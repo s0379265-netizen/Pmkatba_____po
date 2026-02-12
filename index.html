@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Phantom Ping Monitor</title>
+
+<style>
+body{
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+.box{
+    margin-top:100px;
+    padding:30px;
+    border-radius:15px;
+    background:#1a1a1a;
+    display:inline-block;
+}
+.ping{
+    font-size:40px;
+    margin-top:20px;
+}
+.good{color:#00ff88;}
+.medium{color:#ffcc00;}
+.bad{color:#ff4444;}
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    background:#00ff88;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>🎮 Phantom Ping Monitor</h1>
+    <div id="ping" class="ping">-- ms</div>
+    <button onclick="checkPing()">Check Ping</button>
+</div>
+
+<script>
+function checkPing(){
+    const start = performance.now();
+
+    fetch("https://www.google.com", {mode: "no-cors"})
+    .then(()=>{
+        const end = performance.now();
+        const ping = Math.floor(end - start);
+        const pingText = document.getElementById("ping");
+
+        pingText.innerText = ping + " ms";
+
+        if(ping < 50){
+            pingText.className = "ping good";
+        } else if(ping < 120){
+            pingText.className = "ping medium";
+        } else{
+            pingText.className = "ping bad";
+        }
+    })
+    .catch(()=>{
+        document.getElementById("ping").innerText = "Offline";
+    });
+}
+</script>
+
+</body>
+</html>
