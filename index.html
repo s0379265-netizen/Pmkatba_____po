@@ -1,83 +1,381 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نمایشگر خودکار سورس کد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 هوش مصنوعی</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Courier New', monospace;
-            background: #1e1e1e;
-            color: #d4d4d4;
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #0b1120 0%, #1a2639 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            direction: ltr;
         }
-        .container {
-            max-width: 900px;
-            margin: auto;
+        
+        .chat-card {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(18, 25, 40, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: 36px;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            padding: 28px;
         }
-        h1 {
-            color: #00ff88;
+        
+        /* منوی بالا */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .menu-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #9aa9c1;
+            font-size: 0.9rem;
+        }
+        
+        .menu-icons span {
+            cursor: default;
+        }
+        
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-badge a {
+            color: #9aa9c1;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .user-badge a:hover {
+            color: #88ddff;
+        }
+        
+        .divider {
+            color: #3a4a62;
+        }
+        
+        /* تاریخ */
+        .date-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 10px 0;
+            border-bottom: 1px solid #1e2e44;
+            color: #9aa9c1;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .date-row span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .dot-sep {
+            width: 4px;
+            height: 4px;
+            background: #4a5a72;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 8px;
+        }
+        
+        .comment-link {
+            color: #88ddff;
+            text-decoration: none;
+        }
+        
+        /* عنوان اصلی */
+        .main-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .main-title span {
+            background: linear-gradient(135deg, #88ddff, #aaccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* باکس ورود */
+        .login-box {
+            background: #0f1a2a;
+            border-radius: 28px;
+            padding: 30px;
+            border: 1px solid #2a3a55;
+            margin-bottom: 25px;
+        }
+        
+        .login-title {
+            color: #b4c8e8;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #9aa9c1;
+            font-size: 0.9rem;
+        }
+        
+        .input-group input {
+            width: 100%;
+            background: #0b1422;
+            border: 1px solid #2a3a55;
+            border-radius: 16px;
+            padding: 14px 18px;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .input-group input:focus {
+            border-color: #88ddff;
+            box-shadow: 0 0 0 2px rgba(136, 221, 255, 0.2);
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: #2d4a7a;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background: #3a5a8a;
+        }
+        
+        .separator {
             text-align: center;
+            margin: 25px 0;
+            color: #5a6a82;
+            position: relative;
         }
-        pre {
-            background: #2d2d2d;
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            border: 1px solid #444;
-            font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+        
+        .separator::before,
+        .separator::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #2a3a55;
         }
-        .loading {
-            text-align: center;
-            color: #ffcc00;
+        
+        .separator::before { right: 0; }
+        .separator::after { left: 0; }
+        
+        .google-btn {
+            width: 100%;
+            background: #1e293b;
+            border: 1px solid #3a4a62;
+            border-radius: 16px;
+            padding: 16px;
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .error {
-            color: #ff4444;
-            text-align: center;
+        
+        .google-btn:hover {
+            background: #2a384b;
+            border-color: #5a7a9a;
+        }
+        
+        .proxy-status {
+            margin-top: 20px;
+            padding: 12px;
+            background: #1e2a3a;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #88ddff;
+            font-size: 0.9rem;
+        }
+        
+        /* بخش کاربر */
+        .user-section {
+            background: #0f1a2a;
+            border-radius: 28px;
+            padding: 25px 30px;
+            border: 1px solid #2a3a55;
+        }
+        
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #2d4a7a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .user-email {
+            color: #88ddff;
+            font-size: 0.95rem;
+        }
+        
+        .welcome-message {
+            color: #b4c8e8;
+            line-height: 1.6;
+        }
+        
+        .send-icon {
+            margin-top: 15px;
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+        
+        /* ریسپانسیو */
+        @media (max-width: 600px) {
+            .chat-card { padding: 20px; }
+            .main-title { font-size: 1.8rem; }
+        }
+
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📄 نمایشگر خودکار سورس کد</h1>
-        <div id="source-display">
-            <p class="loading">در حال بارگذاری سورس کد از لینک...</p>
+    <div class="chat-card">
+        <!-- منوی بالا -->
+        <div class="top-bar">
+            <div class="menu-icons">
+                <span>سفارش تبلیغ</span>
+                <span>صبا ویژن</span>
+                <span>Hds</span>
+                <span>Menu</span>
+            </div>
+            <div class="user-badge">
+                <a href="#">خانه</a>
+                <a href="#">مشخصات</a>
+                <a href="#">پارسی یار</a>
+                <span class="divider">|</span>
+                <a href="#">ورود</a>
+                <span>Ajj</span>
+            </div>
+        </div>
+
+        <!-- تاریخ و اطلاعات -->
+        <div class="date-row">
+            <span>📅 شنبه 04/11/25 , 5:35 ع</span>
+            <span class="dot-sep"></span>
+            <span>محمدرضا</span>
+            <span class="dot-sep"></span>
+            <a href="#" class="comment-link">• نظر</a>
+        </div>
+
+        <!-- عنوان اصلی -->
+        <div class="main-title">
+            <span>🤖 هوش مصنوعی</span>
+        </div>
+
+        <!-- باکس ورود -->
+        <div class="login-box">
+            <div class="login-title">برای استفاده از سرویس وارد شوید</div>
+            
+            <div class="input-group">
+                <label>ایمیل</label>
+                <input type="email" placeholder="example@email.com">
+            </div>
+            
+            <div class="input-group">
+                <label>رمز عبور</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+            
+            <button class="login-btn">ورود به حساب</button>
+            
+            <div class="separator">یا</div>
+            
+            <button class="google-btn">
+                <span>G</span>
+                ورود با حساب گوگل
+            </button>
+            
+            <div class="proxy-status">
+                <span>🔄</span>
+                در حال اتصال به پروکسی...
+            </div>
+        </div>
+
+        <!-- بخش کاربر (مثال) -->
+        <div class="user-section">
+            <div class="user-header">
+                <div class="user-avatar">U</div>
+                <span class="user-email">کاربر example@gmail.com</span>
+            </div>
+            <div class="welcome-message">
+                سلام! به هوش مصنوعی خوش آمدید.
+            </div>
+            <div class="send-icon">📤</div>
         </div>
     </div>
 
     <script>
-        // آدرس خام فایل HTML در گیت‌هاب
-        const sourceUrl = 'https://raw.githubusercontent.com/s0379265-netizen/Pmkatba_____po/refs/heads/main/index.html';
-
-        // دریافت محتوای فایل
-        fetch(sourceUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('نتونست فایل رو دریافت کنه');
-                }
-                return response.text();
-            })
-            .then(htmlContent => {
-                // فرار دادن کاراکترهای خاص HTML برای نمایش به صورت متن
-                const escapedContent = htmlContent
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
-                
-                // ایجاد المان نمایش با تگ <pre>
-                const displayDiv = document.getElementById('source-display');
-                displayDiv.innerHTML = `<pre>${escapedContent}</pre>`;
-            })
-            .catch(error => {
-                // نمایش خطا
-                const displayDiv = document.getElementById('source-display');
-                displayDiv.innerHTML = `<p class="error">❌ خطا در بارگذاری: ${error.message}</p>`;
-            });
+        // اینجا می‌توانید هرگونه تعامل جاوااسکریپتی اضافه کنید
+        // مثلاً فعال‌سازی دکمه‌ها یا تغییر وضعیت پروکسی
+        console.log('صفحه هوش مصنوعی با موفقیت بارگذاری شد');
     </script>
 </body>
 </html>
