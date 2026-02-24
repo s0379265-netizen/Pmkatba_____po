@@ -1,128 +1,700 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>برنامه اصلی من</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چت گروهی عمومی ⚡ سریع</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Vazir', Arial, sans-serif;
-            overflow: hidden;
+            box-sizing: border-box;
+            font-family: 'Tahoma', Arial, sans-serif;
         }
         
-        .my-header {
-            background: #ff69b4;
+        body {
+            background: #1a1a2e;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .chat-container {
+            width: 95%;
+            max-width: 800px;
+            height: 90vh;
+            background: #16213e;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            background: #0f3460;
             color: white;
             padding: 15px;
-            text-align: center;
-            font-size: 24px;
+            border-bottom: 2px solid #e94560;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .chat-header h2 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: bold;
         }
         
-        .website-container {
-            width: 100%;
-            height: calc(100vh - 70px);
+        .status-badge.connected {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .status-badge.disconnected {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .status-badge.connecting {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .token-display {
+            background: #1a1a2e;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            direction: ltr;
+            text-align: left;
+            color: #00ff88;
+            border: 1px solid #e94560;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .users-online {
+            background: #0f3460;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e94560;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .online-count {
+            background: #e94560;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.own {
+            align-self: flex-end;
+        }
+        
+        .message.other {
+            align-self: flex-start;
+        }
+        
+        .message.system {
+            align-self: center;
+            max-width: 90%;
+        }
+        
+        .message-content {
+            padding: 10px 15px;
+            border-radius: 15px;
             position: relative;
-            background: #f0f0f0;
+            word-wrap: break-word;
         }
         
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .own .message-content {
+            background: #e94560;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .other .message-content {
+            background: #0f3460;
+            color: white;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .system .message-content {
+            background: #4a4a4a;
+            color: #ffd700;
+            font-size: 12px;
             text-align: center;
+            border-radius: 20px;
         }
-
-        .loading-text {
-            color: #333;
-            font-size: 28px;
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 11px;
+        }
+        
+        .own .message-header {
+            color: #ffb3b3;
+        }
+        
+        .other .message-header {
+            color: #a8a8a8;
+        }
+        
+        .sender-name {
             font-weight: bold;
+            color: inherit;
         }
-
-        .loading-text span {
-            animation: blink 1.4s infinite;
-            opacity: 0;
+        
+        .message-time {
+            font-size: 10px;
+            opacity: 0.7;
         }
-
-        .loading-text span:nth-child(2) { animation-delay: 0.2s; }
-        .loading-text span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes blink {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
+        
+        .message-text {
+            font-size: 14px;
+            line-height: 1.5;
         }
-
-        .reload-btn {
-            background: #ff69b4;
+        
+        .typing-indicator {
+            color: #a8a8a8;
+            font-size: 12px;
+            padding: 5px 15px;
+            font-style: italic;
+        }
+        
+        .input-area {
+            background: #0f3460;
+            padding: 15px;
+            border-top: 1px solid #e94560;
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-container input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 25px;
+            background: #1a1a2e;
+            color: white;
+            font-size: 14px;
+            outline: 2px solid transparent;
+            transition: outline 0.3s;
+        }
+        
+        .input-container input:focus {
+            outline: 2px solid #e94560;
+        }
+        
+        .input-container input::placeholder {
+            color: #666;
+        }
+        
+        .input-container button {
+            padding: 12px 25px;
+            background: #e94560;
             color: white;
             border: none;
-            padding: 12px 30px;
             border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
         }
-
-        .reload-btn:hover {
-            background: #ff1493;
+        
+        .input-container button:hover:not(:disabled) {
+            background: #ff6b81;
+            transform: scale(1.05);
         }
-
-        iframe {
-            width: 100%;
-            height: 100%;
+        
+        .input-container button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        .connection-info {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 11px;
+            color: #a8a8a8;
+        }
+        
+        .ping-badge {
+            background: #1a1a2e;
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: #00ff88;
+        }
+        
+        .emoji-picker {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+            padding: 5px;
+            background: #1a1a2e;
+            border-radius: 20px;
+            width: fit-content;
+        }
+        
+        .emoji-btn {
+            background: none;
             border: none;
-            background: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .emoji-btn:hover {
+            background: #e94560;
+            transform: scale(1.2);
+        }
+        
+        .reconnect-btn {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="my-header">
-        🌟 برنامه فوق العاده من | نمایش دهنده خودکار سایت‌ها
-    </div>
-    
-    <div class="website-container" id="websiteContainer">
-        <div class="loading" id="loadingMsg">
-            <div class="loading-text">
-                در حال دریافت کدها<span>.</span><span>.</span><span>.</span>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="header-top">
+                <h2>
+                    <span>💬 چت گروهی عمومی</span>
+                </h2>
+                <span class="status-badge" id="connectionStatus">در حال اتصال...</span>
+            </div>
+            <div class="token-display" id="tokenDisplay">
+                NNYzzQ.zj2sGg:39t_JmOLal1gwD4NIngx2prdLQtOt3ATyyzh9j1vsPc
+            </div>
+        </div>
+        
+        <div class="users-online">
+            <span>👥 کاربران آنلاین</span>
+            <span class="online-count" id="onlineCount">0</span>
+        </div>
+        
+        <div class="messages-area" id="messagesArea">
+            <!-- پیام‌ها اینجا میان -->
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator"></div>
+        
+        <div class="input-area">
+            <div class="emoji-picker">
+                <button class="emoji-btn" onclick="addEmoji('😊')">😊</button>
+                <button class="emoji-btn" onclick="addEmoji('😂')">😂</button>
+                <button class="emoji-btn" onclick="addEmoji('❤️')">❤️</button>
+                <button class="emoji-btn" onclick="addEmoji('👍')">👍</button>
+                <button class="emoji-btn" onclick="addEmoji('🎉')">🎉</button>
+                <button class="emoji-btn" onclick="addEmoji('🔥')">🔥</button>
+            </div>
+            <div class="input-container">
+                <input type="text" id="messageInput" placeholder="پیامت رو بنویس..." onkeypress="handleKeyPress(event)" autocomplete="off">
+                <button id="sendButton" onclick="sendMessage()" disabled>ارسال</button>
+            </div>
+            <div class="connection-info">
+                <span>🖧 سرور: aktif</span>
+                <span class="ping-badge" id="pingDisplay">ping: 0ms</span>
+                <button class="reconnect-btn" onclick="connectWebSocket()">🔄 اتصال مجدد</button>
             </div>
         </div>
     </div>
 
     <script>
-        (function() {
-            const sourceUrl = 'https://raw.githubusercontent.com/s0379265-netizen/Pmkatba_____po/refs/heads/main/index.html';
-            const container = document.getElementById('websiteContainer');
+        // ==================== تنظیمات اصلی ====================
+        const SERVER_URL = 'wss://ws.postman-echo.com/raw'; // WebSocket آزمایشی
+        const USER_TOKEN = 'NNYzzQ.zj2sGg:39t_JmOLal1gwD4NIngx2prdLQtOt3ATyyzh9j1vsPc';
+        
+        // متغیرهای سراسری
+        let socket = null;
+        let connected = false;
+        let username = 'کاربر_' + Math.floor(Math.random() * 1000);
+        let users = [];
+        let pingInterval = null;
+        let reconnectAttempts = 0;
+        let messageHistory = [];
+        
+        // ==================== اتصال به WebSocket ====================
+        function connectWebSocket() {
+            const statusEl = document.getElementById('connectionStatus');
+            const sendBtn = document.getElementById('sendButton');
             
-            fetch(sourceUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error('نتونست بگیره');
-                    return response.text();
-                })
-                .then(htmlCode => {
-                    document.getElementById('loadingMsg').style.display = 'none';
+            statusEl.textContent = '⏳ در حال اتصال...';
+            statusEl.className = 'status-badge connecting';
+            sendBtn.disabled = true;
+            
+            // اگه قبلاً وصل بوده، قطع کن
+            if (socket) {
+                socket.close();
+            }
+            
+            try {
+                // اتصال به WebSocket
+                socket = new WebSocket(SERVER_URL);
+                
+                // وقتی اتصال برقرار شد
+                socket.onopen = function() {
+                    console.log('✅ متصل به سرور با توکن:', USER_TOKEN);
+                    connected = true;
+                    reconnectAttempts = 0;
                     
-                    const siteFrame = document.createElement('iframe');
-                    container.appendChild(siteFrame);
+                    // آپدیت وضعیت
+                    statusEl.textContent = '✅ متصل به سرور';
+                    statusEl.className = 'status-badge connected';
+                    sendBtn.disabled = false;
                     
-                    siteFrame.contentDocument.open();
-                    siteFrame.contentDocument.write(htmlCode);
-                    siteFrame.contentDocument.close();
-                })
-                .catch(error => {
-                    container.innerHTML = `
-                        <div style="text-align:center; padding:50px;">
-                            <div style="background: #ffebee; padding:30px; border-radius:15px;">
-                                ❌ خطا: ${error.message}<br><br>
-                                <button class="reload-btn" onclick="location.reload()">تلاش مجدد</button>
-                            </div>
-                        </div>
-                    `;
-                });
-        })();
+                    // ارسال پیام عضویت با توکن
+                    const joinMsg = {
+                        type: 'join',
+                        token: USER_TOKEN,
+                        username: username,
+                        time: Date.now()
+                    };
+                    socket.send(JSON.stringify(joinMsg));
+                    
+                    // پیام خوش‌آمد
+                    addSystemMessage('✅ شما به سرور متصل شدید');
+                    addSystemMessage('🔑 توکن: ' + USER_TOKEN.substring(0, 20) + '...');
+                    
+                    // شروع اندازه‌گیری پینگ
+                    startPingMeasurement();
+                };
+                
+                // وقتی پیام میاد
+                socket.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        handleIncomingMessage(data);
+                    } catch (e) {
+                        // اگه JSON نبود، به عنوان پیام ساده نشون بده
+                        if (typeof event.data === 'string') {
+                            addMessage({
+                                type: 'text',
+                                sender: 'سرور',
+                                text: event.data,
+                                time: Date.now()
+                            });
+                        }
+                    }
+                };
+                
+                // وقتی اتصال قطع میشه
+                socket.onclose = function() {
+                    console.log('❌ قطع اتصال از سرور');
+                    connected = false;
+                    
+                    statusEl.textContent = '❌ قطع اتصال';
+                    statusEl.className = 'status-badge disconnected';
+                    sendBtn.disabled = true;
+                    
+                    addSystemMessage('❌ اتصال به سرور قطع شد');
+                    
+                    // تلاش مجدد برای اتصال
+                    reconnectAttempts++;
+                    if (reconnectAttempts < 5) {
+                        setTimeout(connectWebSocket, 3000);
+                        addSystemMessage(`🔄 تلاش مجدد برای اتصال (${reconnectAttempts}/5)...`);
+                    }
+                };
+                
+                // خطا
+                socket.onerror = function(error) {
+                    console.error('خطا در WebSocket:', error);
+                    statusEl.textContent = '⚠️ خطا در اتصال';
+                    statusEl.className = 'status-badge disconnected';
+                };
+                
+            } catch (error) {
+                console.error('خطا:', error);
+                statusEl.textContent = '❌ خطا';
+                statusEl.className = 'status-badge disconnected';
+            }
+        }
+        
+        // ==================== مدیریت پیام‌های دریافتی ====================
+        function handleIncomingMessage(data) {
+            switch(data.type) {
+                case 'join':
+                    // کاربر جدید joined
+                    if (data.username && data.username !== username) {
+                        addSystemMessage(`👋 ${data.username} به گروه پیوست`);
+                        // اضافه کردن به لیست کاربران
+                        if (!users.includes(data.username)) {
+                            users.push(data.username);
+                            updateOnlineCount();
+                        }
+                    }
+                    break;
+                    
+                case 'leave':
+                    // کاربر left
+                    if (data.username) {
+                        addSystemMessage(`👋 ${data.username} از گروه خارج شد`);
+                        users = users.filter(u => u !== data.username);
+                        updateOnlineCount();
+                    }
+                    break;
+                    
+                case 'message':
+                    // پیام معمولی
+                    addMessage({
+                        sender: data.username || 'ناشناس',
+                        text: data.text,
+                        time: data.time || Date.now(),
+                        isOwn: data.username === username
+                    });
+                    break;
+                    
+                case 'typing':
+                    // کاربر در حال تایپ
+                    if (data.username && data.username !== username) {
+                        document.getElementById('typingIndicator').textContent = 
+                            `✏️ ${data.username} در حال تایپ...`;
+                        setTimeout(() => {
+                            document.getElementById('typingIndicator').textContent = '';
+                        }, 2000);
+                    }
+                    break;
+                    
+                case 'ping':
+                    // پاسخ پینگ
+                    if (data.time) {
+                        const ping = Date.now() - data.time;
+                        document.getElementById('pingDisplay').textContent = `ping: ${ping}ms`;
+                    }
+                    break;
+                    
+                default:
+                    // نوع ناشناخته
+                    console.log('پیام ناشناخته:', data);
+            }
+        }
+        
+        // ==================== ارسال پیام ====================
+        function sendMessage() {
+            if (!connected) {
+                alert('❌ به سرور متصل نیستید!');
+                return;
+            }
+            
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (text === '') return;
+            
+            // ایجاد پیام
+            const message = {
+                type: 'message',
+                username: username,
+                text: text,
+                time: Date.now()
+            };
+            
+            // ارسال به سرور
+            socket.send(JSON.stringify(message));
+            
+            // نمایش در صفحه
+            addMessage({
+                sender: username,
+                text: text,
+                time: Date.now(),
+                isOwn: true
+            });
+            
+            // پاک کردن input
+            input.value = '';
+            
+            // اسکرول به پایین
+            scrollToBottom();
+        }
+        
+        // ==================== اضافه کردن پیام به صفحه ====================
+        function addMessage(msg) {
+            const messagesArea = document.getElementById('messagesArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${msg.isOwn ? 'own' : 'other'}`;
+            
+            const time = new Date(msg.time).toLocaleTimeString('fa-IR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="sender-name">${msg.sender}</span>
+                        <span class="message-time">${time}</span>
+                    </div>
+                    <div class="message-text">${msg.text.replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+            
+            messagesArea.appendChild(messageDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+            
+            // ذخیره در تاریخچه
+            messageHistory.push(msg);
+            if (messageHistory.length > 100) {
+                messageHistory.shift();
+            }
+        }
+        
+        // ==================== پیام سیستمی ====================
+        function addSystemMessage(text) {
+            const messagesArea = document.getElementById('messagesArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system';
+            
+            const time = new Date().toLocaleTimeString('fa-IR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="message-text">${text}</div>
+                    <div style="font-size: 9px; margin-top: 3px; opacity: 0.7;">${time}</div>
+                </div>
+            `;
+            
+            messagesArea.appendChild(messageDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+        
+        // ==================== آپدیت تعداد آنلاین ====================
+        function updateOnlineCount() {
+            document.getElementById('onlineCount').textContent = users.length + 1; // +1 برای خودمون
+        }
+        
+        // ==================== شروع اندازه‌گیری پینگ ====================
+        function startPingMeasurement() {
+            if (pingInterval) clearInterval(pingInterval);
+            
+            pingInterval = setInterval(() => {
+                if (connected && socket.readyState === WebSocket.OPEN) {
+                    const pingMsg = {
+                        type: 'ping',
+                        time: Date.now()
+                    };
+                    socket.send(JSON.stringify(pingMsg));
+                }
+            }, 5000);
+        }
+        
+        // ==================== اضافه کردن ایموجی ====================
+        function addEmoji(emoji) {
+            const input = document.getElementById('messageInput');
+            input.value += emoji;
+            input.focus();
+        }
+        
+        // ==================== هندل کردن کلید Enter ====================
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+            
+            // نمایش وضعیت تایپ
+            if (connected) {
+                const typingMsg = {
+                    type: 'typing',
+                    username: username
+                };
+                socket.send(JSON.stringify(typingMsg));
+            }
+        }
+        
+        // ==================== اسکرول به پایین ====================
+        function scrollToBottom() {
+            const messagesArea = document.getElementById('messagesArea');
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+        
+        // ==================== تنظیم نام کاربری ====================
+        function setUsername() {
+            const newName = prompt('نام کاربری خود را وارد کنید:', username);
+            if (newName && newName.trim() !== '') {
+                username = newName.trim();
+                addSystemMessage(`👤 نام شما تغییر کرد به: ${username}`);
+            }
+        }
+        
+        // ==================== شروع برنامه ====================
+        window.onload = function() {
+            // اتصال به سرور
+            connectWebSocket();
+            
+            // درخواست نام کاربری
+            setTimeout(setUsername, 500);
+            
+            // فوکوس روی input
+            document.getElementById('messageInput').focus();
+        };
+        
+        // ==================== پاکسازی موقع بسته شدن ====================
+        window.onbeforeunload = function() {
+            if (socket) {
+                socket.close();
+            }
+            if (pingInterval) {
+                clearInterval(pingInterval);
+            }
+        };
     </script>
 </body>
 </html>
