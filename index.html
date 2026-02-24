@@ -2212,6 +2212,83 @@
         .lobby-voice-control {
             display: none;
         }
+        
+        /* ===== استایل دیالوگ قطع ارتباط ===== */
+        .disconnect-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .disconnect-dialog.active {
+            display: flex;
+        }
+        
+        .disconnect-content {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 3px solid #ffd700;
+            border-radius: 40px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(255, 215, 0, 0.3);
+            animation: scaleIn 0.3s ease;
+        }
+        
+        .disconnect-icon {
+            font-size: 80px;
+            color: #ffd700;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        .disconnect-title {
+            color: #ffd700;
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #ffd700;
+        }
+        
+        .disconnect-message {
+            color: white;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .retry-btn {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: black;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            border: 2px solid white;
+        }
+        
+        .retry-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px #ffd700;
+        }
     </style>
 </head>
 <body>
@@ -2557,16 +2634,30 @@
         </div>
     </div>
 
+    <!-- دیالوگ قطع ارتباط با سرور -->
+    <div class="disconnect-dialog" id="disconnectDialog">
+        <div class="disconnect-content">
+            <div class="disconnect-icon">📡</div>
+            <div class="disconnect-title">قطع ارتباط</div>
+            <div class="disconnect-message">
+                کاربر گرامی متاسفانه ارتباط شما با سرور قطع است<br>
+                لطفا مجددا تلاش کنید
+            </div>
+            <button class="retry-btn" onclick="reconnectToAbly()">تلاش مجدد</button>
+        </div>
+    </div>
+
     <!-- نوتیفیکیشن -->
     <div class="notification" id="notification"></div>
 
     <script>
         // ممد - اطلاعات سرور (بدون تغییر)
-        const ABLY_KEY = 'NNYzzQ.PnzEvw:5fSmyarVAhUtvSR6NCWefznSbt9vL4Qp0z7q_iwTQa4';
+        const ABLY_KEY = 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo';
         
-        // پنل ادمین - فقط برای کاربر خاص با شناسه "user_1771851600660_x7y3l"
-        const ADMIN_USER_ID = 'user_1771851600660_x7y3l';
-        const ADMIN_PASSWORD = '1234569';
+        // پنل ادمین - فقط برای کاربر خاص "سازنده:ممد" با رمز عبور جدید
+        const ADMIN_USERNAME = 'سازنده:ممد';
+        const ADMIN_PASSWORD = '2000008978';
+        const ADMIN_USER_ID = 'user_admin_' + Date.now(); // شناسه یکتا برای ادمین
         
         // متغیرهای اصلی
         let currentUser = null;
@@ -2663,15 +2754,20 @@
 
                 ably.connection.on('connected', () => {
                     console.log('✅ به سرور متصل شد');
+                    // مخفی کردن دیالوگ قطع ارتباط در صورت اتصال
+                    hideDisconnectDialog();
                     setupChannels();
                     lastConnectionState = 'connected';
-                    
-                    // ارتباط صوتی غیرفعال شد
                 });
 
                 ably.connection.on('disconnected', () => {
                     console.log('❌ ارتباط قطع شد - تلاش برای اتصال مجدد...');
                     lastConnectionState = 'disconnected';
+                    
+                    // نمایش دیالوگ قطع ارتباط (فقط اگر کاربر به صورت دستی خارج نشده باشد)
+                    if (!isManuallyDisconnected) {
+                        showDisconnectDialog();
+                    }
                     
                     if (reconnectTimer) clearTimeout(reconnectTimer);
                     reconnectTimer = setTimeout(() => {
@@ -2684,11 +2780,21 @@
                 ably.connection.on('suspended', () => {
                     console.log('❌ ارتباط معلق شد');
                     lastConnectionState = 'suspended';
+                    
+                    // نمایش دیالوگ قطع ارتباط (فقط اگر کاربر به صورت دستی خارج نشده باشد)
+                    if (!isManuallyDisconnected) {
+                        showDisconnectDialog();
+                    }
                 });
 
                 ably.connection.on('failed', () => {
                     console.log('❌ ارتباط failed');
                     lastConnectionState = 'failed';
+                    
+                    // نمایش دیالوگ قطع ارتباط (فقط اگر کاربر به صورت دستی خارج نشده باشد)
+                    if (!isManuallyDisconnected) {
+                        showDisconnectDialog();
+                    }
                     
                     if (reconnectTimer) clearTimeout(reconnectTimer);
                     reconnectTimer = setTimeout(() => {
@@ -2697,6 +2803,32 @@
                 });
             } catch (e) {
                 setTimeout(initializeAbly, 1000);
+            }
+        }
+
+        // تابع نمایش دیالوگ قطع ارتباط
+        function showDisconnectDialog() {
+            const dialog = document.getElementById('disconnectDialog');
+            if (dialog && !dialog.classList.contains('active')) {
+                dialog.classList.add('active');
+            }
+        }
+
+        // تابع مخفی کردن دیالوگ قطع ارتباط
+        function hideDisconnectDialog() {
+            const dialog = document.getElementById('disconnectDialog');
+            if (dialog) {
+                dialog.classList.remove('active');
+            }
+        }
+
+        // تابع تلاش مجدد برای اتصال
+        function reconnectToAbly() {
+            hideDisconnectDialog();
+            if (ably) {
+                ably.connection.connect();
+            } else {
+                initializeAbly();
             }
         }
 
@@ -2942,7 +3074,7 @@
             const usersArray = [];
             
             for (let username in users) {
-                if (username === ADMIN_USER_ID) continue;
+                if (username === ADMIN_USERNAME) continue;
                 
                 const user = users[username];
                 
@@ -3027,7 +3159,7 @@
             const usersArray = [];
             
             for (let username in users) {
-                if (username === ADMIN_USER_ID) continue;
+                if (username === ADMIN_USERNAME) continue;
                 
                 if (searchTerm && !username.toLowerCase().includes(searchTerm)) {
                     continue;
@@ -3224,10 +3356,11 @@
                         document.getElementById('registerScreen').style.display = 'none';
                         document.getElementById('gameContainer').classList.remove('hidden');
                         
-                        // بررسی ادمین بودن کاربر (بر اساس شناسه ثابت ADMIN_USER_ID)
-                        if (currentUser.id === ADMIN_USER_ID) {
+                        // بررسی ادمین بودن کاربر (بر اساس نام کاربری و رمز عبور جدید)
+                        if (currentUser.username === ADMIN_USERNAME && currentUser.password === ADMIN_PASSWORD) {
                             document.getElementById('adminMenuItem').style.display = 'flex';
                             currentUser.isAdmin = true;
+                            currentUser.id = ADMIN_USER_ID; // تنظیم شناسه ادمین
                         }
                         
                         updateUI();
@@ -3259,8 +3392,8 @@
             const avatar = document.getElementById('userAvatar');
             if (!avatar) return;
             
-            // اگر کاربر همان اکانت خاص با شناسه ADMIN_USER_ID است، آواتار جدید را نشان بده
-            if (currentUser && currentUser.id === ADMIN_USER_ID) {
+            // اگر کاربر همان اکانت ادمین است، آواتار جدید را نشان بده
+            if (currentUser && currentUser.isAdmin) {
                 avatar.style.backgroundImage = 'url("https://uploadkon.ir/uploads/3c3c23_26IMG-20260223-161029-320.jpg")';
             } else {
                 // آواتار پیش‌فرض برای سایر کاربران
@@ -3281,14 +3414,12 @@
 
             loadAllData();
 
-            // بررسی می‌کنیم که آیا کاربر با شناسه خاص (ممد) وارد می‌شود
-            // در اینجا فرض می‌کنیم که کاربر ممد با نام کاربری "ممد" و رمز "1234569" وارد می‌شود
-            // و شناسه او را به صورت دستی تنظیم می‌کنیم
-            if (username === 'ممد' && password === ADMIN_PASSWORD) {
+            // بررسی می‌کنیم که آیا کاربر با نام کاربری و رمز عبور جدید ادمین است
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
                 currentUser = {
                     username: username,
                     password: password,
-                    id: ADMIN_USER_ID, // تنظیم شناسه ثابت برای کاربر ممد
+                    id: ADMIN_USER_ID, // تنظیم شناسه ثابت برای کاربر ادمین
                     cups: 999999,
                     level: 999,
                     gamesPlayed: 999999,
@@ -3319,7 +3450,7 @@
                     }
                 }, 1000);
                 
-                alert('👑 خوش آمدید ممد (سازنده)');
+                alert('👑 خوش آمدید سازنده');
                 return;
             }
 
@@ -3497,8 +3628,8 @@
                 lobbyDiv.className = 'lobby-item';
                 lobbyDiv.onclick = () => joinLobby(lobby.code);
                 
-                // دکمه ترکاندن لابی مخصوص ادمین (فقط برای کاربر با شناسه ADMIN_USER_ID)
-                const destroyButton = (currentUser && currentUser.id === ADMIN_USER_ID) ? 
+                // دکمه ترکاندن لابی مخصوص ادمین (فقط برای کاربر ادمین)
+                const destroyButton = (currentUser && currentUser.isAdmin) ? 
                     `<button class="destroy-lobby-btn" onclick="event.stopPropagation(); destroyLobby('${lobby.code}')">💥 ترکاندن</button>` : '';
                 
                 lobbyDiv.innerHTML = `
@@ -3521,7 +3652,7 @@
 
         // تابع جدید برای ترکاندن لابی توسط ادمین (بدون نیاز به ورود)
         function destroyLobby(lobbyCode) {
-            if (!currentUser || currentUser.id !== ADMIN_USER_ID) {
+            if (!currentUser || !currentUser.isAdmin) {
                 alert('❌ این قابلیت فقط برای سازنده است');
                 return;
             }
@@ -3649,7 +3780,7 @@
             const playerData = {
                 username: currentUser.username,
                 userId: myUserId,
-                avatar: currentUser.id === ADMIN_USER_ID ? 
+                avatar: currentUser.isAdmin ? 
                     'https://uploadkon.ir/uploads/3c3c23_26IMG-20260223-161029-320.jpg' : 
                     'https://uploadkon.ir/uploads/c22318_26IMG-20260216-161923-048.jpg',
                 cups: currentUser.cups || 0,
@@ -3988,7 +4119,7 @@
             const banBtn = document.getElementById('lobbyProfileBanBtn');
             const unbanBtn = document.getElementById('lobbyProfileUnbanBtn');
             
-            if (currentUser && currentUser.id === ADMIN_USER_ID && player.userId !== currentUser.id) {
+            if (currentUser && currentUser.isAdmin && player.userId !== currentUser.id) {
                 if (bannedUsers[player.username]) {
                     const banData = bannedUsers[player.username];
                     const now = Date.now();
@@ -4095,7 +4226,7 @@
             
             // به‌روزرسانی نمایش در هدر (با تیک برای ادمین)
             const headerUsername = document.getElementById('headerUsername');
-            headerUsername.innerHTML = currentUser.username + (currentUser.id === ADMIN_USER_ID ? '<span class="admin-verified-tick">✓</span>' : '');
+            headerUsername.innerHTML = currentUser.username + (currentUser.isAdmin ? '<span class="admin-verified-tick">✓</span>' : '');
             document.getElementById('profileUsername').textContent = currentUser.username;
             
             // به‌روزرسانی در presence
@@ -4194,7 +4325,7 @@
                 if (playersInGame[i]) {
                     slot.classList.add('filled');
                     slot.innerHTML = `
-                        <div class="player-avatar" style="background-image: url('${playersInGame[i].userId === ADMIN_USER_ID ? 'https://uploadkon.ir/uploads/3c3c23_26IMG-20260223-161029-320.jpg' : 'https://uploadkon.ir/uploads/c22318_26IMG-20260216-161923-048.jpg'}')"></div>
+                        <div class="player-avatar" style="background-image: url('${playersInGame[i].isAdmin ? 'https://uploadkon.ir/uploads/3c3c23_26IMG-20260223-161029-320.jpg' : 'https://uploadkon.ir/uploads/c22318_26IMG-20260216-161923-048.jpg'}')"></div>
                         <div class="player-name">${playersInGame[i].username}</div>
                     `;
                 }
@@ -4230,7 +4361,7 @@
                 playerEl.className = 'game-player' + (player.userId === myUserId ? ' active' : '');
                 playerEl.id = `player-${player.userId}`;
                 playerEl.innerHTML = `
-                    <div class="game-player-avatar" style="background-image: url('${player.userId === ADMIN_USER_ID ? 'https://uploadkon.ir/uploads/3c3c23_26IMG-20260223-161029-320.jpg' : 'https://uploadkon.ir/uploads/c22318_26IMG-20260216-161923-048.jpg'}')"></div>
+                    <div class="game-player-avatar" style="background-image: url('${player.isAdmin ? 'https://uploadkon.ir/uploads/3c3c23_26IMG-20260223-161029-320.jpg' : 'https://uploadkon.ir/uploads/c22318_26IMG-20260216-161923-048.jpg'}')"></div>
                     <div class="game-player-name">${player.username}</div>
                     <div class="voice-indicator" id="voice-${player.userId}"></div>
                 `;
