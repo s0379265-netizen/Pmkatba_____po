@@ -9,12 +9,20 @@
             padding: 0;
             font-family: 'Vazir', Arial, sans-serif;
             overflow: hidden;
-            background: #f0f0f0;
+        }
+        
+        .my-header {
+            background: #ff69b4;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
         }
         
         .website-container {
             width: 100%;
-            height: 100vh;
+            height: calc(100vh - 70px);
             position: relative;
             background: #f0f0f0;
         }
@@ -71,11 +79,15 @@
         }
     </style>
 </head>
-<body>    
+<body>
+    <div class="my-header">
+        🌟 برنامه فوق العاده من | نمایش دهنده خودکار سایت‌ها
+    </div>
+    
     <div class="website-container" id="websiteContainer">
         <div class="loading" id="loadingMsg">
             <div class="loading-text">
-                در حال اتصال به سرور<span>.</span><span>.</span><span>.</span>
+                در حال دریافت کدها<span>.</span><span>.</span><span>.</span>
             </div>
         </div>
     </div>
