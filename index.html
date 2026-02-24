@@ -1,75 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Phantom Ping Monitor</title>
-
-<style>
-body{
-    background:#0f0f0f;
-    color:white;
-    font-family:Arial;
-    text-align:center;
-}
-.box{
-    margin-top:100px;
-    padding:30px;
-    border-radius:15px;
-    background:#1a1a1a;
-    display:inline-block;
-}
-.ping{
-    font-size:40px;
-    margin-top:20px;
-}
-.good{color:#00ff88;}
-.medium{color:#ffcc00;}
-.bad{color:#ff4444;}
-button{
-    margin-top:20px;
-    padding:10px 20px;
-    font-size:16px;
-    border:none;
-    border-radius:10px;
-    background:#00ff88;
-    cursor:pointer;
-}
-</style>
-</head>
-
-<body>
-
-<div class="box">
-    <h1>🎮 Phantom Ping Monitor</h1>
-    <div id="ping" class="ping">-- ms</div>
-    <button onclick="checkPing()">Check Ping</button>
-</div>
-
-<script>
-function checkPing(){
-    const start = performance.now();
-
-    fetch("https://www.google.com", {mode: "no-cors"})
-    .then(()=>{
-        const end = performance.now();
-        const ping = Math.floor(end - start);
-        const pingText = document.getElementById("ping");
-
-        pingText.innerText = ping + " ms";
-
-        if(ping < 50){
-            pingText.className = "ping good";
-        } else if(ping < 120){
-            pingText.className = "ping medium";
-        } else{
-            pingText.className = "ping bad";
+    <meta charset="UTF-8">
+    <title>نمایشگر خودکار سورس کد</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            direction: ltr;
         }
-    })
-    .catch(()=>{
-        document.getElementById("ping").innerText = "Offline";
-    });
-}
-</script>
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+        h1 {
+            color: #00ff88;
+            text-align: center;
+        }
+        pre {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #444;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .loading {
+            text-align: center;
+            color: #ffcc00;
+        }
+        .error {
+            color: #ff4444;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📄 نمایشگر خودکار سورس کد</h1>
+        <div id="source-display">
+            <p class="loading">در حال بارگذاری سورس کد از لینک...</p>
+        </div>
+    </div>
 
+    <script>
+        // آدرس خام فایل HTML در گیت‌هاب
+        const sourceUrl = 'https://raw.githubusercontent.com/s0379265-netizen/Pmkatba_____po/refs/heads/main/index.html';
+
+        // دریافت محتوای فایل
+        fetch(sourceUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('نتونست فایل رو دریافت کنه');
+                }
+                return response.text();
+            })
+            .then(htmlContent => {
+                // فرار دادن کاراکترهای خاص HTML برای نمایش به صورت متن
+                const escapedContent = htmlContent
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+                
+                // ایجاد المان نمایش با تگ <pre>
+                const displayDiv = document.getElementById('source-display');
+                displayDiv.innerHTML = `<pre>${escapedContent}</pre>`;
+            })
+            .catch(error => {
+                // نمایش خطا
+                const displayDiv = document.getElementById('source-display');
+                displayDiv.innerHTML = `<p class="error">❌ خطا در بارگذاری: ${error.message}</p>`;
+            });
+    </script>
 </body>
 </html>
