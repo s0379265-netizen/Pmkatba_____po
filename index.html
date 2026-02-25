@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -630,6 +631,21 @@
             font-size: 14px;
             font-weight: 700;
             margin-bottom: 10px;
+        }
+        /* اسلایدر تنظیم موزیک بازی */
+        .music-volume-slider {
+            width: 100%;
+            margin-top: 5px;
+        }
+        .music-control-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        .music-control-label span {
+            font-size: 18px;
         }
 
         .top-bottom-menu {
@@ -2420,7 +2436,7 @@
             <div class="menu-item" id="adminMenuItem" onclick="showAdminPanel()" style="display: none;">🔨 پنل مدیریت</div>
         </div>
 
-        <!-- پنل تنظیمات -->
+        <!-- پنل تنظیمات (با اسلایدر موزیک) -->
         <div class="settings-panel" id="settingsPanel">
             <div class="setting-item">
                 <label>🔊 صدای بازی</label>
@@ -2429,6 +2445,14 @@
             <div class="setting-item">
                 <label>🎵 صدای پلیر</label>
                 <input type="range" min="0" max="100" value="50" id="playerVolume">
+            </div>
+            <!-- اسلایدر تنظیم موزیک پس‌زمینه -->
+            <div class="setting-item">
+                <div class="music-control-label">
+                    <span>🎵</span>
+                    <label>صدای موزیک بازی</label>
+                </div>
+                <input type="range" class="music-volume-slider" id="musicVolume" min="0" max="1" step="0.1" value="0.3" onchange="setMusicVolume(this.value)">
             </div>
             <button class="change-password-btn" onclick="changePassword()">🔐 تغییر رمز عبور</button>
             <!-- دکمه تغییر نام کاربری -->
@@ -2649,8 +2673,58 @@
 
     <!-- نوتیفیکیشن -->
     <div class="notification" id="notification"></div>
+    
+    <!-- پخش‌کننده موزیک پس‌زمینه (مخفی) -->
+    <audio id="bgMusic" loop preload="auto" style="display: none;">
+        <source src="https://uploadkon.ir/uploads/750325_26Night-Current.mp3" type="audio/mpeg">
+        مرورگر شما از پخش صدا پشتیبانی نمی‌کند.
+    </audio>
 
     <script>
+        // متغیرهای کنترل موزیک
+        let bgMusic = document.getElementById('bgMusic');
+        let musicPlaying = false;
+        let musicStarted = false;
+        
+        // تنظیم صدای اولیه
+        bgMusic.volume = 0.3;
+        
+        // تابع تنظیم بلندی صدا
+        function setMusicVolume(vol) {
+            bgMusic.volume = vol;
+            // ذخیره در localStorage برای استفاده بعدی
+            localStorage.setItem('musicVolume', vol);
+        }
+        
+        // بارگذاری مقدار ذخیره شده صدا
+        const savedVolume = localStorage.getItem('musicVolume');
+        if (savedVolume !== null) {
+            bgMusic.volume = parseFloat(savedVolume);
+            document.getElementById('musicVolume').value = savedVolume;
+        }
+        
+        // تابع شروع پخش موزیک (فراخوانی شده پس از ورود کاربر)
+        function startBackgroundMusic() {
+            if (!musicPlaying && !musicStarted) {
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicStarted = true;
+                    console.log('🎵 موزیک پس‌زمینه شروع شد');
+                }).catch(e => {
+                    console.log('❌ پخش موزیک ممکن نیست:', e);
+                    // اگر پخش خودکار ممکن نبود، منتظر اولین کلیک کاربر می‌مانیم
+                    document.addEventListener('click', function startOnClick() {
+                        bgMusic.play().then(() => {
+                            musicPlaying = true;
+                            musicStarted = true;
+                            console.log('🎵 موزیک پس از کلیک شروع شد');
+                        }).catch(e => console.log('خطا در پخش موزیک:', e));
+                        document.removeEventListener('click', startOnClick);
+                    }, { once: true });
+                });
+            }
+        }
+
         // ممد - اطلاعات سرور (بدون تغییر)
         const ABLY_KEY = 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo';
         
@@ -3380,6 +3454,9 @@
                             }
                         }, 1000);
                         
+                        // شروع پخش موزیک پس از ورود کاربر
+                        startBackgroundMusic();
+                        
                         return;
                     }
                 }
@@ -3450,6 +3527,9 @@
                     }
                 }, 1000);
                 
+                // شروع پخش موزیک پس از ورود کاربر
+                startBackgroundMusic();
+                
                 alert('👑 خوش آمدید سازنده');
                 return;
             }
@@ -3505,6 +3585,9 @@
                     });
                 }
             }, 1000);
+            
+            // شروع پخش موزیک پس از ورود کاربر
+            startBackgroundMusic();
         }
 
         function updateUI() {
