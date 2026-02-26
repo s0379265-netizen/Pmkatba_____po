@@ -2071,6 +2071,185 @@
             display: none;
             z-index: 10001;
         }
+
+        /* ========== استایل دکمه‌های سبز و قرمز و لایک/دیسلایک ========== */
+        .lobby-action-buttons {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            z-index: 2600;
+            background: rgba(0,0,0,0.6);
+            padding: 12px 25px;
+            border-radius: 60px;
+            border: 2px solid #ffd700;
+            backdrop-filter: blur(5px);
+        }
+
+        .action-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(0,0,0,0.7);
+            color: white;
+        }
+
+        .action-btn.green {
+            border-color: #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .action-btn.red {
+            border-color: #ff0000;
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .action-btn.like {
+            border-color: #ffd700;
+            box-shadow: 0 0 20px #ffd700;
+            font-size: 32px;
+        }
+
+        .action-btn.dislike {
+            border-color: #ff4500;
+            box-shadow: 0 0 20px #ff4500;
+            font-size: 32px;
+        }
+
+        .action-btn.small {
+            width: 55px;
+            height: 55px;
+            font-size: 24px;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* ناظرها */
+        .observer {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            z-index: 2601;
+            pointer-events: none;
+        }
+
+        .observer.top {
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .observer.bottom {
+            bottom: 35%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+        }
+
+        .observer.middle {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* استایل لایک/دیسلایک کنار آواتار */
+        .reaction-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 20px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid;
+            animation: popIn 0.3s;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* فریم سبز/قرمز */
+        .player-seat-small.reacted-green {
+            border-color: #00ff00;
+            box-shadow: 0 0 25px #00ff00;
+        }
+
+        .player-seat-small.reacted-red {
+            border-color: #ff0000;
+            box-shadow: 0 0 25px #ff0000;
+        }
+
+        /* دکمه استارت برای مدیر */
+        .start-game-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border: 4px solid white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 30px #ffd700;
+            transition: all 0.3s;
+        }
+
+        .start-game-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .start-game-btn span {
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        /* دکمه مایک جدید */
+        .mic-speaker-btn {
+            position: absolute;
+            bottom: -5px;
+            left: -5px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #ffd700;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border: 2px solid white;
+            cursor: pointer;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -2367,6 +2546,15 @@
                 <!-- صندلی‌ها با جاوااسکریپت پر می‌شوند -->
             </div>
         </div>
+
+        <!-- دکمه‌های سبز و قرمز و لایک/دیسلایک برای همه -->
+        <div class="lobby-action-buttons" id="actionButtons">
+            <!-- اینجا با جاوااسکریپت پر می‌شود -->
+        </div>
+
+        <!-- ناظرها -->
+        <div class="observer top" id="observerTop">👁️</div>
+        <div class="observer bottom" id="observerBottom">👁️</div>
 
         <!-- کنترل‌های چت و صدا -->
         <div class="lobby-controls-bottom">
@@ -2868,6 +3056,10 @@
         let myUserId = null;
         let selectedProfileUser = null;
         let selectedLobbyColor = '#FF5733'; // رنگ پیش‌فرض
+        
+        // ========== متغیرهای جدید برای لایک/دیسلایک و دکمه‌های رنگی ==========
+        let userReactions = new Map(); // userId -> {type: 'like'|'dislike', timestamp}
+        let userFrameColors = new Map(); // userId -> 'green'|'red'
 
         // ========== سیستم ذخیره‌سازی دائمی ==========
         function saveAllData() {
@@ -4018,6 +4210,16 @@
                 playReceivedVoice(message.data);
             });
             
+            // اشتراک در واکنش‌ها (لایک/دیسلایک)
+            lobbyChannel.subscribe('reaction', (message) => {
+                handleReaction(message.data);
+            });
+            
+            // اشتراک در تغییر رنگ فریم
+            lobbyChannel.subscribe('frame-color', (message) => {
+                handleFrameColor(message.data);
+            });
+            
             showFriendlyLobbyPage();
             updateLobbySeats();
             
@@ -4032,6 +4234,9 @@
             document.getElementById('currentLobbyName').textContent = currentLobby.name;
             document.getElementById('currentLobbyName').style.color = currentLobby.color || '#ffd700';
             document.getElementById('currentLobbyName').style.borderColor = currentLobby.color || '#ffd700';
+            
+            // نمایش دکمه‌های مناسب بر اساس نقش
+            updateActionButtons();
         }
 
         function hideLobbyPage() {
@@ -4090,11 +4295,28 @@
                     seatDiv.setAttribute('data-username', player.username);
                     seatDiv.onclick = () => showLobbyProfile(player);
                     
+                    // اعمال رنگ فریم اگر وجود دارد
+                    if (userFrameColors.has(player.userId)) {
+                        const color = userFrameColors.get(player.userId);
+                        seatDiv.classList.add(`reacted-${color}`);
+                    }
+                    
                     seatDiv.innerHTML = `
                         <div class="seat-avatar-small" style="background-image: url('${player.avatar}')"></div>
                         <div class="seat-name-small">${player.username}</div>
                         <div class="voice-status-small" id="voice-${player.userId}"></div>
+                        <div class="mic-speaker-btn" onclick="event.stopPropagation(); toggleUserMic('${player.userId}')">🎤</div>
                     `;
+                    
+                    // نمایش واکنش اگر وجود دارد
+                    if (userReactions.has(player.userId)) {
+                        const reaction = userReactions.get(player.userId);
+                        const reactionDiv = document.createElement('div');
+                        reactionDiv.className = 'reaction-indicator';
+                        reactionDiv.style.borderColor = reaction.type === 'like' ? '#ffd700' : '#ff4500';
+                        reactionDiv.textContent = reaction.type === 'like' ? '👍' : '👎';
+                        seatDiv.appendChild(reactionDiv);
+                    }
                 } else {
                     seatDiv.classList.add('empty');
                     seatDiv.innerHTML = `
@@ -4617,6 +4839,122 @@
                 lobbyChannel.presence.leave();
             }
         });
+
+        // ========== توابع جدید برای دکمه‌های سبز/قرمز و لایک/دیسلایک ==========
+        function updateActionButtons() {
+            const container = document.getElementById('actionButtons');
+            if (!container || !currentLobby) return;
+            
+            container.innerHTML = '';
+            
+            // بررسی اینکه آیا کاربر مدیر لابی است
+            const isLobbyCreator = currentLobby.creatorId === myUserId;
+            
+            if (isLobbyCreator) {
+                // دکمه استارت برای مدیر
+                const startBtn = document.createElement('div');
+                startBtn.className = 'start-game-btn';
+                startBtn.innerHTML = '▶️<span>شروع</span>';
+                startBtn.onclick = startGameFromLobby;
+                container.appendChild(startBtn);
+            } else {
+                // دکمه‌های سبز و قرمز برای بقیه
+                const greenBtn = document.createElement('div');
+                greenBtn.className = 'action-btn green';
+                greenBtn.textContent = '🟢';
+                greenBtn.onclick = () => sendReaction('green');
+                
+                const redBtn = document.createElement('div');
+                redBtn.className = 'action-btn red';
+                redBtn.textContent = '🔴';
+                redBtn.onclick = () => sendReaction('red');
+                
+                container.appendChild(greenBtn);
+                container.appendChild(redBtn);
+            }
+            
+            // دکمه‌های لایک و دیسلایک برای همه
+            const likeBtn = document.createElement('div');
+            likeBtn.className = 'action-btn like';
+            likeBtn.textContent = '👍';
+            likeBtn.onclick = () => sendReaction('like');
+            
+            const dislikeBtn = document.createElement('div');
+            dislikeBtn.className = 'action-btn dislike';
+            dislikeBtn.textContent = '👎';
+            dislikeBtn.onclick = () => sendReaction('dislike');
+            
+            container.appendChild(likeBtn);
+            container.appendChild(dislikeBtn);
+        }
+
+        function sendReaction(type) {
+            if (!lobbyChannel || !currentUser) return;
+            
+            const reactionData = {
+                userId: myUserId,
+                username: currentUser.username,
+                type: type,
+                timestamp: Date.now()
+            };
+            
+            lobbyChannel.publish('reaction', reactionData);
+            
+            // نمایش محلی
+            if (type === 'like' || type === 'dislike') {
+                handleReaction(reactionData);
+            } else if (type === 'green' || type === 'red') {
+                handleFrameColor({
+                    userId: myUserId,
+                    color: type
+                });
+            }
+        }
+
+        function handleReaction(data) {
+            const { userId, type } = data;
+            
+            // ذخیره واکنش
+            userReactions.set(userId, {
+                type: type,
+                timestamp: Date.now()
+            });
+            
+            // بروزرسانی صندلی
+            updateLobbySeats();
+            
+            // حذف واکنش بعد از 3 ثانیه
+            setTimeout(() => {
+                if (userReactions.has(userId)) {
+                    const reaction = userReactions.get(userId);
+                    if (reaction.timestamp === data.timestamp) {
+                        userReactions.delete(userId);
+                        updateLobbySeats();
+                    }
+                }
+            }, 3000);
+        }
+
+        function handleFrameColor(data) {
+            const { userId, color } = data;
+            
+            userFrameColors.set(userId, color);
+            
+            // بروزرسانی صندلی
+            updateLobbySeats();
+        }
+
+        function startGameFromLobby() {
+            if (!currentLobby) return;
+            
+            // اینجا می‌توانید منطق شروع بازی را پیاده‌سازی کنید
+            alert('🎮 بازی شروع شد!');
+        }
+
+        function toggleUserMic(userId) {
+            // اینجا می‌توانید منطق کنترل میکروفون کاربران را پیاده‌سازی کنید
+            console.log('Toggle mic for user:', userId);
+        }
     </script>
 </body>
 </html>
