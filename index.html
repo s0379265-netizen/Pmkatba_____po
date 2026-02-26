@@ -1690,7 +1690,9 @@
             border: 2px solid white;
         }
 
-        /* صفحه لابی دوستانه - بازطراحی شده */
+        /* ========== بخش اصلی بازی مافیا - جدید ========== */
+        
+        /* صفحه لابی دوستانه - جدید */
         .friendly-lobby-page {
             position: fixed;
             top: 0;
@@ -1771,6 +1773,394 @@
             z-index: 2600;
         }
 
+        /* دکمه استارت بازی (فقط برای مدیر لابی) - قبل از شروع بازی */
+        .start-game-btn {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border: 4px solid white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 30px #ffd700;
+            transition: all 0.3s;
+            z-index: 2600;
+        }
+
+        .start-game-btn:hover {
+            transform: translateX(-50%) scale(1.15);
+        }
+
+        .start-game-btn span {
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        /* دکمه نقش (برای دیدن نقش خود) - فقط بعد از شروع بازی */
+        .role-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9c27b0, #673ab7);
+            border: 3px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 30px #9c27b0;
+            transition: all 0.3s;
+            z-index: 2600;
+            display: none; /* پنهان تا شروع بازی */
+        }
+
+        .role-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* دکمه توضیحات نقش (بالا سمت راست) - فقط بعد از شروع بازی */
+        .role-desc-btn {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            border: 3px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 30px #2196F3;
+            transition: all 0.3s;
+            z-index: 2600;
+            display: none; /* پنهان تا شروع بازی */
+        }
+
+        .role-desc-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* کارت نقش - نمایش موقت - فقط بعد از شروع بازی */
+        .role-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border-radius: 20px;
+            border: 5px solid white;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            animation: fadeInScale 0.5s ease;
+        }
+
+        .role-card.active {
+            display: flex;
+        }
+
+        .role-card img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 15px;
+        }
+
+        @keyframes fadeInScale {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            80% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        /* توضیحات نقش - دیالوگ بزرگ - فقط بعد از شروع بازی */
+        .role-desc-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 600px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 4px solid #ffd700;
+            border-radius: 30px;
+            padding: 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3100;
+            box-shadow: 0 0 100px rgba(255, 215, 0, 0.8);
+        }
+
+        .role-desc-dialog.active {
+            display: flex;
+            animation: scaleIn 0.3s ease;
+        }
+
+        .role-desc-dialog img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 20px;
+        }
+
+        .close-desc-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff4444;
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-desc-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* نشانگر بازیکن در حال صحبت - فقط بعد از شروع بازی */
+        .speaking-indicator {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ffd700;
+            border-radius: 40px;
+            padding: 10px 25px;
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: 700;
+            display: none;
+            z-index: 2600;
+            backdrop-filter: blur(5px);
+            white-space: nowrap;
+        }
+
+        .speaking-indicator.active {
+            display: block;
+        }
+
+        /* عنوان روز/شب - فقط بعد از شروع بازی */
+        .phase-title {
+            position: absolute;
+            top: 60px;
+            right: 50%;
+            transform: translateX(50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid;
+            border-radius: 40px;
+            padding: 10px 25px;
+            font-size: 20px;
+            font-weight: 700;
+            z-index: 2600;
+            backdrop-filter: blur(5px);
+            display: none; /* پنهان تا شروع بازی */
+        }
+
+        .phase-title.day {
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .phase-title.night {
+            border-color: #673ab7;
+            color: #673ab7;
+        }
+
+        /* تایمر نوبت - فقط بعد از شروع بازی */
+        .turn-timer {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #1E90FF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1E90FF;
+            font-size: 24px;
+            font-weight: 700;
+            z-index: 2600;
+            backdrop-filter: blur(5px);
+            display: none; /* پنهان تا شروع بازی */
+        }
+
+        /* پیام حذف بازیکن - فقط بعد از شروع بازی */
+        .kill-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #8b0000, #330000);
+            border: 4px solid #ff0000;
+            border-radius: 50px;
+            padding: 30px 50px;
+            color: white;
+            font-size: 28px;
+            font-weight: 900;
+            text-shadow: 0 0 20px red;
+            display: none;
+            z-index: 3200;
+            animation: killPulse 0.5s ease;
+        }
+
+        .kill-message.active {
+            display: block;
+        }
+
+        @keyframes killPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* خون روی آواتار بازیکن کشته شده - فقط بعد از شروع بازی */
+        .blood-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 0, 0, 0.5);
+            animation: bloodPulse 1s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes bloodPulse {
+            0%, 100% { background: rgba(255, 0, 0, 0.5); }
+            50% { background: rgba(139, 0, 0, 0.8); }
+        }
+
+        /* ماسک شب - فقط بعد از شروع بازی */
+        .night-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, transparent 20%, rgba(0, 0, 0, 0.8) 100%);
+            border: 2px solid #673ab7;
+            box-shadow: inset 0 0 20px #673ab7;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .night-mask::after {
+            content: '🌙';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 20px;
+            filter: drop-shadow(0 0 5px #673ab7);
+        }
+
+        /* دکمه‌های لایک و دیسلایک - همیشه قابل مشاهده */
+        .like-btn, .dislike-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .like-btn {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .dislike-btn {
+            border-color: #ff4500;
+            box-shadow: 0 0 15px #ff4500;
+        }
+
+        .like-btn:hover, .dislike-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* دکمه‌های سبز و قرمز - همیشه قابل مشاهده */
+        .green-btn, .red-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .green-btn {
+            border-color: #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .red-btn {
+            border-color: #ff0000;
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .green-btn:hover, .red-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* دکمه روز (فقط برای نمایش) - همیشه قابل مشاهده */
+        .day-display {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            border: 2px solid #ffd700;
+            border-radius: 30px;
+            padding: 8px 15px;
+            color: #ffd700;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 2600;
+            display: none; /* پنهان تا شروع بازی */
+        }
+
+        .day-display:hover {
+            background: rgba(255,215,0,0.2);
+        }
+
         /* میز جلسه با صندلی‌های کوچکتر */
         .meeting-table {
             flex: 1;
@@ -1832,6 +2222,7 @@
             background-position: center;
             border: 2px solid #ffd700;
             margin-bottom: 5px;
+            position: relative;
         }
 
         .player-seat-small .seat-name-small {
@@ -1865,7 +2256,7 @@
         .seat-6 { top: 20%; left: 15%; transform: translate(-50%, -50%); }
         .seat-7 { top: 45%; right: 8%; transform: translate(50%, -50%); }
 
-        /* کنترل‌های صدا و چت - پایین صفحه */
+        /* کنترل‌های صدا و چت - پایین صفحه - همیشه فعال */
         .lobby-controls-bottom {
             position: fixed;
             bottom: 20px;
@@ -1911,7 +2302,12 @@
             animation: recordingPulse 0.5s infinite;
         }
 
-        /* پنل چت */
+        @keyframes recordingPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* پنل چت - همیشه فعال */
         .chat-container {
             position: fixed;
             bottom: 90px;
@@ -2072,183 +2468,21 @@
             z-index: 10001;
         }
 
-        /* ========== استایل دکمه‌های سبز و قرمز و لایک/دیسلایک ========== */
-        .lobby-action-buttons {
+        /* دکمه‌های لایک/دیسلایک و سبز/قرمز - همیشه در پایین صفحه */
+        .action-buttons-container {
             position: absolute;
-            bottom: 30px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 25px;
+            gap: 20px;
             align-items: center;
             z-index: 2600;
             background: rgba(0,0,0,0.6);
-            padding: 12px 25px;
+            padding: 15px 25px;
             border-radius: 60px;
             border: 2px solid #ffd700;
             backdrop-filter: blur(5px);
-        }
-
-        .action-btn {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            border: 3px solid;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 28px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: rgba(0,0,0,0.7);
-            color: white;
-        }
-
-        .action-btn.green {
-            border-color: #00ff00;
-            box-shadow: 0 0 20px #00ff00;
-        }
-
-        .action-btn.red {
-            border-color: #ff0000;
-            box-shadow: 0 0 20px #ff0000;
-        }
-
-        .action-btn.like {
-            border-color: #ffd700;
-            box-shadow: 0 0 20px #ffd700;
-            font-size: 32px;
-        }
-
-        .action-btn.dislike {
-            border-color: #ff4500;
-            box-shadow: 0 0 20px #ff4500;
-            font-size: 32px;
-        }
-
-        .action-btn.small {
-            width: 55px;
-            height: 55px;
-            font-size: 24px;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.15);
-        }
-
-        /* ناظرها */
-        .observer {
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            border: 2px solid white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: white;
-            z-index: 2601;
-            pointer-events: none;
-        }
-
-        .observer.top {
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .observer.bottom {
-            bottom: 35%;
-            left: 50%;
-            transform: translate(-50%, 50%);
-        }
-
-        .observer.middle {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        /* استایل لایک/دیسلایک کنار آواتار */
-        .reaction-indicator {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            font-size: 20px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid;
-            animation: popIn 0.3s;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            80% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        /* فریم سبز/قرمز */
-        .player-seat-small.reacted-green {
-            border-color: #00ff00;
-            box-shadow: 0 0 25px #00ff00;
-        }
-
-        .player-seat-small.reacted-red {
-            border-color: #ff0000;
-            box-shadow: 0 0 25px #ff0000;
-        }
-
-        /* دکمه استارت برای مدیر */
-        .start-game-btn {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border: 4px solid white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 30px;
-            cursor: pointer;
-            box-shadow: 0 0 30px #ffd700;
-            transition: all 0.3s;
-        }
-
-        .start-game-btn:hover {
-            transform: scale(1.15);
-        }
-
-        .start-game-btn span {
-            font-size: 12px;
-            margin-top: 2px;
-        }
-
-        /* دکمه مایک جدید */
-        .mic-speaker-btn {
-            position: absolute;
-            bottom: -5px;
-            left: -5px;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: #ffd700;
-            color: black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            border: 2px solid white;
-            cursor: pointer;
-            z-index: 10;
         }
     </style>
 </head>
@@ -2531,13 +2765,48 @@
         </div>
     </div>
 
-    <!-- صفحه لابی دوستانه -->
+    <!-- صفحه لابی دوستانه - نسخه کامل مافیا -->
     <div class="friendly-lobby-page" id="friendlyLobbyPage">
         <!-- دکمه ترک لابی دایره‌ای بالا چپ -->
         <div class="leave-lobby-btn-small" onclick="leaveLobby()">🚪</div>
 
         <!-- عنوان لابی بالا سمت راست -->
         <div class="lobby-title-small" id="currentLobbyName">لابی</div>
+
+        <!-- دکمه استارت (فقط برای مدیر لابی) - قبل از شروع بازی قابل مشاهده -->
+        <div class="start-game-btn" id="startGameBtn" onclick="startMafiaGame()">▶️<span>شروع</span></div>
+
+        <!-- دکمه نقش (پایین سمت راست) - فقط بعد از شروع بازی -->
+        <div class="role-btn" id="roleBtn" onclick="showMyRole()">🎭</div>
+
+        <!-- دکمه توضیحات نقش (بالا سمت راست) - فقط بعد از شروع بازی -->
+        <div class="role-desc-btn" id="roleDescBtn" onclick="showRoleDescription()">📖</div>
+
+        <!-- نشانگر بازیکن در حال صحبت - فقط بعد از شروع بازی -->
+        <div class="speaking-indicator" id="speakingIndicator">بازیکن شماره 1 در حال صحبت</div>
+
+        <!-- عنوان روز/شب - فقط بعد از شروع بازی -->
+        <div class="phase-title day" id="phaseTitle">روز معارفه</div>
+
+        <!-- تایمر نوبت - فقط بعد از شروع بازی -->
+        <div class="turn-timer" id="turnTimer">30</div>
+
+        <!-- دکمه روز (غیرفعال) - فقط بعد از شروع بازی -->
+        <div class="day-display" id="dayDisplay">روز 1</div>
+
+        <!-- کارت نقش (نمایش موقت) - فقط بعد از شروع بازی -->
+        <div class="role-card" id="roleCard">
+            <img src="" alt="نقش شما" id="roleCardImage">
+        </div>
+
+        <!-- دیالوگ توضیحات نقش - فقط بعد از شروع بازی -->
+        <div class="role-desc-dialog" id="roleDescDialog">
+            <div class="close-desc-btn" onclick="hideRoleDescription()">✕</div>
+            <img src="" alt="توضیحات نقش" id="roleDescImage">
+        </div>
+
+        <!-- پیام حذف بازیکن - فقط بعد از شروع بازی -->
+        <div class="kill-message" id="killMessage">بازیکن شماره 3 از روند بازی حذف شد</div>
 
         <!-- میز جلسه با صندلی‌های کوچک -->
         <div class="meeting-table">
@@ -2547,22 +2816,18 @@
             </div>
         </div>
 
-        <!-- دکمه‌های سبز و قرمز و لایک/دیسلایک برای همه -->
-        <div class="lobby-action-buttons" id="actionButtons">
-            <!-- اینجا با جاوااسکریپت پر می‌شود -->
+        <!-- دکمه‌های لایک/دیسلایک و سبز/قرمز - همیشه در پایین صفحه -->
+        <div class="action-buttons-container" id="actionButtons">
+            <!-- با جاوااسکریپت پر می‌شود -->
         </div>
 
-        <!-- ناظرها -->
-        <div class="observer top" id="observerTop">👁️</div>
-        <div class="observer bottom" id="observerBottom">👁️</div>
-
-        <!-- کنترل‌های چت و صدا -->
+        <!-- کنترل‌های چت و صدا - همیشه در پایین صفحه -->
         <div class="lobby-controls-bottom">
             <div class="control-btn-small chat" onclick="toggleChat()">💬</div>
             <div class="control-btn-small voice" id="voiceRecordBtn" onclick="toggleVoiceRecording()">🎤</div>
         </div>
 
-        <!-- پنل چت -->
+        <!-- پنل چت - همیشه فعال -->
         <div class="chat-container" id="chatContainer">
             <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input-area">
@@ -2620,7 +2885,47 @@
     <audio id="voicePlayerBuffer" style="display: none;" preload="auto"></audio>
 
     <script>
-        // ========== سیستم ضبط و پخش صدا - نسخه پایدار با بهینه‌سازی ==========
+        // ========== آرایه نقش‌ها و تصاویر ==========
+        const roleImages = [
+            'https://uploadkon.ir/uploads/2fa826_26IMG-20260226-183149-242.jpg', // نقش 1
+            'https://uploadkon.ir/uploads/746d26_26IMG-20260226-183149-231.jpg', // نقش 2
+            'https://uploadkon.ir/uploads/469526_26IMG-20260226-183149-375.jpg', // نقش 3
+            'https://uploadkon.ir/uploads/000a26_26IMG-20260226-183148-809.jpg', // نقش 4
+            'https://uploadkon.ir/uploads/2c4326_26IMG-20260226-183149-194.jpg', // نقش 5
+            'https://uploadkon.ir/uploads/b41626_26IMG-20260226-183149-257.jpg', // نقش 6
+            'https://uploadkon.ir/uploads/c0a626_26IMG-20260226-183149-120.jpg', // نقش 7
+            'https://uploadkon.ir/uploads/c0a626_26IMG-20260226-183149-120.jpg', // نقش 8
+            'https://uploadkon.ir/uploads/87c326_26IMG-20260226-183149-605.jpg', // نقش 9
+            'https://uploadkon.ir/uploads/743b26_26IMG-20260226-183148-947.jpg'  // نقش 10
+        ];
+
+        const roleDescImages = [
+            'https://uploadkon.ir/uploads/3ebe26_26IMG-20260226-183223-705.jpg', // توضیحات نقش 1
+            'https://uploadkon.ir/uploads/964f26_26IMG-20260226-183222-952.jpg', // توضیحات نقش 2
+            'https://uploadkon.ir/uploads/7c2626_26IMG-20260226-183223-017.jpg', // توضیحات نقش 3
+            'https://uploadkon.ir/uploads/c9ae26_26IMG-20260226-183223-460.jpg', // توضیحات نقش 4
+            'https://uploadkon.ir/uploads/777826_26IMG-20260226-183223-591.jpg', // توضیحات نقش 5
+            'https://uploadkon.ir/uploads/71e526_26IMG-20260226-183149-140.jpg', // توضیحات نقش 6
+            'https://uploadkon.ir/uploads/e60226_26IMG-20260226-183223-226.jpg', // توضیحات نقش 7
+            'https://uploadkon.ir/uploads/d89326_26IMG-20260226-183223-174.jpg', // توضیحات نقش 8
+            'https://uploadkon.ir/uploads/b28e26_26IMG-20260226-183223-841.jpg', // توضیحات نقش 9
+            'https://uploadkon.ir/uploads/b28e26_26IMG-20260226-183223-841.jpg'  // توضیحات نقش 10 (تکرار)
+        ];
+
+        // ========== متغیرهای بازی مافیا ==========
+        let gameStarted = false;
+        let gamePhase = 'day'; // 'day' یا 'night'
+        let currentDay = 1;
+        let currentSpeakerIndex = 0;
+        let speakerTimer = null;
+        let remainingTime = 30;
+        let playerRoles = new Map(); // userId -> roleIndex
+        let alivePlayers = []; // لیست بازیکنان زنده
+        let mafiaPlayers = []; // لیست بازیکنان مافیا (نقش‌های 1-3)
+        let killedPlayer = null; // بازیکنی که در شب کشته شده
+        let myRole = null; // نقش کاربر فعلی
+
+        // ========== سیستم ضبط و پخش صدا (مشابه قبل) ==========
         let mediaRecorder = null;
         let audioChunks = [];
         let isRecording = false;
@@ -2636,28 +2941,22 @@
         let audioQueue = [];
         let isPlaying = false;
         
-        // درخواست دسترسی به میکروفون با مدیریت خطا
+        // درخواست دسترسی به میکروفون
         async function requestMicrophoneAccess() {
             try {
-                if (audioStream) {
-                    // اگر قبلاً دسترسی گرفته شده، همان را برگردان
-                    return true;
-                }
-                
+                if (audioStream) return true;
                 audioStream = await navigator.mediaDevices.getUserMedia({ 
                     audio: {
                         echoCancellation: true,
                         noiseSuppression: true,
                         autoGainControl: true,
-                        latency: 0.01 // کاهش تأخیر
+                        latency: 0.01
                     } 
                 });
-                
                 console.log('✅ دسترسی به میکروفون داده شد');
                 return true;
             } catch (err) {
                 console.error('❌ خطا در دسترسی به میکروفون:', err);
-                
                 if (err.name === 'NotAllowedError') {
                     showNotification('لطفاً اجازه دسترسی به میکروفون را بدهید');
                 } else if (err.name === 'NotFoundError') {
@@ -2665,57 +2964,38 @@
                 } else {
                     showNotification('خطا در دسترسی به میکروفون');
                 }
-                
                 return false;
             }
         }
         
-        // شروع ضبط صدا با کیفیت بالا
+        // شروع ضبط صدا
         async function startRecording() {
-            // اگر در حال ضبط هستیم، خروج
             if (isRecording) return false;
-            
             const hasAccess = await requestMicrophoneAccess();
             if (!hasAccess) return false;
             
             try {
-                // انتخاب بهترین فرمت صوتی
-                const options = {
-                    mimeType: 'audio/webm;codecs=opus',
-                    audioBitsPerSecond: 48000 // کیفیت بالا
-                };
-                
-                // بررسی پشتیبانی از فرمت
+                const options = { mimeType: 'audio/webm;codecs=opus', audioBitsPerSecond: 48000 };
                 if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                    // استفاده از فرمت پیش‌فرض
                     mediaRecorder = new MediaRecorder(audioStream);
                 } else {
                     mediaRecorder = new MediaRecorder(audioStream, options);
                 }
                 
                 audioChunks = [];
-                
-                mediaRecorder.ondataavailable = (event) => {
+                mediaRecorder.ondataavailable = async (event) => {
                     if (event.data.size > 0) {
                         audioChunks.push(event.data);
                     }
                 };
-                
                 mediaRecorder.onstop = async () => {
                     if (audioChunks.length === 0) return;
-                    
-                    const audioBlob = new Blob(audioChunks, { 
-                        type: mediaRecorder.mimeType || 'audio/webm' 
-                    });
-                    
-                    // ارسال صدا فقط اگر در لابی هستیم
+                    const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
                     if (currentLobby && lobbyChannel) {
                         await sendVoiceMessage(audioBlob);
                     }
-                    
                     hideVoiceNotification();
                 };
-                
                 mediaRecorder.onerror = (error) => {
                     console.error('❌ خطا در ضبط صدا:', error);
                     showNotification('خطا در ضبط صدا');
@@ -2723,14 +3003,11 @@
                     isRecording = false;
                     if (voiceRecordBtn) voiceRecordBtn.classList.remove('recording');
                 };
-                
-                // شروع ضبط با تکه‌های 500 میلی‌ثانیه‌ای (بهینه‌تر)
                 mediaRecorder.start(500);
                 isRecording = true;
                 if (voiceRecordBtn) voiceRecordBtn.classList.add('recording');
                 showVoiceNotification('در حال ضبط صدا...');
                 console.log('🎤 ضبط صدا شروع شد');
-                
                 return true;
             } catch (err) {
                 console.error('❌ خطا در شروع ضبط:', err);
@@ -2759,7 +3036,6 @@
                 showNotification('برای ارسال صدا ابتدا به یک لابی وارد شوید');
                 return;
             }
-            
             if (isRecording) {
                 stopRecording();
             } else {
@@ -2767,46 +3043,33 @@
             }
         }
         
-        // ارسال پیام صوتی با حجم بهینه
+        // ارسال پیام صوتی
         async function sendVoiceMessage(audioBlob) {
             if (!lobbyChannel || !currentUser) return;
-            
             try {
                 showVoiceNotification('در حال ارسال صدا...');
-                
-                // تبدیل به ArrayBuffer برای ارسال بهتر
                 const arrayBuffer = await audioBlob.arrayBuffer();
-                
-                // محدودیت حجم (حداکثر 500KB)
                 if (arrayBuffer.byteLength > 500000) {
                     showNotification('حجم صدا زیاد است');
                     hideVoiceNotification();
                     return;
                 }
-                
-                // تبدیل به base64
                 const base64Audio = btoa(
                     new Uint8Array(arrayBuffer)
                         .reduce((data, byte) => data + String.fromCharCode(byte), '')
                 );
-                
                 const voiceData = {
                     username: currentUser.username,
                     userId: myUserId,
                     audio: base64Audio,
                     mimeType: audioBlob.type,
                     timestamp: Date.now(),
-                    id: Math.random().toString(36).substr(2, 9) // شناسه یکتا
+                    id: Math.random().toString(36).substr(2, 9)
                 };
-                
-                // ارسال صدا به همه در لابی
                 await lobbyChannel.publish('voice-message', voiceData);
-                
                 hideVoiceNotification();
                 showNotification(`🎤 صدای شما ارسال شد`);
-                
                 console.log('✅ صدا ارسال شد:', voiceData.id);
-                
             } catch (err) {
                 console.error('❌ خطا در ارسال صدا:', err);
                 showNotification('خطا در ارسال صدا');
@@ -2817,69 +3080,52 @@
         // پخش صدا از صف
         async function playNextInQueue() {
             if (isPlaying || audioQueue.length === 0) return;
-            
             isPlaying = true;
             const data = audioQueue.shift();
-            
             try {
                 await playAudio(data);
             } catch (err) {
                 console.error('❌ خطا در پخش صدا از صف:', err);
             }
-            
             isPlaying = false;
-            
-            // پخش بعدی اگر وجود دارد
             if (audioQueue.length > 0) {
                 setTimeout(() => playNextInQueue(), 50);
             }
         }
         
-        // پخش صدا با بهینه‌سازی
+        // پخش صدا
         async function playAudio(data) {
-            const { username, audio: base64Audio, mimeType, id, userId } = data;
-            
+            const { username, audio: base64Audio, mimeType, userId } = data;
             return new Promise((resolve, reject) => {
                 try {
-                    // تبدیل base64 به Blob
                     const binaryString = atob(base64Audio);
                     const bytes = new Uint8Array(binaryString.length);
                     for (let i = 0; i < binaryString.length; i++) {
                         bytes[i] = binaryString.charCodeAt(i);
                     }
-                    
                     const audioBlob = new Blob([bytes], { type: mimeType || 'audio/webm' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     
-                    // استفاده از دو پلیر برای بافرینگ بهتر
                     const audioPlayer = document.getElementById('voicePlayer');
                     const bufferPlayer = document.getElementById('voicePlayerBuffer');
-                    
-                    // انتخاب پلیری که مشغول نیست
                     let player = audioPlayer;
                     if (!audioPlayer.paused && audioPlayer.currentTime > 0) {
                         player = bufferPlayer;
                     }
                     
-                    // توقف پخش قبلی
                     player.pause();
                     player.currentTime = 0;
-                    
-                    // تنظیم و پخش جدید
                     player.src = audioUrl;
                     
                     let resolved = false;
                     
                     player.oncanplaythrough = () => {
                         if (!resolved) {
-                            // نمایش انیمیشن روی صندلی کاربر
                             const seatElement = document.querySelector(`[data-userid="${userId}"] .voice-status-small`);
                             if (seatElement) {
                                 seatElement.classList.add('speaking');
                             }
-                            
                             showNotification(`🎤 پیام صوتی از ${username}`);
-                            
                             player.play()
                                 .then(() => {
                                     console.log('🔊 پخش صدای', username);
@@ -2893,13 +3139,10 @@
                     };
                     
                     player.onended = () => {
-                        // مخفی کردن انیمیشن
                         const seatElement = document.querySelector(`[data-userid="${userId}"] .voice-status-small`);
                         if (seatElement) {
                             seatElement.classList.remove('speaking');
                         }
-                        
-                        // پاکسازی URL
                         URL.revokeObjectURL(audioUrl);
                         resolve();
                     };
@@ -2910,9 +3153,7 @@
                         reject(e);
                     };
                     
-                    // شروع بارگذاری
                     player.load();
-                    
                 } catch (err) {
                     console.error('❌ خطا در آماده‌سازی صدا:', err);
                     reject(err);
@@ -2920,24 +3161,16 @@
             });
         }
         
-        // دریافت و پخش صدا با صف
+        // دریافت و پخش صدا
         function playReceivedVoice(data) {
             try {
                 const { username, userId } = data;
-                
-                // اگر صدا از خود کاربر است، پخش نکن
                 if (data.userId === myUserId) return;
-                
                 console.log('📥 دریافت صدا از:', username, 'ID:', data.id);
-                
-                // اضافه به صف پخش
                 audioQueue.push(data);
-                
-                // شروع پخش اگر در حال پخش نیست
                 if (!isPlaying) {
                     playNextInQueue();
                 }
-                
             } catch (err) {
                 console.error('❌ خطا در دریافت صدا:', err);
             }
@@ -2947,8 +3180,6 @@
         function showVoiceNotification(text) {
             voiceNotificationText.textContent = text;
             voiceNotification.style.display = 'flex';
-            
-            // مخفی کردن خودکار بعد از 3 ثانیه
             setTimeout(() => {
                 if (voiceNotification.style.display === 'flex') {
                     hideVoiceNotification();
@@ -2961,20 +3192,13 @@
             voiceNotification.style.display = 'none';
         }
         
-        // پاکسازی منابع صوتی هنگام خروج
+        // پاکسازی منابع صوتی
         function cleanupAudioResources() {
-            if (isRecording) {
-                stopRecording();
-            }
-            
+            if (isRecording) stopRecording();
             if (audioStream) {
-                audioStream.getTracks().forEach(track => {
-                    track.stop();
-                });
+                audioStream.getTracks().forEach(track => track.stop());
                 audioStream = null;
             }
-            
-            // پاکسازی صف و کش
             audioQueue = [];
             audioCache.clear();
         }
@@ -3016,9 +3240,9 @@
         // ممد - اطلاعات سرور
         const ABLY_KEY = 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo';
         
-        // اکانت ادمین با مشخصات جدید
-        const ADMIN_USERNAME = '09373467527'; // شماره به عنوان نام کاربری
-        const ADMIN_PASSWORD = '2000008978'; // رمز عبور جدید
+        // اکانت ادمین
+        const ADMIN_USERNAME = '09373467527';
+        const ADMIN_PASSWORD = '2000008978';
         
         // متغیرهای اصلی
         let currentUser = null;
@@ -3030,7 +3254,7 @@
         let bannedUsers = {};
         let onlineUsers = new Map();
         
-        // متغیرهای صوتی
+        // متغیرهای صوتی قدیمی
         let localStream = null;
         let audioEnabled = true;
         let micMuted = false;
@@ -3057,7 +3281,7 @@
         let selectedProfileUser = null;
         let selectedLobbyColor = '#FF5733'; // رنگ پیش‌فرض
         
-        // ========== متغیرهای جدید برای لایک/دیسلایک و دکمه‌های رنگی ==========
+        // ========== متغیرهای جدید برای واکنش‌ها ==========
         let userReactions = new Map(); // userId -> {type: 'like'|'dislike', timestamp}
         let userFrameColors = new Map(); // userId -> 'green'|'red'
 
@@ -3065,7 +3289,6 @@
         function saveAllData() {
             localStorage.setItem('users', JSON.stringify(users));
             localStorage.setItem('bannedUsers', JSON.stringify(bannedUsers));
-            // ذخیره لابی‌ها برای دائمی شدن
             const lobbiesArray = Array.from(friendlyLobbies.entries());
             localStorage.setItem('friendlyLobbies', JSON.stringify(lobbiesArray));
         }
@@ -3074,11 +3297,8 @@
             try {
                 const savedUsers = localStorage.getItem('users');
                 users = savedUsers ? JSON.parse(savedUsers) : {};
-                
                 const savedBanned = localStorage.getItem('bannedUsers');
                 bannedUsers = savedBanned ? JSON.parse(savedBanned) : {};
-                
-                // بارگذاری لابی‌های ذخیره شده
                 const savedLobbies = localStorage.getItem('friendlyLobbies');
                 if (savedLobbies) {
                     const lobbiesArray = JSON.parse(savedLobbies);
@@ -3138,40 +3358,25 @@
                 ably.connection.on('disconnected', () => {
                     console.log('❌ ارتباط قطع شد - تلاش برای اتصال مجدد...');
                     lastConnectionState = 'disconnected';
-                    
-                    if (!isManuallyDisconnected) {
-                        showDisconnectDialog();
-                    }
-                    
+                    if (!isManuallyDisconnected) showDisconnectDialog();
                     if (reconnectTimer) clearTimeout(reconnectTimer);
                     reconnectTimer = setTimeout(() => {
-                        if (ably && ably.connection.state !== 'connected') {
-                            ably.connection.connect();
-                        }
+                        if (ably && ably.connection.state !== 'connected') ably.connection.connect();
                     }, 2000);
                 });
 
                 ably.connection.on('suspended', () => {
                     console.log('❌ ارتباط معلق شد');
                     lastConnectionState = 'suspended';
-                    
-                    if (!isManuallyDisconnected) {
-                        showDisconnectDialog();
-                    }
+                    if (!isManuallyDisconnected) showDisconnectDialog();
                 });
 
                 ably.connection.on('failed', () => {
                     console.log('❌ ارتباط failed');
                     lastConnectionState = 'failed';
-                    
-                    if (!isManuallyDisconnected) {
-                        showDisconnectDialog();
-                    }
-                    
+                    if (!isManuallyDisconnected) showDisconnectDialog();
                     if (reconnectTimer) clearTimeout(reconnectTimer);
-                    reconnectTimer = setTimeout(() => {
-                        initializeAbly();
-                    }, 5000);
+                    reconnectTimer = setTimeout(() => initializeAbly(), 5000);
                 });
             } catch (e) {
                 setTimeout(initializeAbly, 1000);
@@ -3189,9 +3394,7 @@
         // تابع مخفی کردن دیالوگ قطع ارتباط
         function hideDisconnectDialog() {
             const dialog = document.getElementById('disconnectDialog');
-            if (dialog) {
-                dialog.classList.remove('active');
-            }
+            if (dialog) dialog.classList.remove('active');
         }
 
         // تابع تلاش مجدد برای اتصال
@@ -3210,60 +3413,24 @@
             gameChannel = ably.channels.get('game:lobby');
             banChannel = ably.channels.get('ban:notifications');
             
-            gameChannel.subscribe('player-joined', (message) => {
-                console.log('بازیکن جدید:', message.data);
-                handlePlayerJoined(message);
-            });
-            
-            gameChannel.subscribe('player-left', (message) => {
-                console.log('بازیکن خارج شد:', message.data);
-                handlePlayerLeft(message);
-            });
-            
-            gameChannel.subscribe('game-ready', (message) => {
-                console.log('بازی آماده:', message.data);
-                handleGameReady(message);
-            });
-            
+            gameChannel.subscribe('player-joined', (message) => handlePlayerJoined(message));
+            gameChannel.subscribe('player-left', (message) => handlePlayerLeft(message));
+            gameChannel.subscribe('game-ready', (message) => handleGameReady(message));
             gameChannel.subscribe('answer', handleAnswer);
             
-            banChannel.subscribe('user-banned', (message) => {
-                console.log('⚠️ پیام بن دریافت شد:', message.data);
-                handleBanMessage(message);
-            });
+            banChannel.subscribe('user-banned', (message) => handleBanMessage(message));
             
-            // ========== کانال لابی‌های دوستانه ==========
             lobbiesChannel = ably.channels.get('friendly:lobbies');
-            
-            lobbiesChannel.subscribe('lobby-created', (message) => {
-                console.log('لابی جدید ایجاد شد:', message.data);
-                handleLobbyCreated(message);
-            });
-            
-            lobbiesChannel.subscribe('lobby-updated', (message) => {
-                console.log('لابی بروزرسانی شد:', message.data);
-                handleLobbyUpdated(message);
-            });
-            
-            lobbiesChannel.subscribe('lobby-closed', (message) => {
-                console.log('لابی بسته شد:', message.data);
-                handleLobbyClosed(message);
-            });
-            
-            gameChannel.subscribe('voice-offer', handleVoiceOffer);
-            gameChannel.subscribe('voice-answer', handleVoiceAnswer);
-            gameChannel.subscribe('ice-candidate', handleIceCandidate);
+            lobbiesChannel.subscribe('lobby-created', (message) => handleLobbyCreated(message));
+            lobbiesChannel.subscribe('lobby-updated', (message) => handleLobbyUpdated(message));
+            lobbiesChannel.subscribe('lobby-closed', (message) => handleLobbyClosed(message));
             
             presenceChannel = ably.channels.get('presence');
-            
             onlineUsers.clear();
             
             presenceChannel.presence.get((err, members) => {
                 if (members) {
-                    members.forEach(member => {
-                        onlineUsers.set(member.clientId, member.data);
-                    });
-                    
+                    members.forEach(member => onlineUsers.set(member.clientId, member.data));
                     if (currentUser?.isAdmin) {
                         loadUsersList();
                         updateOnlineCount();
@@ -3273,7 +3440,6 @@
             
             presenceChannel.presence.subscribe('enter', (member) => {
                 onlineUsers.set(member.clientId, member.data);
-                
                 if (currentUser?.isAdmin) {
                     loadUsersList();
                     updateOnlineCount();
@@ -3282,7 +3448,6 @@
             
             presenceChannel.presence.subscribe('leave', (member) => {
                 onlineUsers.delete(member.clientId);
-                
                 if (currentUser?.isAdmin) {
                     loadUsersList();
                     updateOnlineCount();
@@ -3291,7 +3456,6 @@
             
             presenceChannel.presence.subscribe('update', (member) => {
                 onlineUsers.set(member.clientId, member.data);
-                
                 if (currentUser?.isAdmin) {
                     loadUsersList();
                     updateOnlineCount();
@@ -3312,7 +3476,6 @@
         function handleBanMessage(message) {
             const data = message.data;
             console.log('بن دریافت شد برای:', data.username, 'کاربر فعلی:', currentUser?.username);
-            
             if (currentUser && currentUser.username === data.username) {
                 console.log('⚠️ کاربر بن شد:', data.username);
                 showBanDialogForUser(data.username, data.reason, data.days);
@@ -3322,7 +3485,6 @@
 
         function showBanDialogForUser(username, reason, days) {
             console.log('نمایش دیالوگ بن برای:', username);
-            
             const banDialog = document.getElementById('banDialog');
             const banMessage = document.getElementById('banMessageText');
             const banReason = document.getElementById('banReasonText');
@@ -3330,15 +3492,12 @@
             
             banMessage.textContent = `کاربر گرامی شما به علت تخلف ${reason} بن شده اید.`;
             banReason.textContent = `دلیل: ${reason}`;
-            
             if (days === 9999) {
                 banUntil.textContent = 'مدت مسدودیت: دائمی';
             } else {
                 banUntil.textContent = `مدت مسدودیت: ${days} روز`;
             }
-            
             banDialog.classList.add('active');
-            
             const content = document.querySelector('.ban-dialog-content');
             let shakeCount = 0;
             const shakeInterval = setInterval(() => {
@@ -3355,12 +3514,10 @@
         function updateOnlineCount() {
             const onlineCount = document.getElementById('onlineCount');
             const totalCount = document.getElementById('totalUsersCount');
-            
             if (onlineCount) {
                 const online = Array.from(onlineUsers.values()).filter(u => u && u.username).length;
                 onlineCount.textContent = `🟢 آنلاین: ${online}`;
             }
-            
             if (totalCount) {
                 const total = Object.keys(users).length;
                 totalCount.textContent = `👥 کل کاربران: ${total}`;
@@ -3372,9 +3529,7 @@
                 presenceChannel.presence.get((err, members) => {
                     if (members) {
                         onlineUsers.clear();
-                        members.forEach(member => {
-                            onlineUsers.set(member.clientId, member.data);
-                        });
+                        members.forEach(member => onlineUsers.set(member.clientId, member.data));
                     }
                     loadUsersList();
                     updateOnlineCount();
@@ -3383,18 +3538,14 @@
                 loadUsersList();
                 updateOnlineCount();
             }
-            
             const btn = event.target;
             const originalText = btn.textContent;
             btn.textContent = '✅ بروزرسانی شد';
-            setTimeout(() => {
-                btn.textContent = originalText;
-            }, 1000);
+            setTimeout(() => btn.textContent = originalText, 1000);
         }
 
         function showProfilePanel() {
             if (!currentUser) return;
-            
             document.getElementById('profileUsername').textContent = currentUser.username;
             document.getElementById('profileUserId').textContent = currentUser.id || ably?.auth?.clientId || '---';
             document.getElementById('profileCups').textContent = currentUser.cups || 0;
@@ -3440,28 +3591,21 @@
         function loadUsersList() {
             const listDiv = document.getElementById('usersList');
             if (!listDiv) return;
-            
             listDiv.innerHTML = '';
-            
             const usersArray = [];
             
             for (let username in users) {
                 if (username === ADMIN_USERNAME) continue;
-                
                 const user = users[username];
-                
                 let isOnline = false;
-                
                 for (let [clientId, data] of onlineUsers.entries()) {
                     if (data && data.username === username) {
                         isOnline = true;
                         break;
                     }
                 }
-                
                 let banInfo = '';
                 let isBanned = false;
-                
                 if (bannedUsers[username]) {
                     const banData = bannedUsers[username];
                     const now = Date.now();
@@ -3474,14 +3618,7 @@
                         saveAllData();
                     }
                 }
-                
-                usersArray.push({
-                    username,
-                    isOnline,
-                    isBanned,
-                    banInfo,
-                    user
-                });
+                usersArray.push({ username, isOnline, isBanned, banInfo, user });
             }
             
             usersArray.sort((a, b) => {
@@ -3517,7 +3654,6 @@
             if (usersArray.length === 0) {
                 listDiv.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">هیچ کاربری یافت نشد</div>';
             }
-            
             updateOnlineCount();
         }
 
@@ -3525,20 +3661,13 @@
             const searchTerm = document.getElementById('searchUser').value.toLowerCase().trim();
             const listDiv = document.getElementById('usersList');
             if (!listDiv) return;
-            
             listDiv.innerHTML = '';
-            
             const usersArray = [];
             
             for (let username in users) {
                 if (username === ADMIN_USERNAME) continue;
-                
-                if (searchTerm && !username.toLowerCase().includes(searchTerm)) {
-                    continue;
-                }
-                
+                if (searchTerm && !username.toLowerCase().includes(searchTerm)) continue;
                 const user = users[username];
-                
                 let isOnline = false;
                 for (let [clientId, data] of onlineUsers.entries()) {
                     if (data && data.username === username) {
@@ -3546,10 +3675,8 @@
                         break;
                     }
                 }
-                
                 let banInfo = '';
                 let isBanned = false;
-                
                 if (bannedUsers[username]) {
                     const banData = bannedUsers[username];
                     const now = Date.now();
@@ -3562,14 +3689,7 @@
                         saveAllData();
                     }
                 }
-                
-                usersArray.push({
-                    username,
-                    isOnline,
-                    isBanned,
-                    banInfo,
-                    user
-                });
+                usersArray.push({ username, isOnline, isBanned, banInfo, user });
             }
             
             usersArray.sort((a, b) => {
@@ -3608,14 +3728,9 @@
         
         function selectUser(username) {
             selectedUserId = username;
-            
             const buttons = document.querySelectorAll('.user-actions button');
-            buttons.forEach(btn => {
-                btn.style.background = '#ff4500';
-            });
-            
+            buttons.forEach(btn => btn.style.background = '#ff4500');
             event.target.style.background = '#4CAF50';
-            
             alert(`✅ کاربر ${username} برای مسدودسازی انتخاب شد`);
         }
 
@@ -3624,12 +3739,9 @@
                 alert('❌ لطفا ابتدا یک کاربر را انتخاب کنید');
                 return;
             }
-            
             const reason = document.getElementById('banReason').value;
             const days = parseInt(document.getElementById('banDays').value);
-            
             const banUntil = Date.now() + (days * 24 * 60 * 60 * 1000);
-            
             bannedUsers[selectedUserId] = {
                 until: banUntil,
                 reason: reason,
@@ -3637,9 +3749,7 @@
                 date: Date.now(),
                 days: days
             };
-            
             saveAllData();
-            
             if (banChannel) {
                 console.log('ارسال پیام بن برای:', selectedUserId);
                 banChannel.publish('user-banned', {
@@ -3649,7 +3759,6 @@
                     timestamp: Date.now()
                 });
             }
-            
             let targetClientId = null;
             for (let [clientId, data] of onlineUsers.entries()) {
                 if (data && data.username === selectedUserId) {
@@ -3657,54 +3766,38 @@
                     break;
                 }
             }
-            
             if (targetClientId && presenceChannel) {
                 presenceChannel.presence.unsubscribe(targetClientId);
             }
-            
             if (currentUser && currentUser.username === selectedUserId) {
                 showBanDialogForUser(selectedUserId, reason, days);
                 logout(true);
             }
-            
             alert(`✅ کاربر ${selectedUserId} به دلیل ${reason} برای ${days} روز مسدود شد`);
-            
             loadUsersList();
             selectedUserId = null;
         }
 
         function logout(isBanned = false) {
             isManuallyDisconnected = true;
-            
-            // پاکسازی منابع صوتی
             cleanupAudioResources();
-            
             if (currentUser) {
-                if (presenceChannel) {
-                    presenceChannel.presence.leave();
-                }
-                
+                if (presenceChannel) presenceChannel.presence.leave();
                 if (!isBanned) {
                     users[currentUser.username] = currentUser;
                     saveAllData();
                 }
-                
                 localStorage.removeItem('currentUser');
                 currentUser = null;
-                
                 hideProfilePanel();
                 hideAdminPanel();
                 hideFriendlyPage();
                 hideLobbyPage();
                 hideLobbyProfilePanel();
-                
                 document.getElementById('gameContainer').classList.add('hidden');
                 document.getElementById('registerScreen').style.display = 'flex';
             }
-            
-            setTimeout(() => {
-                isManuallyDisconnected = false;
-            }, 1000);
+            setTimeout(() => isManuallyDisconnected = false, 1000);
         }
 
         function checkSavedUser() {
@@ -3731,7 +3824,6 @@
                         document.getElementById('registerScreen').style.display = 'none';
                         document.getElementById('gameContainer').classList.remove('hidden');
                         
-                        // بررسی ادمین بودن کاربر با مشخصات جدید
                         if (currentUser.username === ADMIN_USERNAME && currentUser.password === ADMIN_PASSWORD) {
                             document.getElementById('adminMenuItem').style.display = 'flex';
                             currentUser.isAdmin = true;
@@ -3740,7 +3832,6 @@
                         updateUI();
                         setUserAvatar();
                         
-                        // نمایش نام کاربر در هدر با تیک آبی برای ادمین
                         const headerUsername = document.getElementById('headerUsername');
                         headerUsername.innerHTML = currentUser.username + (currentUser.isAdmin ? '<span class="admin-verified-tick">✓</span>' : '');
                         
@@ -3754,7 +3845,6 @@
                             }
                         }, 1000);
                         
-                        // شروع پخش موزیک
                         startBackgroundMusic();
                         
                         return;
@@ -3768,12 +3858,9 @@
         function setUserAvatar() {
             const avatar = document.getElementById('userAvatar');
             if (!avatar) return;
-            
-            // آواتار انحصاری فقط برای کاربر ادمین (09373467527)
             if (currentUser && currentUser.isAdmin) {
                 avatar.style.backgroundImage = 'url("https://uploadkon.ir/uploads/3c3c23_26IMG-20260223-161029-320.jpg")';
             } else {
-                // آواتار پیش‌فرض برای سایر کاربران
                 avatar.style.backgroundImage = 'url("https://uploadkon.ir/uploads/c22318_26IMG-20260216-161923-048.jpg")';
             }
             avatar.style.backgroundSize = 'cover';
@@ -3791,7 +3878,6 @@
 
             loadAllData();
 
-            // بررسی اکانت ادمین با مشخصات جدید
             if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
                 currentUser = {
                     username: username,
@@ -3908,7 +3994,7 @@
             document.getElementById('waitingPage').classList.remove('active');
         }
 
-        // ========== توابع بخش دوستانه - به‌روزرسانی شده ==========
+        // ========== توابع بخش دوستانه ==========
 
         function showFriendlyPage() {
             document.getElementById('friendlyPage').classList.add('active');
@@ -3939,19 +4025,15 @@
 
         function createLobby() {
             const lobbyName = document.getElementById('lobbyNameInput').value.trim();
-            
             if (!lobbyName) {
                 alert('❌ لطفا نام لابی را وارد کنید');
                 return;
             }
-            
             if (!currentUser) {
                 alert('❌ لطفا ابتدا وارد شوید');
                 return;
             }
-            
             const lobbyCode = 'Lobby_' + Math.random().toString(36).substr(2, 8).toUpperCase();
-            
             const lobbyData = {
                 name: lobbyName,
                 code: lobbyCode,
@@ -3963,10 +4045,8 @@
                 seats: new Array(7).fill(null),
                 color: selectedLobbyColor
             };
-            
             friendlyLobbies.set(lobbyCode, lobbyData);
-            saveAllData(); // ذخیره برای دائمی شدن
-            
+            saveAllData();
             if (lobbiesChannel) {
                 lobbiesChannel.publish('lobby-created', lobbyData);
                 lobbiesChannel.presence.enter({
@@ -3977,31 +4057,23 @@
                     color: selectedLobbyColor
                 });
             }
-            
             hideCreateLobbyDialog();
-            
-            setTimeout(() => {
-                joinLobby(lobbyCode);
-            }, 500);
+            setTimeout(() => joinLobby(lobbyCode), 500);
         }
 
         function updateLobbiesList() {
             const listDiv = document.getElementById('lobbiesList');
             if (!listDiv) return;
-            
             listDiv.innerHTML = '';
-            
             if (friendlyLobbies.size === 0) {
                 listDiv.innerHTML = '<div style="color: rgba(255,255,255,0.7); text-align: center; padding: 20px;">هیچ لابی فعالی وجود ندارد</div>';
                 return;
             }
-            
             const lobbiesArray = Array.from(friendlyLobbies.values());
             lobbiesArray.sort((a, b) => b.createdAt - a.createdAt);
             
             lobbiesArray.forEach(lobby => {
                 if (!lobby) return;
-                
                 const playerCount = lobby.players ? lobby.players.length : 0;
                 const lobbyColor = lobby.color || '#FF5733';
                 
@@ -4027,7 +4099,6 @@
                 `;
                 
                 lobbyDiv.onclick = () => joinLobby(lobby.code);
-                
                 listDiv.appendChild(lobbyDiv);
             });
         }
@@ -4037,24 +4108,19 @@
                 alert('❌ این قابلیت فقط برای ادمین است');
                 return;
             }
-            
             const lobby = friendlyLobbies.get(lobbyCode);
             if (!lobby) {
                 alert('❌ لابی یافت نشد');
                 return;
             }
-            
             friendlyLobbies.delete(lobbyCode);
             saveAllData();
-            
             if (lobbiesChannel) {
                 lobbiesChannel.publish('lobby-closed', { code: lobbyCode, destroyedByAdmin: true });
             }
-            
             if (currentLobby && currentLobby.code === lobbyCode) {
                 leaveLobby();
             }
-            
             updateLobbiesList();
             showNotification(`✅ لابی ${lobby.name} توسط ادمین ترکانده شد`);
         }
@@ -4074,7 +4140,6 @@
             friendlyLobbies.set(lobby.code, lobby);
             saveAllData();
             updateLobbiesList();
-            
             if (currentLobby && currentLobby.code === lobby.code) {
                 currentLobby = lobby;
                 updateLobbySeats();
@@ -4089,7 +4154,6 @@
             friendlyLobbies.delete(lobbyCode);
             saveAllData();
             updateLobbiesList();
-            
             if (currentLobby && currentLobby.code === lobbyCode) {
                 showNotification('لابی توسط ادمین بسته شد');
                 leaveLobby();
@@ -4098,20 +4162,16 @@
 
         function searchLobby() {
             const searchCode = document.getElementById('lobbySearchInput').value.trim().toUpperCase();
-            
             if (!searchCode) {
                 alert('❌ لطفا کد لابی را وارد کنید');
                 return;
             }
-            
-            // جستجو در لابی‌ها
             for (let [code, lobby] of friendlyLobbies.entries()) {
                 if (code.toUpperCase().includes(searchCode) || lobby.name.toUpperCase().includes(searchCode)) {
                     joinLobby(lobby.code);
                     return;
                 }
             }
-            
             alert('❌ لابی با این مشخصات یافت نشد');
         }
 
@@ -4120,27 +4180,17 @@
                 alert('❌ لطفا ابتدا وارد شوید');
                 return;
             }
-            
             const lobby = friendlyLobbies.get(lobbyCode);
-            
             if (!lobby) {
                 alert('❌ لابی یافت نشد');
                 return;
             }
-            
-            if (!lobby.players) {
-                lobby.players = [];
-            }
-            
-            if (!lobby.seats) {
-                lobby.seats = new Array(7).fill(null);
-            }
-            
+            if (!lobby.players) lobby.players = [];
+            if (!lobby.seats) lobby.seats = new Array(7).fill(null);
             if (lobby.players.length >= lobby.maxPlayers) {
                 alert('❌ لابی پر است');
                 return;
             }
-            
             const userExists = lobby.players.some(p => p.userId === myUserId);
             if (userExists) {
                 alert('شما در این لابی هستید');
@@ -4154,7 +4204,6 @@
                     break;
                 }
             }
-            
             if (seatIndex === -1) {
                 alert('❌ صندلی خالی وجود ندارد');
                 return;
@@ -4184,70 +4233,65 @@
                 lobbiesChannel.publish('lobby-updated', currentLobby);
             }
             
-            if (lobbyChannel) {
-                lobbyChannel.unsubscribe();
-            }
+            if (lobbyChannel) lobbyChannel.unsubscribe();
             
             lobbyChannel = ably.channels.get('friendly:lobby:' + lobbyCode);
-            
             lobbyChannel.presence.enter(playerData);
             
-            lobbyChannel.subscribe('player-joined', (message) => {
-                handleLobbyPlayerJoined(message);
-            });
+            lobbyChannel.subscribe('player-joined', (message) => handleLobbyPlayerJoined(message));
+            lobbyChannel.subscribe('player-left', (message) => handleLobbyPlayerLeft(message));
+            lobbyChannel.subscribe('chat-message', (message) => receiveChatMessage(message.data));
+            lobbyChannel.subscribe('voice-message', (message) => playReceivedVoice(message.data));
+            lobbyChannel.subscribe('reaction', (message) => handleReaction(message.data));
+            lobbyChannel.subscribe('frame-color', (message) => handleFrameColor(message.data));
             
-            lobbyChannel.subscribe('player-left', (message) => {
-                handleLobbyPlayerLeft(message);
-            });
-            
-            // اشتراک در پیام‌های چت
-            lobbyChannel.subscribe('chat-message', (message) => {
-                receiveChatMessage(message.data);
-            });
-            
-            // اشتراک در پیام‌های صوتی
-            lobbyChannel.subscribe('voice-message', (message) => {
-                playReceivedVoice(message.data);
-            });
-            
-            // اشتراک در واکنش‌ها (لایک/دیسلایک)
-            lobbyChannel.subscribe('reaction', (message) => {
-                handleReaction(message.data);
-            });
-            
-            // اشتراک در تغییر رنگ فریم
-            lobbyChannel.subscribe('frame-color', (message) => {
-                handleFrameColor(message.data);
-            });
+            // اشتراک در رویدادهای بازی مافیا
+            lobbyChannel.subscribe('game-start', (message) => handleGameStart(message.data));
+            lobbyChannel.subscribe('speaker-turn', (message) => handleSpeakerTurn(message.data));
+            lobbyChannel.subscribe('night-action', (message) => handleNightAction(message.data));
+            lobbyChannel.subscribe('player-killed', (message) => handlePlayerKilled(message.data));
             
             showFriendlyLobbyPage();
             updateLobbySeats();
-            
             showNotification(`به لابی ${lobby.name} پیوستید`);
         }
 
         function showFriendlyLobbyPage() {
             if (!currentLobby) return;
-            
             document.getElementById('friendlyPage').classList.remove('active');
             document.getElementById('friendlyLobbyPage').classList.add('active');
             document.getElementById('currentLobbyName').textContent = currentLobby.name;
             document.getElementById('currentLobbyName').style.color = currentLobby.color || '#ffd700';
             document.getElementById('currentLobbyName').style.borderColor = currentLobby.color || '#ffd700';
             
-            // نمایش دکمه‌های مناسب بر اساس نقش
+            // نمایش دکمه استارت فقط برای مدیر لابی (قبل از شروع بازی)
+            const startBtn = document.getElementById('startGameBtn');
+            if (currentLobby.creatorId === myUserId) {
+                startBtn.style.display = 'flex';
+            } else {
+                startBtn.style.display = 'none';
+            }
+            
+            // دکمه‌های نقش و توضیحات مخفی باشند تا بازی شروع شود
+            document.getElementById('roleBtn').style.display = 'none';
+            document.getElementById('roleDescBtn').style.display = 'none';
+            
+            // نمایش دکمه‌های اکشن
             updateActionButtons();
+            
+            // مخفی کردن المان‌های بازی
+            hideGameElements();
         }
 
         function hideLobbyPage() {
             document.getElementById('friendlyLobbyPage').classList.remove('active');
             currentLobby = null;
+            gameStarted = false;
         }
 
         function leaveLobby() {
             if (currentLobby && lobbyChannel) {
                 const lobbyCode = currentLobby.code;
-                
                 if (currentLobby.players && currentLobby.seats) {
                     const playerIndex = currentLobby.players.findIndex(p => p.userId === myUserId);
                     if (playerIndex !== -1) {
@@ -4256,32 +4300,22 @@
                         currentLobby.players.splice(playerIndex, 1);
                     }
                 }
-                
-                // لابی را حذف نمی‌کنیم - فقط بروزرسانی می‌کنیم
                 friendlyLobbies.set(lobbyCode, currentLobby);
                 saveAllData();
-                
-                if (lobbiesChannel) {
-                    lobbiesChannel.publish('lobby-updated', currentLobby);
-                }
-                
+                if (lobbiesChannel) lobbiesChannel.publish('lobby-updated', currentLobby);
                 lobbyChannel.presence.leave();
                 lobbyChannel.unsubscribe();
             }
-            
             hideLobbyPage();
             showFriendlyPage();
             updateLobbiesList();
-            
             showNotification('از لابی خارج شدید');
         }
 
         function updateLobbySeats() {
             const seatsDiv = document.getElementById('lobbySeats');
             if (!seatsDiv || !currentLobby) return;
-            
             seatsDiv.innerHTML = '';
-            
             const seats = currentLobby.seats || new Array(7).fill(null);
             
             for (let i = 0; i < 7; i++) {
@@ -4293,19 +4327,35 @@
                     seatDiv.classList.remove('empty');
                     seatDiv.setAttribute('data-userid', player.userId);
                     seatDiv.setAttribute('data-username', player.username);
+                    seatDiv.setAttribute('data-seat', i + 1);
                     seatDiv.onclick = () => showLobbyProfile(player);
                     
                     // اعمال رنگ فریم اگر وجود دارد
+                    let borderClass = '';
                     if (userFrameColors.has(player.userId)) {
                         const color = userFrameColors.get(player.userId);
-                        seatDiv.classList.add(`reacted-${color}`);
+                        borderClass = ` reacted-${color}`;
+                    }
+                    
+                    // خون روی آواتار اگر کشته شده باشد - فقط بعد از شروع بازی
+                    let bloodHtml = '';
+                    if (gameStarted && killedPlayer === player.userId) {
+                        bloodHtml = '<div class="blood-overlay"></div>';
+                    }
+                    
+                    // ماسک شب - فقط بعد از شروع بازی
+                    let nightMaskHtml = '';
+                    if (gameStarted && gamePhase === 'night' && player.userId !== myUserId) {
+                        nightMaskHtml = '<div class="night-mask"></div>';
                     }
                     
                     seatDiv.innerHTML = `
-                        <div class="seat-avatar-small" style="background-image: url('${player.avatar}')"></div>
+                        <div class="seat-avatar-small" style="background-image: url('${player.avatar}')">
+                            ${bloodHtml}
+                            ${nightMaskHtml}
+                        </div>
                         <div class="seat-name-small">${player.username}</div>
                         <div class="voice-status-small" id="voice-${player.userId}"></div>
-                        <div class="mic-speaker-btn" onclick="event.stopPropagation(); toggleUserMic('${player.userId}')">🎤</div>
                     `;
                     
                     // نمایش واکنش اگر وجود دارد
@@ -4331,17 +4381,9 @@
 
         function handleLobbyPlayerJoined(message) {
             if (!currentLobby) return;
-            
             const player = message.data;
-            
-            if (!currentLobby.players) {
-                currentLobby.players = [];
-            }
-            
-            if (!currentLobby.seats) {
-                currentLobby.seats = new Array(7).fill(null);
-            }
-            
+            if (!currentLobby.players) currentLobby.players = [];
+            if (!currentLobby.seats) currentLobby.seats = new Array(7).fill(null);
             if (!currentLobby.players.some(p => p.userId === player.userId)) {
                 let seatIndex = -1;
                 for (let i = 0; i < 7; i++) {
@@ -4350,7 +4392,6 @@
                         break;
                     }
                 }
-                
                 if (seatIndex !== -1) {
                     player.seatIndex = seatIndex;
                     currentLobby.players.push(player);
@@ -4364,10 +4405,8 @@
 
         function handleLobbyPlayerLeft(message) {
             if (!currentLobby || !currentLobby.players || !currentLobby.seats) return;
-            
             const playerId = message.data.userId;
             const playerIndex = currentLobby.players.findIndex(p => p.userId === playerId);
-            
             if (playerIndex !== -1) {
                 const seatIndex = currentLobby.players[playerIndex].seatIndex;
                 currentLobby.seats[seatIndex] = null;
@@ -4387,16 +4426,13 @@
         function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
-            
             if (!message || !lobbyChannel || !currentUser) return;
-            
             const messageData = {
                 username: currentUser.username,
                 userId: myUserId,
                 message: message,
                 timestamp: Date.now()
             };
-            
             lobbyChannel.publish('chat-message', messageData);
             displayChatMessage(messageData, true);
             input.value = '';
@@ -4409,21 +4445,17 @@
 
         function displayChatMessage(data, isMine) {
             const chatMessages = document.getElementById('chatMessages');
-            
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message ${isMine ? 'my-message' : 'other-message'}`;
-            
             const time = new Date(data.timestamp).toLocaleTimeString('fa-IR', {
                 hour: '2-digit',
                 minute: '2-digit'
             });
-            
             messageDiv.innerHTML = `
                 <div class="message-sender">${isMine ? 'شما' : data.username}</div>
                 <div>${data.message}</div>
                 <div class="message-time">${time}</div>
             `;
-            
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -4432,9 +4464,7 @@
 
         function showLobbyProfile(player) {
             if (!player) return;
-            
             selectedProfileUser = player;
-            
             document.getElementById('lobbyProfileTitle').textContent = `👤 ${player.username}`;
             document.getElementById('lobbyProfileAvatar').style.backgroundImage = `url('${player.avatar}')`;
             document.getElementById('lobbyProfileUsername').textContent = player.username;
@@ -4491,14 +4521,10 @@
 
         function banUserFromLobby() {
             if (!selectedProfileUser) return;
-            
             const reason = prompt('دلیل بن را وارد کنید:', 'فحاشی');
             if (!reason) return;
-            
             const days = parseInt(prompt('مدت بن (روز) - برای دائمی 9999 را وارد کنید:', '7'));
-            
             const banUntil = Date.now() + (days * 24 * 60 * 60 * 1000);
-            
             bannedUsers[selectedProfileUser.username] = {
                 until: banUntil,
                 reason: reason,
@@ -4506,9 +4532,7 @@
                 date: Date.now(),
                 days: days
             };
-            
             saveAllData();
-            
             if (banChannel) {
                 banChannel.publish('user-banned', {
                     username: selectedProfileUser.username,
@@ -4517,14 +4541,12 @@
                     timestamp: Date.now()
                 });
             }
-            
             hideLobbyProfilePanel();
             showNotification(`✅ کاربر ${selectedProfileUser.username} بن شد`);
         }
 
         function unbanUserFromLobby() {
             if (!selectedProfileUser) return;
-            
             if (bannedUsers[selectedProfileUser.username]) {
                 delete bannedUsers[selectedProfileUser.username];
                 saveAllData();
@@ -4537,32 +4559,24 @@
             const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+            setTimeout(() => notification.classList.remove('show'), 3000);
         }
 
         function changeUsername() {
             const newUsername = prompt('نام کاربری جدید را وارد کنید:', currentUser?.username);
             if (!newUsername || newUsername.trim() === '') return;
-            
             if (users[newUsername] && users[newUsername].username !== currentUser.username) {
                 alert('❌ این نام کاربری قبلاً ثبت شده است');
                 return;
             }
-            
             delete users[currentUser.username];
             currentUser.username = newUsername.trim();
             users[currentUser.username] = currentUser;
-            
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
             saveAllData();
-            
             const headerUsername = document.getElementById('headerUsername');
             headerUsername.innerHTML = currentUser.username + (currentUser.isAdmin ? '<span class="admin-verified-tick">✓</span>' : '');
             document.getElementById('profileUsername').textContent = currentUser.username;
-            
             if (presenceChannel) {
                 presenceChannel.presence.update({
                     username: currentUser.username,
@@ -4570,24 +4584,456 @@
                     lastSeen: Date.now()
                 });
             }
-            
             alert('✅ نام کاربری با موفقیت تغییر کرد');
             document.getElementById('settingsPanel').classList.remove('active');
         }
 
+        // ========== توابع کمکی برای نمایش/مخفی کردن المان‌های بازی ==========
+        
+        function hideGameElements() {
+            // مخفی کردن المان‌های بازی که فقط بعد از استارت باید نمایش داده شوند
+            document.getElementById('roleBtn').style.display = 'none';
+            document.getElementById('roleDescBtn').style.display = 'none';
+            document.getElementById('speakingIndicator').classList.remove('active');
+            document.getElementById('phaseTitle').style.display = 'none';
+            document.getElementById('turnTimer').style.display = 'none';
+            document.getElementById('dayDisplay').style.display = 'none';
+        }
+        
+        function showGameElements() {
+            // نمایش المان‌های بازی بعد از استارت
+            document.getElementById('roleBtn').style.display = 'flex';
+            document.getElementById('roleDescBtn').style.display = 'flex';
+            document.getElementById('phaseTitle').style.display = 'block';
+            document.getElementById('turnTimer').style.display = 'flex';
+            document.getElementById('dayDisplay').style.display = 'block';
+        }
+
+        // ========== توابع بازی مافیا ==========
+
+        function startMafiaGame() {
+            if (!currentLobby || currentLobby.creatorId !== myUserId) {
+                showNotification('فقط مدیر لابی می‌تواند بازی را شروع کند');
+                return;
+            }
+            
+            if (currentLobby.players.length < 5) {
+                showNotification('حداقل 5 بازیکن برای شروع بازی نیاز است');
+                return;
+            }
+            
+            gameStarted = true;
+            gamePhase = 'day';
+            currentDay = 1;
+            currentSpeakerIndex = 0;
+            remainingTime = 30;
+            
+            // تخصیص نقش‌ها به بازیکنان
+            assignRoles();
+            
+            // نمایش نقش به هر بازیکن
+            showMyRole();
+            
+            // مخفی کردن دکمه استارت
+            document.getElementById('startGameBtn').style.display = 'none';
+            
+            // نمایش المان‌های بازی
+            showGameElements();
+            
+            // بروزرسانی عنوان
+            document.getElementById('phaseTitle').textContent = 'روز معارفه';
+            document.getElementById('phaseTitle').className = 'phase-title day';
+            document.getElementById('dayDisplay').textContent = `روز ${currentDay}`;
+            
+            // شروع نوبت‌های صحبت
+            startSpeakingTurns();
+            
+            // ارسال رویداد شروع بازی به دیگران
+            if (lobbyChannel) {
+                lobbyChannel.publish('game-start', {
+                    roles: Array.from(playerRoles.entries()),
+                    currentDay: currentDay
+                });
+            }
+        }
+
+        function assignRoles() {
+            if (!currentLobby) return;
+            
+            const players = currentLobby.players;
+            const numPlayers = players.length;
+            const roles = [];
+            
+            // تعیین تعداد نقش‌ها
+            const numMafia = Math.min(3, Math.floor(numPlayers / 3));
+            const numCitizens = numPlayers - numMafia;
+            
+            // تخصیص نقش‌های مافیا (1-3)
+            for (let i = 0; i < numMafia; i++) {
+                roles.push(i); // نقش 1-3
+            }
+            
+            // تخصیص نقش‌های شهروند (4-10)
+            for (let i = 0; i < numCitizens; i++) {
+                roles.push(3 + (i % 7)); // نقش‌های 4-10
+            }
+            
+            // شافل کردن نقش‌ها
+            for (let i = roles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [roles[i], roles[j]] = [roles[j], roles[i]];
+            }
+            
+            // تخصیص به بازیکنان
+            playerRoles.clear();
+            mafiaPlayers = [];
+            alivePlayers = [];
+            
+            for (let i = 0; i < players.length; i++) {
+                const player = players[i];
+                const roleIndex = roles[i];
+                playerRoles.set(player.userId, roleIndex);
+                
+                // ذخیره بازیکنان زنده
+                alivePlayers.push({
+                    userId: player.userId,
+                    username: player.username,
+                    seatIndex: player.seatIndex
+                });
+                
+                // ذخیره مافیاها
+                if (roleIndex < 3) { // نقش‌های 1-3 مافیا هستند
+                    mafiaPlayers.push(player.userId);
+                }
+                
+                // ذخیره نقش خود کاربر
+                if (player.userId === myUserId) {
+                    myRole = roleIndex;
+                }
+            }
+            
+            console.log('🎭 نقش‌ها تخصیص داده شدند');
+        }
+
+        function showMyRole() {
+            if (myRole === null || myRole === undefined) {
+                showNotification('نقش شما مشخص نیست');
+                return;
+            }
+            
+            const roleCard = document.getElementById('roleCard');
+            const roleImage = document.getElementById('roleCardImage');
+            roleImage.src = roleImages[myRole];
+            roleCard.classList.add('active');
+            
+            // مخفی شدن بعد از 5 ثانیه
+            setTimeout(() => {
+                roleCard.classList.remove('active');
+            }, 5000);
+        }
+
+        function showRoleDescription() {
+            if (myRole === null || myRole === undefined) return;
+            
+            const descDialog = document.getElementById('roleDescDialog');
+            const descImage = document.getElementById('roleDescImage');
+            descImage.src = roleDescImages[myRole];
+            descDialog.classList.add('active');
+        }
+
+        function hideRoleDescription() {
+            document.getElementById('roleDescDialog').classList.remove('active');
+        }
+
+        function startSpeakingTurns() {
+            if (speakerTimer) clearInterval(speakerTimer);
+            
+            const players = alivePlayers.filter(p => p.userId !== killedPlayer);
+            if (players.length === 0) return;
+            
+            currentSpeakerIndex = 0;
+            remainingTime = (gamePhase === 'day' ? 40 : 30);
+            updateSpeaker();
+            
+            speakerTimer = setInterval(() => {
+                remainingTime--;
+                document.getElementById('turnTimer').textContent = remainingTime;
+                
+                // آپدیت خط آبی دور آواتار (با border)
+                const currentPlayer = players[currentSpeakerIndex];
+                if (currentPlayer) {
+                    const seats = document.querySelectorAll('.player-seat-small');
+                    seats.forEach(seat => seat.style.borderColor = '#ffd700');
+                    const speakingSeat = document.querySelector(`[data-userid="${currentPlayer.userId}"]`);
+                    if (speakingSeat) {
+                        speakingSeat.style.borderColor = '#1E90FF';
+                    }
+                }
+                
+                if (remainingTime <= 0) {
+                    nextSpeaker();
+                }
+            }, 1000);
+        }
+
+        function nextSpeaker() {
+            const players = alivePlayers.filter(p => p.userId !== killedPlayer);
+            if (players.length === 0) return;
+            
+            currentSpeakerIndex++;
+            if (currentSpeakerIndex >= players.length) {
+                // پایان نوبت همه بازیکنان
+                if (gamePhase === 'day') {
+                    // رفتن به شب
+                    startNightPhase();
+                } else {
+                    // رفتن به روز بعد
+                    startDayPhase();
+                }
+                return;
+            }
+            
+            remainingTime = (gamePhase === 'day' ? 40 : 30);
+            updateSpeaker();
+        }
+
+        function updateSpeaker() {
+            const players = alivePlayers.filter(p => p.userId !== killedPlayer);
+            if (players.length === 0) return;
+            
+            const currentPlayer = players[currentSpeakerIndex];
+            const speakerIndicator = document.getElementById('speakingIndicator');
+            speakerIndicator.textContent = `بازیکن شماره ${currentPlayer.seatIndex + 1} در حال صحبت`;
+            speakerIndicator.classList.add('active');
+            
+            // فعال کردن میکروفون برای بازیکن فعلی (همیشه فعال)
+            // در بازی مافیا همه می‌توانند در نوبت خود صحبت کنند
+        }
+
+        function startNightPhase() {
+            gamePhase = 'night';
+            document.getElementById('phaseTitle').textContent = 'شب';
+            document.getElementById('phaseTitle').className = 'phase-title night';
+            
+            // بروزرسانی صندلی‌ها با ماسک شب
+            updateLobbySeats();
+            
+            // شروع نوبت‌های شب (مافیاها)
+            if (mafiaPlayers.includes(myUserId)) {
+                // اگر مافیا هستیم، می‌توانیم رای بدهیم
+                showNotification('مافیاها می‌توانند یک نفر را بکشند');
+            }
+            
+            // شروع نوبت‌های صحبت شب (برای مافیاها)
+            currentSpeakerIndex = 0;
+            remainingTime = 30;
+            startSpeakingTurns();
+        }
+
+        function startDayPhase() {
+            gamePhase = 'day';
+            currentDay++;
+            document.getElementById('phaseTitle').textContent = `روز ${currentDay}`;
+            document.getElementById('phaseTitle').className = 'phase-title day';
+            document.getElementById('dayDisplay').textContent = `روز ${currentDay}`;
+            
+            // نمایش نتیجه شب (اگر کسی کشته شده باشد)
+            if (killedPlayer) {
+                const killedSeat = currentLobby.players.find(p => p.userId === killedPlayer);
+                if (killedSeat) {
+                    const killMsg = document.getElementById('killMessage');
+                    killMsg.textContent = `بازیکن شماره ${killedSeat.seatIndex + 1} از روند بازی حذف شد`;
+                    killMsg.classList.add('active');
+                    
+                    setTimeout(() => killMsg.classList.remove('active'), 5000);
+                }
+            }
+            
+            // بروزرسانی صندلی‌ها
+            updateLobbySeats();
+            
+            // شروع نوبت‌های روز
+            currentSpeakerIndex = 0;
+            remainingTime = 40;
+            startSpeakingTurns();
+        }
+
+        function handleGameStart(data) {
+            gameStarted = true;
+            gamePhase = 'day';
+            currentDay = data.currentDay;
+            
+            // بارگذاری نقش‌ها
+            playerRoles.clear();
+            mafiaPlayers = [];
+            alivePlayers = [];
+            
+            const roles = data.roles;
+            for (let [userId, roleIndex] of roles) {
+                playerRoles.set(userId, roleIndex);
+                if (roleIndex < 3) mafiaPlayers.push(userId);
+                
+                const player = currentLobby.players.find(p => p.userId === userId);
+                if (player) {
+                    alivePlayers.push({
+                        userId: player.userId,
+                        username: player.username,
+                        seatIndex: player.seatIndex
+                    });
+                }
+                
+                if (userId === myUserId) {
+                    myRole = roleIndex;
+                }
+            }
+            
+            // مخفی کردن دکمه استارت
+            document.getElementById('startGameBtn').style.display = 'none';
+            
+            // نمایش المان‌های بازی
+            showGameElements();
+            
+            // نمایش نقش
+            showMyRole();
+            
+            // بروزرسانی UI
+            document.getElementById('phaseTitle').textContent = 'روز معارفه';
+            
+            // شروع نوبت‌ها
+            startSpeakingTurns();
+        }
+
+        function handleSpeakerTurn(data) {
+            // همگام‌سازی نوبت‌ها
+            currentSpeakerIndex = data.index;
+            remainingTime = data.time;
+            gamePhase = data.phase;
+            
+            document.getElementById('phaseTitle').textContent = data.phase === 'day' ? `روز ${data.day}` : 'شب';
+            document.getElementById('phaseTitle').className = data.phase === 'day' ? 'phase-title day' : 'phase-title night';
+            document.getElementById('turnTimer').textContent = remainingTime;
+            
+            const players = alivePlayers.filter(p => p.userId !== killedPlayer);
+            if (players.length > 0 && currentSpeakerIndex < players.length) {
+                const currentPlayer = players[currentSpeakerIndex];
+                document.getElementById('speakingIndicator').textContent = `بازیکن شماره ${currentPlayer.seatIndex + 1} در حال صحبت`;
+            }
+        }
+
+        function handleNightAction(data) {
+            if (data.action === 'kill' && data.targetUserId) {
+                // نمایش کشته شدن
+                killedPlayer = data.targetUserId;
+                showNotification(`بازیکن ${data.targetUsername} در شب کشته شد`);
+            }
+        }
+
+        function handlePlayerKilled(data) {
+            killedPlayer = data.userId;
+            const player = currentLobby.players.find(p => p.userId === data.userId);
+            
+            if (player) {
+                const killMsg = document.getElementById('killMessage');
+                killMsg.textContent = `بازیکن شماره ${player.seatIndex + 1} از روند بازی حذف شد`;
+                killMsg.classList.add('active');
+                setTimeout(() => killMsg.classList.remove('active'), 5000);
+            }
+            
+            updateLobbySeats();
+        }
+
+        // ========== توابع واکنش‌ها و دکمه‌ها ==========
+        
+        function updateActionButtons() {
+            const container = document.getElementById('actionButtons');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // دکمه‌های سبز و قرمز
+            const greenBtn = document.createElement('div');
+            greenBtn.className = 'green-btn';
+            greenBtn.textContent = '🟢';
+            greenBtn.onclick = () => sendReaction('green');
+            
+            const redBtn = document.createElement('div');
+            redBtn.className = 'red-btn';
+            redBtn.textContent = '🔴';
+            redBtn.onclick = () => sendReaction('red');
+            
+            container.appendChild(greenBtn);
+            container.appendChild(redBtn);
+            
+            // دکمه‌های لایک و دیسلایک
+            const likeBtn = document.createElement('div');
+            likeBtn.className = 'like-btn';
+            likeBtn.textContent = '👍';
+            likeBtn.onclick = () => sendReaction('like');
+            
+            const dislikeBtn = document.createElement('div');
+            dislikeBtn.className = 'dislike-btn';
+            dislikeBtn.textContent = '👎';
+            dislikeBtn.onclick = () => sendReaction('dislike');
+            
+            container.appendChild(likeBtn);
+            container.appendChild(dislikeBtn);
+        }
+
+        function sendReaction(type) {
+            if (!lobbyChannel || !currentUser) return;
+            
+            const reactionData = {
+                userId: myUserId,
+                username: currentUser.username,
+                type: type,
+                timestamp: Date.now()
+            };
+            
+            lobbyChannel.publish('reaction', reactionData);
+            
+            // نمایش محلی
+            if (type === 'like' || type === 'dislike') {
+                handleReaction(reactionData);
+            } else if (type === 'green' || type === 'red') {
+                handleFrameColor({
+                    userId: myUserId,
+                    color: type
+                });
+            }
+        }
+
+        function handleReaction(data) {
+            const { userId, type, timestamp } = data;
+            
+            userReactions.set(userId, { type, timestamp });
+            updateLobbySeats();
+            
+            setTimeout(() => {
+                if (userReactions.has(userId)) {
+                    const reaction = userReactions.get(userId);
+                    if (reaction.timestamp === timestamp) {
+                        userReactions.delete(userId);
+                        updateLobbySeats();
+                    }
+                }
+            }, 3000);
+        }
+
+        function handleFrameColor(data) {
+            const { userId, color } = data;
+            
+            userFrameColors.set(userId, color);
+            updateLobbySeats();
+        }
+
+        // ========== توابع قدیمی ==========
         function joinGameLobby() {
             if (!gameChannel) {
                 setTimeout(() => joinGameLobby(), 500);
                 return;
             }
-            
-            const playerData = {
-                username: currentUser.username,
-                userId: myUserId
-            };
-            
+            const playerData = { username: currentUser.username, userId: myUserId };
             gameChannel.publish('player-joined', playerData);
-            
             if (!playersInGame.find(p => p.userId === myUserId)) {
                 playersInGame.push(playerData);
                 updatePlayersGrid();
@@ -4595,11 +5041,7 @@
         }
 
         function leaveGameLobby() {
-            if (gameChannel) {
-                gameChannel.publish('player-left', {
-                    userId: myUserId
-                });
-            }
+            if (gameChannel) gameChannel.publish('player-left', { userId: myUserId });
             playersInGame = [];
             document.getElementById('playerCount').textContent = '0';
             document.getElementById('playersGrid').innerHTML = '';
@@ -4608,7 +5050,6 @@
         function handlePlayerLeft(message) {
             playersInGame = playersInGame.filter(p => p.userId !== message.data.userId);
             updatePlayersGrid();
-            
             if (document.getElementById('multiplayerPage').classList.contains('active')) {
                 alert('حریف از بازی خارج شد');
                 document.getElementById('multiplayerPage').classList.remove('active');
@@ -4617,17 +5058,14 @@
 
         function handlePlayerJoined(message) {
             if (!message.data || !message.data.userId || message.data.userId === myUserId) return;
-            
             if (!playersInGame.find(p => p.userId === message.data.userId)) {
                 playersInGame.push(message.data);
                 updatePlayersGrid();
-                
                 if (playersInGame.length === 2) {
                     gameChannel.publish('game-ready', {
                         players: playersInGame,
                         gameId: 'game_' + Date.now()
                     });
-                    
                     setTimeout(() => startMultiplayerGame(), 1000);
                 }
             }
@@ -4642,14 +5080,11 @@
 
         function updatePlayersGrid() {
             document.getElementById('playerCount').textContent = playersInGame.length;
-            
             const grid = document.getElementById('playersGrid');
             grid.innerHTML = '';
-            
             for (let i = 0; i < 2; i++) {
                 const slot = document.createElement('div');
                 slot.className = 'player-slot';
-                
                 if (playersInGame[i]) {
                     slot.classList.add('filled');
                     slot.innerHTML = `
@@ -4657,7 +5092,6 @@
                         <div class="player-name">${playersInGame[i].username}</div>
                     `;
                 }
-                
                 grid.appendChild(slot);
             }
         }
@@ -4665,10 +5099,8 @@
         function startMultiplayerGame(providedGameId = null) {
             hideWaitingPage();
             document.getElementById('multiplayerPage').classList.add('active');
-            
             gameId = providedGameId || 'game_' + Date.now();
             gameChannel = ably.channels.get('game:' + gameId);
-            
             loadGamePlayers();
             startGameRound();
         }
@@ -4676,7 +5108,6 @@
         function loadGamePlayers() {
             const list = document.getElementById('gamePlayersList');
             list.innerHTML = '';
-            
             playersInGame.forEach((player) => {
                 const playerEl = document.createElement('div');
                 playerEl.className = 'game-player' + (player.userId === myUserId ? ' active' : '');
@@ -4708,15 +5139,11 @@
                     correct: 2
                 }
             ];
-            
             const question = questions[Math.floor(Math.random() * questions.length)];
-            
             document.getElementById('gameQuestion').textContent = question.text;
             document.getElementById('gameTimer').textContent = '40';
-            
             const optionsDiv = document.getElementById('gameOptions');
             optionsDiv.innerHTML = '';
-            
             question.options.forEach((opt, index) => {
                 const btn = document.createElement('div');
                 btn.className = 'game-option';
@@ -4724,7 +5151,6 @@
                 btn.onclick = () => selectOption(index, question.correct);
                 optionsDiv.appendChild(btn);
             });
-            
             let timeLeft = 40;
             const timer = setInterval(() => {
                 timeLeft--;
@@ -4736,26 +5162,14 @@
         function selectOption(selected, correct) {
             const options = document.querySelectorAll('.game-option');
             options.forEach(opt => opt.classList.remove('selected', 'correct', 'wrong'));
-            
             options[selected].classList.add('selected');
-            
             if (selected === correct) {
                 options[selected].classList.add('correct');
-                if (gameChannel) {
-                    gameChannel.publish('answer', {
-                        userId: myUserId,
-                        correct: true
-                    });
-                }
+                if (gameChannel) gameChannel.publish('answer', { userId: myUserId, correct: true });
             } else {
                 options[selected].classList.add('wrong');
                 options[correct].classList.add('correct');
-                if (gameChannel) {
-                    gameChannel.publish('answer', {
-                        userId: myUserId,
-                        correct: false
-                    });
-                }
+                if (gameChannel) gameChannel.publish('answer', { userId: myUserId, correct: false });
             }
         }
 
@@ -4777,9 +5191,9 @@
             }
         }
 
-        function handleVoiceOffer(message) {}
-        function handleVoiceAnswer(message) {}
-        function handleIceCandidate(message) {}
+        function handleVoiceOffer() {}
+        function handleVoiceAnswer() {}
+        function handleIceCandidate() {}
         function handleAnswer(message) {
             console.log('کاربر پاسخ داد:', message.data);
         }
@@ -4831,130 +5245,10 @@
 
         window.addEventListener('beforeunload', function() {
             cleanupAudioResources();
-            saveAllData(); // ذخیره نهایی
-            if (presenceChannel && currentUser) {
-                presenceChannel.presence.leave();
-            }
-            if (lobbyChannel && currentLobby) {
-                lobbyChannel.presence.leave();
-            }
+            saveAllData();
+            if (presenceChannel && currentUser) presenceChannel.presence.leave();
+            if (lobbyChannel && currentLobby) lobbyChannel.presence.leave();
         });
-
-        // ========== توابع جدید برای دکمه‌های سبز/قرمز و لایک/دیسلایک ==========
-        function updateActionButtons() {
-            const container = document.getElementById('actionButtons');
-            if (!container || !currentLobby) return;
-            
-            container.innerHTML = '';
-            
-            // بررسی اینکه آیا کاربر مدیر لابی است
-            const isLobbyCreator = currentLobby.creatorId === myUserId;
-            
-            if (isLobbyCreator) {
-                // دکمه استارت برای مدیر
-                const startBtn = document.createElement('div');
-                startBtn.className = 'start-game-btn';
-                startBtn.innerHTML = '▶️<span>شروع</span>';
-                startBtn.onclick = startGameFromLobby;
-                container.appendChild(startBtn);
-            } else {
-                // دکمه‌های سبز و قرمز برای بقیه
-                const greenBtn = document.createElement('div');
-                greenBtn.className = 'action-btn green';
-                greenBtn.textContent = '🟢';
-                greenBtn.onclick = () => sendReaction('green');
-                
-                const redBtn = document.createElement('div');
-                redBtn.className = 'action-btn red';
-                redBtn.textContent = '🔴';
-                redBtn.onclick = () => sendReaction('red');
-                
-                container.appendChild(greenBtn);
-                container.appendChild(redBtn);
-            }
-            
-            // دکمه‌های لایک و دیسلایک برای همه
-            const likeBtn = document.createElement('div');
-            likeBtn.className = 'action-btn like';
-            likeBtn.textContent = '👍';
-            likeBtn.onclick = () => sendReaction('like');
-            
-            const dislikeBtn = document.createElement('div');
-            dislikeBtn.className = 'action-btn dislike';
-            dislikeBtn.textContent = '👎';
-            dislikeBtn.onclick = () => sendReaction('dislike');
-            
-            container.appendChild(likeBtn);
-            container.appendChild(dislikeBtn);
-        }
-
-        function sendReaction(type) {
-            if (!lobbyChannel || !currentUser) return;
-            
-            const reactionData = {
-                userId: myUserId,
-                username: currentUser.username,
-                type: type,
-                timestamp: Date.now()
-            };
-            
-            lobbyChannel.publish('reaction', reactionData);
-            
-            // نمایش محلی
-            if (type === 'like' || type === 'dislike') {
-                handleReaction(reactionData);
-            } else if (type === 'green' || type === 'red') {
-                handleFrameColor({
-                    userId: myUserId,
-                    color: type
-                });
-            }
-        }
-
-        function handleReaction(data) {
-            const { userId, type } = data;
-            
-            // ذخیره واکنش
-            userReactions.set(userId, {
-                type: type,
-                timestamp: Date.now()
-            });
-            
-            // بروزرسانی صندلی
-            updateLobbySeats();
-            
-            // حذف واکنش بعد از 3 ثانیه
-            setTimeout(() => {
-                if (userReactions.has(userId)) {
-                    const reaction = userReactions.get(userId);
-                    if (reaction.timestamp === data.timestamp) {
-                        userReactions.delete(userId);
-                        updateLobbySeats();
-                    }
-                }
-            }, 3000);
-        }
-
-        function handleFrameColor(data) {
-            const { userId, color } = data;
-            
-            userFrameColors.set(userId, color);
-            
-            // بروزرسانی صندلی
-            updateLobbySeats();
-        }
-
-        function startGameFromLobby() {
-            if (!currentLobby) return;
-            
-            // اینجا می‌توانید منطق شروع بازی را پیاده‌سازی کنید
-            alert('🎮 بازی شروع شد!');
-        }
-
-        function toggleUserMic(userId) {
-            // اینجا می‌توانید منطق کنترل میکروفون کاربران را پیاده‌سازی کنید
-            console.log('Toggle mic for user:', userId);
-        }
     </script>
 </body>
 </html>
