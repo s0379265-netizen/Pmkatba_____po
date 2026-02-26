@@ -1321,7 +1321,7 @@
 
         /* ========== استایل‌های بخش دوستانه ========== */
         
-        /* صفحه اصلی دوستانه */
+        /* صفحه اصلی دوستانه - بزرگ‌تر */
         .friendly-page {
             position: fixed;
             top: 0;
@@ -1332,7 +1332,7 @@
             display: none;
             z-index: 2000;
             flex-direction: column;
-            padding: 20px;
+            padding: 30px;
             overflow-y: auto;
         }
 
@@ -1344,27 +1344,27 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 25px 30px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 30px;
-            margin-bottom: 30px;
+            border-radius: 40px;
+            margin-bottom: 40px;
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .friendly-header h2 {
-            color: white;
-            font-size: 32px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            color: #00BFFF;
+            font-size: 38px;
+            text-shadow: 0 0 30px rgba(0, 191, 255, 0.8);
         }
 
         .back-to-menu {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 2px solid white;
-            padding: 12px 30px;
+            padding: 15px 35px;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -1379,38 +1379,39 @@
         .lobby-search-section {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 30px;
-            margin-bottom: 30px;
+            border-radius: 40px;
+            padding: 40px;
+            margin-bottom: 40px;
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .lobby-search-title {
-            color: white;
-            font-size: 24px;
-            margin-bottom: 20px;
+            color: #00BFFF;
+            font-size: 28px;
+            margin-bottom: 25px;
             text-align: center;
         }
 
         .lobby-search-box {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             margin-bottom: 20px;
         }
 
         .lobby-search-box input {
             flex: 1;
-            padding: 18px 25px;
+            padding: 20px 30px;
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50px;
             color: white;
-            font-size: 18px;
+            font-size: 20px;
             direction: ltr;
         }
 
         .lobby-search-box input::placeholder {
             color: rgba(255, 255, 255, 0.6);
+            font-size: 18px;
         }
 
         .lobby-search-box input:focus {
@@ -1423,9 +1424,9 @@
             background: linear-gradient(135deg, #4CAF50, #45a049);
             color: white;
             border: none;
-            padding: 0 40px;
+            padding: 0 50px;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
@@ -1434,33 +1435,33 @@
 
         .search-lobby-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+            box-shadow: 0 0 40px rgba(76, 175, 80, 0.6);
         }
 
         /* لیست لابی‌ها */
         .lobbies-list {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 30px;
-            margin-bottom: 30px;
+            border-radius: 40px;
+            padding: 40px;
+            margin-bottom: 40px;
             border: 2px solid rgba(255, 255, 255, 0.2);
-            max-height: 300px;
+            max-height: 350px;
             overflow-y: auto;
         }
 
         .lobbies-list h3 {
-            color: white;
-            font-size: 22px;
-            margin-bottom: 20px;
+            color: #00BFFF;
+            font-size: 26px;
+            margin-bottom: 25px;
         }
 
         .lobby-item {
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
+            border-radius: 30px;
+            padding: 25px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1480,14 +1481,14 @@
 
         .lobby-name {
             color: white;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .lobby-details {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
+            font-size: 16px;
             display: flex;
             gap: 20px;
         }
@@ -1501,9 +1502,9 @@
             background: linear-gradient(135deg, #2196F3, #1976D2);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-size: 16px;
+            padding: 15px 35px;
+            border-radius: 40px;
+            font-size: 18px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
@@ -1511,62 +1512,63 @@
 
         .join-lobby-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(33, 150, 243, 0.5);
+            box-shadow: 0 0 30px rgba(33, 150, 243, 0.6);
         }
-        /* دکمه ترکاندن لابی مخصوص ادمین */
+
         .destroy-lobby-btn {
             background: linear-gradient(135deg, #ff4444, #ff0000);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 14px;
+            padding: 15px 25px;
+            border-radius: 40px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            margin-right: 10px;
+            margin-right: 15px;
             border: 2px solid white;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-        }
-        .destroy-lobby-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
         }
 
-        /* دکمه ایجاد لابی - بزرگ‌تر و قوی‌تر */
+        .destroy-lobby-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.9);
+        }
+
+        /* دکمه ایجاد لابی - بزرگ‌تر */
         .create-lobby-btn {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 100px;
-            height: 100px;
+            bottom: 40px;
+            right: 40px;
+            width: 120px;
+            height: 120px;
             background: linear-gradient(135deg, #4CAF50, #45a049);
-            border: 5px solid white;
+            border: 6px solid white;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 60px;
+            font-size: 70px;
             font-weight: 900;
             color: white;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 0 50px rgba(76, 175, 80, 0.8);
+            box-shadow: 0 0 70px rgba(76, 175, 80, 0.9);
             z-index: 2100;
             animation: createPulse 2s infinite;
         }
 
         @keyframes createPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 50px rgba(76, 175, 80, 0.8); }
-            50% { transform: scale(1.1); box-shadow: 0 0 80px rgba(0, 255, 0, 1); }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 70px rgba(76, 175, 80, 0.9); }
+            50% { transform: scale(1.15); box-shadow: 0 0 100px rgba(0, 255, 0, 1); }
         }
 
         .create-lobby-btn:hover {
-            transform: scale(1.15) rotate(90deg);
-            box-shadow: 0 0 80px rgba(0, 255, 0, 1);
+            transform: scale(1.2) rotate(90deg);
+            box-shadow: 0 0 100px rgba(0, 255, 0, 1);
         }
 
-        /* دیالوگ ایجاد لابی با انتخاب رنگ (رنگ متن) */
+        /* دیالوگ ایجاد لابی - بزرگ‌تر */
         .create-lobby-dialog {
             position: fixed;
             top: 50%;
@@ -1575,13 +1577,13 @@
             background: rgba(0, 51, 102, 0.98);
             backdrop-filter: blur(20px);
             border: 4px solid white;
-            border-radius: 50px;
-            padding: 50px;
+            border-radius: 60px;
+            padding: 60px;
             width: 90%;
-            max-width: 550px;
+            max-width: 650px;
             z-index: 2200;
             display: none;
-            box-shadow: 0 0 150px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 200px rgba(255, 255, 255, 0.6);
         }
 
         .create-lobby-dialog.active {
@@ -1595,22 +1597,22 @@
         }
 
         .create-lobby-dialog h3 {
-            color: white;
-            font-size: 32px;
+            color: #00BFFF;
+            font-size: 36px;
             text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            margin-bottom: 40px;
+            text-shadow: 0 0 30px rgba(0, 191, 255, 0.7);
         }
 
         .create-lobby-dialog input {
             width: 100%;
-            padding: 20px 30px;
+            padding: 25px 35px;
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50px;
             color: white;
-            font-size: 20px;
-            margin-bottom: 30px;
+            font-size: 22px;
+            margin-bottom: 40px;
             direction: ltr;
         }
 
@@ -1620,44 +1622,46 @@
             background: rgba(255, 255, 255, 0.25);
         }
 
-        /* بخش انتخاب رنگ لابی (رنگ متن) - بزرگ‌تر */
         .color-selector {
             display: flex;
             justify-content: space-around;
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 25px;
+            margin-bottom: 50px;
             flex-wrap: wrap;
         }
+
         .color-option {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             border: 4px solid transparent;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+            box-shadow: 0 0 30px rgba(255,255,255,0.6);
         }
+
         .color-option:hover {
-            transform: scale(1.3);
+            transform: scale(1.4);
             border-color: white;
         }
+
         .color-option.selected {
             border-color: white;
-            box-shadow: 0 0 30px currentColor;
-            transform: scale(1.2);
+            box-shadow: 0 0 40px currentColor;
+            transform: scale(1.3);
         }
 
         .dialog-buttons {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
 
         .dialog-buttons button {
             flex: 1;
-            padding: 18px;
+            padding: 20px;
             border: none;
-            border-radius: 40px;
-            font-size: 20px;
+            border-radius: 50px;
+            font-size: 22px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
@@ -1731,10 +1735,9 @@
             color: white;
             font-size: 36px;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            transition: color 0.3s; /* برای تغییر رنگ متن */
+            transition: color 0.3s;
         }
 
-        /* دکمه ترک لابی به بالا سمت چپ منتقل شد */
         .leave-lobby-btn {
             background: rgba(255, 69, 0, 0.8);
             color: white;
@@ -1755,7 +1758,6 @@
             transform: scale(1.05);
         }
 
-        /* چیدمان میز جلسه - دایره‌ای با صندلی‌های کوچک‌تر و فاصله بیشتر */
         .meeting-table {
             flex: 1;
             display: flex;
@@ -1799,10 +1801,9 @@
             pointer-events: none;
         }
 
-        /* ۷ صندلی با فاصله زیاد و اندازه کوچک‌تر */
         .player-seat {
             position: absolute;
-            width: 120px; /* کوچک‌تر */
+            width: 120px;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(15px);
             border: 3px solid #ffd700;
@@ -1830,7 +1831,7 @@
         }
 
         .player-seat .seat-avatar {
-            width: 60px; /* کوچک‌تر */
+            width: 60px;
             height: 60px;
             border-radius: 50%;
             background-size: cover;
@@ -1841,7 +1842,7 @@
 
         .player-seat .seat-name {
             color: white;
-            font-size: 12px; /* کوچک‌تر */
+            font-size: 12px;
             font-weight: 700;
             margin-bottom: 3px;
             text-align: center;
@@ -1853,7 +1854,7 @@
 
         .player-seat .seat-cups {
             color: #ffd700;
-            font-size: 10px; /* کوچک‌تر */
+            font-size: 10px;
             margin-bottom: 3px;
         }
 
@@ -1871,53 +1872,18 @@
             animation: speakingPulse 0.3s infinite;
         }
 
-        /* پوزیشن‌های ۷ صندلی با فاصله بیشتر و کمی بالاتر */
-        .seat-1 { top: 2%; left: 50%; transform: translate(-50%, -50%); }   /* بالا وسط */
-        .seat-2 { top: 15%; right: 8%; transform: translate(50%, -50%); }   /* بالا راست */
-        .seat-3 { bottom: 35%; right: 5%; transform: translate(50%, 50%); } /* پایین راست (کمی بالاتر) */
-        .seat-4 { bottom: 2%; left: 50%; transform: translate(-50%, 50%); } /* پایین وسط */
-        .seat-5 { bottom: 35%; left: 5%; transform: translate(-50%, 50%); } /* پایین چپ (کمی بالاتر) */
-        .seat-6 { top: 15%; left: 8%; transform: translate(-50%, -50%); }   /* بالا چپ */
-        .seat-7 { top: 45%; right: 12%; transform: translate(50%, -50%); }    /* راست وسط (بالاتر) */
+        .seat-1 { top: 2%; left: 50%; transform: translate(-50%, -50%); }
+        .seat-2 { top: 15%; right: 8%; transform: translate(50%, -50%); }
+        .seat-3 { bottom: 35%; right: 5%; transform: translate(50%, 50%); }
+        .seat-4 { bottom: 2%; left: 50%; transform: translate(-50%, 50%); }
+        .seat-5 { bottom: 35%; left: 5%; transform: translate(-50%, 50%); }
+        .seat-6 { top: 15%; left: 8%; transform: translate(-50%, -50%); }
+        .seat-7 { top: 45%; right: 12%; transform: translate(50%, -50%); }
 
-        /* کنترل صدا (push-to-talk) - بدون اکو */
         .lobby-voice-control {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #ffd700, #ff4500);
-            border: 5px solid white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 45px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
-            z-index: 2600;
-            user-select: none;
+            display: none;
         }
 
-        .lobby-voice-control.active {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            transform: scale(1.15);
-            box-shadow: 0 0 60px rgba(76, 175, 80, 0.9);
-        }
-
-        .lobby-voice-control.muted {
-            background: #888;
-            opacity: 0.7;
-        }
-
-        .lobby-voice-control:hover {
-            transform: scale(1.1);
-        }
-
-        /* پنل پروفایل در لابی */
         .lobby-profile-panel {
             position: fixed;
             top: 50%;
@@ -2026,12 +1992,10 @@
             width: 100%;
         }
 
-        /* دکمه کپی لینک (حذف شده) */
         .copy-lobby-link {
             display: none;
         }
 
-        /* نوتیفیکیشن */
         .notification {
             position: fixed;
             top: 20px;
@@ -2058,7 +2022,6 @@
             to { transform: translate(-50%, 0); opacity: 1; }
         }
 
-        /* استایل برای ادمین */
         .admin-badge {
             background: #ff4500;
             color: white;
@@ -2068,7 +2031,6 @@
             margin-left: 5px;
         }
 
-        /* نشانگر سطح صدا */
         .voice-level {
             width: 100%;
             height: 4px;
@@ -2085,7 +2047,6 @@
             transition: width 0.1s ease;
         }
 
-        /* ===== استایل‌های جدید برای چت و صدا ===== */
         .chat-voice-controls {
             position: fixed;
             bottom: 30px;
@@ -2178,7 +2139,7 @@
             z-index: 2700;
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
             direction: rtl;
-            display: none; /* ابتدا پنهان */
+            display: none;
         }
 
         .chat-container.active {
@@ -2287,12 +2248,10 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* تنظیم مجدد دکمه صدا (مخفی) */
         .lobby-voice-control {
             display: none;
         }
         
-        /* ===== استایل دیالوگ قطع ارتباط ===== */
         .disconnect-dialog {
             position: fixed;
             top: 0;
@@ -2369,7 +2328,6 @@
             box-shadow: 0 0 50px #ffd700;
         }
         
-        /* نوتیفیکیشن صوتی */
         .voice-notification {
             position: fixed;
             top: 20px;
@@ -2406,7 +2364,6 @@
             50% { transform: scale(1.3); opacity: 0.7; }
         }
 
-        /* ===== استایل نشانگر اتصال به سرور ===== */
         .connection-status {
             position: fixed;
             top: 15px;
@@ -2483,12 +2440,10 @@
     </style>
 </head>
 <body>
-    <!-- صفحه لوگو با نام جدید -->
     <div class="logo-screen" id="logoScreen">
         <div class="logo">🎬 MAFIA LEGENDRY</div>
     </div>
 
-    <!-- صفحه ثبت نام -->
     <div class="register-screen" id="registerScreen">
         <div class="register-box">
             <h2>🎭 ورود / ثبت نام</h2>
@@ -2498,16 +2453,13 @@
         </div>
     </div>
 
-    <!-- صفحه اصلی بازی -->
     <div class="game-container hidden" id="gameContainer">
-        <!-- نشانگر وضعیت اتصال به سرور -->
         <div class="connection-status" id="connectionStatus">
             <span class="status-dot" id="statusDot"></span>
             <span id="statusText">اتصال به سرور...</span>
             <button class="retry-small-btn" id="retrySmallBtn" onclick="reconnectToAbly()" style="display: none;">🔄</button>
         </div>
 
-        <!-- هدر -->
         <div class="header">
             <div class="profile-section">
                 <div style="position: relative;">
@@ -2515,7 +2467,6 @@
                     <div class="avatar-badge"></div>
                 </div>
                 <div class="user-info">
-                    <!-- نام کاربر در کنار آواتار با تیک آبی برای ادمین -->
                     <span class="username-display" id="headerUsername"></span>
                     <div class="cups-info" id="cupsCount">🏆 0</div>
                     <div class="level-info" id="levelInfo">⭐ سطح 1</div>
@@ -2530,7 +2481,6 @@
             </div>
         </div>
 
-        <!-- پنل پروفایل کاربری -->
         <div class="profile-panel" id="profilePanel">
             <h2>👤 پروفایل کاربری</h2>
             <div class="profile-avatar-large" id="profileAvatar"></div>
@@ -2570,7 +2520,6 @@
             </div>
         </div>
 
-        <!-- پنل ادمین -->
         <div class="admin-panel" id="adminPanel">
             <h2>👑 پنل مدیریت</h2>
             
@@ -2584,7 +2533,6 @@
             </div>
             
             <div class="users-list" id="usersList">
-                <!-- لیست کاربران با جاوااسکریپت پر می‌شود -->
                 <div style="color: #888; text-align: center; padding: 20px;">در حال بارگذاری کاربران...</div>
             </div>
             
@@ -2610,7 +2558,6 @@
             <button class="admin-close" onclick="hideAdminPanel()">✕ بستن</button>
         </div>
 
-        <!-- منوی کشویی (پنل ادمین به جایگاه اصلی بازگشت) -->
         <div class="dropdown-menu" id="dropdownMenu">
             <div class="menu-item" onclick="showContact()">📞 ارتباط با ما</div>
             <div class="menu-item" onclick="showAdmins()">👑 ادمین ها</div>
@@ -2618,7 +2565,6 @@
             <div class="menu-item" id="adminMenuItem" onclick="showAdminPanel()" style="display: none;">🔨 پنل مدیریت</div>
         </div>
 
-        <!-- پنل تنظیمات (با اسلایدر موزیک) -->
         <div class="settings-panel" id="settingsPanel">
             <div class="setting-item">
                 <label>🔊 صدای بازی</label>
@@ -2628,7 +2574,6 @@
                 <label>🎵 صدای پلیر</label>
                 <input type="range" min="0" max="100" value="50" id="playerVolume">
             </div>
-            <!-- اسلایدر تنظیم موزیک پس‌زمینه -->
             <div class="setting-item">
                 <div class="music-control-label">
                     <span>🎵</span>
@@ -2637,11 +2582,9 @@
                 <input type="range" class="music-volume-slider" id="musicVolume" min="0" max="1" step="0.1" value="0.3" onchange="setMusicVolume(this.value)">
             </div>
             <button class="change-password-btn" onclick="changePassword()">🔐 تغییر رمز عبور</button>
-            <!-- دکمه تغییر نام کاربری -->
             <button class="change-username-btn" onclick="changeUsername()">✏️ تغییر نام کاربری</button>
         </div>
 
-        <!-- منوی بالایی پایین -->
         <div class="top-bottom-menu">
             <div class="challenge-button" onclick="showComingSoon()" title="امتیازی"></div>
             <div class="menu-button" onclick="showFriendlyPage()">
@@ -2650,7 +2593,6 @@
             </div>
         </div>
 
-        <!-- منوی پایینی پایین -->
         <div class="bottom-menu">
             <div class="menu-button disabled">
                 <span class="icon">🏠</span>
@@ -2669,7 +2611,6 @@
         </div>
     </div>
 
-    <!-- صفحه انتظار دو نفره (امتیازی - بسته شده) -->
     <div class="waiting-page" id="waitingPage">
         <div class="waiting-content">
             <div class="waiting-header">
@@ -2681,7 +2622,6 @@
             </div>
 
             <div class="players-grid" id="playersGrid" style="opacity: 0.5;">
-                <!-- اسلات‌های خالی -->
             </div>
 
             <div class="waiting-footer">
@@ -2690,11 +2630,9 @@
         </div>
     </div>
 
-    <!-- صفحه بازی دو نفره -->
     <div class="multiplayer-page" id="multiplayerPage">
         <div class="game-layout">
             <div class="players-side" id="gamePlayersList">
-                <!-- لیست بازیکنان با جاوااسکریپت پر می‌شود -->
             </div>
 
             <div class="game-main">
@@ -2710,7 +2648,6 @@
         </div>
     </div>
 
-    <!-- دیالوگ مسدودیت قدرتمند -->
     <div class="ban-dialog" id="banDialog">
         <div class="ban-dialog-content">
             <div class="ban-icon">🚫</div>
@@ -2722,16 +2659,12 @@
         </div>
     </div>
 
-    <!-- ========== صفحات دوستانه ========== -->
-
-    <!-- صفحه اصلی دوستانه -->
     <div class="friendly-page" id="friendlyPage">
         <div class="friendly-header">
             <h2 style="color: #00BFFF;">👥 بازی دوستانه</h2>
             <button class="back-to-menu" onclick="hideFriendlyPage()">🔙 بازگشت</button>
         </div>
 
-        <!-- بخش جستجوی لابی -->
         <div class="lobby-search-section">
             <h3 class="lobby-search-title" style="color: #00BFFF;">🔍 جستجوی لابی</h3>
             <div class="lobby-search-box">
@@ -2740,17 +2673,14 @@
             </div>
         </div>
 
-        <!-- لیست لابی‌های موجود -->
         <div class="lobbies-list" id="lobbiesList">
             <h3 style="color: #00BFFF;">📋 لابی‌های فعال</h3>
             <div style="color: rgba(255,255,255,0.7); text-align: center; padding: 20px;">در حال بارگذاری لابی‌ها...</div>
         </div>
 
-        <!-- دکمه ایجاد لابی - بزرگ و قوی -->
         <div class="create-lobby-btn" onclick="showCreateLobbyDialog()">+</div>
     </div>
 
-    <!-- دیالوگ ایجاد لابی با انتخاب رنگ (رنگ متن) -->
     <div class="create-lobby-dialog" id="createLobbyDialog">
         <h3 style="color: #00BFFF;">🎮 ایجاد لابی جدید</h3>
         <input type="text" id="lobbyNameInput" placeholder="نام لابی را وارد کنید..." maxlength="30">
@@ -2768,30 +2698,24 @@
         </div>
     </div>
 
-    <!-- صفحه لابی دوستانه -->
     <div class="friendly-lobby-page" id="friendlyLobbyPage">
         <div class="lobby-header">
             <h2 id="currentLobbyName">لابی دوستانه</h2>
         </div>
 
-        <!-- دکمه ترک لابی به بالا سمت چپ منتقل شد -->
         <button class="leave-lobby-btn" onclick="leaveLobby()">🚪 ترک لابی</button>
 
-        <!-- میز جلسه با ۷ صندلی شماره‌دار -->
         <div class="meeting-table">
             <div class="table-center" id="tableCenter">🎮</div>
             <div class="players-around-table" id="lobbySeats">
-                <!-- ۷ صندلی با شماره -->
             </div>
         </div>
 
-        <!-- کنترل‌های چت و صدا -->
         <div class="chat-voice-controls">
             <div class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">💬</div>
             <div class="voice-record-btn" id="voiceRecordBtn" onclick="toggleVoiceRecording()" title="ضبط و ارسال صدا">🎤</div>
         </div>
 
-        <!-- ===== بخش چت لابی (پنل) ===== -->
         <div class="chat-container" id="chatContainer">
             <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input-area">
@@ -2800,7 +2724,6 @@
             </div>
         </div>
 
-        <!-- پنل پروفایل در لابی (برای ادمین) -->
         <div class="lobby-profile-panel" id="lobbyProfilePanel">
             <h2 id="lobbyProfileTitle">👤 پروفایل کاربر</h2>
             <div class="lobby-profile-avatar" id="lobbyProfileAvatar"></div>
@@ -2840,7 +2763,6 @@
         </div>
     </div>
 
-    <!-- دیالوگ قطع ارتباط با سرور -->
     <div class="disconnect-dialog" id="disconnectDialog">
         <div class="disconnect-content">
             <div class="disconnect-icon">📡</div>
@@ -2853,26 +2775,21 @@
         </div>
     </div>
 
-    <!-- نوتیفیکیشن صوتی -->
     <div class="voice-notification" id="voiceNotification">
         <span class="voice-wave"></span>
         <span id="voiceNotificationText">در حال ضبط صدا...</span>
     </div>
 
-    <!-- نوتیفیکیشن -->
     <div class="notification" id="notification"></div>
     
-    <!-- پخش‌کننده موزیک پس‌زمینه (مخفی) -->
     <audio id="bgMusic" loop preload="auto" style="display: none;">
         <source src="https://uploadkon.ir/uploads/750325_26Night-Current.mp3" type="audio/mpeg">
-        مرورگر شما از پخش صدا پشتیبانی نمی‌کند.
     </audio>
     
-    <!-- المان‌های صوتی برای پخش صداهای دریافتی -->
     <audio id="voicePlayer" style="display: none;"></audio>
 
     <script>
-        // ========== سیستم ضبط و پخش صدا - نسخه با کمترین تاخیر ==========
+        // ========== سیستم ضبط و پخش صدا - نسخه نهایی ==========
         let mediaRecorder = null;
         let audioChunks = [];
         let isRecording = false;
@@ -2881,25 +2798,18 @@
         let voiceNotificationText = document.getElementById('voiceNotificationText');
         let voiceRecordBtn = document.getElementById('voiceRecordBtn');
         let audioContext = null;
-        let audioWorkletNode = null;
         
-        // کش برای صداهای دریافتی
-        let audioCache = new Map();
-        
-        // درخواست دسترسی به میکروفون با مدیریت خطا و تنظیمات بهینه
+        // درخواست دسترسی به میکروفون
         async function requestMicrophoneAccess() {
             try {
-                if (audioStream) {
-                    return true;
-                }
+                if (audioStream) return true;
                 
                 audioStream = await navigator.mediaDevices.getUserMedia({ 
                     audio: {
                         echoCancellation: true,
                         noiseSuppression: true,
                         autoGainControl: true,
-                        latency: 0.01, // کمترین تاخیر
-                        channelCount: 1 // مونو برای کاهش حجم
+                        latency: 0.01
                     } 
                 });
                 
@@ -2907,20 +2817,12 @@
                 return true;
             } catch (err) {
                 console.error('❌ خطا در دسترسی به میکروفون:', err);
-                
-                if (err.name === 'NotAllowedError') {
-                    showNotification('لطفاً اجازه دسترسی به میکروفون را بدهید');
-                } else if (err.name === 'NotFoundError') {
-                    showNotification('میکروفونی یافت نشد');
-                } else {
-                    showNotification('خطا در دسترسی به میکروفون');
-                }
-                
+                showNotification('لطفاً اجازه دسترسی به میکروفون را بدهید');
                 return false;
             }
         }
         
-        // شروع ضبط صدا با کیفیت بالا و کمترین تاخیر
+        // شروع ضبط صدا
         async function startRecording() {
             if (isRecording) return false;
             
@@ -2928,70 +2830,78 @@
             if (!hasAccess) return false;
             
             try {
-                // انتخاب بهترین فرمت صوتی برای کمترین تاخیر
                 const options = {
-                    mimeType: 'audio/webm;codecs=opus',
-                    audioBitsPerSecond: 64000, // کیفیت خوب با حجم کم
-                    bitsPerSecond: 64000
+                    mimeType: 'audio/webm',
+                    audioBitsPerSecond: 64000
                 };
                 
-                // بررسی پشتیبانی از فرمت
-                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                    mediaRecorder = new MediaRecorder(audioStream);
-                } else {
-                    mediaRecorder = new MediaRecorder(audioStream, options);
-                }
-                
+                mediaRecorder = new MediaRecorder(audioStream, options);
                 audioChunks = [];
                 
-                // ارسال صدا در تکه‌های کوچک برای کمترین تاخیر
                 mediaRecorder.ondataavailable = async (event) => {
-                    if (event.data.size > 0) {
-                        // بلافاصله صدا را ارسال کن
-                        if (currentLobby && lobbyChannel) {
-                            await sendVoiceMessage(event.data);
+                    if (event.data.size > 0 && currentLobby && lobbyChannel) {
+                        try {
+                            const arrayBuffer = await event.data.arrayBuffer();
+                            if (arrayBuffer.byteLength <= 100000) {
+                                const base64Audio = btoa(
+                                    String.fromCharCode(...new Uint8Array(arrayBuffer))
+                                );
+                                
+                                await lobbyChannel.publish('voice-message', {
+                                    username: currentUser.username,
+                                    userId: myUserId,
+                                    audio: base64Audio,
+                                    timestamp: Date.now()
+                                });
+                                
+                                const seatElement = document.querySelector(`[data-userid="${myUserId}"] .voice-status`);
+                                if (seatElement) {
+                                    seatElement.classList.add('speaking');
+                                    setTimeout(() => seatElement.classList.remove('speaking'), 200);
+                                }
+                            }
+                        } catch (e) {
+                            console.error('❌ خطا در ارسال صدا:', e);
                         }
                     }
                 };
                 
-                mediaRecorder.onerror = (error) => {
-                    console.error('❌ خطا در ضبط صدا:', error);
-                    showNotification('خطا در ضبط صدا');
-                    hideVoiceNotification();
+                mediaRecorder.onstop = () => {
                     isRecording = false;
                     voiceRecordBtn.classList.remove('recording');
+                    hideVoiceNotification();
                 };
                 
-                // شروع ضبط با تکه‌های 500 میلی‌ثانیه‌ای (کمترین تاخیر)
+                mediaRecorder.onerror = (error) => {
+                    console.error('❌ خطا در ضبط:', error);
+                    stopRecording();
+                };
+                
                 mediaRecorder.start(500);
                 isRecording = true;
                 voiceRecordBtn.classList.add('recording');
                 showVoiceNotification('در حال ضبط صدا...');
-                console.log('🎤 ضبط صدا شروع شد');
                 
                 return true;
             } catch (err) {
-                console.error('❌ خطا در شروع ضبط:', err);
-                showNotification('خطا در شروع ضبط صدا');
+                console.error('❌ خطا:', err);
                 return false;
             }
         }
         
-        // توقف ضبط صدا
         function stopRecording() {
             if (mediaRecorder && isRecording) {
                 try {
                     mediaRecorder.stop();
+                } catch (err) {
+                    console.error('❌ خطا:', err);
                     isRecording = false;
                     voiceRecordBtn.classList.remove('recording');
-                    console.log('⏹️ ضبط صدا متوقف شد');
-                } catch (err) {
-                    console.error('❌ خطا در توقف ضبط:', err);
+                    hideVoiceNotification();
                 }
             }
         }
         
-        // قطع و وصل ضبط صدا
         async function toggleVoiceRecording() {
             if (!currentLobby || !lobbyChannel) {
                 showNotification('برای ارسال صدا ابتدا به یک لابی وارد شوید');
@@ -3005,71 +2915,11 @@
             }
         }
         
-        // ارسال پیام صوتی با حجم بهینه و کمترین تاخیر
-        async function sendVoiceMessage(audioBlob) {
-            if (!lobbyChannel || !currentUser) return;
-            
-            try {
-                // تبدیل به ArrayBuffer
-                const arrayBuffer = await audioBlob.arrayBuffer();
-                
-                // محدودیت حجم (حداکثر 200KB برای هر تکه)
-                if (arrayBuffer.byteLength > 200000) {
-                    return; // بی‌خیال تکه‌های خیلی بزرگ
-                }
-                
-                // تبدیل به base64 با سرعت بالا
-                const base64Audio = await blobToBase64Fast(audioBlob);
-                
-                const voiceData = {
-                    username: currentUser.username,
-                    userId: myUserId,
-                    audio: base64Audio,
-                    timestamp: Date.now(),
-                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 5) // شناسه یکتا
-                };
-                
-                // ارسال صدا به همه در لابی
-                await lobbyChannel.publish('voice-message', voiceData);
-                
-                // نمایش نشانگر صدا روی صندلی خودم
-                const seatElement = document.querySelector(`[data-userid="${myUserId}"] .voice-status`);
-                if (seatElement) {
-                    seatElement.classList.add('speaking');
-                    setTimeout(() => {
-                        seatElement.classList.remove('speaking');
-                    }, 300);
-                }
-                
-            } catch (err) {
-                console.error('❌ خطا در ارسال صدا:', err);
-            }
-        }
-        
-        // تبدیل سریع Blob به Base64
-        function blobToBase64Fast(blob) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const result = reader.result;
-                    const base64 = result.split(',')[1];
-                    resolve(base64);
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-            });
-        }
-        
-        // دریافت و پخش صدا با کمترین تاخیر
         async function playReceivedVoice(data) {
             try {
-                const { username, audio: base64Audio, id } = data;
-                
-                // اگر صدا از خود کاربر است، پخش نکن
                 if (data.userId === myUserId) return;
                 
-                // تبدیل base64 به Blob
-                const binaryString = atob(base64Audio);
+                const binaryString = atob(data.audio);
                 const bytes = new Uint8Array(binaryString.length);
                 for (let i = 0; i < binaryString.length; i++) {
                     bytes[i] = binaryString.charCodeAt(i);
@@ -3080,79 +2930,52 @@
                 
                 const audioPlayer = document.getElementById('voicePlayer');
                 
-                // نمایش نشانگر صدا روی صندلی کاربر
                 const seatElement = document.querySelector(`[data-userid="${data.userId}"] .voice-status`);
-                if (seatElement) {
-                    seatElement.classList.add('speaking');
-                }
+                if (seatElement) seatElement.classList.add('speaking');
                 
-                // تنظیم و پخش جدید با کمترین تاخیر
                 audioPlayer.src = audioUrl;
-                audioPlayer.load(); // بارگذاری سریع
-                
-                audioPlayer.onplay = () => {
-                    console.log('🔊 پخش صدای', username);
-                };
+                audioPlayer.load();
                 
                 audioPlayer.onended = () => {
-                    // مخفی کردن انیمیشن
-                    if (seatElement) {
-                        seatElement.classList.remove('speaking');
-                    }
-                    
-                    // پاکسازی URL
-                    setTimeout(() => URL.revokeObjectURL(audioUrl), 1000);
-                };
-                
-                audioPlayer.onerror = (e) => {
-                    console.error('❌ خطا در پخش صدا:', e);
-                    if (seatElement) {
-                        seatElement.classList.remove('speaking');
-                    }
+                    if (seatElement) seatElement.classList.remove('speaking');
                     URL.revokeObjectURL(audioUrl);
                 };
                 
-                // شروع پخش بلافاصله
-                await audioPlayer.play();
+                audioPlayer.onerror = () => {
+                    if (seatElement) seatElement.classList.remove('speaking');
+                    URL.revokeObjectURL(audioUrl);
+                };
+                
+                try {
+                    await audioPlayer.play();
+                } catch (playError) {
+                    console.log('⚠️ پخش خودکار ممکن نیست، کاربر باید کلیک کند');
+                    if (seatElement) seatElement.classList.remove('speaking');
+                }
                 
             } catch (err) {
-                console.error('❌ خطا در پخش صدای دریافتی:', err);
+                console.error('❌ خطا در پخش صدا:', err);
+                const seatElement = document.querySelector(`[data-userid="${data.userId}"] .voice-status`);
+                if (seatElement) seatElement.classList.remove('speaking');
             }
         }
         
-        // نمایش نوتیفیکیشن صوتی
         function showVoiceNotification(text) {
             voiceNotificationText.textContent = text;
             voiceNotification.style.display = 'flex';
-            
-            // مخفی کردن خودکار بعد از 2 ثانیه
-            setTimeout(() => {
-                if (voiceNotification.style.display === 'flex') {
-                    hideVoiceNotification();
-                }
-            }, 2000);
+            setTimeout(hideVoiceNotification, 2000);
         }
         
-        // مخفی کردن نوتیفیکیشن صوتی
         function hideVoiceNotification() {
             voiceNotification.style.display = 'none';
         }
         
-        // پاکسازی منابع صوتی هنگام خروج
         function cleanupAudioResources() {
-            if (isRecording) {
-                stopRecording();
-            }
-            
+            if (isRecording) stopRecording();
             if (audioStream) {
-                audioStream.getTracks().forEach(track => {
-                    track.stop();
-                });
+                audioStream.getTracks().forEach(track => track.stop());
                 audioStream = null;
             }
-            
-            // پاکسازی کش
-            audioCache.clear();
         }
 
         // متغیرهای کنترل موزیک
@@ -3160,43 +2983,32 @@
         let musicPlaying = false;
         let musicStarted = false;
         
-        // تنظیم صدای اولیه
         bgMusic.volume = 0.3;
         
-        // تابع تنظیم بلندی صدا
         function setMusicVolume(vol) {
             bgMusic.volume = vol;
             localStorage.setItem('musicVolume', vol);
         }
         
-        // بارگذاری مقدار ذخیره شده صدا
         const savedVolume = localStorage.getItem('musicVolume');
         if (savedVolume !== null) {
             bgMusic.volume = parseFloat(savedVolume);
             document.getElementById('musicVolume').value = savedVolume;
         }
         
-        // تابع شروع پخش موزیک
         function startBackgroundMusic() {
             if (!musicPlaying && !musicStarted) {
                 bgMusic.play().then(() => {
                     musicPlaying = true;
                     musicStarted = true;
-                    console.log('🎵 موزیک پس‌زمینه شروع شد');
-                }).catch(e => {
-                    console.log('❌ پخش موزیک ممکن نیست:', e);
-                });
+                }).catch(e => console.log('❌ پخش موزیک ممکن نیست:', e));
             }
         }
 
-        // ممد - اطلاعات سرور
         const ABLY_KEY = 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo';
+        const ADMIN_USERNAME = '09373467527';
+        const ADMIN_PASSWORD = '2000008978';
         
-        // اکانت ادمین با مشخصات جدید
-        const ADMIN_USERNAME = '09373467527'; // شماره به عنوان نام کاربری
-        const ADMIN_PASSWORD = '2000008978'; // رمز عبور جدید
-        
-        // متغیرهای اصلی
         let currentUser = null;
         let users = {};
         let ably = null;
@@ -3206,7 +3018,6 @@
         let bannedUsers = {};
         let onlineUsers = new Map();
         
-        // متغیرهای صوتی
         let localStream = null;
         let audioEnabled = true;
         let micMuted = false;
@@ -3215,7 +3026,6 @@
         let reconnectTimer = null;
         let isTalking = false;
         
-        // متغیرهای وضعیت
         let connectionCheckInterval = null;
         let lastConnectionState = 'connected';
         let dialogShowing = false;
@@ -3224,16 +3034,14 @@
         let isManuallyDisconnected = false;
         let banChannel = null;
 
-        // ========== متغیرهای بخش دوستانه ==========
         let friendlyLobbies = new Map();
         let currentLobby = null;
         let lobbyChannel = null;
         let lobbiesChannel = null;
         let myUserId = null;
         let selectedProfileUser = null;
-        let selectedLobbyColor = '#FF5733'; // رنگ پیش‌فرض
+        let selectedLobbyColor = '#FF5733';
 
-        // ========== سیستم ذخیره‌سازی دائمی ==========
         function saveAllData() {
             localStorage.setItem('users', JSON.stringify(users));
             localStorage.setItem('bannedUsers', JSON.stringify(bannedUsers));
@@ -3252,12 +3060,10 @@
             }
         }
 
-        // بارگذاری اطلاعات
         function loadUserData() {
             loadAllData();
         }
 
-        // تابع به‌روزرسانی وضعیت اتصال
         function updateConnectionStatus() {
             const statusDiv = document.getElementById('connectionStatus');
             const statusDot = document.getElementById('statusDot');
@@ -3275,7 +3081,6 @@
             }
         }
 
-        // تابع تلاش مجدد برای اتصال
         function reconnectToAbly() {
             hideDisconnectDialog();
             if (ably) {
@@ -3285,7 +3090,6 @@
             }
         }
 
-        // مقداردهی اولیه
         document.addEventListener('DOMContentLoaded', function() {
             loadUserData();
             
@@ -3328,7 +3132,7 @@
                 });
 
                 ably.connection.on('disconnected', () => {
-                    console.log('❌ ارتباط قطع شد - تلاش برای اتصال مجدد...');
+                    console.log('❌ ارتباط قطع شد');
                     lastConnectionState = 'disconnected';
                     updateConnectionStatus();
                     
@@ -3373,7 +3177,6 @@
             }
         }
 
-        // تابع نمایش دیالوگ قطع ارتباط
         function showDisconnectDialog() {
             const dialog = document.getElementById('disconnectDialog');
             if (dialog && !dialog.classList.contains('active')) {
@@ -3381,7 +3184,6 @@
             }
         }
 
-        // تابع مخفی کردن دیالوگ قطع ارتباط
         function hideDisconnectDialog() {
             const dialog = document.getElementById('disconnectDialog');
             if (dialog) {
@@ -3417,7 +3219,6 @@
                 handleBanMessage(message);
             });
             
-            // ========== کانال لابی‌های دوستانه ==========
             lobbiesChannel = ably.channels.get('friendly:lobbies');
             
             lobbiesChannel.subscribe('lobby-created', (message) => {
@@ -3434,10 +3235,6 @@
                 console.log('لابی بسته شد:', message.data);
                 handleLobbyClosed(message);
             });
-            
-            gameChannel.subscribe('voice-offer', handleVoiceOffer);
-            gameChannel.subscribe('voice-answer', handleVoiceAnswer);
-            gameChannel.subscribe('ice-candidate', handleIceCandidate);
             
             presenceChannel = ably.channels.get('presence');
             
@@ -3458,7 +3255,6 @@
             
             presenceChannel.presence.subscribe('enter', (member) => {
                 onlineUsers.set(member.clientId, member.data);
-                
                 if (currentUser?.isAdmin) {
                     loadUsersList();
                     updateOnlineCount();
@@ -3467,7 +3263,6 @@
             
             presenceChannel.presence.subscribe('leave', (member) => {
                 onlineUsers.delete(member.clientId);
-                
                 if (currentUser?.isAdmin) {
                     loadUsersList();
                     updateOnlineCount();
@@ -3476,7 +3271,6 @@
             
             presenceChannel.presence.subscribe('update', (member) => {
                 onlineUsers.set(member.clientId, member.data);
-                
                 if (currentUser?.isAdmin) {
                     loadUsersList();
                     updateOnlineCount();
@@ -3861,7 +3655,6 @@
         function logout(isBanned = false) {
             isManuallyDisconnected = true;
             
-            // پاکسازی منابع صوتی
             cleanupAudioResources();
             
             if (currentUser) {
@@ -3916,7 +3709,6 @@
                         document.getElementById('registerScreen').style.display = 'none';
                         document.getElementById('gameContainer').classList.remove('hidden');
                         
-                        // بررسی ادمین بودن کاربر با مشخصات جدید
                         if (currentUser.username === ADMIN_USERNAME && currentUser.password === ADMIN_PASSWORD) {
                             document.getElementById('adminMenuItem').style.display = 'flex';
                             currentUser.isAdmin = true;
@@ -3925,7 +3717,6 @@
                         updateUI();
                         setUserAvatar();
                         
-                        // نمایش نام کاربر در هدر با تیک آبی برای ادمین
                         const headerUsername = document.getElementById('headerUsername');
                         headerUsername.innerHTML = currentUser.username + (currentUser.isAdmin ? '<span class="admin-verified-tick">✓</span>' : '');
                         
@@ -3939,7 +3730,6 @@
                             }
                         }, 1000);
                         
-                        // شروع پخش موزیک
                         startBackgroundMusic();
                         
                         return;
@@ -3954,11 +3744,9 @@
             const avatar = document.getElementById('userAvatar');
             if (!avatar) return;
             
-            // آواتار انحصاری فقط برای کاربر ادمین (09373467527)
             if (currentUser && currentUser.isAdmin) {
                 avatar.style.backgroundImage = 'url("https://uploadkon.ir/uploads/3c3c23_26IMG-20260223-161029-320.jpg")';
             } else {
-                // آواتار پیش‌فرض برای سایر کاربران
                 avatar.style.backgroundImage = 'url("https://uploadkon.ir/uploads/c22318_26IMG-20260216-161923-048.jpg")';
             }
             avatar.style.backgroundSize = 'cover';
@@ -3976,7 +3764,6 @@
 
             loadAllData();
 
-            // بررسی اکانت ادمین با مشخصات جدید
             if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
                 currentUser = {
                     username: username,
@@ -4374,16 +4161,10 @@
                 handleLobbyPlayerLeft(message);
             });
             
-            lobbyChannel.subscribe('voice-offer', handleLobbyVoiceOffer);
-            lobbyChannel.subscribe('voice-answer', handleLobbyVoiceAnswer);
-            lobbyChannel.subscribe('ice-candidate', handleLobbyIceCandidate);
-            
-            // اشتراک در پیام‌های چت
             lobbyChannel.subscribe('chat-message', (message) => {
                 receiveChatMessage(message.data);
             });
             
-            // اشتراک در پیام‌های صوتی
             lobbyChannel.subscribe('voice-message', (message) => {
                 playReceivedVoice(message.data);
             });
@@ -4531,26 +4312,6 @@
                 showNotification('بازیکنی از لابی خارج شد');
             }
         }
-
-        // ========== سیستم صوتی قدیمی غیرفعال ==========
-        async function setupLobbyVoiceChat() {
-            console.log('ارتباط صوتی از طریق سیستم جدید انجام می‌شود');
-            return;
-        }
-
-        function createLobbyPeerConnection(targetUserId) {
-            return;
-        }
-
-        function handleLobbyVoiceOffer(message) {}
-
-        function handleLobbyVoiceAnswer(message) {}
-
-        function handleLobbyIceCandidate(message) {}
-
-        function startTalking() {}
-
-        function stopTalking() {}
 
         // ========== توابع چت ==========
         function toggleChat() {
@@ -4949,9 +4710,6 @@
             btn.innerHTML = micMuted ? '🔇' : '🔊';
         }
 
-        function handleVoiceOffer(message) {}
-        function handleVoiceAnswer(message) {}
-        function handleIceCandidate(message) {}
         function handleAnswer(message) {
             console.log('کاربر پاسخ داد:', message.data);
         }
