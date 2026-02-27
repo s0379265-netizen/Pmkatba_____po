@@ -3,84 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Server Error Dialog</title>
+<title>Server Status</title>
+
 <style>
-body{
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
     font-family:tahoma, sans-serif;
-    background:#0f172a;
+}
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
-    height:100vh;
+    overflow:hidden;
 }
+
+/* ===== Dialog ===== */
 .overlay{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,0.65);
-    backdrop-filter:blur(6px);
+    backdrop-filter:blur(8px);
+    background:rgba(0,0,0,0.5);
     display:flex;
     align-items:center;
     justify-content:center;
 }
 .dialog{
-    background:#1e293b;
-    width:90%;
-    max-width:400px;
-    border-radius:16px;
-    padding:25px;
+    width:95%;
+    max-width:420px;
+    background:#111827;
+    border-radius:20px;
+    padding:30px;
     text-align:center;
-    box-shadow:0 10px 40px rgba(0,0,0,0.5);
-    animation:fadeIn 0.4s ease;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+    animation:fadeIn .4s ease;
 }
 .icon{
-    font-size:55px;
-    margin-bottom:10px;
+    font-size:60px;
+    margin-bottom:15px;
 }
 h2{
     color:#fff;
-    margin:10px 0;
+    margin-bottom:10px;
 }
-p{
-    color:#cbd5e1;
+.status{
+    margin:15px 0;
     font-size:14px;
-    line-height:1.6;
+    color:#cbd5e1;
+}
+.ping-box{
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    background:#1f2937;
+    color:#22c55e;
+    font-weight:bold;
 }
 button{
-    margin-top:20px;
-    padding:12px 25px;
+    margin-top:25px;
+    padding:12px 30px;
     border:none;
-    border-radius:8px;
+    border-radius:10px;
     font-size:15px;
-    cursor:not-allowed;
-    background:linear-gradient(45deg,#ef4444,#dc2626);
+    cursor:pointer;
+    background:linear-gradient(45deg,#3b82f6,#2563eb);
     color:#fff;
-    opacity:0.85;
+    transition:.3s;
+}
+button:hover{
+    transform:scale(1.05);
 }
 @keyframes fadeIn{
-    from{opacity:0;transform:scale(0.9);}
+    from{opacity:0;transform:scale(.9);}
     to{opacity:1;transform:scale(1);}
+}
+
+/* ===== Blue Screen ===== */
+.blue-screen{
+    position:fixed;
+    inset:0;
+    background:#0066ff;
+    display:none;
 }
 </style>
 </head>
+
 <body>
 
-<div class="overlay">
+<div class="overlay" id="overlay">
     <div class="dialog">
-        <div class="icon">⚠️</div>
-        <h2>خطا در ارتباط با سرور</h2>
-        <p>
-            در حال حاضر امکان اتصال به سرور وجود ندارد.
-            لطفاً اتصال اینترنت خود را بررسی نمایید.
-        </p>
-        <button disabled>تلاش مجدد</button>
+        <div class="icon">🌐</div>
+        <h2>بررسی وضعیت سرور</h2>
+        <div class="status">در حال اندازه‌گیری پینگ...</div>
+        <div class="ping-box" id="ping">---</div>
+        <button onclick="goBlue()">تلاش مجدد</button>
     </div>
 </div>
 
+<div class="blue-screen" id="blueScreen"></div>
+
 <script>
-document.querySelector("button").addEventListener("click",function(e){
-    e.preventDefault();
-});
+async function measurePing(){
+    const pingDisplay = document.getElementById("ping");
+    try{
+        const start = performance.now();
+        await fetch("https://www.google.com", {mode:"no-cors"});
+        const end = performance.now();
+        const ping = Math.floor(end - start);
+        pingDisplay.innerText = ping + " ms";
+        if(ping < 100){
+            pingDisplay.style.color="#22c55e";
+        }else if(ping < 300){
+            pingDisplay.style.color="#facc15";
+        }else{
+            pingDisplay.style.color="#ef4444";
+        }
+    }catch{
+        pingDisplay.innerText="Offline";
+        pingDisplay.style.color="#ef4444";
+    }
+}
+measurePing();
+
+function goBlue(){
+    document.getElementById("overlay").style.display="none";
+    document.getElementById("blueScreen").style.display="block";
+}
 </script>
 
 </body>
