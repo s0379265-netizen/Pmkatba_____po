@@ -3,212 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galaxy Finger War PRO</title>
-
+<title>Mafia Lobby 3D Ultimate</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',sans-serif;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:tahoma;
+}
 
 body{
-background:radial-gradient(circle at 50% 20%,#0f2027,#000814);
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#fff;
-overflow:hidden;
+  height:100vh;
+  background:url('https://uploadkon.ir/uploads/3dba27_26IMG-20260227-194042-969.jpg') no-repeat center center/cover;
+  background-size:cover;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  position:relative;
+  overflow:hidden;
+  filter: brightness(1.25) contrast(1.25) saturate(1.35);
+  perspective:1500px;
 }
 
-.card{
-background:rgba(20,25,40,.95);
-padding:20px;
-border-radius:25px;
-box-shadow:0 0 80px rgba(0,150,255,.6);
-width:95%;
-max-width:500px;
-text-align:center;
+/* لایه نور پویا روی تصویر */
+body::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0; left:0;
+  pointer-events:none;
+  background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.15), rgba(0,0,0,0.55));
+  mix-blend-mode:overlay;
+  z-index:1;
+  transition: background 0.2s;
 }
 
-canvas{
-background:#020617;
-border-radius:20px;
-margin-top:15px;
-box-shadow:0 20px 60px rgba(0,0,0,.8);
+/* پروفایل سه‌بعدی بالا سمت چپ */
+.profile-box{
+  position:absolute;
+  top:20px;
+  left:20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  z-index:2;
+  transform-style: preserve-3d;
 }
 
-.scoreBoard{
-display:flex;
-justify-content:space-between;
-margin-top:10px;
-font-size:13px;
+.profile-img{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  border:4px solid gold;
+  box-shadow:0 12px 35px rgba(255,215,0,0.85), inset 0 0 22px rgba(255,215,0,0.7);
+  transition:0.3s, transform 0.2s;
 }
 
-button{
-margin-top:10px;
-padding:10px 20px;
-border:none;
-border-radius:12px;
-background:linear-gradient(45deg,#00f2fe,#3b82f6);
-color:#fff;
-cursor:pointer;
-font-weight:bold;
+.profile-name{
+  color:white;
+  font-size:22px;
+  font-weight:bold;
+  text-shadow: 0 0 15px black, 0 0 30px rgba(0,0,0,0.7);
+}
+
+/* دکمه‌های سه‌بعدی پایین */
+.main-buttons{
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  padding-bottom:2px;
+  z-index:2;
+  perspective:1500px;
+}
+
+.mafia-btn{
+  width:200px;
+  padding:22px;
+  border:none;
+  border-radius:30px;
+  font-size:18px;
+  font-weight:bold;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+  transform-style: preserve-3d;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.7), inset 0 -3px 12px rgba(255,255,255,0.25);
+}
+
+/* گرادینت‌ها و سایه‌های سه‌بعدی پویا */
+.rank-btn{
+  background: linear-gradient(145deg,#00e676,#009624);
+  box-shadow: 0 14px 38px #00ff66, inset 0 0 30px #00ff66;
+}
+
+.friend-btn{
+  background: linear-gradient(145deg,#42a5f5,#0d47a1);
+  box-shadow: 0 14px 38px #64b5f6, inset 0 0 30px #64b5f6;
+}
+
+/* افکت هاور سه‌بعدی با نور پویا */
+.mafia-btn:hover{
+  transform: rotateX(var(--rx,8deg)) rotateY(var(--ry,8deg)) scale(1.12);
+  box-shadow:0 20px 50px #ffeb3b, inset 0 0 40px #ffeb3b;
+}
+
+/* فشار واقعی هنگام کلیک */
+.mafia-btn:active{
+  transform: rotateX(0deg) rotateY(0deg) scale(0.95);
+  box-shadow:0 8px 22px #ffeb3b, inset 0 0 22px #ffeb3b;
+}
+
+/* دیالوگ وارد کردن اسم شیشه‌ای */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:5;
+}
+
+.modal-content{
+  background:rgba(255,255,255,0.18);
+  backdrop-filter:blur(45px);
+  padding:50px;
+  border-radius:40px;
+  width:320px;
+  text-align:center;
+  color:white;
+  box-shadow:0 0 85px rgba(0,0,0,0.95);
+}
+
+.modal-content input{
+  width:100%;
+  padding:16px;
+  margin-top:20px;
+  border:none;
+  border-radius:15px;
+  outline:none;
+  font-size:17px;
+}
+
+.modal-content button{
+  margin-top:25px;
+  padding:16px 35px;
+  border:none;
+  border-radius:22px;
+  background:linear-gradient(145deg,#d50000,#ff1744);
+  color:white;
+  font-weight:bold;
+  font-size:17px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.modal-content button:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 55px #ff0000;
 }
 </style>
 </head>
 <body>
 
-<div class="card">
-<h2>🚀 Galaxy Finger War PRO</h2>
-
-<div class="scoreBoard">
-<div>امتیاز: <span id="score">0</span></div>
-<div>سکه: <span id="coins">0</span></div>
-<div>قدرت: <span id="power">1</span></div>
+<!-- پروفایل -->
+<div class="profile-box">
+  <img src="https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg" class="profile-img">
+  <div class="profile-name" id="playerName">بازیکن</div>
 </div>
 
-<canvas id="game" width="320" height="420"></canvas>
-<button onclick="upgrade()">ارتقا قدرت (50 سکه)</button>
+<!-- دکمه‌های پایین -->
+<div class="main-buttons">
+  <button class="mafia-btn rank-btn">🎖 بازی امتیازی</button>
+  <button class="mafia-btn friend-btn">👥 بازی دوستانه</button>
+</div>
+
+<!-- دیالوگ وارد کردن اسم -->
+<div class="modal" id="nameModal">
+  <div class="modal-content">
+    <h3>نام خود را وارد کنید</h3>
+    <input type="text" id="nameInput" placeholder="نام شما">
+    <button onclick="saveName()">ثبت</button>
+  </div>
 </div>
 
 <script>
-const canvas=document.getElementById("game");
-const ctx=canvas.getContext("2d");
+// ذخیره اسم کاربر
+let savedName = localStorage.getItem("mafiaPlayerName");
+if(savedName){
+  document.getElementById("playerName").innerText = savedName;
+  document.getElementById("nameModal").style.display = "none";
+}
 
-let score=0;
-let coins=parseInt(localStorage.getItem("coins"))||0;
-let power=parseInt(localStorage.getItem("power"))||1;
+// عملکرد ذخیره اسم
+function saveName(){
+  let name = document.getElementById("nameInput").value.trim();
+  if(name !== ""){
+    localStorage.setItem("mafiaPlayerName", name);
+    document.getElementById("playerName").innerText = name;
+    document.getElementById("nameModal").style.display = "none";
+  }
+}
 
-let player={x:140,y:360,w:40,h:40};
-let bullets=[];
-let enemies=[];
-let gameOver=false;
+// نور پویا روی لایه جدا
+document.addEventListener('mousemove', e=>{
+  const x = e.clientX / window.innerWidth - 0.5;
+  const y = e.clientY / window.innerHeight - 0.5;
 
-document.getElementById("coins").innerText=coins;
-document.getElementById("power").innerText=power;
+  document.querySelectorAll('.mafia-btn').forEach(btn=>{
+    btn.style.setProperty('--rx', y*20+'deg');
+    btn.style.setProperty('--ry', x*20+'deg');
+  });
 
-canvas.addEventListener("mousemove",e=>{
-const rect=canvas.getBoundingClientRect();
-player.x=e.clientX-rect.left-player.w/2;
+  document.body.style.setProperty('--mouseX', x);
+  document.body.style.setProperty('--mouseY', y);
+  document.querySelector('body::after'); // برای مرورگرهای مدرن فقط CSS تغییر می‌کنه
+  document.body.style.setProperty('--bgX', 50 + x*20);
+  document.body.style.setProperty('--bgY', 35 + y*20);
+  document.body.style.setProperty('background', null); // جلوگیری از ریست شدن تصویر
 });
-
-canvas.addEventListener("touchmove",e=>{
-const rect=canvas.getBoundingClientRect();
-player.x=e.touches[0].clientX-rect.left-player.w/2;
-});
-
-function spawnEnemy(){
-if(gameOver) return;
-enemies.push({
-x:Math.random()*(canvas.width-35),
-y:-40,
-w:35,
-h:35,
-speed:2+Math.random()*1.5
-});
-}
-setInterval(spawnEnemy,900);
-
-function autoShoot(){
-if(gameOver) return;
-let spread=10;
-for(let i=0;i<power;i++){
-let offset=(i-(power-1)/2)*spread;
-bullets.push({
-x:player.x+player.w/2+offset,
-y:player.y,
-w:4,
-h:12,
-speed:7
-});
-}
-}
-setInterval(autoShoot,300);
-
-function rectHit(a,b){
-return a.x < b.x+b.w &&
-a.x+a.w > b.x &&
-a.y < b.y+b.h &&
-a.y+a.h > b.y;
-}
-
-function upgrade(){
-if(coins>=50 && power<20){
-coins-=50;
-power++;
-localStorage.setItem("coins",coins);
-localStorage.setItem("power",power);
-document.getElementById("coins").innerText=coins;
-document.getElementById("power").innerText=power;
-}
-}
-
-function drawShip(){
-let grd=ctx.createLinearGradient(player.x,player.y,player.x,player.y+player.h);
-grd.addColorStop(0,"#00f2fe");
-grd.addColorStop(1,"#0077ff");
-ctx.fillStyle=grd;
-ctx.fillRect(player.x,player.y,player.w,player.h);
-}
-
-function loop(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-if(gameOver){
-ctx.fillStyle="#fff";
-ctx.font="20px Vazirmatn";
-ctx.fillText("💀 باختی!",110,200);
-return;
-}
-
-drawShip();
-
-// bullets
-for(let i=bullets.length-1;i>=0;i--){
-let b=bullets[i];
-b.y-=b.speed;
-ctx.fillStyle="#00ff88";
-ctx.fillRect(b.x,b.y,b.w,b.h);
-if(b.y<-20) bullets.splice(i,1);
-}
-
-// enemies
-for(let i=enemies.length-1;i>=0;i--){
-let e=enemies[i];
-e.y+=e.speed;
-
-let grd=ctx.createLinearGradient(e.x,e.y,e.x,e.y+e.h);
-grd.addColorStop(0,"#ff4d4d");
-grd.addColorStop(1,"#990000");
-ctx.fillStyle=grd;
-ctx.fillRect(e.x,e.y,e.w,e.h);
-
-// برخورد با بازیکن
-if(rectHit(player,e)){
-gameOver=true;
-}
-
-// برخورد با تیر
-for(let j=bullets.length-1;j>=0;j--){
-if(rectHit(bullets[j],e)){
-bullets.splice(j,1);
-enemies.splice(i,1);
-score++;
-coins+=5;
-document.getElementById("score").innerText=score;
-document.getElementById("coins").innerText=coins;
-break;
-}
-}
-
-if(e.y>canvas.height){
-enemies.splice(i,1);
-}
-}
-
-requestAnimationFrame(loop);
-}
-
-loop();
 </script>
 
 </body>
