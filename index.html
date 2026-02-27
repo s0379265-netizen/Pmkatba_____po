@@ -3,145 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connection Error</title>
+<title>Offline Arcade Mode</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Vazirmatn',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',sans-serif;}
 
 body{
+background:radial-gradient(circle at 30% 30%,#0f2027,#203a43,#000);
 height:100vh;
-background:radial-gradient(circle at 20% 20%,#1e3a8a,#0f172a 70%);
 display:flex;
 align-items:center;
 justify-content:center;
 overflow:hidden;
-}
-
-/* Animated Background Glow */
-body::before{
-content:'';
-position:absolute;
-width:600px;
-height:600px;
-background:radial-gradient(circle,#3b82f6 0%,transparent 70%);
-animation:moveGlow 8s infinite alternate ease-in-out;
-filter:blur(120px);
-opacity:.5;
-}
-
-@keyframes moveGlow{
-0%{transform:translate(-100px,-100px);}
-100%{transform:translate(100px,100px);}
+color:#fff;
 }
 
 /* Overlay */
 .overlay{
 position:fixed;
 inset:0;
-backdrop-filter:blur(25px);
-background:rgba(0,0,0,.65);
+backdrop-filter:blur(20px);
+background:rgba(0,0,0,.7);
 display:flex;
 align-items:center;
 justify-content:center;
-animation:fadeIn .6s ease;
-}
-
-/* Card */
-.card{
-width:95%;
-max-width:480px;
-padding:45px 35px;
-border-radius:30px;
-background:rgba(255,255,255,0.08);
-box-shadow:
-0 40px 120px rgba(0,0,0,.8),
-inset 0 0 0 1px rgba(255,255,255,.08);
+flex-direction:column;
+padding:20px;
 text-align:center;
-color:#fff;
-position:relative;
-overflow:hidden;
 }
 
-/* Neon Border */
-.card::before{
-content:'';
-position:absolute;
-inset:-2px;
-border-radius:32px;
-background:linear-gradient(45deg,#00f2fe,#4facfe,#00f2fe);
-z-index:-1;
-filter:blur(15px);
+.card{
+background:rgba(20,25,40,.85);
+padding:35px;
+border-radius:30px;
+box-shadow:0 40px 120px rgba(0,0,0,.8);
+width:95%;
+max-width:500px;
+}
+
+h2{font-size:24px;font-weight:900;margin-bottom:10px;}
+p{opacity:.85;margin-bottom:15px;}
+
+.status{
+font-size:13px;
 opacity:.7;
-}
-
-/* Icon */
-.icon{
-font-size:80px;
-margin-bottom:20px;
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.12);}
-100%{transform:scale(1);}
-}
-
-h1{
-font-size:24px;
-font-weight:800;
 margin-bottom:15px;
 }
 
-p{
-font-size:15px;
-opacity:.85;
-line-height:1.9;
-margin-bottom:30px;
+canvas{
+background:#0f172a;
+border-radius:20px;
+box-shadow:0 20px 60px rgba(0,0,0,.7);
+margin-top:15px;
 }
 
-/* Loader */
-.loader{
-width:60px;
-height:60px;
-border-radius:50%;
-border:4px solid rgba(255,255,255,.2);
-border-top:4px solid #00f2fe;
-margin:0 auto 30px auto;
-animation:spin 1s linear infinite;
+.scoreBoard{
+margin-top:15px;
+font-size:14px;
+display:flex;
+justify-content:space-between;
 }
 
-@keyframes spin{
-100%{transform:rotate(360deg);}
-}
-
-/* Button */
 button{
-padding:15px 40px;
+margin-top:15px;
+padding:12px 30px;
 border:none;
-border-radius:18px;
-font-size:16px;
-font-weight:600;
-cursor:pointer;
+border-radius:15px;
 background:linear-gradient(45deg,#3b82f6,#00f2fe);
 color:#fff;
+font-weight:bold;
+cursor:pointer;
 transition:.3s;
-box-shadow:0 15px 40px rgba(0,242,254,.6);
 }
 
 button:hover{
-transform:translateY(-4px) scale(1.05);
+transform:scale(1.05);
 }
 
-/* Blue Screen */
-.blue-screen{
+/* reconnect animation */
+.reconnect{
 position:fixed;
 inset:0;
 background:#0b3cff;
@@ -149,59 +91,139 @@ display:flex;
 align-items:center;
 justify-content:center;
 flex-direction:column;
-color:#fff;
+font-size:20px;
 opacity:0;
 pointer-events:none;
-transition:opacity .6s ease;
+transition:opacity .6s;
 }
 
-.blue-screen.active{
+.reconnect.active{
 opacity:1;
 pointer-events:auto;
 }
-
-.blue-screen h2{
-font-size:26px;
-margin-bottom:15px;
-}
-
-.blue-screen p{
-font-size:16px;
-opacity:.9;
-}
-
-@keyframes fadeIn{
-from{opacity:0;transform:scale(.9);}
-to{opacity:1;transform:scale(1);}
-}
-
 </style>
 </head>
 <body>
 
 <div class="overlay" id="overlay">
 <div class="card">
-<div class="icon">⚠️</div>
-<h1>ارتباط با سرور قطع شد</h1>
-<p>
-در حال حاضر امکان اتصال به سرور وجود ندارد.
-لطفاً اتصال اینترنت خود را بررسی نمایید.
-</p>
-<div class="loader"></div>
-<button onclick="showBlue()">تلاش مجدد</button>
+<h2>🚫 ارتباط با سرور قطع شد</h2>
+<p>تا زمان اتصال مجدد، حالت آرکید فعال شد.</p>
+<div class="status" id="status">در حال بررسی اتصال...</div>
+
+<div class="scoreBoard">
+<div>امتیاز: <span id="score">0</span></div>
+<div>رکورد: <span id="best">0</span></div>
+</div>
+
+<canvas id="gameCanvas" width="320" height="400"></canvas>
+
+<button onclick="manualReconnect()">تلاش مجدد</button>
 </div>
 </div>
 
-<div class="blue-screen" id="blue">
-<h2>ما نمی‌توانیم شما را متصل کنیم</h2>
-<p>لطفاً چند لحظه منتظر بمانید...</p>
+<div class="reconnect" id="reconnect">
+<div>در حال اتصال به سرور...</div>
 </div>
 
 <script>
-function showBlue(){
-document.getElementById("overlay").style.display="none";
-document.getElementById("blue").classList.add("active");
+// ===== Storage =====
+let bestScore = localStorage.getItem("bestScore") || 0;
+document.getElementById("best").innerText = bestScore;
+
+// ===== Server Check =====
+async function checkServer(){
+try{
+await fetch("https://example.com",{mode:"no-cors"});
+showReconnect();
+}catch{}
 }
+setInterval(checkServer,7000);
+
+function manualReconnect(){
+showReconnect();
+}
+
+function showReconnect(){
+document.getElementById("reconnect").classList.add("active");
+setTimeout(()=>location.reload(),2000);
+}
+
+// ===== Game =====
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let player = {x:150,y:350,size:20};
+let enemies = [];
+let score = 0;
+let speed = 2;
+
+function spawnEnemy(){
+enemies.push({
+x:Math.random()*300,
+y:-20,
+size:20
+});
+}
+
+setInterval(spawnEnemy,1000);
+
+document.addEventListener("mousemove",e=>{
+const rect = canvas.getBoundingClientRect();
+player.x = e.clientX - rect.left - 10;
+});
+
+canvas.addEventListener("touchmove",e=>{
+const rect = canvas.getBoundingClientRect();
+player.x = e.touches[0].clientX - rect.left - 10;
+});
+
+function gameLoop(){
+ctx.clearRect(0,0,320,400);
+
+// player
+ctx.fillStyle="#00f2fe";
+ctx.fillRect(player.x,player.y,player.size,player.size);
+
+// enemies
+ctx.fillStyle="#ef4444";
+for(let i=0;i<enemies.length;i++){
+let en = enemies[i];
+en.y += speed;
+ctx.fillRect(en.x,en.y,en.size,en.size);
+
+if(en.y>400){
+enemies.splice(i,1);
+score++;
+document.getElementById("score").innerText=score;
+if(score % 5 === 0) speed += 0.5;
+}
+
+if(player.x < en.x+en.size &&
+player.x+player.size > en.x &&
+player.y < en.y+en.size &&
+player.y+player.size > en.y){
+gameOver();
+}
+}
+
+requestAnimationFrame(gameLoop);
+}
+
+function gameOver(){
+if(score > bestScore){
+bestScore = score;
+localStorage.setItem("bestScore",bestScore);
+}
+alert("💥 باختی! امتیاز: "+score);
+score=0;
+speed=2;
+enemies=[];
+document.getElementById("score").innerText=0;
+document.getElementById("best").innerText=bestScore;
+}
+
+gameLoop();
 </script>
 
 </body>
