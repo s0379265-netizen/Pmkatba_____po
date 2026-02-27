@@ -3,91 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connection Error</title>
+<title>Galaxy Finger War</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@500;800&display=swap');
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Vazirmatn',sans-serif;
-}
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',sans-serif;}
 
 body{
+background:radial-gradient(circle at 50% 20%,#0f2027,#000);
 height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-text-align:center;
-color:#fff;
 overflow:hidden;
-animation:bgShift 12s infinite alternate ease-in-out;
+color:#fff;
 }
 
-/* Smooth Blue Gradient Animation */
-@keyframes bgShift{
-0%{
-background:linear-gradient(135deg,#0f2027,#203a43);
-}
-25%{
-background:linear-gradient(135deg,#1e3c72,#2a5298);
-}
-50%{
-background:linear-gradient(135deg,#0f2027,#1e3a8a);
-}
-75%{
-background:linear-gradient(135deg,#1e3c72,#0f2027);
-}
-100%{
-background:linear-gradient(135deg,#0f2027,#2a5298);
-}
+.overlay{
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+background:rgba(0,0,0,.7);
+backdrop-filter:blur(10px);
 }
 
-/* Glow Text */
-.container{
-padding:40px;
+.card{
+background:rgba(20,25,40,.9);
+padding:25px;
 border-radius:25px;
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
-box-shadow:0 30px 100px rgba(0,0,0,.6);
+box-shadow:0 0 80px rgba(0,150,255,.5);
+width:95%;
+max-width:500px;
+text-align:center;
 }
 
-h1{
-font-size:26px;
-font-weight:800;
-letter-spacing:1px;
-margin-bottom:15px;
-text-shadow:0 0 15px rgba(255,255,255,.6);
+h2{font-weight:900;margin-bottom:10px;}
+canvas{
+background:#000814;
+border-radius:20px;
+margin-top:15px;
+box-shadow:0 20px 60px rgba(0,0,0,.7);
 }
 
-p{
-font-size:16px;
-opacity:.9;
+.scoreBoard{
+display:flex;
+justify-content:space-between;
+margin-top:10px;
+font-size:13px;
 }
 
-.clock{
-margin-top:25px;
-font-size:40px;
-animation:pulse 2s infinite;
+.upgradeBtn{
+margin-top:10px;
+padding:10px 20px;
+border:none;
+border-radius:12px;
+background:linear-gradient(45deg,#00f2fe,#3b82f6);
+color:#fff;
+cursor:pointer;
+font-weight:bold;
 }
 
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.1);}
-100%{transform:scale(1);}
+.ship{
+width:40px;
+height:40px;
+position:absolute;
+transform-style:preserve-3d;
+}
+
+.ship div{
+position:absolute;
+width:40px;
+height:40px;
+background:#00f2fe;
+opacity:.8;
 }
 
 </style>
 </head>
 <body>
 
-<div class="container">
-<h1>⚠ خطا در ارتباط با سرور</h1>
-<p>لطفاً ساعتی دیگر دوباره تلاش کنید</p>
-<div class="clock">🕒</div>
+<div class="overlay">
+<div class="card">
+<h2>🚀 Galaxy Finger War</h2>
+<p style="opacity:.7;font-size:13px;">دشمن‌های قرمز رو نابود کن و ارتقا بده</p>
+
+<div class="scoreBoard">
+<div>امتیاز: <span id="score">0</span></div>
+<div>سکه: <span id="coins">0</span></div>
+<div>قدرت: <span id="power">1</span></div>
 </div>
+
+<canvas id="gameCanvas" width="320" height="420"></canvas>
+
+<button class="upgradeBtn" onclick="upgrade()">ارتقا قدرت (50 سکه)</button>
+
+</div>
+</div>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let score=0;
+let coins=parseInt(localStorage.getItem("coins"))||0;
+let power=parseInt(localStorage.getItem("power"))||1;
+
+document.getElementById("coins").innerText=coins;
+document.getElementById("power").innerText=power;
+
+let player={x:150,y:360,size:20};
+let bullets=[];
+let enemies=[];
+
+function spawnEnemy(){
+enemies.push({
+x:Math.random()*290,
+y:-20,
+size:20,
+hp:power
+});
+}
+setInterval(spawnEnemy,800);
+
+canvas.addEventListener("mousemove",e=>{
+const rect=canvas.getBoundingClientRect();
+player.x=e.clientX-rect.left-10;
+});
+
+canvas.addEventListener("touchmove",e=>{
+const rect=canvas.getBoundingClientRect();
+player.x=e.touches[0].clientX-rect.left-10;
+});
+
+canvas.addEventListener("click",shoot);
+canvas.addEventListener("touchstart",shoot);
+
+function shoot(){
+for(let i=0;i<power;i++){
+bullets.push({x:player.x+10,y:player.y});
+}
+}
+
+function upgrade(){
+if(coins>=50 && power<2000){
+coins-=50;
+power++;
+localStorage.setItem("coins",coins);
+localStorage.setItem("power",power);
+document.getElementById("coins").innerText=coins;
+document.getElementById("power").innerText=power;
+}
+}
+
+function loop(){
+ctx.clearRect(0,0,320,420);
+
+// player (3D effect)
+ctx.fillStyle="#00f2fe";
+ctx.fillRect(player.x,player.y,player.size,player.size);
+
+// bullets
+ctx.fillStyle="#00ff88";
+for(let i=0;i<bullets.length;i++){
+bullets[i].y-=6;
+ctx.fillRect(bullets[i].x,bullets[i].y,4,10);
+}
+
+// enemies
+ctx.fillStyle="#ef4444";
+for(let i=0;i<enemies.length;i++){
+enemies[i].y+=2;
+ctx.fillRect(enemies[i].x,enemies[i].y,enemies[i].size,enemies[i].size);
+
+for(let j=0;j<bullets.length;j++){
+if(bullets[j] &&
+bullets[j].x < enemies[i].x+20 &&
+bullets[j].x+4 > enemies[i].x &&
+bullets[j].y < enemies[i].y+20 &&
+bullets[j].y+10 > enemies[i].y){
+enemies.splice(i,1);
+bullets.splice(j,1);
+score++;
+coins+=5;
+document.getElementById("score").innerText=score;
+document.getElementById("coins").innerText=coins;
+break;
+}
+}
+}
+
+requestAnimationFrame(loop);
+}
+
+loop();
+</script>
 
 </body>
 </html>
