@@ -3,90 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Server Status</title>
+<title>Server Connection</title>
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:tahoma, sans-serif;
+    font-family: Vazirmatn, Tahoma, sans-serif;
 }
 body{
-    background:linear-gradient(135deg,#0f172a,#1e293b);
     height:100vh;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
     display:flex;
     align-items:center;
     justify-content:center;
     overflow:hidden;
 }
 
-/* ===== Dialog ===== */
+/* Overlay */
 .overlay{
     position:fixed;
     inset:0;
-    backdrop-filter:blur(8px);
-    background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(15px);
+    background:rgba(0,0,0,0.55);
     display:flex;
     align-items:center;
     justify-content:center;
 }
+
+/* Dialog */
 .dialog{
-    width:95%;
-    max-width:420px;
-    background:#111827;
-    border-radius:20px;
-    padding:30px;
+    width:92%;
+    max-width:430px;
+    background:rgba(17,25,40,0.85);
+    border-radius:22px;
+    padding:35px 30px;
     text-align:center;
-    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+    box-shadow:
+        0 25px 60px rgba(0,0,0,0.6),
+        inset 0 0 0 1px rgba(255,255,255,0.05);
     animation:fadeIn .4s ease;
 }
+
 .icon{
     font-size:60px;
     margin-bottom:15px;
+    animation:pulse 1.5s infinite;
 }
+
 h2{
-    color:#fff;
-    margin-bottom:10px;
+    color:#ffffff;
+    font-size:20px;
+    margin-bottom:12px;
+    letter-spacing:0.5px;
 }
-.status{
-    margin:15px 0;
-    font-size:14px;
+
+p{
     color:#cbd5e1;
+    font-size:14px;
+    line-height:1.8;
 }
-.ping-box{
-    margin-top:15px;
+
+.network{
+    margin-top:18px;
     padding:12px;
-    border-radius:10px;
-    background:#1f2937;
-    color:#22c55e;
+    border-radius:12px;
+    background:linear-gradient(45deg,#00c6ff,#0072ff);
+    color:#fff;
+    font-size:13px;
     font-weight:bold;
+    letter-spacing:1px;
+    box-shadow:0 0 20px rgba(0,114,255,0.6);
 }
+
 button{
-    margin-top:25px;
-    padding:12px 30px;
+    margin-top:28px;
+    padding:13px 32px;
     border:none;
-    border-radius:10px;
+    border-radius:12px;
     font-size:15px;
     cursor:pointer;
-    background:linear-gradient(45deg,#3b82f6,#2563eb);
+    background:linear-gradient(45deg,#4facfe,#00f2fe);
     color:#fff;
-    transition:.3s;
+    transition:0.3s;
+    box-shadow:0 8px 25px rgba(0,242,254,0.4);
 }
 button:hover{
-    transform:scale(1.05);
+    transform:scale(1.06);
 }
+
+/* Blue Empty Screen */
+.blue-screen{
+    position:fixed;
+    inset:0;
+    background:#0b5cff;
+    display:none;
+}
+
+/* Animations */
 @keyframes fadeIn{
     from{opacity:0;transform:scale(.9);}
     to{opacity:1;transform:scale(1);}
 }
-
-/* ===== Blue Screen ===== */
-.blue-screen{
-    position:fixed;
-    inset:0;
-    background:#0066ff;
-    display:none;
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.08);}
+    100%{transform:scale(1);}
 }
 </style>
 </head>
@@ -95,10 +118,18 @@ button:hover{
 
 <div class="overlay" id="overlay">
     <div class="dialog">
-        <div class="icon">🌐</div>
-        <h2>بررسی وضعیت سرور</h2>
-        <div class="status">در حال اندازه‌گیری پینگ...</div>
-        <div class="ping-box" id="ping">---</div>
+        <div class="icon">📡</div>
+        <h2>ارتباط با سرور برقرار نشد</h2>
+        <p>
+            کیفیت شبکه شما در حال حاضر پایدار نیست.
+            لطفاً از اتصال 4G یا اینترنت پایدار استفاده نمایید
+            و سپس مجدداً تلاش کنید.
+        </p>
+
+        <div class="network">
+            وضعیت شبکه: 4G Preferred
+        </div>
+
         <button onclick="goBlue()">تلاش مجدد</button>
     </div>
 </div>
@@ -106,28 +137,6 @@ button:hover{
 <div class="blue-screen" id="blueScreen"></div>
 
 <script>
-async function measurePing(){
-    const pingDisplay = document.getElementById("ping");
-    try{
-        const start = performance.now();
-        await fetch("https://www.google.com", {mode:"no-cors"});
-        const end = performance.now();
-        const ping = Math.floor(end - start);
-        pingDisplay.innerText = ping + " ms";
-        if(ping < 100){
-            pingDisplay.style.color="#22c55e";
-        }else if(ping < 300){
-            pingDisplay.style.color="#facc15";
-        }else{
-            pingDisplay.style.color="#ef4444";
-        }
-    }catch{
-        pingDisplay.innerText="Offline";
-        pingDisplay.style.color="#ef4444";
-    }
-}
-measurePing();
-
 function goBlue(){
     document.getElementById("overlay").style.display="none";
     document.getElementById("blueScreen").style.display="block";
