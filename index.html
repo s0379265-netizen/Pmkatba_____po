@@ -3,102 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Server Connection</title>
+<title>Server Connection Error</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700&display=swap');
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: Vazirmatn, Tahoma, sans-serif;
+    font-family:'Vazirmatn',sans-serif;
 }
+
 body{
     height:100vh;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    background:radial-gradient(circle at 30% 30%, #1f2937, #0f172a 70%);
     display:flex;
     align-items:center;
     justify-content:center;
     overflow:hidden;
 }
 
-/* Overlay */
+/* ===== Overlay ===== */
 .overlay{
     position:fixed;
     inset:0;
-    backdrop-filter:blur(15px);
-    background:rgba(0,0,0,0.55);
+    backdrop-filter:blur(20px);
+    background:rgba(0,0,0,0.6);
     display:flex;
     align-items:center;
     justify-content:center;
+    animation:fadeIn .5s ease;
 }
 
-/* Dialog */
+/* ===== Dialog Card ===== */
 .dialog{
     width:92%;
-    max-width:430px;
-    background:rgba(17,25,40,0.85);
-    border-radius:22px;
-    padding:35px 30px;
+    max-width:460px;
+    background:rgba(15,23,42,0.85);
+    border-radius:28px;
+    padding:40px 30px;
     text-align:center;
     box-shadow:
-        0 25px 60px rgba(0,0,0,0.6),
+        0 30px 80px rgba(0,0,0,0.7),
         inset 0 0 0 1px rgba(255,255,255,0.05);
-    animation:fadeIn .4s ease;
+    position:relative;
+    overflow:hidden;
 }
 
+/* Glow border */
+.dialog::before{
+    content:'';
+    position:absolute;
+    inset:-2px;
+    border-radius:30px;
+    padding:2px;
+    background:linear-gradient(45deg,#00f2fe,#4facfe,#00f2fe);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+            mask-composite:exclude;
+}
+
+/* Icon */
 .icon{
-    font-size:60px;
-    margin-bottom:15px;
-    animation:pulse 1.5s infinite;
+    font-size:70px;
+    margin-bottom:18px;
+    animation:pulse 2s infinite;
 }
 
+/* Text */
 h2{
     color:#ffffff;
-    font-size:20px;
+    font-weight:700;
+    font-size:22px;
     margin-bottom:12px;
-    letter-spacing:0.5px;
 }
 
 p{
     color:#cbd5e1;
     font-size:14px;
-    line-height:1.8;
+    line-height:1.9;
+    margin-bottom:25px;
 }
 
-.network{
-    margin-top:18px;
-    padding:12px;
-    border-radius:12px;
-    background:linear-gradient(45deg,#00c6ff,#0072ff);
-    color:#fff;
-    font-size:13px;
-    font-weight:bold;
-    letter-spacing:1px;
-    box-shadow:0 0 20px rgba(0,114,255,0.6);
-}
-
+/* Button */
 button{
-    margin-top:28px;
-    padding:13px 32px;
+    padding:14px 35px;
     border:none;
-    border-radius:12px;
+    border-radius:16px;
     font-size:15px;
+    font-weight:500;
     cursor:pointer;
     background:linear-gradient(45deg,#4facfe,#00f2fe);
     color:#fff;
-    transition:0.3s;
-    box-shadow:0 8px 25px rgba(0,242,254,0.4);
+    transition:.3s;
+    box-shadow:0 12px 35px rgba(0,242,254,0.5);
 }
 button:hover{
-    transform:scale(1.06);
+    transform:translateY(-3px) scale(1.05);
 }
 
-/* Blue Empty Screen */
+/* ===== Blue Screen ===== */
 .blue-screen{
     position:fixed;
     inset:0;
-    background:#0b5cff;
-    display:none;
+    background:#0b3cff;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    flex-direction:column;
+    padding:30px;
+    opacity:0;
+    transition:opacity .6s ease;
+}
+
+.blue-screen.active{
+    opacity:1;
+}
+
+.blue-screen h1{
+    font-size:24px;
+    margin-bottom:15px;
+}
+
+.blue-screen p{
+    font-size:15px;
+    line-height:1.9;
+    opacity:.9;
 }
 
 /* Animations */
@@ -108,7 +143,7 @@ button:hover{
 }
 @keyframes pulse{
     0%{transform:scale(1);}
-    50%{transform:scale(1.08);}
+    50%{transform:scale(1.1);}
     100%{transform:scale(1);}
 }
 </style>
@@ -118,28 +153,29 @@ button:hover{
 
 <div class="overlay" id="overlay">
     <div class="dialog">
-        <div class="icon">📡</div>
-        <h2>ارتباط با سرور برقرار نشد</h2>
+        <div class="icon">🚫</div>
+        <h2>ارتباط با سرور قطع شد</h2>
         <p>
-            کیفیت شبکه شما در حال حاضر پایدار نیست.
-            لطفاً از اتصال 4G یا اینترنت پایدار استفاده نمایید
-            و سپس مجدداً تلاش کنید.
+            در حال حاضر امکان اتصال به سرور وجود ندارد.
+            لطفاً اتصال اینترنت خود را بررسی کنید و مجدداً تلاش نمایید.
         </p>
-
-        <div class="network">
-            وضعیت شبکه: 4G Preferred
-        </div>
-
-        <button onclick="goBlue()">تلاش مجدد</button>
+        <button onclick="showBlue()">تلاش مجدد</button>
     </div>
 </div>
 
-<div class="blue-screen" id="blueScreen"></div>
+<div class="blue-screen" id="blueScreen">
+    <h1>ما نمی‌توانیم شما را متصل کنیم</h1>
+    <p>
+        لطفاً چند لحظه منتظر بمانید...
+        سیستم در حال تلاش برای برقراری ارتباط مجدد با سرور است.
+    </p>
+</div>
 
 <script>
-function goBlue(){
+function showBlue(){
     document.getElementById("overlay").style.display="none";
-    document.getElementById("blueScreen").style.display="block";
+    const blue = document.getElementById("blueScreen");
+    blue.classList.add("active");
 }
 </script>
 
