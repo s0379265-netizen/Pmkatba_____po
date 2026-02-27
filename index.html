@@ -3,49 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galaxy Finger War</title>
+<title>Galaxy Finger War PRO</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',sans-serif;}
 
 body{
-background:radial-gradient(circle at 50% 20%,#0f2027,#000);
+background:radial-gradient(circle at 50% 20%,#0f2027,#000814);
 height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-overflow:hidden;
 color:#fff;
-}
-
-.overlay{
-position:fixed;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-background:rgba(0,0,0,.7);
-backdrop-filter:blur(10px);
+overflow:hidden;
 }
 
 .card{
-background:rgba(20,25,40,.9);
-padding:25px;
+background:rgba(20,25,40,.95);
+padding:20px;
 border-radius:25px;
-box-shadow:0 0 80px rgba(0,150,255,.5);
+box-shadow:0 0 80px rgba(0,150,255,.6);
 width:95%;
 max-width:500px;
 text-align:center;
 }
 
-h2{font-weight:900;margin-bottom:10px;}
 canvas{
-background:#000814;
+background:#020617;
 border-radius:20px;
 margin-top:15px;
-box-shadow:0 20px 60px rgba(0,0,0,.7);
+box-shadow:0 20px 60px rgba(0,0,0,.8);
 }
 
 .scoreBoard{
@@ -55,7 +43,7 @@ margin-top:10px;
 font-size:13px;
 }
 
-.upgradeBtn{
+button{
 margin-top:10px;
 padding:10px 20px;
 border:none;
@@ -65,30 +53,12 @@ color:#fff;
 cursor:pointer;
 font-weight:bold;
 }
-
-.ship{
-width:40px;
-height:40px;
-position:absolute;
-transform-style:preserve-3d;
-}
-
-.ship div{
-position:absolute;
-width:40px;
-height:40px;
-background:#00f2fe;
-opacity:.8;
-}
-
 </style>
 </head>
 <body>
 
-<div class="overlay">
 <div class="card">
-<h2>🚀 Galaxy Finger War</h2>
-<p style="opacity:.7;font-size:13px;">دشمن‌های قرمز رو نابود کن و ارتقا بده</p>
+<h2>🚀 Galaxy Finger War PRO</h2>
 
 <div class="scoreBoard">
 <div>امتیاز: <span id="score">0</span></div>
@@ -96,59 +66,73 @@ opacity:.8;
 <div>قدرت: <span id="power">1</span></div>
 </div>
 
-<canvas id="gameCanvas" width="320" height="420"></canvas>
-
-<button class="upgradeBtn" onclick="upgrade()">ارتقا قدرت (50 سکه)</button>
-
-</div>
+<canvas id="game" width="320" height="420"></canvas>
+<button onclick="upgrade()">ارتقا قدرت (50 سکه)</button>
 </div>
 
 <script>
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
 
 let score=0;
 let coins=parseInt(localStorage.getItem("coins"))||0;
 let power=parseInt(localStorage.getItem("power"))||1;
 
+let player={x:140,y:360,w:40,h:40};
+let bullets=[];
+let enemies=[];
+let gameOver=false;
+
 document.getElementById("coins").innerText=coins;
 document.getElementById("power").innerText=power;
 
-let player={x:150,y:360,size:20};
-let bullets=[];
-let enemies=[];
-
-function spawnEnemy(){
-enemies.push({
-x:Math.random()*290,
-y:-20,
-size:20,
-hp:power
-});
-}
-setInterval(spawnEnemy,800);
-
 canvas.addEventListener("mousemove",e=>{
 const rect=canvas.getBoundingClientRect();
-player.x=e.clientX-rect.left-10;
+player.x=e.clientX-rect.left-player.w/2;
 });
 
 canvas.addEventListener("touchmove",e=>{
 const rect=canvas.getBoundingClientRect();
-player.x=e.touches[0].clientX-rect.left-10;
+player.x=e.touches[0].clientX-rect.left-player.w/2;
 });
 
-canvas.addEventListener("click",shoot);
-canvas.addEventListener("touchstart",shoot);
-
-function shoot(){
-for(let i=0;i<power;i++){
-bullets.push({x:player.x+10,y:player.y});
+function spawnEnemy(){
+if(gameOver) return;
+enemies.push({
+x:Math.random()*(canvas.width-35),
+y:-40,
+w:35,
+h:35,
+speed:2+Math.random()*1.5
+});
 }
+setInterval(spawnEnemy,900);
+
+function autoShoot(){
+if(gameOver) return;
+let spread=10;
+for(let i=0;i<power;i++){
+let offset=(i-(power-1)/2)*spread;
+bullets.push({
+x:player.x+player.w/2+offset,
+y:player.y,
+w:4,
+h:12,
+speed:7
+});
+}
+}
+setInterval(autoShoot,300);
+
+function rectHit(a,b){
+return a.x < b.x+b.w &&
+a.x+a.w > b.x &&
+a.y < b.y+b.h &&
+a.y+a.h > b.y;
 }
 
 function upgrade(){
-if(coins>=50 && power<2000){
+if(coins>=50 && power<20){
 coins-=50;
 power++;
 localStorage.setItem("coins",coins);
@@ -158,40 +142,66 @@ document.getElementById("power").innerText=power;
 }
 }
 
-function loop(){
-ctx.clearRect(0,0,320,420);
+function drawShip(){
+let grd=ctx.createLinearGradient(player.x,player.y,player.x,player.y+player.h);
+grd.addColorStop(0,"#00f2fe");
+grd.addColorStop(1,"#0077ff");
+ctx.fillStyle=grd;
+ctx.fillRect(player.x,player.y,player.w,player.h);
+}
 
-// player (3D effect)
-ctx.fillStyle="#00f2fe";
-ctx.fillRect(player.x,player.y,player.size,player.size);
+function loop(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+if(gameOver){
+ctx.fillStyle="#fff";
+ctx.font="20px Vazirmatn";
+ctx.fillText("💀 باختی!",110,200);
+return;
+}
+
+drawShip();
 
 // bullets
+for(let i=bullets.length-1;i>=0;i--){
+let b=bullets[i];
+b.y-=b.speed;
 ctx.fillStyle="#00ff88";
-for(let i=0;i<bullets.length;i++){
-bullets[i].y-=6;
-ctx.fillRect(bullets[i].x,bullets[i].y,4,10);
+ctx.fillRect(b.x,b.y,b.w,b.h);
+if(b.y<-20) bullets.splice(i,1);
 }
 
 // enemies
-ctx.fillStyle="#ef4444";
-for(let i=0;i<enemies.length;i++){
-enemies[i].y+=2;
-ctx.fillRect(enemies[i].x,enemies[i].y,enemies[i].size,enemies[i].size);
+for(let i=enemies.length-1;i>=0;i--){
+let e=enemies[i];
+e.y+=e.speed;
 
-for(let j=0;j<bullets.length;j++){
-if(bullets[j] &&
-bullets[j].x < enemies[i].x+20 &&
-bullets[j].x+4 > enemies[i].x &&
-bullets[j].y < enemies[i].y+20 &&
-bullets[j].y+10 > enemies[i].y){
-enemies.splice(i,1);
+let grd=ctx.createLinearGradient(e.x,e.y,e.x,e.y+e.h);
+grd.addColorStop(0,"#ff4d4d");
+grd.addColorStop(1,"#990000");
+ctx.fillStyle=grd;
+ctx.fillRect(e.x,e.y,e.w,e.h);
+
+// برخورد با بازیکن
+if(rectHit(player,e)){
+gameOver=true;
+}
+
+// برخورد با تیر
+for(let j=bullets.length-1;j>=0;j--){
+if(rectHit(bullets[j],e)){
 bullets.splice(j,1);
+enemies.splice(i,1);
 score++;
 coins+=5;
 document.getElementById("score").innerText=score;
 document.getElementById("coins").innerText=coins;
 break;
 }
+}
+
+if(e.y>canvas.height){
+enemies.splice(i,1);
 }
 }
 
