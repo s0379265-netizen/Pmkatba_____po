@@ -3,149 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Offline Mode Game</title>
+<title>Connection Error</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap');
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',sans-serif;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Vazirmatn',sans-serif;
+}
 
 body{
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    color:white;
+height:100vh;
+background:radial-gradient(circle at 20% 20%,#1e3a8a,#0f172a 70%);
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
 }
 
-/* ===== Dialog ===== */
+/* Animated Background Glow */
+body::before{
+content:'';
+position:absolute;
+width:600px;
+height:600px;
+background:radial-gradient(circle,#3b82f6 0%,transparent 70%);
+animation:moveGlow 8s infinite alternate ease-in-out;
+filter:blur(120px);
+opacity:.5;
+}
+
+@keyframes moveGlow{
+0%{transform:translate(-100px,-100px);}
+100%{transform:translate(100px,100px);}
+}
+
+/* Overlay */
 .overlay{
-    position:fixed;
-    inset:0;
-    backdrop-filter:blur(15px);
-    background:rgba(0,0,0,0.7);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    text-align:center;
-    padding:20px;
+position:fixed;
+inset:0;
+backdrop-filter:blur(25px);
+background:rgba(0,0,0,.65);
+display:flex;
+align-items:center;
+justify-content:center;
+animation:fadeIn .6s ease;
 }
 
+/* Card */
 .card{
-    background:rgba(15,23,42,0.85);
-    padding:35px;
-    border-radius:25px;
-    box-shadow:0 30px 80px rgba(0,0,0,0.7);
-    width:95%;
-    max-width:450px;
-    animation:fade .5s ease;
+width:95%;
+max-width:480px;
+padding:45px 35px;
+border-radius:30px;
+background:rgba(255,255,255,0.08);
+box-shadow:
+0 40px 120px rgba(0,0,0,.8),
+inset 0 0 0 1px rgba(255,255,255,.08);
+text-align:center;
+color:#fff;
+position:relative;
+overflow:hidden;
 }
 
-h2{margin-bottom:10px;font-size:22px;}
-p{opacity:.85;font-size:14px;margin-bottom:20px;}
-
-.status{
-    margin-top:10px;
-    font-size:13px;
-    opacity:.7;
+/* Neon Border */
+.card::before{
+content:'';
+position:absolute;
+inset:-2px;
+border-radius:32px;
+background:linear-gradient(45deg,#00f2fe,#4facfe,#00f2fe);
+z-index:-1;
+filter:blur(15px);
+opacity:.7;
 }
 
-/* ===== Game ===== */
-#game{
-    display:none;
-    margin-top:25px;
+/* Icon */
+.icon{
+font-size:80px;
+margin-bottom:20px;
+animation:pulse 2s infinite;
 }
 
-canvas{
-    background:#111827;
-    border-radius:15px;
-    box-shadow:0 10px 40px rgba(0,0,0,.6);
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.12);}
+100%{transform:scale(1);}
 }
 
-/* Anim */
-@keyframes fade{
-    from{opacity:0;transform:scale(.9);}
-    to{opacity:1;transform:scale(1);}
+h1{
+font-size:24px;
+font-weight:800;
+margin-bottom:15px;
 }
+
+p{
+font-size:15px;
+opacity:.85;
+line-height:1.9;
+margin-bottom:30px;
+}
+
+/* Loader */
+.loader{
+width:60px;
+height:60px;
+border-radius:50%;
+border:4px solid rgba(255,255,255,.2);
+border-top:4px solid #00f2fe;
+margin:0 auto 30px auto;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+100%{transform:rotate(360deg);}
+}
+
+/* Button */
+button{
+padding:15px 40px;
+border:none;
+border-radius:18px;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+background:linear-gradient(45deg,#3b82f6,#00f2fe);
+color:#fff;
+transition:.3s;
+box-shadow:0 15px 40px rgba(0,242,254,.6);
+}
+
+button:hover{
+transform:translateY(-4px) scale(1.05);
+}
+
+/* Blue Screen */
+.blue-screen{
+position:fixed;
+inset:0;
+background:#0b3cff;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+color:#fff;
+opacity:0;
+pointer-events:none;
+transition:opacity .6s ease;
+}
+
+.blue-screen.active{
+opacity:1;
+pointer-events:auto;
+}
+
+.blue-screen h2{
+font-size:26px;
+margin-bottom:15px;
+}
+
+.blue-screen p{
+font-size:16px;
+opacity:.9;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:scale(.9);}
+to{opacity:1;transform:scale(1);}
+}
+
 </style>
 </head>
 <body>
 
 <div class="overlay" id="overlay">
-    <div class="card">
-        <h2>ارتباط با سرور قطع شد 🚫</h2>
-        <p>تا زمان برقراری اتصال، می‌توانید بازی آفلاین انجام دهید.</p>
-        <div class="status" id="status">در حال بررسی اتصال...</div>
-        <div id="game">
-            <canvas id="canvas" width="300" height="300"></canvas>
-        </div>
-    </div>
+<div class="card">
+<div class="icon">⚠️</div>
+<h1>ارتباط با سرور قطع شد</h1>
+<p>
+در حال حاضر امکان اتصال به سرور وجود ندارد.
+لطفاً اتصال اینترنت خود را بررسی نمایید.
+</p>
+<div class="loader"></div>
+<button onclick="showBlue()">تلاش مجدد</button>
+</div>
+</div>
+
+<div class="blue-screen" id="blue">
+<h2>ما نمی‌توانیم شما را متصل کنیم</h2>
+<p>لطفاً چند لحظه منتظر بمانید...</p>
 </div>
 
 <script>
-// ===== Ping Check =====
-async function checkServer(){
-    try{
-        await fetch("https://example.com", {mode:"no-cors"});
-        location.reload(); // reconnect
-    }catch{}
+function showBlue(){
+document.getElementById("overlay").style.display="none";
+document.getElementById("blue").classList.add("active");
 }
-setInterval(checkServer,5000);
-
-// ===== Show Game =====
-document.getElementById("game").style.display="block";
-
-// ===== Simple Offline Game (Dodge Square) =====
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-let player = {x:140,y:260,size:20};
-let enemy = {x:Math.random()*280,y:0,size:20,speed:3};
-let score = 0;
-
-document.addEventListener("mousemove",e=>{
-    const rect = canvas.getBoundingClientRect();
-    player.x = e.clientX - rect.left - 10;
-});
-
-function update(){
-    ctx.clearRect(0,0,300,300);
-
-    // player
-    ctx.fillStyle="#4facfe";
-    ctx.fillRect(player.x,player.y,player.size,player.size);
-
-    // enemy
-    ctx.fillStyle="#ef4444";
-    ctx.fillRect(enemy.x,enemy.y,enemy.size,enemy.size);
-
-    enemy.y += enemy.speed;
-
-    if(enemy.y>300){
-        enemy.y=0;
-        enemy.x=Math.random()*280;
-        score++;
-    }
-
-    // collision
-    if(player.x < enemy.x + enemy.size &&
-       player.x + player.size > enemy.x &&
-       player.y < enemy.y + enemy.size &&
-       player.y + player.size > enemy.y){
-        alert("باختی 😅 امتیاز: "+score);
-        score=0;
-        enemy.y=0;
-    }
-
-    ctx.fillStyle="white";
-    ctx.fillText("Score: "+score,10,15);
-
-    requestAnimationFrame(update);
-}
-update();
 </script>
 
 </body>
