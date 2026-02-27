@@ -3,228 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Offline Arcade Mode</title>
+<title>Connection Error</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@500;800&display=swap');
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',sans-serif;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Vazirmatn',sans-serif;
+}
 
 body{
-background:radial-gradient(circle at 30% 30%,#0f2027,#203a43,#000);
 height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-overflow:hidden;
-color:#fff;
-}
-
-/* Overlay */
-.overlay{
-position:fixed;
-inset:0;
-backdrop-filter:blur(20px);
-background:rgba(0,0,0,.7);
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-padding:20px;
 text-align:center;
-}
-
-.card{
-background:rgba(20,25,40,.85);
-padding:35px;
-border-radius:30px;
-box-shadow:0 40px 120px rgba(0,0,0,.8);
-width:95%;
-max-width:500px;
-}
-
-h2{font-size:24px;font-weight:900;margin-bottom:10px;}
-p{opacity:.85;margin-bottom:15px;}
-
-.status{
-font-size:13px;
-opacity:.7;
-margin-bottom:15px;
-}
-
-canvas{
-background:#0f172a;
-border-radius:20px;
-box-shadow:0 20px 60px rgba(0,0,0,.7);
-margin-top:15px;
-}
-
-.scoreBoard{
-margin-top:15px;
-font-size:14px;
-display:flex;
-justify-content:space-between;
-}
-
-button{
-margin-top:15px;
-padding:12px 30px;
-border:none;
-border-radius:15px;
-background:linear-gradient(45deg,#3b82f6,#00f2fe);
 color:#fff;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
+overflow:hidden;
+animation:bgShift 12s infinite alternate ease-in-out;
 }
 
-button:hover{
-transform:scale(1.05);
+/* Smooth Blue Gradient Animation */
+@keyframes bgShift{
+0%{
+background:linear-gradient(135deg,#0f2027,#203a43);
+}
+25%{
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+}
+50%{
+background:linear-gradient(135deg,#0f2027,#1e3a8a);
+}
+75%{
+background:linear-gradient(135deg,#1e3c72,#0f2027);
+}
+100%{
+background:linear-gradient(135deg,#0f2027,#2a5298);
+}
 }
 
-/* reconnect animation */
-.reconnect{
-position:fixed;
-inset:0;
-background:#0b3cff;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-font-size:20px;
-opacity:0;
-pointer-events:none;
-transition:opacity .6s;
+/* Glow Text */
+.container{
+padding:40px;
+border-radius:25px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(15px);
+box-shadow:0 30px 100px rgba(0,0,0,.6);
 }
 
-.reconnect.active{
-opacity:1;
-pointer-events:auto;
+h1{
+font-size:26px;
+font-weight:800;
+letter-spacing:1px;
+margin-bottom:15px;
+text-shadow:0 0 15px rgba(255,255,255,.6);
 }
+
+p{
+font-size:16px;
+opacity:.9;
+}
+
+.clock{
+margin-top:25px;
+font-size:40px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.1);}
+100%{transform:scale(1);}
+}
+
 </style>
 </head>
 <body>
 
-<div class="overlay" id="overlay">
-<div class="card">
-<h2>🚫 ارتباط با سرور قطع شد</h2>
-<p>تا زمان اتصال مجدد، حالت آرکید فعال شد.</p>
-<div class="status" id="status">در حال بررسی اتصال...</div>
-
-<div class="scoreBoard">
-<div>امتیاز: <span id="score">0</span></div>
-<div>رکورد: <span id="best">0</span></div>
+<div class="container">
+<h1>⚠ خطا در ارتباط با سرور</h1>
+<p>لطفاً ساعتی دیگر دوباره تلاش کنید</p>
+<div class="clock">🕒</div>
 </div>
-
-<canvas id="gameCanvas" width="320" height="400"></canvas>
-
-<button onclick="manualReconnect()">تلاش مجدد</button>
-</div>
-</div>
-
-<div class="reconnect" id="reconnect">
-<div>در حال اتصال به سرور...</div>
-</div>
-
-<script>
-// ===== Storage =====
-let bestScore = localStorage.getItem("bestScore") || 0;
-document.getElementById("best").innerText = bestScore;
-
-// ===== Server Check =====
-async function checkServer(){
-try{
-await fetch("https://example.com",{mode:"no-cors"});
-showReconnect();
-}catch{}
-}
-setInterval(checkServer,7000);
-
-function manualReconnect(){
-showReconnect();
-}
-
-function showReconnect(){
-document.getElementById("reconnect").classList.add("active");
-setTimeout(()=>location.reload(),2000);
-}
-
-// ===== Game =====
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-let player = {x:150,y:350,size:20};
-let enemies = [];
-let score = 0;
-let speed = 2;
-
-function spawnEnemy(){
-enemies.push({
-x:Math.random()*300,
-y:-20,
-size:20
-});
-}
-
-setInterval(spawnEnemy,1000);
-
-document.addEventListener("mousemove",e=>{
-const rect = canvas.getBoundingClientRect();
-player.x = e.clientX - rect.left - 10;
-});
-
-canvas.addEventListener("touchmove",e=>{
-const rect = canvas.getBoundingClientRect();
-player.x = e.touches[0].clientX - rect.left - 10;
-});
-
-function gameLoop(){
-ctx.clearRect(0,0,320,400);
-
-// player
-ctx.fillStyle="#00f2fe";
-ctx.fillRect(player.x,player.y,player.size,player.size);
-
-// enemies
-ctx.fillStyle="#ef4444";
-for(let i=0;i<enemies.length;i++){
-let en = enemies[i];
-en.y += speed;
-ctx.fillRect(en.x,en.y,en.size,en.size);
-
-if(en.y>400){
-enemies.splice(i,1);
-score++;
-document.getElementById("score").innerText=score;
-if(score % 5 === 0) speed += 0.5;
-}
-
-if(player.x < en.x+en.size &&
-player.x+player.size > en.x &&
-player.y < en.y+en.size &&
-player.y+player.size > en.y){
-gameOver();
-}
-}
-
-requestAnimationFrame(gameLoop);
-}
-
-function gameOver(){
-if(score > bestScore){
-bestScore = score;
-localStorage.setItem("bestScore",bestScore);
-}
-alert("💥 باختی! امتیاز: "+score);
-score=0;
-speed=2;
-enemies=[];
-document.getElementById("score").innerText=0;
-document.getElementById("best").innerText=bestScore;
-}
-
-gameLoop();
-</script>
 
 </body>
 </html>
