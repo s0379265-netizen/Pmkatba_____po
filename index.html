@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>مافیامون | در حال بروزرسانی سرور</title>
+<title>مافیامون | در حال بروزرسانی</title>
 <style>
   * {
     margin: 0;
@@ -97,7 +97,7 @@
     transform: scale(1.1);
   }
 
-  /* دیالوگ سرور - حرفه‌ای */
+  /* دیالوگ حرفه‌ای با افکت‌های خاص */
   .server-dialog-overlay {
     position: fixed;
     top: 0;
@@ -105,99 +105,156 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(15px);
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.4s ease;
+    animation: fadeIn 0.5s ease;
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; backdrop-filter: blur(0px); }
+    to { opacity: 1; backdrop-filter: blur(15px); }
   }
 
   .server-dialog {
-    background: linear-gradient(145deg, rgba(20, 40, 60, 0.95), rgba(10, 25, 40, 0.98));
-    backdrop-filter: blur(20px);
-    border-radius: 60px;
-    padding: 50px 40px;
+    background: linear-gradient(145deg, rgba(25, 45, 70, 0.95), rgba(15, 30, 50, 0.98));
+    backdrop-filter: blur(25px);
+    border-radius: 70px;
+    padding: 55px 45px;
     width: 90%;
-    max-width: 550px;
+    max-width: 580px;
     text-align: center;
-    border: 2px solid rgba(255, 215, 0, 0.5);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,215,0,0.2) inset;
-    animation: scaleIn 0.3s ease;
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    box-shadow: 0 50px 90px rgba(0,0,0,0.7), 0 0 0 3px rgba(255,215,0,0.2) inset, 0 0 50px rgba(255,215,0,0.1);
+    animation: slideUp 0.4s ease;
+    position: relative;
+    overflow: hidden;
   }
 
-  @keyframes scaleIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+  @keyframes slideUp {
+    from { transform: translateY(50px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  /* افکت نور متحرک پشت دیالوگ */
+  .server-dialog::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%);
+    animation: rotateLight 8s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes rotateLight {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   .server-icon {
-    font-size: 80px;
+    font-size: 85px;
     margin-bottom: 20px;
     display: inline-block;
-    animation: pulse 2s infinite;
+    animation: floatIcon 3s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
   }
 
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+  @keyframes floatIcon {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
   }
 
   .server-dialog h2 {
-    color: #ffaa00;
-    font-size: 2.2rem;
-    margin-bottom: 20px;
-    text-shadow: 0 0 20px rgba(255,170,0,0.5);
+    background: linear-gradient(145deg, #ffcc00, #ff9800);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 2.4rem;
+    margin-bottom: 25px;
+    text-shadow: 0 0 30px rgba(255,170,0,0.5);
+    position: relative;
+    z-index: 2;
   }
 
   .server-dialog p {
-    color: white;
+    color: rgba(255, 255, 255, 0.95);
     font-size: 1.2rem;
-    line-height: 1.8;
-    margin-bottom: 15px;
+    line-height: 1.9;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 2;
   }
 
-  .server-dialog .error-code {
-    background: rgba(0,0,0,0.5);
-    padding: 12px;
-    border-radius: 40px;
+  .server-dialog .highlight-text {
+    background: rgba(255, 215, 0, 0.15);
+    padding: 12px 20px;
+    border-radius: 50px;
     margin: 20px 0;
-    font-family: monospace;
-    color: #ff8888;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    border-right: 3px solid #ffcc00;
+    text-align: right;
+  }
+
+  .loading-dots {
+    display: inline-block;
+    margin-top: 15px;
+  }
+
+  .loading-dots span {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffcc00;
+    margin: 0 4px;
+    animation: dotPulse 1.4s infinite ease-in-out;
+  }
+
+  .loading-dots span:nth-child(1) { animation-delay: 0s; }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dotPulse {
+    0%, 60%, 100% { transform: scale(0.6); opacity: 0.4; }
+    30% { transform: scale(1.2); opacity: 1; }
   }
 
   .server-dialog .date-time {
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.5);
     font-size: 0.9rem;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255,215,0,0.3);
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(255,215,0,0.3);
+    position: relative;
+    z-index: 2;
   }
 
   .close-dialog-btn {
     margin-top: 30px;
-    padding: 14px 35px;
-    background: linear-gradient(145deg, #ff9800, #f57c00);
+    padding: 16px 45px;
+    background: linear-gradient(145deg, #ffcc00, #ff9800);
     border: none;
-    border-radius: 50px;
-    color: white;
-    font-size: 1.2rem;
+    border-radius: 60px;
+    color: #2c2c2c;
+    font-size: 1.3rem;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 15px rgba(255,215,0,0.5);
+    position: relative;
+    z-index: 2;
   }
 
   .close-dialog-btn:hover {
     transform: scale(1.05);
-    background: linear-gradient(145deg, #ffb74d, #ff9800);
-    box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+    background: linear-gradient(145deg, #ffdb4d, #ffb300);
+    box-shadow: 0 20px 35px rgba(0,0,0,0.5), 0 0 25px rgba(255,215,0,0.7);
   }
 </style>
 </head>
@@ -213,19 +270,30 @@
   <button class="mafia-btn friend-btn" id="openFriendLobby">👥 بازی دوستانه</button>
 </div>
 
-<!-- دیالوگ خطا و قطعی سرور -->
+<!-- دیالوگ حرفه‌ای با توضیح ساده و قابل فهم -->
 <div class="server-dialog-overlay" id="serverDialog">
   <div class="server-dialog">
-    <div class="server-icon">🛜⚠️</div>
-    <h2>خطا در اتصال به سرور</h2>
-    <p>در حال انجام عملیات‌های فنی روی سرور هستیم.<br>لطفاً شکیبا باشید.</p>
-    <p>🔧 تیم فنی در حال رفع مشکل است 🔧</p>
-    <div class="error-code">
-      کد خطا: SRV_503 | سرور موقتاً در دسترس نیست
+    <div class="server-icon">🛜🌀</div>
+    <h2>در حال آماده‌سازی</h2>
+    
+    <p>🔧 <strong>چرا الان نمیشه وارد بازی شد؟</strong></p>
+    <p>تیم فنی داره روی بازی کار می‌کنه تا تجربه بهتری براتون بسازه.<br>یه سری به‌روزرسانی‌ها در حال انجامه.</p>
+    
+    <div class="highlight-text">
+      ⏳ این چند لحظه رو صبر کن، به زودی همه چی آماده میشه!
     </div>
-    <p>⏱️ سرور به زودی وصل خواهد شد.<br>از شکیبایی شما سپاسگزاریم.</p>
+    
+    <div class="loading-dots">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    
+    <p style="margin-top: 15px; font-size: 1rem;">🙏 از شکیبایی و همراهی شما بی‌نهایت سپاسگزاریم</p>
+    
     <div class="date-time" id="dateTime"></div>
-    <button class="close-dialog-btn" id="closeDialogBtn">باشه 🤝</button>
+    
+    <button class="close-dialog-btn" id="closeDialogBtn">متوجه شدم 🤝</button>
   </div>
 </div>
 
@@ -236,29 +304,29 @@
   const formattedDate = now.toLocaleDateString('fa-IR') + ' - ' + now.toLocaleTimeString('fa-IR');
   dateTimeSpan.innerText = '🕒 ' + formattedDate;
 
-  // ذخیره اسم کاربر از localStorage (فقط نمایشی)
+  // ذخیره اسم کاربر
   let savedName = localStorage.getItem("mafiaPlayerName");
   if(savedName) {
     document.getElementById("playerName").innerText = savedName;
   }
 
-  // دکمه بستن دیالوگ (فقط دیالوگ رو میبنده، بازی اجرا نمیشه)
+  // دکمه بستن دیالوگ
   document.getElementById('closeDialogBtn').addEventListener('click', function() {
     document.getElementById('serverDialog').style.display = 'none';
   });
 
-  // دکمه بازی دوستانه هم هیچ کاری انجام نمیده فقط دیالوگ رو نشون میده
+  // دکمه بازی دوستانه - نمایش دیالوگ
   document.getElementById('openFriendLobby').addEventListener('click', function() {
     document.getElementById('serverDialog').style.display = 'flex';
   });
 
-  // دکمه بازی امتیازی هم همون دیالوگ رو نشون میده
+  // دکمه بازی امتیازی - نمایش دیالوگ
   document.querySelector('.rank-btn').addEventListener('click', function() {
     document.getElementById('serverDialog').style.display = 'flex';
   });
 
-  // جلوگیری از هرگونه اجرای بازی یا لابی
-  console.log('سرور در حال بروزرسانی - هیچ بازیای اجرا نمیشود');
+  // هیچ بازی و لابی و اتصالی اجرا نمیشه
+  console.log('در حال بروزرسانی - بازی در دسترس نیست');
 </script>
 
 </body>
