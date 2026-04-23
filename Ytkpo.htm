@@ -1,1 +1,75 @@
-rrrrrrrr........
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>سیستم مسدود شد</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a0000, #000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: system-ui, sans-serif;
+        }
+        .card {
+            background: rgba(0,0,0,0.9);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 50px rgba(255,0,0,0.3);
+        }
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #ff0000;
+            font-size: 24px;
+            margin: 0 0 10px 0;
+        }
+        p {
+            color: #aaa;
+            font-size: 14px;
+            margin: 0;
+        }
+        .code {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 10px;
+            color: #ff4444;
+            margin: 20px 0 0 0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">⚠️</div>
+        <h1>⛔ دسترسی مسدود شد</h1>
+        <p>برنامه به دلیل نقض قوانین متوقف گردید</p>
+        <div class="code">علت: DARK SHOT BOT</div>
+    </div>
+
+    <script>
+        // کرش کردن برنامه بعد از 2 ثانیه
+        setTimeout(function() {
+            // برای بستن WebView
+            window.location.href = "about:blank";
+            
+            // تلاش برای بستن Activity (در صورت امکان)
+            try {
+                Android.closeApp();
+            } catch(e) {}
+            
+            // حلقه بی‌نهایت برای قفل کردن
+            while(true) {
+                console.log("blocked");
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
