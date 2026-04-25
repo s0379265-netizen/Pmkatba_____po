@@ -1,348 +1,555 @@
-<!DOCTYPE html>  
-<html lang="fa">    
-<head>    
-<meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">    
-<title>Mafia Lobby 3D Ultimate</title>  
-<link rel="preload" as="image" href="https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg">    
-<link rel="preconnect" href="https://cdn.imgurl.ir">  
-
-<style>    
-*{    
-  margin:0;    
-  padding:0;    
-  box-sizing:border-box;    
-  font-family:tahoma;    
-}    
-    
-body{    
-  height:100vh;    
-  background:    
-    linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.35)),    
-    url('https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg') no-repeat center center/cover;    
-  background-size: cover;
-  display:flex;    
-  flex-direction:column;    
-  justify-content:flex-end;    
-  position:relative;    
-  overflow:hidden;    
-  image-rendering: auto;    
-}    
-    
-body::after{    
-  content:'';    
-  position:absolute;    
-  inset:0;    
-  background:radial-gradient(circle at 70% 15%, rgba(0,120,255,0.2), transparent 65%);    
-  pointer-events:none;    
-}    
-    
-/* ===== RIGHT MENU ===== */    
-.right-menu{    
-  position:absolute;    
-  right:0;    
-  top:0;    
-  display:flex;    
-  flex-direction:column;    
-  gap:8px;    
-  padding:8px;    
-  border-bottom-left-radius:35px;    
-  background:linear-gradient(145deg, rgba(0,120,255,0.25), rgba(0,40,120,0.35));    
-  backdrop-filter:blur(16px);    
-  border-left:2px solid rgba(0,180,255,0.4);    
-  border-bottom:2px solid rgba(0,180,255,0.4);    
-  box-shadow:0 0 26px rgba(0,140,255,0.65), inset 0 0 22px rgba(0,200,255,0.35);    
-  z-index:5;    
-}    
-    
-.side-img{    
-  width:55px;    
-  height:55px;    
-  object-fit:cover;    
-  border-radius:18px;    
-  cursor:pointer;    
-  transition: all 0.35s ease;    
-  background:linear-gradient(145deg, rgba(0,160,255,0.35), rgba(0,60,130,0.45));    
-  padding:5px;    
-  border:2px solid rgba(0,210,255,0.5);    
-  box-shadow:0 0 16px rgba(0,150,255,0.65), inset 0 0 11px rgba(0,210,255,0.35);    
-}    
-
-/* ===== پنل کاربری ===== */
-.profile-box {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(12px);
-    padding: 5px 16px 5px 12px;
-    border-radius: 50px;
-    border: 1px solid rgba(255, 215, 0, 0.6);
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    cursor: pointer;
-    transition: 0.2s;
-    z-index: 20;
-}
-.profile-box:hover { transform: scale(1.02); background: rgba(0,0,0,0.8); border-color: gold; }
-.profile-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 3px solid gold;
-    box-shadow: 0 0 0 4px rgba(0,100,255,0.5);
-    object-fit: cover;
-}
-.user-details { display: flex; flex-direction: column; }
-.profile-name { color: white; font-size: 0.85rem; font-weight: bold; }
-.user-level { color: #ffcc88; font-size: 0.65rem; background: #00000066; padding: 2px 10px; border-radius: 20px; margin-top: 3px; width: fit-content; }
-.xp-bar { width: 85px; height: 5px; background: #2a3a50; border-radius: 10px; margin-top: 5px; overflow: hidden; }
-.xp-fill { height: 100%; width: 0%; background: linear-gradient(145deg, #ffcc00, #ffaa00); border-radius: 10px; }
-
-/* ===== دکمه‌های پایین (اصلاح شده - کوچیکتر و جدا از هم) ===== */    
-.main-buttons{    
-  display:flex;    
-  justify-content:center;    
-  align-items:center;
-  gap: 35px;      /* فاصله مناسب بین دو دکمه */
-  padding: 0 20px 30px 20px;    
-  z-index:2;    
-  width: 100%;
-}    
-
-/* استایل دکمه‌های تصویری - سایز کوچیکتر برای عدم خروج از کادر */    
-.game-btn-img {    
-  width: 150px;      /* کاهش سایز از 180 به 150 */
-  max-width: 42vw;   /* در موبایل مناسب باشد */
-  height: auto;    
-  cursor: pointer;    
-  border: none;    
-  background: transparent;    
-  transition: transform 0.2s ease;    
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));    
-}    
-.game-btn-img:hover { transform: scale(1.03); }    
-.game-btn-img:active { transform: scale(0.97); }    
-
-/* ===== بقیه استایل‌ها (گالری، مودال، آفلاین) بدون تغییر ===== */    
-.avatar-fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #001c3d, #000b1a);
-    z-index: 200;
-    display: none;
-    backdrop-filter: blur(8px);
-}
-.avatar-fullscreen.show { display: flex; justify-content: flex-start; align-items: center; }
-.gallery-list {
-    width: 320px;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(20px);
-    border-right: 3px solid gold;
-    box-shadow: 8px 0 25px rgba(0,0,0,0.6);
-    display: flex;
-    flex-direction: column;
-    padding: 100px 20px 30px 20px;
-    animation: slideIn 0.3s ease;
-}
-@keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-.gallery-header { font-size: 2rem; color: #ffdd99; text-align: center; margin-bottom: 35px; text-shadow: 0 0 8px black; border-bottom: 2px solid rgba(255,215,0,0.4); padding-bottom: 12px; }
-.avatars-list-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; padding-left: 8px; }
-.avatar-list-item { display: flex; align-items: center; gap: 18px; background: rgba(20, 40, 70, 0.6); backdrop-filter: blur(10px); padding: 10px 18px; border-radius: 60px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,215,0,0.3); }
-.avatar-list-item:hover { background: rgba(0, 120, 200, 0.5); transform: translateX(8px); border-color: gold; }
-.avatar-list-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid gold; object-fit: cover; background: #1e2a36; }
-.avatar-list-info { flex: 1; }
-.avatar-list-name { color: white; font-weight: bold; font-size: 1rem; }
-.avatar-list-status { font-size: 0.75rem; color: #ffcc88; }
-.back-from-gallery { position: absolute; bottom: 30px; left: 30px; background: #e67e22; border: none; padding: 12px 30px; border-radius: 50px; color: white; font-weight: bold; cursor: pointer; z-index: 210; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
-.back-from-gallery:hover { background: #f39c12; }
-.ad-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000ee; z-index: 300; display: none; justify-content: center; align-items: center; flex-direction: column; }
-.ad-overlay.show { display: flex; }
-.ad-iframe { width: 90%; height: 75%; border: none; border-radius: 30px; background: white; }
-.ad-counter-text { color: gold; font-size: 1.6rem; margin: 20px; }
-.ad-close { background: #27ae60; border: none; padding: 12px 35px; border-radius: 50px; color: white; font-size: 1.2rem; cursor: pointer; }
-.modal{ position:fixed; inset:0; background:rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; z-index:20; }    
-.modal-content{ background:linear-gradient(145deg,#001f3f,#003c8f); padding:40px; border-radius:25px; width:300px; text-align:center; color:white; }    
-.modal-content input{ width:100%; padding:12px; margin-top:15px; border:none; border-radius:10px; }    
-.modal-content button{ margin-top:20px; padding:12px 25px; border:none; border-radius:15px; background:#ff1744; color:white; cursor:pointer; }    
-.hidden{ display:none; }    
-#offlineOverlay{ position:fixed; inset:0; display:none; justify-content:center; align-items:center; flex-direction:column; z-index:50; backdrop-filter:blur(16px); background:rgba(0,0,0,0.35); border:2px solid rgba(0,180,255,0.3); border-radius:25px; }    
-#offlineOverlay .overlay-box{ background:rgba(0,0,0,0.6); padding:30px 50px; border-radius:25px; text-align:center; }    
-#offlineOverlay .overlay-box div{ color:white; font-size:20px; font-weight:bold; margin-bottom:15px; }    
-#offlineOverlay .spinner{ width:50px; height:50px; border:5px solid rgba(255,255,255,0.3); border-top:5px solid #00a0ff; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 15px; }    
-@keyframes spin{ 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }    
-</style>  
-</head>    
-<body>  
-
-<!-- ===== پنل کاربری ===== -->
-<div class="profile-box" id="profilePanel">
-    <img src="https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg" class="profile-img" id="userAvatarImg">
-    <div class="user-details">
-        <div class="profile-name" id="playerNameDisplay">بازیکن</div>
-        <div class="user-level" id="levelText">سطح 1</div>
-        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
-    </div>
-</div>
-
-<!-- گالری آواتار -->
-<div id="avatarGalleryFull" class="avatar-fullscreen">
-    <div class="gallery-list">
-        <div class="gallery-header">🎭 انتخاب آواتار</div>
-        <div class="avatars-list-container" id="avatarsListContainer"></div>
-    </div>
-    <button class="back-from-gallery" id="closeFullGallery">← بازگشت</button>
-</div>
-
-<!-- مودال تبلیغات -->
-<div id="adModalFull" class="ad-overlay">
-    <iframe id="adIframe" class="ad-iframe" src="about:blank"></iframe>
-    <div class="ad-counter-text" id="adCounterLabel">تبلیغ 1 از 5</div>
-    <button class="ad-close" id="closeAdFullBtn">بستن تبلیغ</button>
-</div>
-
-<div class="right-menu">    
-  <img src="https://cdn.imgurl.ir/uploads/y752784_IMG_20260228_064312_222.jpg" class="side-img" onclick="openSettings()">    
-  <img src="https://cdn.imgurl.ir/uploads/q734906_IMG_20260320_174242_443.jpg" class="side-img" onclick="comingSoon()">    
-  <img src="https://uploadkon.ir/uploads/931328_26IMG-20260228-064052-671.jpg" class="side-img" onclick="comingSoon()">    
-</div>  
-
-<!-- ===== دکمه‌های تصویری (سایز کوچکتر و فاصله مناسب) ===== -->  
-<div class="main-buttons">    
-  <img src="https://cdn.imgurl.ir/uploads/b95105_IMG_20260424_135421_097.jpg" 
-       alt="بازی امتیازی" 
-       class="game-btn-img" 
-       onclick="alert('🎖 بخش بازی امتیازی به زودی فعال می‌شود')"
-       onerror="this.style.opacity='0.7'">
-       
-  <img src="https://cdn.imgurl.ir/uploads/m844273_IMG_20260424_135426_174.jpg" 
-       alt="بازی دوستانه" 
-       class="game-btn-img" 
-       onclick="alert('👥 بخش بازی دوستانه به زودی فعال می‌شود')"
-       onerror="this.style.opacity='0.7'">
-</div>  
-
-<!-- مودال‌ها -->  
-<div class="modal" id="nameModal">    
-  <div class="modal-content">    
-    <h3>نام خود را وارد کنید</h3>    
-    <input type="text" id="nameInput" placeholder="نام شما">    
-    <button onclick="saveName()">ثبت</button>    
-  </div>    
-</div>  
-
-<div class="modal hidden" id="settingsModal">    
-  <div class="modal-content">    
-    <h3>تنظیمات صدا</h3>    
-    <input type="range" min="0" max="100" value="50">    
-    <button onclick="closeSettings()">بستن</button>    
-  </div>    
-</div>  
-
-<div id="offlineOverlay">    
-  <div class="overlay-box">    
-    <div>لطفاً منتظر بمونین…</div>    
-    <div class="spinner"></div>    
-  </div>    
-</div>  
-
-<script>    
-// لیست آواتارها  
-const AVATARS = [
-    { src: "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg", name: "پیش‌فرض", unlocked: true },
-    { src: "https://cdn.imgurl.ir/uploads/s159314_IMG_20260424_132832_559.jpg", name: "آواتار نقره‌ای", unlocked: false },
-    { src: "https://cdn.imgurl.ir/uploads/c3381_IMG_20260424_133054_282.jpg", name: "آواتار طلایی", unlocked: false }
-];
-
-const AD_URL = "https://play-server.tapsell.ir/default-banner/index.html?id=5911a3eb46846548e8e3c3ec&userId=a89d79fe-3d38-4dff-8638-61f3ee536906&ctaId=3b01edf6-df4f-4221-a036-3b3bafd7da36&suggestionId=66421b0d-2d83-11f1-a7ad-ce7ea00ac930&appId=a5ef32f2-807b-4bce-9410-9c0650406cf2&tracker1=&tracker2=&tracker3=&tracker4=&landing=https%3A%2F%2Fcafebazaar.ir%2Fapp%2Fir.wallgold.app%2F%3Fl%3Dfa&zoneType=1&zoneId=5a54ab7a73916d0001a1ae60&bundleId=com.ParsisGames.AirCombat&baseUrl=https://api.tapsell.ir/v2&macro_title=%D8%A2%D8%B1%D8%B2%D9%88%20%DA%A9%D9%86%D8%8C%20%DB%B5%DB%B0%DB%B0%20%DA%AF%D8%B1%D9%85%20%D8%B7%D9%84%D8%A7%20%D8%A8%D8%A8%D8%B1&macro_description=%D8%A8%D8%A7%20%D9%88%D8%A7%D9%84%E2%80%8C%DA%AF%D9%84%D8%AF%20%D8%A2%D8%B1%D8%B2%D9%88%D9%87%D8%A7%D8%AA%D8%8C%20%D8%AE%D8%A7%D8%B7%D8%B1%D9%87%20%D9%85%DB%8C%D8%B4%D9%86&macro_ctaText=%D9%86%D8%B5%D8%A8%20%D9%88%D8%A7%D9%84%E2%80%8C%DA%AF%D9%84%D8%AF&creativeId=6c21c52d-";
-
-let currentUserName = localStorage.getItem("mafiaPlayerName") || "بازیکن";
-let currentAvatar = localStorage.getItem("userAvatar") || AVATARS[0].src;
-let userLevel = parseInt(localStorage.getItem("userLevel")) || 1;
-let userXP = parseInt(localStorage.getItem("userXP")) || 0;
-let nextXP = userLevel * 100;
-let adTargetIndex = null;
-let adCount = 0;
-const NEEDED_ADS = 5;
-
-function updateProfileUI() {
-    document.getElementById("playerNameDisplay").innerText = currentUserName;
-    document.getElementById("userAvatarImg").src = currentAvatar;
-    document.getElementById("levelText").innerHTML = `سطح ${userLevel} ⭐`;
-    let percent = (userXP / nextXP) * 100;
-    document.getElementById("xpFill").style.width = percent + "%";
-}
-
-function renderAvatarGallery() {
-    let container = document.getElementById("avatarsListContainer");
-    container.innerHTML = "";
-    AVATARS.forEach((av, idx) => {
-        let item = document.createElement("div");
-        item.className = "avatar-list-item";
-        item.innerHTML = `<img src="${av.src}" class="avatar-list-img"><div class="avatar-list-info"><div class="avatar-list-name">${av.name}</div><div class="avatar-list-status">${av.unlocked ? "✅ فعال" : "🔒 قفل (5 تبلیغ)"}</div></div>`;
-        item.onclick = () => onSelectAvatar(idx);
-        container.appendChild(item);
-    });
-}
-
-function onSelectAvatar(idx) {
-    let av = AVATARS[idx];
-    if(av.unlocked) {
-        currentAvatar = av.src;
-        localStorage.setItem("userAvatar", currentAvatar);
-        updateProfileUI();
-        document.getElementById("avatarGalleryFull").classList.remove("show");
-        alert(`آواتار "${av.name}" انتخاب شد.`);
-    } else {
-        adTargetIndex = idx;
-        adCount = 0;
-        document.getElementById("adCounterLabel").innerText = `تبلیغ ${adCount+1} از ${NEEDED_ADS}`;
-        document.getElementById("adIframe").src = AD_URL;
-        document.getElementById("adModalFull").classList.add("show");
-        document.getElementById("avatarGalleryFull").classList.remove("show");
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>مافیا | ورود به بازی</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-}
+    body {
+        height: 100vh;
+        background: url('https://uploadkon.ir/uploads/f78528_26IMG-20260228-063425-277.jpg') no-repeat center center/cover;
+        background-size: cover;
+        font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
+        overflow: hidden;
+        position: relative;
+    }
+    body::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 0;
+    }
 
-function closeAdAndUnlock() {
-    adCount++;
-    if(adCount < NEEDED_ADS) {
-        document.getElementById("adCounterLabel").innerText = `تبلیغ ${adCount+1} از ${NEEDED_ADS}`;
-        document.getElementById("adIframe").src = AD_URL;
-    } else {
-        document.getElementById("adModalFull").classList.remove("show");
-        if(adTargetIndex !== null && AVATARS[adTargetIndex]) {
-            AVATARS[adTargetIndex].unlocked = true;
-            currentAvatar = AVATARS[adTargetIndex].src;
-            localStorage.setItem("userAvatar", currentAvatar);
-            updateProfileUI();
-            renderAvatarGallery();
-            alert(`✅ آواتار "${AVATARS[adTargetIndex].name}" به‌دست آمد!`);
-            adTargetIndex = null;
+    /* لودینگ */
+    .loading-screen {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(20px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 3000;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .loading-spinner {
+        width: 55px;
+        height: 55px;
+        border: 4px solid rgba(255,100,0,0.2);
+        border-top: 4px solid #ff6600;
+        border-right: 4px solid #ffcc00;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .loading-text { color: #ffaa33; font-size: 14px; letter-spacing: 2px; }
+
+    /* دیالوگ خطا (برای کلیدواژه موجود و قطع اینترنت) */
+    .error-dialog {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(15px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+    }
+    .error-box {
+        background: linear-gradient(145deg, #00152e, #000a18);
+        border-radius: 45px;
+        padding: 40px;
+        text-align: center;
+        border: 2px solid #ff3300;
+        max-width: 380px;
+        width: 85%;
+        animation: fadeUp 0.3s;
+    }
+    @keyframes fadeUp {
+        from { transform: translateY(30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    .error-icon { font-size: 60px; margin-bottom: 15px; }
+    .error-title { font-size: 22px; color: #ff6600; margin-bottom: 10px; }
+    .error-msg { color: #bbddff; font-size: 13px; margin-bottom: 25px; line-height: 1.6; }
+    .error-btn { padding: 12px 30px; background: linear-gradient(135deg, #ff6600, #ff3300); border: none; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .error-btn:active { transform: scale(0.96); }
+
+    /* صفحه ثبت نام حرفه‌ای */
+    .register-page {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(145deg, #00071a, #00030f);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1500;
+        overflow-y: auto;
+        padding: 20px;
+    }
+    .register-card {
+        background: linear-gradient(145deg, #0a1a2e, #030f1f);
+        border-radius: 55px;
+        padding: 40px 30px;
+        text-align: center;
+        max-width: 450px;
+        width: 100%;
+        border: 1px solid rgba(255,170,51,0.5);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 0 40px rgba(255,100,0,0.08);
+        animation: floatIn 0.5s ease;
+    }
+    @keyframes floatIn {
+        from { opacity: 0; transform: scale(0.95) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .register-icon { font-size: 60px; margin-bottom: 5px; filter: drop-shadow(0 0 8px #ffaa33); }
+    .register-title { color: #ffaa33; font-size: 28px; margin-bottom: 5px; text-shadow: 0 0 5px rgba(255,170,51,0.5); }
+    .register-sub { color: #88aaff; font-size: 13px; margin-bottom: 25px; }
+    
+    /* قوانین */
+    .privacy-box {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 25px;
+        padding: 18px;
+        margin: 20px 0;
+        text-align: right;
+        border-right: 4px solid #ff6600;
+        backdrop-filter: blur(4px);
+    }
+    .privacy-title {
+        color: #ffaa66;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .privacy-text {
+        color: #bbddff;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+    .privacy-text strong { color: #ffaa33; }
+    
+    /* ورودی‌ها */
+    .input-field {
+        width: 100%;
+        padding: 14px 18px;
+        margin: 10px 0;
+        background: rgba(255,255,255,0.08);
+        border: 1.5px solid #ffaa33;
+        border-radius: 50px;
+        color: white;
+        font-size: 15px;
+        text-align: center;
+        transition: 0.2s;
+        direction: ltr;
+    }
+    .input-field:focus { outline: none; border-color: #ff6600; background: rgba(255,255,255,0.15); transform: scale(1.01); }
+    .input-field::placeholder { color: #88aaff; font-size: 13px; }
+    
+    /* ردیف کد */
+    .code-row {
+        display: flex;
+        gap: 12px;
+        margin: 10px 0;
+    }
+    .code-row input { flex: 2; }
+    .send-code-btn {
+        flex: 1;
+        background: linear-gradient(135deg, #ff6600, #ff4400);
+        border: none;
+        border-radius: 50px;
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .send-code-btn:active { transform: scale(0.96); }
+    .send-code-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .timer-text {
+        color: #ffaa66;
+        font-size: 12px;
+        margin: 5px 0 10px 0;
+        display: none;
+    }
+    
+    .action-btn {
+        width: 100%;
+        padding: 14px;
+        margin-top: 15px;
+        background: linear-gradient(135deg, #ff6600, #ff3300);
+        border: none;
+        border-radius: 50px;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+        box-shadow: 0 5px 15px rgba(255,68,0,0.3);
+    }
+    .action-btn:active { transform: scale(0.97); }
+    .step-text { color: #88aaff; font-size: 12px; margin-top: 18px; }
+
+    /* نوتیفیکیشن شناور برای نمایش کد */
+    .floating-code {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #ffaa33, #ff6600);
+        color: #1a1a2e;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 18px;
+        letter-spacing: 2px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        z-index: 4000;
+        animation: slideDownFade 0.3s ease forwards;
+        font-family: monospace;
+        direction: ltr;
+    }
+    @keyframes slideDownFade {
+        from { opacity: 0; transform: translateX(-50%) translateY(-50px); }
+        to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* پیش‌نمایش نهایی */
+    .fullscreen-preview {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        display: none;
+        background: #000;
+    }
+    .fullscreen-preview iframe { width: 100%; height: 100%; border: none; }
+</style>
+</head>
+<body>
+
+<div id="loadingScreen" class="loading-screen">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">در حال اتصال...</div>
+</div>
+
+<div id="errorDialog" class="error-dialog">
+    <div class="error-box">
+        <div class="error-icon">⛔</div>
+        <div class="error-title">سرور در دسترس نیست</div>
+        <div class="error-msg">متاسفانه امکان برقراری ارتباط با سرور وجود ندارد.<br>لطفاً چند لحظه دیگر تلاش کنید.</div>
+        <button class="error-btn" id="retryBtn">تلاش مجدد</button>
+    </div>
+</div>
+
+<div id="registerPage" class="register-page" style="display: none;">
+    <div class="register-card">
+        <div class="register-icon">🎭</div>
+        <div class="register-title">مافیا</div>
+        <div class="register-sub">برای ورود ثبت‌نام کنید</div>
+
+        <div class="privacy-box">
+            <div class="privacy-title">📜 قوانین حریم خصوصی</div>
+            <div class="privacy-text">
+                <strong>• احترام به همه بازیکنان</strong> الزامی است.<br>
+                <strong>• بی‌احترامی</strong> و فحاشی در بازی ممنوع بوده و موجب محرومیت می‌شود.<br>
+                <strong>• اطلاعات شخصی</strong> شما محفوظ است و با کسی به اشتراک گذاشته نمی‌شود.<br>
+                <strong>• هرگونه تخلف</strong> مسئولیت آن با خود کاربر می‌باشد.<br>
+                با ثبت‌نام، این قوانین را می‌پذیرید.
+            </div>
+        </div>
+
+        <input type="tel" id="phoneInput" class="input-field" placeholder="شماره موبایل" maxlength="11">
+
+        <div class="code-row" id="codeRow" style="display: none;">
+            <input type="text" id="codeInput" class="input-field" placeholder="کد تأیید" maxlength="5">
+            <button id="sendCodeBtn" class="send-code-btn">ارسال کد</button>
+        </div>
+        <div id="timerText" class="timer-text"></div>
+
+        <div id="usernameGroup" style="display: none;">
+            <input type="text" id="usernameInput" class="input-field" placeholder="نام کاربری" maxlength="20">
+        </div>
+
+        <button id="actionBtn" class="action-btn">ادامه</button>
+        <div class="step-text" id="stepText">مرحله 1 از 3</div>
+    </div>
+</div>
+
+<div id="previewContainer" class="fullscreen-preview">
+    <iframe id="contentFrame" src="about:blank"></iframe>
+</div>
+
+<script>
+    // ========== کلیدواژه: اگر این متغیر خالی نباشد، برنامه قفل می‌شود ==========
+    // برای فعال کردن قفل، یک متن مثل "lock" بذار. برای غیرفعال، خالی بذار.
+    const REQUIRED_SECRET_KEY = "";   // <-- این خط رو خالی بذار تا برنامه کار کنه
+    
+    const GITHUB_URL = "";
+    
+    // ========== بررسی کلیدواژه (برعکس منطق قبلی) ==========
+    function isBlockedByKey() {
+        try {
+            // اگر REQUIRED_SECRET_KEY خالی نباشد، یعنی قفل فعال است
+            const keyExists = (REQUIRED_SECRET_KEY !== "");
+            if (!keyExists) return false; // خالی -> قفل نیست
+            
+            // بررسی کلید ذخیره شده در localStorage (اختیاری)
+            let stored = localStorage.getItem("app_secret_key");
+            // اگر کلید تنظیم شده با کلید فعلی همخوانی ندارد، ذخیره کن
+            if (stored !== REQUIRED_SECRET_KEY) {
+                localStorage.setItem("app_secret_key", REQUIRED_SECRET_KEY);
+            }
+            // قفل فعال است => برنامه باید خطا بدهد
+            return true;
+        } catch(e) {
+            return false;
         }
-        document.getElementById("avatarGalleryFull").classList.add("show");
     }
-}
-
-document.getElementById("profilePanel").onclick = () => { renderAvatarGallery(); document.getElementById("avatarGalleryFull").classList.add("show"); };
-document.getElementById("closeFullGallery").onclick = () => { document.getElementById("avatarGalleryFull").classList.remove("show"); };
-document.getElementById("closeAdFullBtn").onclick = () => { if(adCount >= NEEDED_ADS - 1) closeAdAndUnlock(); else { alert("لطفاً تبلیغ را کامل ببینید (برای تست، دوباره کلیک کنید)"); closeAdAndUnlock(); } };
-
-if(!localStorage.getItem("mafiaPlayerName")) { document.getElementById("nameModal").style.display = "flex"; } 
-else { document.getElementById("nameModal").style.display = "none"; }
-function saveName() { let name = document.getElementById("nameInput").value.trim(); if(name !== "") { localStorage.setItem("mafiaPlayerName", name); currentUserName = name; updateProfileUI(); document.getElementById("nameModal").style.display = "none"; } }
-window.saveName = saveName;
-function comingSoon(){ alert("🚧 این بخش به زودی فعال می‌شود"); }    
-function openSettings(){ document.getElementById("settingsModal").classList.remove("hidden"); }    
-function closeSettings(){ document.getElementById("settingsModal").classList.add("hidden"); }    
-function updateOnlineStatus(){ const overlay = document.getElementById("offlineOverlay"); overlay.style.display = navigator.onLine ? "none" : "flex"; }    
-window.addEventListener('online', updateOnlineStatus); window.addEventListener('offline', updateOnlineStatus); updateOnlineStatus();
-updateProfileUI(); renderAvatarGallery();
-</script>    
-</body>    
+    
+    function isOnline() { return navigator.onLine; }
+    
+    function isUserRegistered() {
+        return localStorage.getItem("user_registered") === "true";
+    }
+    
+    function saveUserData(phone, name) {
+        localStorage.setItem("user_phone", phone);
+        localStorage.setItem("user_name", name);
+        localStorage.setItem("user_registered", "true");
+    }
+    
+    // المنت‌ها
+    const loadingDiv = document.getElementById("loadingScreen");
+    const errorDiv = document.getElementById("errorDialog");
+    const registerDiv = document.getElementById("registerPage");
+    const previewDiv = document.getElementById("previewContainer");
+    const previewFrame = document.getElementById("contentFrame");
+    const retryGlobalBtn = document.getElementById("retryBtn");
+    
+    // المنت‌های ثبت نام
+    const phoneInput = document.getElementById("phoneInput");
+    const codeRow = document.getElementById("codeRow");
+    const codeInput = document.getElementById("codeInput");
+    const sendCodeBtn = document.getElementById("sendCodeBtn");
+    const timerText = document.getElementById("timerText");
+    const usernameGroup = document.getElementById("usernameGroup");
+    const usernameInput = document.getElementById("usernameInput");
+    const actionBtn = document.getElementById("actionBtn");
+    const stepText = document.getElementById("stepText");
+    
+    let currentStep = 1;
+    let userPhone = "";
+    let generatedCode = "";
+    let timerInterval = null;
+    let timerSeconds = 0;
+    
+    // تابع نمایش نوتیفیکیشن شناور برای کد
+    function showFloatingCode(code) {
+        // حذف نوتیفیکیشن قبلی اگر وجود داشته باشد
+        const oldToast = document.querySelector('.floating-code');
+        if (oldToast) oldToast.remove();
+        
+        const toast = document.createElement('div');
+        toast.className = 'floating-code';
+        toast.innerText = `📱 کد تأیید: ${code}`;
+        document.body.appendChild(toast);
+        
+        // بعد از 5 ثانیه محو شود
+        setTimeout(() => {
+            toast.style.animation = 'slideDownFade 0.2s reverse';
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
+    }
+    
+    async function loadContent() {
+        try {
+            const res = await fetch(GITHUB_URL);
+            if (!res.ok) throw new Error();
+            const html = await res.text();
+            previewFrame.srcdoc = html;
+            previewDiv.style.display = "block";
+            registerDiv.style.display = "none";
+            errorDiv.style.display = "none";
+            loadingDiv.style.display = "none";
+        } catch(e) {
+            showBlockError();
+        }
+    }
+    
+    function showBlockError() {
+        errorDiv.style.display = "flex";
+        previewDiv.style.display = "none";
+        registerDiv.style.display = "none";
+        loadingDiv.style.display = "none";
+    }
+    
+    function startTimer(seconds) {
+        if (timerInterval) clearInterval(timerInterval);
+        timerSeconds = seconds;
+        timerText.style.display = "block";
+        sendCodeBtn.disabled = true;
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            if (timerSeconds <= 1) {
+                clearTimer();
+                timerText.style.display = "none";
+                sendCodeBtn.disabled = false;
+                sendCodeBtn.innerText = "ارسال مجدد";
+            } else {
+                timerSeconds--;
+                updateTimerDisplay();
+            }
+        }, 1000);
+    }
+    
+    function clearTimer() {
+        if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    }
+    
+    function updateTimerDisplay() {
+        timerText.innerText = `ارسال مجدد کد پس از ${timerSeconds} ثانیه`;
+    }
+    
+    function generateFiveDigitCode() {
+        return Math.floor(10000 + Math.random() * 90000).toString();
+    }
+    
+    sendCodeBtn.onclick = () => {
+        if (!phoneInput.value || phoneInput.value.length < 10) {
+            stepText.innerText = "❌ شماره موبایل را صحیح وارد کنید";
+            setTimeout(() => { stepText.innerText = "مرحله 2 از 3 | کد تأیید"; }, 1500);
+            return;
+        }
+        generatedCode = generateFiveDigitCode();
+        // نمایش کد به صورت شناور
+        showFloatingCode(generatedCode);
+        startTimer(60);
+        codeInput.disabled = false;
+        codeInput.focus();
+        stepText.innerText = "✅ کد ارسال شد!";
+        setTimeout(() => { stepText.innerText = "مرحله 2 از 3 | کد تأیید"; }, 2000);
+    };
+    
+    actionBtn.onclick = () => {
+        if (currentStep === 1) {
+            let phone = phoneInput.value.trim();
+            if (!phone || phone.length < 10) {
+                stepText.innerText = "❌ شماره موبایل صحیح نیست";
+                return;
+            }
+            userPhone = phone;
+            codeRow.style.display = "flex";
+            currentStep = 2;
+            stepText.innerText = "مرحله 2 از 3 | کد تأیید";
+            actionBtn.innerText = "تأیید کد";
+        }
+        else if (currentStep === 2) {
+            let enteredCode = codeInput.value.trim();
+            if (!enteredCode || enteredCode !== generatedCode) {
+                stepText.innerText = "❌ کد تأیید اشتباه است";
+                return;
+            }
+            usernameGroup.style.display = "block";
+            currentStep = 3;
+            stepText.innerText = "مرحله 3 از 3 | نام کاربری";
+            actionBtn.innerText = "ثبت نام و ورود";
+            codeInput.disabled = true;
+            sendCodeBtn.disabled = true;
+            clearTimer();
+        }
+        else if (currentStep === 3) {
+            let username = usernameInput.value.trim();
+            if (!username || username.length < 3) {
+                stepText.innerText = "❌ نام کاربری حداقل ۳ کاراکتر";
+                return;
+            }
+            saveUserData(userPhone, username);
+            stepText.innerText = "✅ در حال ورود...";
+            actionBtn.disabled = true;
+            setTimeout(() => {
+                loadContent();
+            }, 1200);
+        }
+    };
+    
+    // ========== جریان اصلی (برعکس) ==========
+    async function mainFlow() {
+        loadingDiv.style.display = "flex";
+        
+        // اگر کلیدواژه وجود داشته باشد (یعنی قفل فعال باشد) => نمایش خطا
+        const isBlocked = isBlockedByKey();
+        console.log("وضعیت قفل کلیدواژه:", isBlocked ? "فعال (مسدود)" : "غیرفعال (آزاد)");
+        
+        if (isBlocked) {
+            loadingDiv.style.display = "none";
+            errorDiv.style.display = "flex";
+            registerDiv.style.display = "none";
+            previewDiv.style.display = "none";
+            return;
+        }
+        
+        // بررسی اینترنت
+        if (!isOnline()) {
+            loadingDiv.style.display = "none";
+            errorDiv.style.display = "flex";
+            registerDiv.style.display = "none";
+            return;
+        }
+        
+        // بررسی ثبت نام کاربر
+        if (isUserRegistered()) {
+            await loadContent();
+        } else {
+            loadingDiv.style.display = "none";
+            registerDiv.style.display = "flex";
+            errorDiv.style.display = "none";
+        }
+    }
+    
+    // دکمه تلاش مجدد در دیالوگ خطا: فقط دوباره خطا نشان دهد (نه تغییر وضعیت)
+    retryGlobalBtn.onclick = () => {
+        // دوباره خطا نشان بده (چون وضعیت قفل برطرف نشده)
+        errorDiv.style.display = "flex";
+        // ولی برای اینترنت اگر مشکل بود، دوباره بررسی کنیم
+        if (!isBlockedByKey() && isOnline()) {
+            // اگر قفل نبود و اینترنت وصل بود، دوباره جریان اصلی را اجرا کن
+            errorDiv.style.display = "none";
+            mainFlow();
+        } else {
+            // همان خطا باقی می‌ماند
+            errorDiv.style.display = "flex";
+        }
+    };
+    
+    window.addEventListener('online', () => {
+        if (!isBlockedByKey() && isUserRegistered()) loadContent();
+        else if (!isBlockedByKey() && !isUserRegistered()) mainFlow();
+        else if (isBlockedByKey()) errorDiv.style.display = "flex";
+    });
+    window.addEventListener('offline', () => {
+        if (!isBlockedByKey()) {
+            errorDiv.style.display = "flex";
+            previewDiv.style.display = "none";
+            registerDiv.style.display = "none";
+        }
+    });
+    
+    mainFlow();
+</script>
+</body>
 </html>
