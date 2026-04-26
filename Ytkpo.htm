@@ -1,640 +1,185 @@
-
-<!DOCTYPE html>  
-<html lang="fa">    
-<head>    
-<meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">    
-<title>Mafia Lobby 3D Ultimate</title>  
-<link rel="preload" as="image" href="https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg">    
-<link rel="preconnect" href="https://cdn.imgurl.ir">  
-
-<style>    
-*{    
-  margin:0;    
-  padding:0;    
-  box-sizing:border-box;    
-  font-family:tahoma;    
-}    
-    
-body{    
-  height:100vh;    
-  background:    
-    linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.35)),    
-    url('https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg') no-repeat center center/cover;    
-  background-size: cover;
-  display:flex;    
-  flex-direction:column;    
-  justify-content:flex-end;    
-  position:relative;    
-  overflow:hidden;    
-  image-rendering: auto;    
-}    
-
-/* افکت نور پویا */
-body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 50% 50%, rgba(0,150,255,0.08), transparent 80%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-body::after{    
-  content:'';    
-  position:absolute;    
-  inset:0;    
-  background:radial-gradient(circle at 70% 15%, rgba(0,120,255,0.2), transparent 65%);    
-  pointer-events:none;    
-  z-index: 0;
-}
-    
-/* ===== RIGHT MENU ===== */    
-.right-menu{    
-  position:absolute;    
-  right:0;    
-  top:0;    
-  display:flex;    
-  flex-direction:column;    
-  gap:10px;    
-  padding:10px;    
-  border-bottom-left-radius:35px;    
-  background:linear-gradient(145deg, rgba(0,120,255,0.3), rgba(0,40,120,0.4));    
-  backdrop-filter:blur(16px);    
-  border-left:2px solid rgba(0,210,255,0.5);    
-  border-bottom:2px solid rgba(0,210,255,0.5);    
-  box-shadow:0 0 26px rgba(0,140,255,0.7), inset 0 0 22px rgba(0,200,255,0.35);    
-  z-index:5;    
-}    
-    
-.side-img{    
-  width:60px;    
-  height:60px;    
-  object-fit:cover;    
-  border-radius:18px;    
-  cursor:pointer;    
-  transition: all 0.35s ease;    
-  background:linear-gradient(145deg, rgba(0,160,255,0.35), rgba(0,60,130,0.45));    
-  padding:5px;    
-  border:2px solid rgba(0,210,255,0.5);    
-  box-shadow:0 0 16px rgba(0,150,255,0.65), inset 0 0 11px rgba(0,210,255,0.35);    
-}    
-
-.side-img:hover{    
-  transform:scale(1.1) rotateY(5deg);    
-  box-shadow:0 0 30px rgba(0,210,255,0.85), inset 0 0 16px rgba(0,210,255,0.55);    
-}  
-
-/* ===== پنل کاربری (مثل مافیامون با قابلیت تغییر اسم) ===== */
-.profile-box {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(12px);
-    padding: 6px 20px 6px 14px;
-    border-radius: 60px;
-    border: 1px solid rgba(255, 215, 0, 0.6);
-    box-shadow: 0 0 20px rgba(0,0,0,0.5), 0 0 10px rgba(255,215,0,0.3);
-    cursor: pointer;
-    transition: 0.2s;
-    z-index: 20;
-}
-.profile-box:hover { 
-    transform: scale(1.02); 
-    background: rgba(0,0,0,0.8); 
-    border-color: gold;
-    box-shadow: 0 0 25px rgba(255,215,0,0.4);
-}
-.profile-img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    border: 3px solid gold;
-    box-shadow: 0 0 0 4px rgba(0,100,255,0.5);
-    object-fit: cover;
-    transition: 0.2s;
-}
-.user-details { display: flex; flex-direction: column; }
-
-/* اسم کاربر با قابلیت کلیک (مثل مافیامون) */
-.profile-name { 
-    color: white; 
-    font-size: 1rem; 
-    font-weight: bold; 
-    text-shadow: 0 1px 3px black;
-    cursor: pointer;
-    background: rgba(0,0,0,0.3);
-    padding: 2px 10px;
-    border-radius: 20px;
-    transition: 0.2s;
-    display: inline-block;
-    width: fit-content;
-}
-.profile-name:hover {
-    background: rgba(255,215,0,0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.user-level { 
-    color: #ffcc88; 
-    font-size: 0.75rem; 
-    background: #00000066; 
-    padding: 3px 12px; 
-    border-radius: 20px; 
-    margin-top: 5px; 
-    width: fit-content;
-    text-shadow: 0 0 5px rgba(0,0,0,0.5);
-}
-.xp-bar { 
-    width: 100px; 
-    height: 6px; 
-    background: #2a3a50; 
-    border-radius: 10px; 
-    margin-top: 6px; 
-    overflow: hidden;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
-}
-.xp-fill { 
-    height: 100%; 
-    width: 0%; 
-    background: linear-gradient(145deg, #ffcc00, #ffaa00); 
-    border-radius: 10px;
-    box-shadow: 0 0 6px #ffcc00;
-}
-
-/* ===== دکمه‌های پایین با فاصله بیشتر ===== */    
-.main-buttons{    
-  display:flex;    
-  justify-content:center;    
-  align-items:center;
-  gap: 55px;    /* فاصله بیشتر بین دکمه‌ها (از 35 به 55) */
-  padding: 0 25px 35px 25px;    
-  z-index:2;    
-  width: 100%;
-}    
-
-/* استایل دکمه‌های تصویری */    
-.game-btn-img {    
-  width: 155px;    
-  max-width: 42vw;    
-  height: auto;    
-  cursor: pointer;    
-  border: none;    
-  background: transparent;    
-  transition: all 0.25s ease;    
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
-}    
-.game-btn-img:hover { 
-    transform: scale(1.05) translateY(-5px); 
-    filter: drop-shadow(0 12px 20px rgba(0,0,0,0.6));
-}    
-.game-btn-img:active { 
-    transform: scale(0.97) translateY(2px); 
-}    
-
-/* مودال تغییر اسم (کارت اسم مثل مافیامون) */
-.name-edit-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(15px);
-    z-index: 400;
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-.name-edit-modal.show {
-    display: flex;
-}
-.name-edit-card {
-    background: linear-gradient(145deg, #001f3f, #000f2a);
-    border-radius: 40px;
-    padding: 35px;
-    width: 350px;
-    max-width: 90%;
-    text-align: center;
-    border: 2px solid rgba(255, 215, 0, 0.5);
-    box-shadow: 0 0 50px rgba(0,0,0,0.8);
-}
-.name-edit-card h3 {
-    color: #ffdd99;
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px gold;
-}
-.name-edit-card input {
-    width: 100%;
-    padding: 15px;
-    background: rgba(10, 30, 50, 0.9);
-    border: 2px solid #ffcc66;
-    border-radius: 50px;
-    color: white;
-    font-size: 1.1rem;
-    text-align: center;
-    margin-bottom: 25px;
-}
-.name-edit-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-}
-.name-edit-buttons button {
-    padding: 12px 30px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.btn-save {
-    background: linear-gradient(145deg, #00e676, #009624);
-    color: white;
-}
-.btn-cancel {
-    background: linear-gradient(145deg, #ff5252, #d32f2f);
-    color: white;
-}
-.btn-save:hover, .btn-cancel:hover {
-    transform: scale(1.03);
-}
-
-/* ===== گالری آواتار ===== */
-.avatar-fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #001c3d, #000b1a);
-    z-index: 200;
-    display: none;
-    backdrop-filter: blur(8px);
-}
-.avatar-fullscreen.show { display: flex; justify-content: flex-start; align-items: center; }
-.gallery-list {
-    width: 340px;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
-    border-right: 3px solid gold;
-    box-shadow: 8px 0 25px rgba(0,0,0,0.6);
-    display: flex;
-    flex-direction: column;
-    padding: 100px 20px 30px 20px;
-    animation: slideIn 0.3s ease;
-}
-@keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-.gallery-header { 
-    font-size: 2.2rem; 
-    color: #ffdd99; 
-    text-align: center; 
-    margin-bottom: 35px; 
-    text-shadow: 0 0 12px black, 0 0 8px gold; 
-    border-bottom: 2px solid rgba(255,215,0,0.4); 
-    padding-bottom: 15px; 
-}
-.avatars-list-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; padding-left: 8px; }
-.avatar-list-item { 
-    display: flex; 
-    align-items: center; 
-    gap: 18px; 
-    background: rgba(20, 40, 70, 0.6); 
-    backdrop-filter: blur(10px); 
-    padding: 10px 18px; 
-    border-radius: 60px; 
-    cursor: pointer; 
-    transition: 0.25s; 
-    border: 1px solid rgba(255,215,0,0.3);
-}
-.avatar-list-item:hover { 
-    background: rgba(0, 120, 200, 0.6); 
-    transform: translateX(8px); 
-    border-color: gold;
-    box-shadow: 0 0 15px rgba(0,150,255,0.4);
-}
-.avatar-list-img { 
-    width: 60px; 
-    height: 60px; 
-    border-radius: 50%; 
-    border: 2px solid gold; 
-    object-fit: cover; 
-    background: #1e2a36;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-.avatar-list-info { flex: 1; }
-.avatar-list-name { color: white; font-weight: bold; font-size: 1.05rem; text-shadow: 0 1px 2px black; }
-.avatar-list-status { font-size: 0.8rem; color: #ffcc88; }
-.back-from-gallery { 
-    position: absolute; 
-    bottom: 35px; 
-    left: 35px; 
-    background: linear-gradient(145deg, #e67e22, #d35400); 
-    border: none; 
-    padding: 12px 35px; 
-    border-radius: 50px; 
-    color: white; 
-    font-weight: bold; 
-    cursor: pointer; 
-    z-index: 210; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    transition: 0.2s;
-}
-.back-from-gallery:hover { 
-    background: #f39c12; 
-    transform: scale(1.02);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-}
-
-/* ===== مودال تبلیغات ===== */
-.ad-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000000ee;
-    z-index: 300;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-.ad-overlay.show { display: flex; }
-.ad-iframe {
-    width: 90%;
-    height: 75%;
-    border: none;
-    border-radius: 30px;
-    background: white;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
-}
-.ad-counter-text { color: gold; font-size: 1.6rem; margin: 20px; text-shadow: 0 0 10px black; }
-.ad-close { 
-    background: #27ae60; 
-    border: none; 
-    padding: 12px 35px; 
-    border-radius: 50px; 
-    color: white; 
-    font-size: 1.2rem; 
-    cursor: pointer;
-    transition: 0.2s;
-}
-.ad-close:hover { transform: scale(1.02); background: #2ecc71; }
-
-/* ===== مودال‌ها ===== */
-.modal{ position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; justify-content:center; align-items:center; z-index:20; }    
-.modal-content{ background:linear-gradient(145deg,#001f3f,#001a3a); padding:40px; border-radius:25px; width:320px; text-align:center; color:white; border: 1px solid rgba(255,215,0,0.3); box-shadow: 0 0 30px rgba(0,0,0,0.6); }    
-.modal-content h3{ color: #ffdd99; margin-bottom: 10px; }
-.modal-content input{ width:100%; padding:14px; margin-top:15px; border:none; border-radius:10px; background: #0a1a2a; color: white; border: 1px solid #ffcc66; }    
-.modal-content button{ margin-top:20px; padding:12px 25px; border:none; border-radius:15px; background:#ff1744; color:white; cursor:pointer; transition:0.2s; }    
-.modal-content button:hover{ transform: scale(1.02); background: #ff3355; }
-.hidden{ display:none; }    
-
-/* ===== آفلاین ===== */
-#offlineOverlay{ position:fixed; inset:0; display:none; justify-content:center; align-items:center; flex-direction:column; z-index:50; backdrop-filter:blur(16px); background:rgba(0,0,0,0.5); border:2px solid rgba(0,180,255,0.3); border-radius:25px; }    
-#offlineOverlay .overlay-box{ background:rgba(0,0,0,0.7); padding:35px 55px; border-radius:25px; text-align:center; border: 1px solid #00aaff; }    
-#offlineOverlay .overlay-box div{ color:white; font-size:1.3rem; font-weight:bold; margin-bottom:20px; }    
-#offlineOverlay .spinner{ width:55px; height:55px; border:5px solid rgba(255,255,255,0.3); border-top:5px solid #00a0ff; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto; }    
-@keyframes spin{ 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }    
-
-/* بهبود کیفیت نمایش در موبایل */
-@media (max-width: 550px) {
-    .profile-img { width: 45px; height: 45px; }
-    .profile-name { font-size: 0.85rem; }
-    .user-level { font-size: 0.65rem; padding: 2px 8px; }
-    .xp-bar { width: 80px; }
-    .side-img { width: 48px; height: 48px; }
-    .game-btn-img { width: 130px; }
-    .main-buttons { gap: 30px; padding-bottom: 25px; }
-    .gallery-list { width: 280px; padding: 80px 15px 25px 15px; }
-    .avatar-list-img { width: 50px; height: 50px; }
-}
-</style>  
-</head>    
-<body>  
-
-<!-- ===== پنل کاربری (با قابلیت تغییر اسم) ===== -->
-<div class="profile-box" id="profilePanel">
-    <img src="https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg" class="profile-img" id="userAvatarImg">
-    <div class="user-details">
-        <div class="profile-name" id="playerNameDisplay">بازیکن</div>
-        <div class="user-level" id="levelText">سطح 1 ⭐</div>
-        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
-    </div>
-</div>
-
-<!-- مودال تغییر اسم (کارت اسم مثل مافیامون) -->
-<div id="nameEditModal" class="name-edit-modal">
-    <div class="name-edit-card">
-        <h3>✏️ تغییر نام</h3>
-        <input type="text" id="newNameInput" placeholder="نام جدید" maxlength="20">
-        <div class="name-edit-buttons">
-            <button class="btn-save" id="saveNameBtn">ذخیره</button>
-            <button class="btn-cancel" id="cancelNameBtn">انصراف</button>
-        </div>
-    </div>
-</div>
-
-<!-- گالری آواتار -->
-<div id="avatarGalleryFull" class="avatar-fullscreen">
-    <div class="gallery-list">
-        <div class="gallery-header">🎭 انتخاب آواتار</div>
-        <div class="avatars-list-container" id="avatarsListContainer"></div>
-    </div>
-    <button class="back-from-gallery" id="closeFullGallery">← بازگشت</button>
-</div>
-
-<!-- مودال تبلیغات -->
-<div id="adModalFull" class="ad-overlay">
-    <iframe id="adIframe" class="ad-iframe" src="about:blank"></iframe>
-    <div class="ad-counter-text" id="adCounterLabel">تبلیغ 1 از 5</div>
-    <button class="ad-close" id="closeAdFullBtn">بستن تبلیغ</button>
-</div>
-
-<div class="right-menu">    
-  <img src="https://cdn.imgurl.ir/uploads/y752784_IMG_20260228_064312_222.jpg" class="side-img" onclick="openSettings()">    
-  <img src="https://cdn.imgurl.ir/uploads/q734906_IMG_20260320_174242_443.jpg" class="side-img" onclick="comingSoon()">    
-  <img src="https://uploadkon.ir/uploads/931328_26IMG-20260228-064052-671.jpg" class="side-img" onclick="comingSoon()">    
-</div>  
-
-<!-- ===== دکمه‌های تصویری با فاصله بیشتر ===== -->  
-<div class="main-buttons">    
-  <img src="https://cdn.imgurl.ir/uploads/b95105_IMG_20260424_135421_097.jpg" 
-       alt="بازی امتیازی" 
-       class="game-btn-img" 
-       onclick="alert('🎖 بخش بازی امتیازی به زودی فعال می‌شود')"
-       onerror="this.style.opacity='0.7'">
-       
-  <img src="https://cdn.imgurl.ir/uploads/m844273_IMG_20260424_135426_174.jpg" 
-       alt="بازی دوستانه" 
-       class="game-btn-img" 
-       onclick="alert('👥 بخش بازی دوستانه به زودی فعال می‌شود')"
-       onerror="this.style.opacity='0.7'">
-</div>  
-
-<!-- مودال‌ها -->  
-<div class="modal" id="nameModal">    
-  <div class="modal-content">    
-    <h3>نام خود را وارد کنید</h3>    
-    <input type="text" id="nameInput" placeholder="نام شما">    
-    <button onclick="saveName()">ثبت</button>    
-  </div>    
-</div>  
-
-<div class="modal hidden" id="settingsModal">    
-  <div class="modal-content">    
-    <h3>تنظیمات صدا</h3>    
-    <input type="range" min="0" max="100" value="50">    
-    <button onclick="closeSettings()">بستن</button>    
-  </div>    
-</div>  
-
-<div id="offlineOverlay">    
-  <div class="overlay-box">    
-    <div>لطفاً منتظر بمونین…</div>    
-    <div class="spinner"></div>    
-  </div>    
-</div>  
-
-<script>    
-// لیست آواتارها  
-const AVATARS = [
-    { src: "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg", name: "پیش‌فرض", unlocked: true },
-    { src: "https://cdn.imgurl.ir/uploads/s159314_IMG_20260424_132832_559.jpg", name: "آواتار نقره‌ای", unlocked: false },
-    { src: "https://cdn.imgurl.ir/uploads/c3381_IMG_20260424_133054_282.jpg", name: "آواتار طلایی", unlocked: false }
-];
-
-const AD_URL = "https://play-server.tapsell.ir/default-banner/index.html?id=5911a3eb46846548e8e3c3ec&userId=a89d79fe-3d38-4dff-8638-61f3ee536906&ctaId=3b01edf6-df4f-4221-a036-3b3bafd7da36&suggestionId=66421b0d-2d83-11f1-a7ad-ce7ea00ac930&appId=a5ef32f2-807b-4bce-9410-9c0650406cf2&tracker1=&tracker2=&tracker3=&tracker4=&landing=https%3A%2F%2Fcafebazaar.ir%2Fapp%2Fir.wallgold.app%2F%3Fl%3Dfa&zoneType=1&zoneId=5a54ab7a73916d0001a1ae60&bundleId=com.ParsisGames.AirCombat&baseUrl=https://api.tapsell.ir/v2&macro_title=%D8%A2%D8%B1%D8%B2%D9%88%20%DA%A9%D9%86%D8%8C%20%DB%B5%DB%B0%DB%B0%20%DA%AF%D8%B1%D9%85%20%D8%B7%D9%84%D8%A7%20%D8%A8%D8%A8%D8%B1&macro_description=%D8%A8%D8%A7%20%D9%88%D8%A7%D9%84%E2%80%8C%DA%AF%D9%84%D8%AF%20%D8%A2%D8%B1%D8%B2%D9%88%D9%87%D8%A7%D8%AA%D8%8C%20%D8%AE%D8%A7%D8%B7%D8%B1%D9%87%20%D9%85%DB%8C%D8%B4%D9%86&macro_ctaText=%D9%86%D8%B5%D8%A8%20%D9%88%D8%A7%D9%84%E2%80%8C%DA%AF%D9%84%D8%AF&creativeId=6c21c52d-";
-
-let currentUserName = localStorage.getItem("mafiaPlayerName") || "بازیکن";
-let currentAvatar = localStorage.getItem("userAvatar") || AVATARS[0].src;
-let userLevel = parseInt(localStorage.getItem("userLevel")) || 1;
-let userXP = parseInt(localStorage.getItem("userXP")) || 0;
-let nextXP = userLevel * 100;
-let adTargetIndex = null;
-let adCount = 0;
-const NEEDED_ADS = 5;
-
-function updateProfileUI() {
-    document.getElementById("playerNameDisplay").innerText = currentUserName;
-    document.getElementById("userAvatarImg").src = currentAvatar;
-    document.getElementById("levelText").innerHTML = `سطح ${userLevel} ⭐`;
-    let percent = (userXP / nextXP) * 100;
-    document.getElementById("xpFill").style.width = percent + "%";
-}
-
-// ===== تغییر اسم (مثل مافیامون) =====
-function openNameEditModal() {
-    document.getElementById("newNameInput").value = currentUserName;
-    document.getElementById("nameEditModal").classList.add("show");
-}
-
-function saveNewName() {
-    let newName = document.getElementById("newNameInput").value.trim();
-    if(newName !== "") {
-        currentUserName = newName;
-        localStorage.setItem("mafiaPlayerName", currentUserName);
-        updateProfileUI();
-        document.getElementById("nameEditModal").classList.remove("show");
-        alert(`✅ اسم شما به "${currentUserName}" تغییر کرد`);
-    } else {
-        alert("❌ لطفاً یک نام معتبر وارد کنید");
-    }
-}
-
-function closeNameEditModal() {
-    document.getElementById("nameEditModal").classList.remove("show");
-}
-
-// رویداد کلیک روی اسم کاربر
-document.getElementById("playerNameDisplay").onclick = openNameEditModal;
-document.getElementById("saveNameBtn").onclick = saveNewName;
-document.getElementById("cancelNameBtn").onclick = closeNameEditModal;
-// بستن با کلیک بیرون
-document.getElementById("nameEditModal").onclick = function(e) {
-    if(e.target === this) closeNameEditModal();
-};
-
-function renderAvatarGallery() {
-    let container = document.getElementById("avatarsListContainer");
-    container.innerHTML = "";
-    AVATARS.forEach((av, idx) => {
-        let item = document.createElement("div");
-        item.className = "avatar-list-item";
-        item.innerHTML = `<img src="${av.src}" class="avatar-list-img"><div class="avatar-list-info"><div class="avatar-list-name">${av.name}</div><div class="avatar-list-status">${av.unlocked ? "✅ فعال" : "🔒 قفل (5 تبلیغ)"}</div></div>`;
-        item.onclick = () => onSelectAvatar(idx);
-        container.appendChild(item);
-    });
-}
-
-function onSelectAvatar(idx) {
-    let av = AVATARS[idx];
-    if(av.unlocked) {
-        currentAvatar = av.src;
-        localStorage.setItem("userAvatar", currentAvatar);
-        updateProfileUI();
-        document.getElementById("avatarGalleryFull").classList.remove("show");
-        alert(`آواتار "${av.name}" انتخاب شد.`);
-    } else {
-        adTargetIndex = idx;
-        adCount = 0;
-        document.getElementById("adCounterLabel").innerText = `تبلیغ ${adCount+1} از ${NEEDED_ADS}`;
-        document.getElementById("adIframe").src = AD_URL;
-        document.getElementById("adModalFull").classList.add("show");
-        document.getElementById("avatarGalleryFull").classList.remove("show");
-    }
-}
-
-function closeAdAndUnlock() {
-    adCount++;
-    if(adCount < NEEDED_ADS) {
-        document.getElementById("adCounterLabel").innerText = `تبلیغ ${adCount+1} از ${NEEDED_ADS}`;
-        document.getElementById("adIframe").src = AD_URL;
-    } else {
-        document.getElementById("adModalFull").classList.remove("show");
-        if(adTargetIndex !== null && AVATARS[adTargetIndex]) {
-            AVATARS[adTargetIndex].unlocked = true;
-            currentAvatar = AVATARS[adTargetIndex].src;
-            localStorage.setItem("userAvatar", currentAvatar);
-            updateProfileUI();
-            renderAvatarGallery();
-            alert(`✅ آواتار "${AVATARS[adTargetIndex].name}" به‌دست آمد!`);
-            adTargetIndex = null;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mafia Dark Shot - Token Extractor</title>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: white;
+            font-family: monospace;
+            margin: 0;
+            padding: 20px;
         }
-        document.getElementById("avatarGalleryFull").classList.add("show");
+        .loader {
+            text-align: center;
+            padding: 50px;
+            color: #00ffcc;
+        }
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+<div id="loader" class="loader">
+    🔐 در حال استخراج توکن از سرور...
+</div>
+<div id="status" class="status"></div>
+
+<script>
+    // ========== توکن سرور شما ==========
+    const SERVER_TOKEN = "NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo";
+    
+    // ========== تابع رمزگشایی متن رمزگذاری شده ==========
+    function decodeFromServer(encodedText) {
+        try {
+            // اگر متن با "8426" شروع شد، رمزگذاری عددی است
+            if(encodedText.startsWith("8426")) {
+                let parts = encodedText.split('.');
+                parts = parts.slice(1);
+                if(parts.length > 1) parts.pop(); // حذف چک‌سام
+                
+                let result = "";
+                for(let i = 0; i < parts.length; i++) {
+                    let code = parseInt(parts[i]);
+                    let originalCode = (code - 123) / 7;
+                    result += String.fromCharCode(originalCode);
+                }
+                return result;
+            }
+            // اگر Base64 بود
+            else if(encodedText.match(/^[A-Za-z0-9+/=]+$/)) {
+                return decodeURIComponent(escape(atob(encodedText)));
+            }
+            return encodedText;
+        } catch(e) {
+            console.error("رمزگشایی خطا:", e);
+            return null;
+        }
     }
-}
-
-document.getElementById("profilePanel").onclick = (e) => {
-    if(e.target.classList.contains("profile-name")) return;
-    renderAvatarGallery(); 
-    document.getElementById("avatarGalleryFull").classList.add("show");
-};
-document.getElementById("closeFullGallery").onclick = () => { document.getElementById("avatarGalleryFull").classList.remove("show"); };
-document.getElementById("closeAdFullBtn").onclick = () => { if(adCount >= NEEDED_ADS - 1) closeAdAndUnlock(); else { alert("لطفاً تبلیغ را کامل ببینید (برای تست، دوباره کلیک کنید)"); closeAdAndUnlock(); } };
-
-if(!localStorage.getItem("mafiaPlayerName")) { document.getElementById("nameModal").style.display = "flex"; } 
-else { document.getElementById("nameModal").style.display = "none"; }
-function saveName() { let name = document.getElementById("nameInput").value.trim(); if(name !== "") { localStorage.setItem("mafiaPlayerName", name); currentUserName = name; updateProfileUI(); document.getElementById("nameModal").style.display = "none"; } }
-window.saveName = saveName;
-function comingSoon(){ alert("🚧 این بخش به زودی فعال می‌شود"); }    
-function openSettings(){ document.getElementById("settingsModal").classList.remove("hidden"); }    
-function closeSettings(){ document.getElementById("settingsModal").classList.add("hidden"); }    
-function updateOnlineStatus(){ const overlay = document.getElementById("offlineOverlay"); overlay.style.display = navigator.onLine ? "none" : "flex"; }    
-window.addEventListener('online', updateOnlineStatus); window.addEventListener('offline', updateOnlineStatus); updateOnlineStatus();
-updateProfileUI(); renderAvatarGallery();
-</script>    
-</body>    
+    
+    // ========== تابع درخواست به سرور ==========
+    async function requestToServer(requestData) {
+        // در اینجا شما باید آدرس سرور واقعی خود را بگذارید
+        const YOUR_SERVER_URL = "https://your-server.com/api/mafia/request";
+        
+        try {
+            const response = await fetch(YOUR_SERVER_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "MafiaDarkShotApp"
+                },
+                body: JSON.stringify({
+                    token: SERVER_TOKEN,
+                    request: requestData,
+                    timestamp: Date.now(),
+                    appVersion: "1.0"
+                })
+            });
+            
+            if(!response.ok) {
+                throw new Error("خطا در ارتباط با سرور");
+            }
+            
+            const data = await response.json();
+            return data;
+        } catch(error) {
+            console.error("درخواست خطا:", error);
+            return null;
+        }
+    }
+    
+    // ========== تابع اصلی: دریافت و رمزگشایی توکن ==========
+    async function fetchAndDecryptToken() {
+        const statusDiv = document.getElementById("status");
+        const loaderDiv = document.getElementById("loader");
+        
+        statusDiv.innerHTML = "📡 در حال ارسال درخواست به سرور...";
+        
+        // مرحله 1: درخواست به سرور
+        const response = await requestToServer("get_game_token");
+        
+        if(!response || !response.encryptedToken) {
+            statusDiv.innerHTML = "❌ خطا: پاسخ معتبری از سرور دریافت نشد";
+            loaderDiv.innerHTML = "❌ اتصال به سرور ناموفق";
+            return null;
+        }
+        
+        statusDiv.innerHTML = "🔓 در حال رمزگشایی توکن دریافتی...";
+        
+        // مرحله 2: رمزگشایی توکن دریافتی
+        const decryptedToken = decodeFromServer(response.encryptedToken);
+        
+        if(!decryptedToken) {
+            statusDiv.innerHTML = "❌ خطا: رمزگشایی توکن ناموفق";
+            loaderDiv.innerHTML = "❌ رمزگشایی ناموفق";
+            return null;
+        }
+        
+        statusDiv.innerHTML = "✅ توکن با موفقیت استخراج و رمزگشایی شد";
+        
+        // مرحله 3: ذخیره توکن
+        localStorage.setItem("mafia_game_token", decryptedToken);
+        
+        return decryptedToken;
+    }
+    
+    // ========== بررسی اینکه آیا توکن از قبل وجود دارد ==========
+    function hasValidToken() {
+        const token = localStorage.getItem("mafia_game_token");
+        const expiry = localStorage.getItem("mafia_token_expiry");
+        
+        if(!token) return false;
+        if(expiry && Date.now() > parseInt(expiry)) return false;
+        
+        return true;
+    }
+    
+    // ========== بارگذاری بازی اصلی ==========
+    async function loadGame() {
+        let token = localStorage.getItem("mafia_game_token");
+        
+        if(!token) {
+            token = await fetchAndDecryptToken();
+        }
+        
+        if(!token) {
+            document.body.innerHTML = `
+                <div style="text-align:center; padding:50px;">
+                    <h1 style="color:#ff4444;">❌ خطای احراز هویت</h1>
+                    <p>امکان اتصال به سرور وجود ندارد</p>
+                    <button onclick="location.reload()">تلاش مجدد</button>
+                </div>
+            `;
+            return;
+        }
+        
+        // نمایش بازی اصلی
+        document.body.innerHTML = `
+            <div style="text-align:center; padding:30px;">
+                <h1 style="color:#00ffcc;">🎭 مافیا دارک شات</h1>
+                <p>✅ احراز هویت موفق</p>
+                <p>🔐 توکن بازی: ${token.substring(0, 30)}...</p>
+                <div style="margin-top:30px;">
+                    <button onclick="startMafiaGame()" style="background:#00ffcc; border:none; padding:12px 24px; border-radius:30px;">شروع بازی</button>
+                </div>
+            </div>
+        `;
+    }
+    
+    // تابع شروع بازی
+    window.startMafiaGame = function() {
+        alert("🎮 بازی مافیا دارک شات شروع شد!\nتوکن شما معتبر است.");
+        // اینجا کد اصلی بازی قرار می‌گیرد
+    };
+    
+    // اجرا
+    loadGame();
+</script>
+</body>
 </html>
