@@ -1,1 +1,672 @@
-....
+
+<!DOCTYPE html>  
+<html lang="fa">    
+<head>    
+<meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">    
+<title>Mafia Lobby 3D Ultimate - گالری حرفه‌ای</title>  
+<link rel="preload" as="image" href="https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg">    
+<link rel="preconnect" href="https://cdn.imgur.com">  
+
+<style>    
+*{  
+  margin:0;  
+  padding:0;  
+  box-sizing:border-box;  
+  font-family:tahoma;  
+}    
+
+body{  
+  height:100vh;  
+  background:    
+    linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.35)),    
+    url('https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg') no-repeat center center/cover;    
+  background-size: cover;
+  display:flex;    
+  flex-direction:column;    
+  justify-content:flex-end;    
+  position:relative;    
+  overflow:hidden;    
+}    
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(0,150,255,0.08), transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after{    
+  content:'';    
+  position:absolute;    
+  inset:0;    
+  background:radial-gradient(circle at 70% 15%, rgba(0,120,255,0.2), transparent 65%);    
+  pointer-events:none;    
+  z-index: 0;
+}
+    
+/* ===== RIGHT MENU ===== */    
+.right-menu{    
+  position:absolute;    
+  right:0;    
+  top:0;    
+  display:flex;    
+  flex-direction:column;    
+  gap:10px;    
+  padding:10px;    
+  border-bottom-left-radius:35px;    
+  background:linear-gradient(145deg, rgba(0,120,255,0.3), rgba(0,40,120,0.4));    
+  backdrop-filter:blur(16px);    
+  border-left:2px solid rgba(0,210,255,0.5);    
+  border-bottom:2px solid rgba(0,210,255,0.5);    
+  box-shadow:0 0 26px rgba(0,140,255,0.7), inset 0 0 22px rgba(0,200,255,0.35);    
+  z-index:5;    
+}    
+    
+.side-img{    
+  width:60px;    
+  height:60px;    
+  object-fit:cover;    
+  border-radius:18px;    
+  cursor:pointer;    
+  transition: all 0.35s ease;    
+  background:linear-gradient(145deg, rgba(0,160,255,0.35), rgba(0,60,130,0.45));    
+  padding:5px;    
+  border:2px solid rgba(0,210,255,0.5);    
+  box-shadow:0 0 16px rgba(0,150,255,0.65), inset 0 0 11px rgba(0,210,255,0.35);    
+}    
+
+.side-img:hover{    
+  transform:scale(1.1) rotateY(5deg);    
+  box-shadow:0 0 30px rgba(0,210,255,0.85), inset 0 0 16px rgba(0,210,255,0.55);    
+}  
+
+/* ===== پنل کاربری با رینگ اینستاگرامی ===== */
+.profile-box {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(12px);
+    padding: 6px 20px 6px 14px;
+    border-radius: 60px;
+    border: 1px solid rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 20px rgba(0,0,0,0.5), 0 0 10px rgba(255,215,0,0.3);
+    cursor: pointer;
+    transition: 0.2s;
+    z-index: 20;
+}
+.profile-box:hover { 
+    transform: scale(1.02); 
+    background: rgba(0,0,0,0.8); 
+    border-color: gold;
+    box-shadow: 0 0 25px rgba(255,215,0,0.4);
+}
+
+.profile-img-wrapper {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ring-instagram {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #f9ce34, #ee2a7b, #6228d7, #f9ce34);
+    z-index: 0;
+}
+.ring-instagram::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: #0a0a0a;
+}
+@keyframes instagramSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.ring-spin {
+    animation: instagramSpin 1.8s linear infinite;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+}
+
+.user-details { display: flex; flex-direction: column; }
+.profile-name { 
+    color: white; 
+    font-size: 1rem; 
+    font-weight: bold; 
+    text-shadow: 0 1px 3px black;
+    cursor: pointer;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 10px;
+    border-radius: 20px;
+    transition: 0.2s;
+    display: inline-block;
+    width: fit-content;
+}
+.profile-name:hover { background: rgba(255,215,0,0.3); transform: translateY(-2px); }
+.user-level { color: #ffcc88; font-size: 0.75rem; background: #00000066; padding: 3px 12px; border-radius: 20px; margin-top: 5px; width: fit-content; }
+.xp-bar { width: 100px; height: 6px; background: #2a3a50; border-radius: 10px; margin-top: 6px; overflow: hidden; }
+.xp-fill { height: 100%; width: 0%; background: linear-gradient(145deg, #ffcc00, #ffaa00); border-radius: 10px; }
+
+/* دکمه‌های پایین */    
+.main-buttons{    
+  display:flex;    
+  justify-content:center;    
+  align-items:center;
+  gap: 55px;
+  padding: 0 25px 35px 25px;    
+  z-index:2;    
+  width: 100%;
+}    
+.game-btn-img {    
+  width: 155px;    
+  max-width: 42vw;    
+  height: auto;    
+  cursor: pointer;    
+  background: transparent;    
+  transition: all 0.25s ease;    
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+}    
+.game-btn-img:hover { transform: scale(1.05) translateY(-5px); }
+
+/* لودینگ اینستاگرامی */
+.instagram-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(20px);
+    z-index: 500;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.instagram-loader.show { display: flex; }
+.loader-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255,255,255,0.3);
+    border-top: 4px solid #f9ce34;
+    border-right: 4px solid #ee2a7b;
+    border-bottom: 4px solid #6228d7;
+    border-radius: 50%;
+    animation: loaderSpin 0.8s linear infinite;
+}
+@keyframes loaderSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.loader-text { color: white; font-size: 14px; letter-spacing: 1px; }
+.loader-dots { display: flex; gap: 6px; }
+.loader-dots span {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: dotPulse 1.4s infinite;
+}
+.loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotPulse {
+    0%, 60%, 100% { transform: scale(0.6); opacity: 0.4; }
+    30% { transform: scale(1.2); opacity: 1; }
+}
+
+/* گالری جدید به صورت گرید دایره‌ای (سمت چپ و راست) مثل مافیامون */
+.avatar-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #001c3d, #000b1a);
+    z-index: 200;
+    display: none;
+    backdrop-filter: blur(8px);
+}
+.avatar-fullscreen.show { display: block; }
+
+.gallery-circle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+.gallery-circle-header {
+    color: gold;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 0 0 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+}
+.avatars-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 45px;
+    max-width: 90%;
+    margin: 0 auto;
+}
+.circle-avatar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+.circle-avatar-item:hover {
+    transform: scale(1.1);
+}
+.circle-avatar-img {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    border: 3px solid gold;
+    object-fit: cover;
+    background: #0a0a0a;
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
+    transition: 0.2s;
+}
+.circle-avatar-item:hover .circle-avatar-img {
+    border-color: #ffcc44;
+    box-shadow: 0 0 30px rgba(255,215,0,0.6);
+}
+.circle-avatar-name {
+    color: white;
+    font-size: 0.85rem;
+    background: rgba(0,0,0,0.6);
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+.circle-avatar-status {
+    font-size: 0.7rem;
+    color: gold;
+}
+.back-from-gallery {
+    position: absolute;
+    bottom: 35px;
+    right: 35px;
+    background: linear-gradient(145deg, #e67e22, #d35400);
+    border: none;
+    padding: 12px 35px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.back-from-gallery:hover {
+    transform: scale(1.02);
+    background: #f39c12;
+}
+
+/* مودال تغییر اسم */
+.name-edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    z-index: 400;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+.name-edit-modal.show { display: flex; }
+.name-edit-card {
+    background: linear-gradient(145deg, #001f3f, #000f2a);
+    border-radius: 40px;
+    padding: 35px;
+    width: 350px;
+    max-width: 90%;
+    text-align: center;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+}
+.name-edit-card h3 { color: #ffdd99; font-size: 1.8rem; margin-bottom: 20px; }
+.name-edit-card input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(10, 30, 50, 0.9);
+    border: 2px solid #ffcc66;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 25px;
+}
+.name-edit-buttons { display: flex; gap: 20px; justify-content: center; }
+.btn-save { background: linear-gradient(145deg, #00e676, #009624); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
+.btn-cancel { background: linear-gradient(145deg, #ff5252, #d32f2f); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
+
+/* مودال تبلیغات */
+.ad-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000ee;
+    z-index: 300;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.ad-overlay.show { display: flex; }
+.ad-iframe {
+    width: 90%;
+    height: 75%;
+    border: none;
+    border-radius: 30px;
+    background: white;
+}
+.ad-counter-text { color: gold; font-size: 1.4rem; margin: 20px; }
+.ad-close { background: #27ae60; border: none; padding: 12px 35px; border-radius: 50px; color: white; cursor: pointer; }
+
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; justify-content:center; align-items:center; z-index:20; }    
+.modal-content{ background:linear-gradient(145deg,#001f3f,#001a3a); padding:40px; border-radius:25px; width:320px; text-align:center; color:white; }    
+.modal-content input{ width:100%; padding:14px; margin-top:15px; border:none; border-radius:10px; background: #0a1a2a; color: white; }    
+.modal-content button{ margin-top:20px; padding:12px 25px; border:none; border-radius:15px; background:#ff1744; color:white; cursor:pointer; }    
+.hidden{ display:none; }    
+
+#offlineOverlay{ position:fixed; inset:0; display:none; justify-content:center; align-items:center; flex-direction:column; z-index:50; backdrop-filter:blur(16px); background:rgba(0,0,0,0.5); }    
+#offlineOverlay .overlay-box{ background:rgba(0,0,0,0.7); padding:35px 55px; border-radius:25px; text-align:center; }    
+#offlineOverlay .spinner{ width:55px; height:55px; border:5px solid rgba(255,255,255,0.3); border-top:5px solid #00a0ff; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto; }    
+@keyframes spin{ 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }    
+
+@media (max-width: 650px) {
+    .circle-avatar-img { width: 65px; height: 65px; }
+    .avatars-circle { gap: 25px; }
+    .gallery-circle-header { font-size: 1.5rem; margin-bottom: 30px; }
+}
+</style>  
+</head>    
+<body>  
+
+<!-- لودینگ اینستاگرامی -->
+<div id="instagramLoader" class="instagram-loader">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">در حال بارگذاری</div>
+    <div class="loader-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- پنل کاربری -->
+<div class="profile-box" id="profilePanel">
+    <div class="profile-img-wrapper" id="profileRingWrapper">
+        <div class="ring-instagram" id="profileRing"></div>
+        <img src="https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg" class="profile-img" id="userAvatarImg">
+    </div>
+    <div class="user-details">
+        <div class="profile-name" id="playerNameDisplay">بازیکن</div>
+        <div class="user-level" id="levelText">سطح 1 ⭐</div>
+        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+    </div>
+</div>
+
+<!-- مودال تغییر اسم -->
+<div id="nameEditModal" class="name-edit-modal">
+    <div class="name-edit-card">
+        <h3>✏️ تغییر نام</h3>
+        <input type="text" id="newNameInput" placeholder="نام جدید" maxlength="20">
+        <div class="name-edit-buttons">
+            <button class="btn-save" id="saveNameBtn">ذخیره</button>
+            <button class="btn-cancel" id="cancelNameBtn">انصراف</button>
+        </div>
+    </div>
+</div>
+
+<!-- گالری دایره‌ای (سمت چپ و راست) مثل مافیامون -->
+<div id="avatarGalleryFull" class="avatar-fullscreen">
+    <div class="gallery-circle-container">
+        <div class="gallery-circle-header">🎭 انتخاب آواتار</div>
+        <div class="avatars-circle" id="avatarsCircleContainer"></div>
+        <button class="back-from-gallery" id="closeFullGallery">← بازگشت به بازی</button>
+    </div>
+</div>
+
+<div id="adModalFull" class="ad-overlay">
+    <iframe id="adIframe" class="ad-iframe" src="about:blank"></iframe>
+    <div class="ad-counter-text" id="adCounterLabel">تبلیغ 1 از 5</div>
+    <button class="ad-close" id="closeAdFullBtn">بستن تبلیغ</button>
+</div>
+
+<div class="right-menu">    
+  <img src="https://cdn.imgurl.ir/uploads/y752784_IMG_20260228_064312_222.jpg" class="side-img" onclick="openSettings()">    
+  <img src="https://cdn.imgurl.ir/uploads/q734906_IMG_20260320_174242_443.jpg" class="side-img" onclick="comingSoon()">    
+  <img src="https://uploadkon.ir/uploads/931328_26IMG-20260228-064052-671.jpg" class="side-img" onclick="comingSoon()">    
+</div>  
+
+<div class="main-buttons">    
+  <img src="https://cdn.imgurl.ir/uploads/b95105_IMG_20260424_135421_097.jpg" alt="بازی امتیازی" class="game-btn-img" onclick="alert('🎖 بخش بازی امتیازی به زودی فعال می‌شود')">
+  <img src="https://cdn.imgurl.ir/uploads/m844273_IMG_20260424_135426_174.jpg" alt="بازی دوستانه" class="game-btn-img" onclick="alert('👥 بخش بازی دوستانه به زودی فعال می‌شود')">
+</div>  
+
+<div class="modal" id="nameModal">    
+  <div class="modal-content">    
+    <h3>نام خود را وارد کنید</h3>    
+    <input type="text" id="nameInput" placeholder="نام شما">    
+    <button onclick="saveName()">ثبت</button>    
+  </div>    
+</div>  
+
+<div class="modal hidden" id="settingsModal">    
+  <div class="modal-content">    
+    <h3>تنظیمات صدا</h3>    
+    <input type="range" min="0" max="100" value="50">    
+    <button onclick="closeSettings()">بستن</button>    
+  </div>    
+</div>  
+
+<div id="offlineOverlay">    
+  <div class="overlay-box">    
+    <div>لطفاً منتظر بمونین…</div>    
+    <div class="spinner"></div>    
+  </div>    
+</div>  
+
+<script>    
+// لیست آواتارها (تصاویر صفحه اصلی و صفحه اصلی)
+const AVATARS = [
+    { src: "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg", name: "پیش‌فرض", unlocked: true },
+    { src: "https://cdn.imgurl.ir/uploads/s159314_IMG_20260424_132832_559.jpg", name: "آواتار نقره‌ای", unlocked: false },
+    { src: "https://cdn.imgurl.ir/uploads/c3381_IMG_20260424_133054_282.jpg", name: "آواتار طلایی", unlocked: false },
+    { src: "https://cdn.imgurl.ir/uploads/y752784_IMG_20260228_064312_222.jpg", name: "آواتار آبی", unlocked: false },
+    { src: "https://cdn.imgurl.ir/uploads/q734906_IMG_20260320_174242_443.jpg", name: "آواتار قرمز", unlocked: false }
+];
+
+const AD_URL = "https://play-server.tapsell.ir/default-banner/index.html?id=5911a3eb46846548e8e3c3ec&userId=a89d79fe-3d38-4dff-8638-61f3ee536906&ctaId=3b01edf6-df4f-4221-a036-3b3bafd7da36&suggestionId=66421b0d-2d83-11f1-a7ad-ce7ea00ac930&appId=a5ef32f2-807b-4bce-9410-9c0650406cf2&tracker1=&tracker2=&tracker3=&tracker4=&landing=https%3A%2F%2Fcafebazaar.ir%2Fapp%2Fir.wallgold.app%2F%3Fl%3Dfa&zoneType=1&zoneId=5a54ab7a73916d0001a1ae60&bundleId=com.ParsisGames.AirCombat&baseUrl=https://api.tapsell.ir/v2&macro_title=%D8%A2%D8%B1%D8%B2%D9%88%20%DA%A9%D9%86%D8%8C%20%DB%B5%DB%B0%DB%B0%20%DA%AF%D8%B1%D9%85%20%D8%B7%D9%84%D8%A7%20%D8%A8%D8%A8%D8%B1&macro_description=%D8%A8%D8%A7%20%D9%88%D8%A7%D9%84%E2%80%8C%DA%AF%D9%84%D8%AF%20%D8%A2%D8%B1%D8%B2%D9%88%D9%87%D8%A7%D8%AA%D8%8C%20%D8%AE%D8%A7%D8%B7%D8%B1%D9%87%20%D9%85%DB%8C%D8%B4%D9%86&macro_ctaText=%D9%86%D8%B5%D8%A8%20%D9%88%D8%A7%D9%84%E2%80%8C%DA%AF%D9%84%D8%AF&creativeId=6c21c52d-";
+
+let currentUserName = localStorage.getItem("mafiaPlayerName") || "бозікен";
+let currentAvatar = localStorage.getItem("userAvatar") || AVATARS[0].src;
+let userLevel = parseInt(localStorage.getItem("userLevel")) || 1;
+let userXP = parseInt(localStorage.getItem("userXP")) || 0;
+let nextXP = userLevel * 100;
+let adTargetIndex = null;
+let adCount = 0;
+const NEEDED_ADS = 5;
+
+function updateProfileUI() {
+    document.getElementById("playerNameDisplay").innerText = currentUserName;
+    document.getElementById("userAvatarImg").src = currentAvatar;
+    document.getElementById("levelText").innerHTML = `سطح ${userLevel} ⭐`;
+    let percent = (userXP / nextXP) * 100;
+    document.getElementById("xpFill").style.width = percent + "%";
+}
+
+function showLoader(message = "در حال بارگذاری") {
+    const loader = document.getElementById("instagramLoader");
+    loader.querySelector(".loader-text").textContent = message;
+    loader.classList.add("show");
+}
+function hideLoader() { document.getElementById("instagramLoader").classList.remove("show"); }
+
+function startRing() {
+    const ring = document.getElementById("profileRing");
+    ring.classList.add("ring-spin");
+    setTimeout(() => ring.classList.remove("ring-spin"), 5000);
+}
+
+function onSelectAvatar(idx) {
+    let av = AVATARS[idx];
+    if(av.unlocked) {
+        showLoader("تغییر آواتار...");
+        setTimeout(() => {
+            currentAvatar = av.src;
+            localStorage.setItem("userAvatar", currentAvatar);
+            updateProfileUI();
+            hideLoader();
+            document.getElementById("avatarGalleryFull").classList.remove("show");
+            alert(`آواتار "${av.name}" انتخاب شد`);
+            startRing();
+        }, 600);
+    } else {
+        adTargetIndex = idx;
+        adCount = 0;
+        document.getElementById("adCounterLabel").innerText = `تبلیغ ${adCount+1} از ${NEEDED_ADS}`;
+        document.getElementById("adIframe").src = AD_URL;
+        document.getElementById("adModalFull").classList.add("show");
+        document.getElementById("avatarGalleryFull").classList.remove("show");
+    }
+}
+
+// رندر گالری دایره‌ای (سمت چپ و راست)
+function renderCircleGallery() {
+    let container = document.getElementById("avatarsCircleContainer");
+    container.innerHTML = "";
+    AVATARS.forEach((av, idx) => {
+        let item = document.createElement("div");
+        item.className = "circle-avatar-item";
+        item.innerHTML = `
+            <img src="${av.src}" class="circle-avatar-img">
+            <div class="circle-avatar-name">${av.name}</div>
+            <div class="circle-avatar-status">${av.unlocked ? "✅ فعال" : "🔒 قفل (5 تبلیغ)"}</div>
+        `;
+        item.onclick = () => onSelectAvatar(idx);
+        container.appendChild(item);
+    });
+}
+
+function closeAdAndUnlock() {
+    adCount++;
+    if(adCount < NEEDED_ADS) {
+        document.getElementById("adCounterLabel").innerText = `تبلیغ ${adCount+1} از ${NEEDED_ADS}`;
+        document.getElementById("adIframe").src = AD_URL;
+    } else {
+        document.getElementById("adModalFull").classList.remove("show");
+        if(adTargetIndex !== null && AVATARS[adTargetIndex]) {
+            showLoader("در حال گشودن آواتار...");
+            setTimeout(() => {
+                AVATARS[adTargetIndex].unlocked = true;
+                currentAvatar = AVATARS[adTargetIndex].src;
+                localStorage.setItem("userAvatar", currentAvatar);
+                updateProfileUI();
+                renderCircleGallery();
+                hideLoader();
+                alert(`✅ آواتار "${AVATARS[adTargetIndex].name}" به‌دست آمد!`);
+                startRing();
+                adTargetIndex = null;
+            }, 700);
+        }
+        document.getElementById("avatarGalleryFull").classList.add("show");
+    }
+}
+
+function saveNewName() {
+    let newName = document.getElementById("newNameInput").value.trim();
+    if(newName !== "") {
+        showLoader("به‌روزرسانی نام...");
+        setTimeout(() => {
+            currentUserName = newName;
+            localStorage.setItem("mafiaPlayerName", currentUserName);
+            updateProfileUI();
+            hideLoader();
+            document.getElementById("nameEditModal").classList.remove("show");
+            alert(`✅ اسم شما به "${currentUserName}" تغییر کرد`);
+            startRing();
+        }, 500);
+    } else alert("❌ لطفاً یک نام معتبر وارد کنید");
+}
+
+function openNameEditModal() {
+    document.getElementById("newNameInput").value = currentUserName;
+    document.getElementById("nameEditModal").classList.add("show");
+}
+function closeNameEditModal() { document.getElementById("nameEditModal").classList.remove("show"); }
+
+document.getElementById("playerNameDisplay").onclick = openNameEditModal;
+document.getElementById("saveNameBtn").onclick = saveNewName;
+document.getElementById("cancelNameBtn").onclick = closeNameEditModal;
+document.getElementById("nameEditModal").onclick = (e) => { if(e.target === this) closeNameEditModal(); };
+
+document.getElementById("profilePanel").onclick = (e) => {
+    if(e.target.classList.contains("profile-name")) return;
+    renderCircleGallery();
+    document.getElementById("avatarGalleryFull").classList.add("show");
+};
+document.getElementById("closeFullGallery").onclick = () => { document.getElementById("avatarGalleryFull").classList.remove("show"); };
+document.getElementById("closeAdFullBtn").onclick = () => { if(adCount >= NEEDED_ADS - 1) closeAdAndUnlock(); else { alert("لطفاً تبلیغ را کامل ببینید"); closeAdAndUnlock(); } };
+
+if(!localStorage.getItem("mafiaPlayerName")) document.getElementById("nameModal").style.display = "flex";
+else document.getElementById("nameModal").style.display = "none";
+
+function saveName() { 
+    let name = document.getElementById("nameInput").value.trim(); 
+    if(name !== "") { 
+        showLoader("ساخت پروفایل...");
+        setTimeout(() => {
+            localStorage.setItem("mafiaPlayerName", name); 
+            currentUserName = name; 
+            updateProfileUI(); 
+            document.getElementById("nameModal").style.display = "none";
+            hideLoader();
+            startRing();
+        }, 500);
+    } 
+}
+window.saveName = saveName;
+function comingSoon(){ alert("🚧 این بخش به زودی فعال می‌شود"); }    
+function openSettings(){ document.getElementById("settingsModal").classList.remove("hidden"); }    
+function closeSettings(){ document.getElementById("settingsModal").classList.add("hidden"); }    
+function updateOnlineStatus(){ const overlay = document.getElementById("offlineOverlay"); overlay.style.display = navigator.onLine ? "none" : "flex"; }    
+window.addEventListener('online', updateOnlineStatus); window.addEventListener('offline', updateOnlineStatus); updateOnlineStatus();
+
+updateProfileUI(); 
+renderCircleGallery();
+startRing();
+</script>    
+</body>    
+</html>
