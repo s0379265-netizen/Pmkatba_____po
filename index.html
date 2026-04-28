@@ -1,237 +1,706 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>در حال اتصال...</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            width: 100%;
-            height: 100vh;
-            background: radial-gradient(ellipse at center, #0a0f1e 0%, #03060c 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            font-family: 'Segoe UI', 'Vazir', Tahoma, sans-serif;
-        }
-        .loader-container {
-            text-align: center;
-            position: relative;
-            z-index: 20;
-        }
-        .neon-ring {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 30px;
-            position: relative;
-        }
-        .neon-ring::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00ffcc, #ff00cc, #00ffcc);
-            animation: rotateNeon 2s linear infinite;
-            filter: blur(15px);
-            opacity: 0.7;
-        }
-        .neon-ring::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: #0a0f1e;
-        }
-        .spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            border: 3px solid rgba(0,255,200,0.3);
-            border-top: 3px solid #00ffcc;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            z-index: 2;
-        }
-        @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        @keyframes rotateNeon {
-            to { transform: rotate(360deg); }
-        }
-        .status-text {
-            color: #00ffcc;
-            font-size: 22px;
-            letter-spacing: 3px;
-            margin-top: 20px;
-            text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%,100% { opacity: 0.7; text-shadow: 0 0 5px #00ffcc; }
-            50% { opacity: 1; text-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc; }
-        }
-        .sub-text {
-            color: #6688aa;
-            font-size: 13px;
-            margin-top: 15px;
-            letter-spacing: 1px;
-        }
-        .progress-bar {
-            width: 250px;
-            height: 2px;
-            background: rgba(0,255,200,0.2);
-            margin: 30px auto 0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #00ffcc, #ff00cc);
-            animation: fillProgress 2.5s ease-out forwards;
-        }
-        @keyframes fillProgress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
-        }
-        .fullscreen-frame {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            z-index: 10;
-            display: none;
-            background: #000;
-        }
-        .dots {
-            display: inline-block;
-            width: 40px;
-            text-align: left;
-        }
-    </style>
-</head>
-<body>
+<!DOCTYPE html>  
+<html lang="fa">    
+<head>    
+<meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">    
+<title>مافیا لابی | گالری بی‌نهایت آواتار</title>  
+<link rel="preload" as="image" href="https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg">    
+<link rel="preconnect" href="https://cdn.imgur.com">  
 
-<div class="loader-container" id="loader">
-    <div class="neon-ring">
-        <div class="spinner"></div>
+<style>    
+*{  
+  margin:0;  
+  padding:0;  
+  box-sizing:border-box;  
+  font-family:tahoma;  
+}    
+
+body{  
+  height:100vh;  
+  background:    
+    linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.35)),    
+    url('https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg') no-repeat center center/cover;    
+  background-size: cover;
+  display:flex;    
+  flex-direction:column;    
+  justify-content:flex-end;    
+  position:relative;    
+  overflow:hidden;    
+}    
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(0,150,255,0.08), transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after{    
+  content:'';    
+  position:absolute;    
+  inset:0;    
+  background:radial-gradient(circle at 70% 15%, rgba(0,120,255,0.2), transparent 65%);    
+  pointer-events:none;    
+  z-index: 0;
+}
+    
+/* ===== RIGHT MENU ===== */    
+.right-menu{    
+  position:absolute;    
+  right:0;    
+  top:0;    
+  display:flex;    
+  flex-direction:column;    
+  gap:10px;    
+  padding:10px;    
+  border-bottom-left-radius:35px;    
+  background:linear-gradient(145deg, rgba(0,120,255,0.3), rgba(0,40,120,0.4));    
+  backdrop-filter:blur(16px);    
+  border-left:2px solid rgba(0,210,255,0.5);    
+  border-bottom:2px solid rgba(0,210,255,0.5);    
+  box-shadow:0 0 26px rgba(0,140,255,0.7), inset 0 0 22px rgba(0,200,255,0.35);    
+  z-index:5;    
+}    
+    
+.side-img{    
+  width:60px;    
+  height:60px;    
+  object-fit:cover;    
+  border-radius:18px;    
+  cursor:pointer;    
+  transition: all 0.35s ease;    
+  background:linear-gradient(145deg, rgba(0,160,255,0.35), rgba(0,60,130,0.45));    
+  padding:5px;    
+  border:2px solid rgba(0,210,255,0.5);    
+  box-shadow:0 0 16px rgba(0,150,255,0.65), inset 0 0 11px rgba(0,210,255,0.35);    
+}    
+
+.side-img:hover{    
+  transform:scale(1.1) rotateY(5deg);    
+  box-shadow:0 0 30px rgba(0,210,255,0.85), inset 0 0 16px rgba(0,210,255,0.55);    
+}  
+
+/* ===== پنل کاربری با رینگ اینستاگرامی ===== */
+.profile-box {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(12px);
+    padding: 6px 20px 6px 14px;
+    border-radius: 60px;
+    border: 1px solid rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 20px rgba(0,0,0,0.5), 0 0 10px rgba(255,215,0,0.3);
+    cursor: pointer;
+    transition: 0.2s;
+    z-index: 20;
+}
+.profile-box:hover { 
+    transform: scale(1.02); 
+    background: rgba(0,0,0,0.8); 
+    border-color: gold;
+    box-shadow: 0 0 25px rgba(255,215,0,0.4);
+}
+
+.profile-img-wrapper {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ring-instagram {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #f9ce34, #ee2a7b, #6228d7, #f9ce34);
+    z-index: 0;
+}
+.ring-instagram::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: #0a0a0a;
+}
+@keyframes instagramSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.ring-spin {
+    animation: instagramSpin 1.8s linear infinite;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+}
+
+.user-details { display: flex; flex-direction: column; }
+.profile-name { 
+    color: white; 
+    font-size: 1rem; 
+    font-weight: bold; 
+    text-shadow: 0 1px 3px black;
+    cursor: pointer;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 10px;
+    border-radius: 20px;
+    transition: 0.2s;
+    display: inline-block;
+    width: fit-content;
+}
+.profile-name:hover { background: rgba(255,215,0,0.3); transform: translateY(-2px); }
+.user-level { color: #ffcc88; font-size: 0.75rem; background: #00000066; padding: 3px 12px; border-radius: 20px; margin-top: 5px; width: fit-content; }
+.xp-bar { width: 100px; height: 6px; background: #2a3a50; border-radius: 10px; margin-top: 6px; overflow: hidden; }
+.xp-fill { height: 100%; width: 0%; background: linear-gradient(145deg, #ffcc00, #ffaa00); border-radius: 10px; }
+
+/* دکمه‌های پایین */    
+.main-buttons{    
+  display:flex;    
+  justify-content:center;    
+  align-items:center;
+  gap: 55px;
+  padding: 0 25px 35px 25px;    
+  z-index:2;    
+  width: 100%;
+}    
+.game-btn-img {    
+  width: 155px;    
+  max-width: 42vw;    
+  height: auto;    
+  cursor: pointer;    
+  background: transparent;    
+  transition: all 0.25s ease;    
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+}    
+.game-btn-img:hover { transform: scale(1.05) translateY(-5px); }
+
+/* لودینگ */
+.instagram-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(20px);
+    z-index: 500;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.instagram-loader.show { display: flex; }
+.loader-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255,255,255,0.3);
+    border-top: 4px solid #f9ce34;
+    border-right: 4px solid #ee2a7b;
+    border-bottom: 4px solid #6228d7;
+    border-radius: 50%;
+    animation: loaderSpin 0.8s linear infinite;
+}
+@keyframes loaderSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.loader-text { color: white; font-size: 14px; letter-spacing: 1px; }
+.loader-dots { display: flex; gap: 6px; }
+.loader-dots span {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: dotPulse 1.4s infinite;
+}
+.loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotPulse {
+    0%, 60%, 100% { transform: scale(0.6); opacity: 0.4; }
+    30% { transform: scale(1.2); opacity: 1; }
+}
+
+/* ========== گالری بی‌نهایت آواتار ========== */
+.avatar-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #001c3d, #000b1a);
+    z-index: 200;
+    display: none;
+    backdrop-filter: blur(8px);
+}
+.avatar-fullscreen.show { display: block; }
+
+.gallery-circle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow-y: auto;
+    padding: 80px 20px;
+}
+.gallery-circle-header {
+    color: gold;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 0 0 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+}
+.avatars-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 45px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.circle-avatar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+.circle-avatar-item:hover {
+    transform: scale(1.1);
+}
+.circle-avatar-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 3px solid gold;
+    object-fit: cover;
+    background: #0a0a0a;
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+.circle-avatar-name {
+    color: white;
+    font-size: 0.85rem;
+    background: rgba(0,0,0,0.6);
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+.load-more-avatars-btn {
+    display: block;
+    width: 250px;
+    margin: 40px auto 20px;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, gold, #ffaa00);
+    border: none;
+    border-radius: 50px;
+    color: #1a1a1a;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.load-more-avatars-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255,215,0,0.5);
+}
+.back-from-gallery {
+    position: fixed;
+    bottom: 35px;
+    right: 35px;
+    background: linear-gradient(145deg, #e67e22, #d35400);
+    border: none;
+    padding: 12px 35px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 210;
+}
+.back-from-gallery:hover {
+    transform: scale(1.02);
+    background: #f39c12;
+}
+
+/* مودال تغییر اسم */
+.name-edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    z-index: 400;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+.name-edit-modal.show { display: flex; }
+.name-edit-card {
+    background: linear-gradient(145deg, #001f3f, #000f2a);
+    border-radius: 40px;
+    padding: 35px;
+    width: 350px;
+    max-width: 90%;
+    text-align: center;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+}
+.name-edit-card h3 { color: #ffdd99; font-size: 1.8rem; margin-bottom: 20px; }
+.name-edit-card input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(10, 30, 50, 0.9);
+    border: 2px solid #ffcc66;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 25px;
+}
+.name-edit-buttons { display: flex; gap: 20px; justify-content: center; }
+.btn-save { background: linear-gradient(145deg, #00e676, #009624); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
+.btn-cancel { background: linear-gradient(145deg, #ff5252, #d32f2f); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
+
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; justify-content:center; align-items:center; z-index:20; }    
+.modal-content{ background:linear-gradient(145deg,#001f3f,#001a3a); padding:40px; border-radius:25px; width:320px; text-align:center; color:white; }    
+.modal-content input{ width:100%; padding:14px; margin-top:15px; border:none; border-radius:10px; background: #0a1a2a; color: white; }    
+.modal-content button{ margin-top:20px; padding:12px 25px; border:none; border-radius:15px; background:#ff1744; color:white; cursor:pointer; }    
+.hidden{ display:none; }    
+
+#offlineOverlay{ position:fixed; inset:0; display:none; justify-content:center; align-items:center; flex-direction:column; z-index:50; backdrop-filter:blur(16px); background:rgba(0,0,0,0.5); }    
+#offlineOverlay .overlay-box{ background:rgba(0,0,0,0.7); padding:35px 55px; border-radius:25px; text-align:center; }    
+#offlineOverlay .spinner{ width:55px; height:55px; border:5px solid rgba(255,255,255,0.3); border-top:5px solid #00a0ff; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto; }    
+@keyframes spin{ 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }    
+
+@media (max-width: 650px) {
+    .circle-avatar-img { width: 65px; height: 65px; }
+    .avatars-circle { gap: 25px; }
+    .gallery-circle-header { font-size: 1.5rem; margin-bottom: 30px; }
+}
+</style>  
+</head>    
+<body>  
+
+<!-- لودینگ -->
+<div id="instagramLoader" class="instagram-loader">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">در حال بارگذاری</div>
+    <div class="loader-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- پنل کاربری -->
+<div class="profile-box" id="profilePanel">
+    <div class="profile-img-wrapper" id="profileRingWrapper">
+        <div class="ring-instagram" id="profileRing"></div>
+        <img src="https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg" class="profile-img" id="userAvatarImg">
     </div>
-    <div class="status-text">
-        در حال اتصال به سرور<span class="dots" id="dots">...</span>
-    </div>
-    <div class="sub-text">لطفاً چند لحظه صبر کنید</div>
-    <div class="progress-bar">
-        <div class="progress-fill"></div>
+    <div class="user-details">
+        <div class="profile-name" id="playerNameDisplay">بازیکن</div>
+        <div class="user-level" id="levelText">سطح 1 ⭐</div>
+        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
     </div>
 </div>
 
-<iframe id="contentFrame" class="fullscreen-frame" src="about:blank"></iframe>
+<!-- مودال تغییر اسم -->
+<div id="nameEditModal" class="name-edit-modal">
+    <div class="name-edit-card">
+        <h3>✏️ تغییر نام</h3>
+        <input type="text" id="newNameInput" placeholder="نام جدید" maxlength="20">
+        <div class="name-edit-buttons">
+            <button class="btn-save" id="saveNameBtn">ذخیره</button>
+            <button class="btn-cancel" id="cancelNameBtn">انصراف</button>
+        </div>
+    </div>
+</div>
 
-<script>
+<!-- گالری بی‌نهایت آواتار -->
+<div id="avatarGalleryFull" class="avatar-fullscreen">
+    <div class="gallery-circle-container">
+        <div class="gallery-circle-header">🎭 انتخاب آواتار</div>
+        <div class="avatars-circle" id="avatarsCircleContainer"></div>
+        <button class="load-more-avatars-btn" id="loadMoreAvatarsBtn">✨ بارگذاری آواتارهای بیشتر ✨</button>
+        <button class="back-from-gallery" id="closeFullGallery">← بازگشت به بازی</button>
+    </div>
+</div>
+
+<div class="right-menu">    
+  <img src="https://cdn.imgurl.ir/uploads/y752784_IMG_20260228_064312_222.jpg" class="side-img" onclick="openSettings()">    
+  <img src="https://cdn.imgurl.ir/uploads/q734906_IMG_20260320_174242_443.jpg" class="side-img" onclick="comingSoon()">    
+  <img src="https://uploadkon.ir/uploads/931328_26IMG-20260228-064052-671.jpg" class="side-img" onclick="comingSoon()">    
+</div>  
+
+<div class="main-buttons">    
+  <img src="https://cdn.imgurl.ir/uploads/b95105_IMG_20260424_135421_097.jpg" alt="بازی امتیازی" class="game-btn-img" onclick="alert('🎖 بخش بازی امتیازی به زودی فعال می‌شود')">
+  <img src="https://cdn.imgurl.ir/uploads/m844273_IMG_20260424_135426_174.jpg" alt="بازی دوستانه" class="game-btn-img" onclick="alert('👥 بخش بازی دوستانه به زودی فعال می‌شود')">
+</div>  
+
+<div class="modal" id="nameModal">    
+  <div class="modal-content">    
+    <h3>نام خود را وارد کنید</h3>    
+    <input type="text" id="nameInput" placeholder="نام شما">    
+    <button onclick="saveName()">ثبت</button>    
+  </div>    
+</div>  
+
+<div class="modal hidden" id="settingsModal">    
+  <div class="modal-content">    
+    <h3>تنظیمات صدا</h3>    
+    <input type="range" min="0" max="100" value="50">    
+    <button onclick="closeSettings()">بستن</button>    
+  </div>    
+</div>  
+
+<div id="offlineOverlay">    
+  <div class="overlay-box">    
+    <div>لطفاً منتظر بمونین…</div>    
+    <div class="spinner"></div>    
+  </div>    
+</div>  
+
+<script>    
+// ==================== منابع بی‌نهایت تصاویر از گیت‌هاب و APIهای رایگان ====================
+let currentPageNum = 0;
+let isLoading = false;
+let allAvatars = [];
+let currentAvatarUrl = localStorage.getItem("userAvatar") || "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg";
+let currentUserName = localStorage.getItem("mafiaPlayerName") || "بازیکن";
+let userLevel = parseInt(localStorage.getItem("userLevel")) || 1;
+let userXP = parseInt(localStorage.getItem("userXP")) || 0;
+let nextXP = userLevel * 100;
+
+function updateProfileUI() {
+    document.getElementById("playerNameDisplay").innerText = currentUserName;
+    document.getElementById("userAvatarImg").src = currentAvatarUrl;
+    document.getElementById("levelText").innerHTML = `سطح ${userLevel} ⭐`;
+    let percent = (userXP / nextXP) * 100;
+    document.getElementById("xpFill").style.width = percent + "%";
+}
+
+function showLoader(message = "در حال بارگذاری") {
+    const loader = document.getElementById("instagramLoader");
+    loader.querySelector(".loader-text").textContent = message;
+    loader.classList.add("show");
+}
+function hideLoader() { document.getElementById("instagramLoader").classList.remove("show"); }
+
+function startRing() {
+    const ring = document.getElementById("profileRing");
+    ring.classList.add("ring-spin");
+    setTimeout(() => ring.classList.remove("ring-spin"), 5000);
+}
+
+// تست سلامت تصویر
+function testImage(url) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+        setTimeout(() => resolve(false), 5000);
+    });
+}
+
+// دریافت تصاویر از منابع رایگان و بی‌نهایت
+async function fetchInfiniteAvatars(count) {
+    const newAvatars = [];
+    const startIndex = allAvatars.length;
     
-    const v1 = "8426"; const v2 = "0104"; const v3 = "0116"; const v4 = "0116"; const v5 = "0112";
-    const v6 = "0115"; const v7 = "0058"; const v8 = "0047"; const v9 = "0047"; const v10 = "0114";
-    const v11 = "0097"; const v12 = "0119"; const v13 = "0046"; const v14 = "0103"; const v15 = "0105";
-    const v16 = "0116"; const v17 = "0104"; const v18 = "0117"; const v19 = "0098"; const v20 = "0117";
-    const v21 = "0115"; const v22 = "0101"; const v23 = "0114"; const v24 = "0099"; const v25 = "0111";
-    const v26 = "0110"; const v27 = "0116"; const v28 = "0101"; const v29 = "0110"; const v30 = "0116";
-    const v31 = "0046"; const v32 = "0099"; const v33 = "0111"; const v34 = "0109"; const v35 = "0047";
-    const v36 = "0115"; const v37 = "0048"; const v38 = "0051"; const v39 = "0055"; const v40 = "0057";
-    const v41 = "0050"; const v42 = "0054"; const v43 = "0053"; const v44 = "0045"; const v45 = "0110";
-    const v46 = "0101"; const v47 = "0116"; const v48 = "0105"; const v49 = "0122"; const v50 = "0101";
-    const v51 = "0110"; const v52 = "0047"; const v53 = "0080"; const v54 = "0109"; const v55 = "0107";
-    const v56 = "0097"; const v57 = "0116"; const v58 = "0098"; const v59 = "0097"; const v60 = "0095";
-    const v61 = "0095"; const v62 = "0095"; const v63 = "0095"; const v64 = "0095"; const v65 = "0112";
-    const v66 = "0111"; const v67 = "0047"; const v68 = "0109"; const v69 = "0097"; const v70 = "0105";
-    const v71 = "0110"; const v72 = "0047"; const v73 = "0089"; const v74 = "0116"; const v75 = "0107";
-    const v76 = "0112"; const v77 = "0111"; const v78 = "0046"; const v79 = "0104"; const v80 = "0116";
-    const v81 = "0109"; const v82 = "02039"; const v83 = "9988";
-    
-    
-    const x1 = v1; const x2 = v2; const x3 = v3; const x4 = v4; const x5 = v5;
-    const x6 = v6; const x7 = v7; const x8 = v8; const x9 = v9; const x10 = v10;
-    const x11 = v11; const x12 = v12; const x13 = v13; const x14 = v14; const x15 = v15;
-    const x16 = v16; const x17 = v17; const x18 = v18; const x19 = v19; const x20 = v20;
-    const x21 = v21; const x22 = v22; const x23 = v23; const x24 = v24; const x25 = v25;
-    const x26 = v26; const x27 = v27; const x28 = v28; const x29 = v29; const x30 = v30;
-    const x31 = v31; const x32 = v32; const x33 = v33; const x34 = v34; const x35 = v35;
-    const x36 = v36; const x37 = v37; const x38 = v38; const x39 = v39; const x40 = v40;
-    const x41 = v41; const x42 = v42; const x43 = v43; const x44 = v44; const x45 = v45;
-    const x46 = v46; const x47 = v47; const x48 = v48; const x49 = v49; const x50 = v50;
-    const x51 = v51; const x52 = v52; const x53 = v53; const x54 = v54; const x55 = v55;
-    const x56 = v56; const x57 = v57; const x58 = v58; const x59 = v59; const x60 = v60;
-    const x61 = v61; const x62 = v62; const x63 = v63; const x64 = v64; const x65 = v65;
-    const x66 = v66; const x67 = v67; const x68 = v68; const x69 = v69; const x70 = v70;
-    const x71 = v71; const x72 = v72; const x73 = v73; const x74 = v74; const x75 = v75;
-    const x76 = v76; const x77 = v77; const x78 = v78; const x79 = v79; const x80 = v80;
-    const x81 = v81; const x82 = v82; const x83 = v83;
-    
-    
-    const fullCode = x1 + "." + x2 + "." + x3 + "." + x4 + "." + x5 + "." + x6 + "." + x7 + "." + x8 + "." + x9 + "." + x10 + "." + x11 + "." + x12 + "." + x13 + "." + x14 + "." + x15 + "." + x16 + "." + x17 + "." + x18 + "." + x19 + "." + x20 + "." + x21 + "." + x22 + "." + x23 + "." + x24 + "." + x25 + "." + x26 + "." + x27 + "." + x28 + "." + x29 + "." + x30 + "." + x31 + "." + x32 + "." + x33 + "." + x34 + "." + x35 + "." + x36 + "." + x37 + "." + x38 + "." + x39 + "." + x40 + "." + x41 + "." + x42 + "." + x43 + "." + x44 + "." + x45 + "." + x46 + "." + x47 + "." + x48 + "." + x49 + "." + x50 + "." + x51 + "." + x52 + "." + x53 + "." + x54 + "." + x55 + "." + x56 + "." + x57 + "." + x58 + "." + x59 + "." + x60 + "." + x61 + "." + x62 + "." + x63 + "." + x64 + "." + x65 + "." + x66 + "." + x67 + "." + x68 + "." + x69 + "." + x70 + "." + x71 + "." + x72 + "." + x73 + "." + x74 + "." + x75 + "." + x76 + "." + x77 + "." + x78 + "." + x79 + "." + x80 + "." + x81 + "." + x82 + "." + x83;
-    
-    const loaderDiv = document.getElementById("loader");
-    const contentFrame = document.getElementById("contentFrame");
-    const dotsSpan = document.getElementById("dots");
-    
-    let dotCount = 0;
-    setInterval(() => {
-        dotCount = (dotCount + 1) % 4;
-        dotsSpan.innerText = ".".repeat(dotCount);
-    }, 400);
-    
-    function decode(encoded) {
-        let parts = encoded.split('.');
-        if(parts[0] !== "8426") return null;
-        parts = parts.slice(1, -2);
-        let result = "";
-        for(let i = 0; i < parts.length; i++) {
-            result += String.fromCharCode(parseInt(parts[i]));
+    // منبع 1: GitHub Users (تصاویر واقعی)
+    try {
+        const since = Math.floor(Math.random() * 100000);
+        const response = await fetch(`https://api.github.com/users?since=${since}&per_page=10`);
+        if (response.ok) {
+            const users = await response.json();
+            for (let i = 0; i < users.length && newAvatars.length < count; i++) {
+                const user = users[i];
+                if (user.avatar_url && user.login) {
+                    const isValid = await testImage(user.avatar_url);
+                    if (isValid) {
+                        newAvatars.push({
+                            src: user.avatar_url,
+                            name: user.login
+                        });
+                    }
+                }
+            }
         }
-        return result;
+    } catch(e) { console.log('GitHub error:', e); }
+    
+    // منبع 2: Random User Generator
+    try {
+        const response = await fetch(`https://randomuser.me/api/?results=8&inc=picture,name`);
+        if (response.ok) {
+            const data = await response.json();
+            for (const user of data.results) {
+                if (user.picture?.large && newAvatars.length < count) {
+                    const isValid = await testImage(user.picture.large);
+                    if (isValid) {
+                        newAvatars.push({
+                            src: user.picture.large,
+                            name: `${user.name.first} ${user.name.last}`
+                        });
+                    }
+                }
+            }
+        }
+    } catch(e) { console.log('RandomUser error:', e); }
+    
+    // منبع 3: DiceBear (کارتونی - همیشه سالم)
+    const diceStyles = ['adventurer', 'avataaars', 'fun-emoji', 'lorelei', 'micah', 'open-peeps', 'pixel-art', 'thumbs'];
+    const bgColors = ['4285f4', 'ea4335', 'fbbc05', '34a853', '9b59b6', 'e74c3c', '3498db', '1abc9c'];
+    for (let i = 0; i < count && newAvatars.length < count; i++) {
+        const style = diceStyles[Math.floor(Math.random() * diceStyles.length)];
+        const bg = bgColors[Math.floor(Math.random() * bgColors.length)];
+        const seed = `user_${Date.now()}_${Math.random()}_${i}`;
+        newAvatars.push({
+            src: `https://avatars.dicebear.com/api/${style}/${seed}.svg?background=%23${bg}`,
+            name: `آواتار ${startIndex + i + 1}`
+        });
     }
     
-    async function loadContent() {
-        let link = decode(fullCode);
-        
-        if(!link) {
-            loaderDiv.innerHTML = '<div class="neon-ring"><div class="spinner"></div></div><div class="status-text">خطا در اتصال</div><div class="sub-text">لطفاً مجدداً تلاش کنید</div>';
-            return;
-        }
-        
-        try {
-            const response = await fetch(link);
-            const html = await response.text();
-            
-            setTimeout(() => {
-                contentFrame.srcdoc = html;
-                loaderDiv.style.opacity = "0";
-                setTimeout(() => {
-                    loaderDiv.style.display = "none";
-                    contentFrame.style.display = "block";
-                }, 500);
-            }, 1000);
-            
-        } catch(error) {
-            loaderDiv.innerHTML = '<div class="neon-ring"><div class="spinner"></div></div><div class="status-text">خطا در اتصال به سرور</div><div class="sub-text">لطفاً اتصال اینترنت خود را بررسی کنید</div>';
-        }
-    }
+    return newAvatars.slice(0, count);
+}
+
+// رندر گالری
+function renderAvatars(avatars) {
+    const container = document.getElementById("avatarsCircleContainer");
+    const startIndex = allAvatars.length - avatars.length;
     
-    loadContent();
-</script>
-</body>
+    avatars.forEach((av, idx) => {
+        const item = document.createElement("div");
+        item.className = "circle-avatar-item";
+        item.innerHTML = `
+            <img src="${av.src}" class="circle-avatar-img" onerror="this.src='https://avatars.dicebear.com/api/identicon/fallback_${Date.now()}.svg'">
+            <div class="circle-avatar-name">${av.name.length > 20 ? av.name.substring(0, 18) + '...' : av.name}</div>
+            <div style="font-size:0.7rem; color:#aaa;">#${startIndex + idx + 1}</div>
+        `;
+        item.onclick = () => selectAvatar(av.src, av.name);
+        container.appendChild(item);
+    });
+}
+
+async function loadMoreAvatars() {
+    if (isLoading) return;
+    isLoading = true;
+    const loadBtn = document.getElementById("loadMoreAvatarsBtn");
+    loadBtn.disabled = true;
+    loadBtn.textContent = "⏳ در حال بارگذاری...";
+    
+    try {
+        const newAvatars = await fetchInfiniteAvatars(12);
+        allAvatars.push(...newAvatars);
+        renderAvatars(newAvatars);
+    } catch(e) {
+        console.error(e);
+    } finally {
+        isLoading = false;
+        loadBtn.disabled = false;
+        loadBtn.textContent = "✨ بارگذاری آواتارهای بیشتر ✨";
+    }
+}
+
+async function selectAvatar(imgSrc, imgName) {
+    showLoader("در حال تغییر آواتار...");
+    setTimeout(() => {
+        currentAvatarUrl = imgSrc;
+        localStorage.setItem("userAvatar", currentAvatarUrl);
+        updateProfileUI();
+        hideLoader();
+        document.getElementById("avatarGalleryFull").classList.remove("show");
+        alert(`✅ آواتار "${imgName}" انتخاب شد!`);
+        startRing();
+    }, 500);
+}
+
+function saveNewName() {
+    let newName = document.getElementById("newNameInput").value.trim();
+    if(newName !== "") {
+        showLoader("به‌روزرسانی نام...");
+        setTimeout(() => {
+            currentUserName = newName;
+            localStorage.setItem("mafiaPlayerName", currentUserName);
+            updateProfileUI();
+            hideLoader();
+            document.getElementById("nameEditModal").classList.remove("show");
+            alert(`✅ اسم شما به "${currentUserName}" تغییر کرد`);
+            startRing();
+        }, 500);
+    } else alert("❌ لطفاً یک نام معتبر وارد کنید");
+}
+
+function openNameEditModal() {
+    document.getElementById("newNameInput").value = currentUserName;
+    document.getElementById("nameEditModal").classList.add("show");
+}
+function closeNameEditModal() { document.getElementById("nameEditModal").classList.remove("show"); }
+
+document.getElementById("playerNameDisplay").onclick = openNameEditModal;
+document.getElementById("saveNameBtn").onclick = saveNewName;
+document.getElementById("cancelNameBtn").onclick = closeNameEditModal;
+document.getElementById("nameEditModal").onclick = (e) => { if(e.target === this) closeNameEditModal(); };
+
+document.getElementById("profilePanel").onclick = (e) => {
+    if(e.target.classList.contains("profile-name")) return;
+    document.getElementById("avatarGalleryFull").classList.add("show");
+};
+document.getElementById("closeFullGallery").onclick = () => { document.getElementById("avatarGalleryFull").classList.remove("show"); };
+document.getElementById("loadMoreAvatarsBtn").onclick = loadMoreAvatars;
+
+if(!localStorage.getItem("mafiaPlayerName")) document.getElementById("nameModal").style.display = "flex";
+else document.getElementById("nameModal").style.display = "none";
+
+function saveName() { 
+    let name = document.getElementById("nameInput").value.trim(); 
+    if(name !== "") { 
+        showLoader("ساخت پروفایل...");
+        setTimeout(() => {
+            localStorage.setItem("mafiaPlayerName", name); 
+            currentUserName = name; 
+            updateProfileUI(); 
+            document.getElementById("nameModal").style.display = "none";
+            hideLoader();
+            startRing();
+        }, 500);
+    } 
+}
+window.saveName = saveName;
+function comingSoon(){ alert("🚧 این بخش به زودی فعال می‌شود"); }    
+function openSettings(){ document.getElementById("settingsModal").classList.remove("hidden"); }    
+function closeSettings(){ document.getElementById("settingsModal").classList.add("hidden"); }    
+function updateOnlineStatus(){ const overlay = document.getElementById("offlineOverlay"); overlay.style.display = navigator.onLine ? "none" : "flex"; }    
+window.addEventListener('online', updateOnlineStatus); window.addEventListener('offline', updateOnlineStatus); updateOnlineStatus();
+
+// بارگذاری اولیه گالری
+async function initGallery() {
+    const initialAvatars = await fetchInfiniteAvatars(12);
+    allAvatars.push(...initialAvatars);
+    renderAvatars(initialAvatars);
+}
+
+updateProfileUI();
+initGallery();
+startRing();
+</script>    
+</body>    
 </html>
