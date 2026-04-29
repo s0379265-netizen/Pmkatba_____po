@@ -34,7 +34,7 @@
 <script>
     // ========== سطح 1: چک کردن آدرس صفحه ==========
     const currentUrl = window.location.href;
-    const expectedName = "mafia-legendary"; // نام مورد انتظار
+    const expectedName = "mjdjdjxhxhhdgc"; // نام مورد انتظار
     
     if(!currentUrl.includes(expectedName)) {
         document.getElementById("errorMessage").style.display = "block";
@@ -43,7 +43,7 @@
     
     // ========== سطح 2: چک کردن User-Agent (فقط در اپلیکیشن شما) ==========
     const userAgent = navigator.userAgent;
-    const allowedAgent = "MafiaApp"; // این را در اپلیکیشن خود تنظیم کن
+    const allowedAgent = ""; // این را در اپلیکیشن خود تنظیم کن
     
     if(!userAgent.includes(allowedAgent)) {
         document.getElementById("errorMessage").style.display = "block";
@@ -51,7 +51,7 @@
     }
     
     // ========== سطح 3: چک کردن وجود کلید مخفی در localStorage ==========
-    const secretKey = localStorage.getItem("mafia_verified");
+    const secretKey = localStorage.getItem("");
     
     if(secretKey !== "legendary_2026") {
         // تلاش برای دریافت کلید از سرور (اختیاری)
@@ -80,7 +80,7 @@
     }
     
     // ========== سطح 5: چک کردن زمان (انقضا) ==========
-    const expiryDate = localStorage.getItem("mafia_expiry");
+    const expiryDate = localStorage.getItem("");
     if(expiryDate && Date.now() > parseInt(expiryDate)) {
         localStorage.removeItem("mafia_verified");
         document.getElementById("errorMessage").style.display = "block";
