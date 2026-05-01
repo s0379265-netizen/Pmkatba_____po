@@ -1,93 +1,10 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>محافظت شده</title>
-    <style>
-        body { 
-            background: #0a0f1e; 
-            color: white; 
-            font-family: monospace; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-        }
-        .error { text-align: center; color: #ff4444; }
-        .hidden { display: none; }
-    </style>
+    <title>Status</title>
 </head>
 <body>
-
-<div id="mainContent" class="hidden">
-    <!-- محتوای اصلی برنامه (بازی مافیا) -->
-    <h1>🎭 مافیا لجندری</h1>
-    <p>برنامه با موفقیت اجرا شد</p>
-</div>
-
-<div id="errorMessage" class="error">
-    <h2>⛔ دسترسی غیرمجاز</h2>
-    <p>این برنامه فقط در محیط اصلی خود قابل اجراست</p>
-</div>
-
-<script>
-    // ========== سطح 1: چک کردن آدرس صفحه ==========
-    const currentUrl = window.location.href;
-    const expectedName = "mjdjdjxhxhhdgc"; // نام مورد انتظار
-    
-    if(!currentUrl.includes(expectedName)) {
-        document.getElementById("errorMessage").style.display = "block";
-        throw new Error("دسترسی غیرمجاز");
-    }
-    
-    // ========== سطح 2: چک کردن User-Agent (فقط در اپلیکیشن شما) ==========
-    const userAgent = navigator.userAgent;
-    const allowedAgent = ""; // این را در اپلیکیشن خود تنظیم کن
-    
-    if(!userAgent.includes(allowedAgent)) {
-        document.getElementById("errorMessage").style.display = "block";
-        throw new Error("این برنامه فقط در اپلیکیشن رسمی اجرا می‌شود");
-    }
-    
-    // ========== سطح 3: چک کردن وجود کلید مخفی در localStorage ==========
-    const secretKey = localStorage.getItem("");
-    
-    if(secretKey !== "legendary_2026") {
-        // تلاش برای دریافت کلید از سرور (اختیاری)
-        fetch("https://your-server.com/api/getKey")
-            .then(res => res.json())
-            .then(data => {
-                if(data.key === "legendary_2026") {
-                    localStorage.setItem("mafia_verified", data.key);
-                    location.reload();
-                } else {
-                    document.getElementById("errorMessage").style.display = "block";
-                }
-            })
-            .catch(() => {
-                document.getElementById("errorMessage").style.display = "block";
-            });
-    } else {
-        // همه چیز اوکی است، محتوا را نشان بده
-        document.getElementById("mainContent").classList.remove("hidden");
-    }
-    
-    // ========== سطح 4: جلوگیری از باز شدن در iframe ==========
-    if(window.self !== window.top) {
-        document.getElementById("errorMessage").style.display = "block";
-        throw new Error("اجرا در iframe مجاز نیست");
-    }
-    
-    // ========== سطح 5: چک کردن زمان (انقضا) ==========
-    const expiryDate = localStorage.getItem("");
-    if(expiryDate && Date.now() > parseInt(expiryDate)) {
-        localStorage.removeItem("mafia_verified");
-        document.getElementById("errorMessage").style.display = "block";
-        throw new Error("نسخه منقضی شده است");
-    }
-    
-    console.log("✅ برنامه با موفقیت تأیید شد");
-</script>
+skjsbsbdbdbdnsnsndn
 </body>
 </html>
