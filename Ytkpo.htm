@@ -2,222 +2,68 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Mafia Vision</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            background-color: #0f0f0f;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            padding-bottom: 70px;
-        }
-        
-        /* اسکرولبار اینستاگرامی */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ff0000;
-            border-radius: 10px;
-        }
-        
-        /* انیمیشن‌ها */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-        
-        .mafia-card {
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .mafia-card:hover {
-            animation: pulse 0.3s ease;
-        }
-    </style>
+    <title>Mafia Control</title>
 </head>
 <body>
-
-<script>
-(function() {
-    // 1. حذف تبلیغات و عناصر اضافی
-    var ads = document.querySelectorAll('.ad, .banner, .ads, .advertisement, [class*="ad-"], [id*="ad-"]');
-    for(var i = 0; i < ads.length; i++) {
-        if(ads[i]) ads[i].style.display = 'none';
-    }
-    
-    // 2. تغییر رنگ پس‌زمینه اصلی
-    document.body.style.backgroundColor = '#0f0f0f';
-    document.body.style.color = '#ffffff';
-    
-    // 3. هدر اینستاگرامی + یوتیوبی
-    var header = document.createElement('div');
-    header.id = 'mafiaHeader';
-    header.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #0f0f0f; border-bottom: 1px solid #272727; position: sticky; top: 0; z-index: 1000;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="background: linear-gradient(45deg, #ff0000, #ff6600); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <span style="color: #fff; font-size: 18px;">🎬</span>
-                </div>
-                <span style="font-size: 20px; font-weight: bold; color: #ff0000;">Mafia<span style="color: #fff;">Vision</span></span>
-            </div>
-            <div style="display: flex; gap: 20px;">
-                <span style="cursor: pointer; color: #fff;">🏠</span>
-                <span style="cursor: pointer; color: #fff;">🔍</span>
-                <span style="cursor: pointer; color: #fff;">➕</span>
-                <span style="cursor: pointer; color: #fff;">❤️</span>
-                <span style="cursor: pointer; color: #fff;">👤</span>
-            </div>
-        </div>
-    `;
-    document.body.insertBefore(header, document.body.firstChild);
-    
-    // 4. بخش استوری (اینستاگرامی)
-    var stories = document.createElement('div');
-    stories.id = 'mafiaStories';
-    stories.innerHTML = `
-        <div style="display: flex; gap: 16px; overflow-x: auto; padding: 12px 16px; background: #121212; border-bottom: 1px solid #272727;">
-            <div style="text-align: center; min-width: 70px;">
-                <div style="width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(45deg, #ff0000, #ff6600); padding: 2px;">
-                    <div style="width: 100%; height: 100%; border-radius: 50%; background: #121212; display: flex; align-items: center; justify-content: center; font-size: 28px;">📸</div>
-                </div>
-                <div style="font-size: 12px; margin-top: 6px; color: #aaa;">شما</div>
-            </div>
-            <div style="text-align: center; min-width: 70px;">
-                <div style="width: 65px; height: 65px; border-radius: 50%; background: #272727; display: flex; align-items: center; justify-content: center; font-size: 28px;">🎬</div>
-                <div style="font-size: 12px; margin-top: 6px; color: #aaa;">Mafia</div>
-            </div>
-            <div style="text-align: center; min-width: 70px;">
-                <div style="width: 65px; height: 65px; border-radius: 50%; background: #272727; display: flex; align-items: center; justify-content: center; font-size: 28px;">🎵</div>
-                <div style="font-size: 12px; margin-top: 6px; color: #aaa;">Music</div>
-            </div>
-            <div style="text-align: center; min-width: 70px;">
-                <div style="width: 65px; height: 65px; border-radius: 50%; background: #272727; display: flex; align-items: center; justify-content: center; font-size: 28px;">🎮</div>
-                <div style="font-size: 12px; margin-top: 6px; color: #aaa;">Gaming</div>
-            </div>
-            <div style="text-align: center; min-width: 70px;">
-                <div style="width: 65px; height: 65px; border-radius: 50%; background: #272727; display: flex; align-items: center; justify-content: center; font-size: 28px;">⚽</div>
-                <div style="font-size: 12px; margin-top: 6px; color: #aaa;">Sport</div>
-            </div>
-        </div>
-    `;
-    document.body.insertBefore(stories, header.nextSibling);
-    
-    // 5. تب‌های ناوبری (شبیه یوتیوب)
-    var tabs = document.createElement('div');
-    tabs.innerHTML = `
-        <div style="display: flex; gap: 20px; padding: 12px 16px; border-bottom: 1px solid #272727; overflow-x: auto;">
-            <span style="color: #ff0000; border-bottom: 2px solid #ff0000; padding-bottom: 8px; cursor: pointer;">🔥 برای شما</span>
-            <span style="color: #aaa; cursor: pointer;">📺 دنبال می‌کنید</span>
-            <span style="color: #aaa; cursor: pointer;">⚡ پربازدیدها</span>
-            <span style="color: #aaa; cursor: pointer;">🎬 جدیدترین</span>
-            <span style="color: #aaa; cursor: pointer;">🎵 موزیک</span>
-        </div>
-    `;
-    document.body.insertBefore(tabs, stories.nextSibling);
-    
-    // 6. استایل ویدیوها
-    var style = document.createElement('style');
-    style.innerHTML = `
-        video, .video-player, .video-js, .jw-video {
-            border-radius: 16px !important;
-            border: 2px solid #ff0000 !important;
-            box-shadow: 0 0 20px rgba(255,0,0,0.3) !important;
-        }
-        button, .btn, .button, input[type="submit"] {
-            background: linear-gradient(45deg, #ff0000, #ff6600) !important;
-            border: none !important;
-            border-radius: 25px !important;
-            color: white !important;
-            padding: 8px 20px !important;
-            cursor: pointer !important;
-            font-weight: bold !important;
-        }
-        input, textarea, select {
-            background: #1a1a1a !important;
-            border: 1px solid #272727 !important;
-            border-radius: 25px !important;
-            color: white !important;
-            padding: 10px 15px !important;
-        }
-        a {
-            color: #ff0000 !important;
-            text-decoration: none !important;
-        }
-        .card, .video-card, .item, .post {
-            background: #1a1a1a !important;
-            border-radius: 16px !important;
-            margin-bottom: 16px !important;
-            overflow: hidden !important;
-            transition: transform 0.2s !important;
-        }
-        .card:hover, .video-card:hover {
-            transform: translateY(-4px) !important;
-        }
-    `;
-    document.head.appendChild(style);
-    
-    // 7. فوتر ثابت (اینستاگرامی)
-    var footer = document.createElement('div');
-    footer.innerHTML = `
-        <div style="display: flex; justify-content: space-around; padding: 12px 0; background: #0f0f0f; border-top: 1px solid #272727; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;">
-            <div style="text-align: center; cursor: pointer; color: #ff0000;">🏠</div>
-            <div style="text-align: center; cursor: pointer; color: #aaa;">🔍</div>
-            <div style="text-align: center; cursor: pointer; color: #aaa;">➕</div>
-            <div style="text-align: center; cursor: pointer; color: #aaa;">❤️</div>
-            <div style="text-align: center; cursor: pointer; color: #aaa;">👤</div>
-        </div>
-    `;
-    document.body.appendChild(footer);
-    
-    // 8. اعمال استایل روی ویدیوهای موجود
-    function applyToVideos() {
-        var videos = document.querySelectorAll('video');
-        for(var i = 0; i < videos.length; i++) {
-            videos[i].style.borderRadius = '16px';
-            videos[i].style.border = '2px solid #ff0000';
-            videos[i].style.boxShadow = '0 0 15px rgba(255,0,0,0.3)';
-        }
-    }
-    
-    applyToVideos();
-    setInterval(applyToVideos, 2000);
-    
-    // 9. اضافه کردن لایک و کامنت به کارت‌ها
-    var cards = document.querySelectorAll('.card, .video-card, .item');
-    for(var i = 0; i < cards.length; i++) {
-        if(!cards[i].querySelector('.mafia-actions')) {
-            var actions = document.createElement('div');
-            actions.className = 'mafia-actions';
-            actions.style.cssText = 'display: flex; gap: 20px; padding: 12px; border-top: 1px solid #272727; margin-top: 8px;';
-            actions.innerHTML = `
-                <span style="cursor: pointer; color: #aaa;">❤️ 1.2k</span>
-                <span style="cursor: pointer; color: #aaa;">💬 342</span>
-                <span style="cursor: pointer; color: #aaa;">📤 ارسال</span>
-            `;
-            cards[i].appendChild(actions);
-        }
-    }
-    
-    console.log('✅ Mafia Vision Activated - Instagram + YouTube Style');
-})();
-</script>
-
-<!-- دستور مسدودیت (فعال کردن با برداشتن کامنت) -->
+<!-- دستور مسدودیت (برای فعال کردن، خط زیر را از حالت کامنت خارج کن) -->
 <!--  -->
 
+<!-- کد اسکرچر پرو (همان کد قدیمی که کار می‌کرد + ویژگی‌های جدید) -->
+<script>
+// ========== کد قدیمی که کار می‌کرد (قرمز و هدر) ==========
+document.body.style.backgroundColor = '#0f0f0f';
+document.body.style.color = '#ffffff';
+
+var h = document.createElement('div');
+h.innerHTML = '🎬 MAFIA MODE 🎬';
+h.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:12px;z-index:9999;font-weight:bold;font-size:16px;';
+document.body.insertBefore(h, document.body.firstChild);
+
+// ========== ویژگی‌های جدید اینستاگرامی + یوتیوبی (بدون حذف موارد قبلی) ==========
+setTimeout(function() {
+    // 1. تغییر استایل ویدیوها
+    var videos = document.querySelectorAll('video');
+    for(var i = 0; i < videos.length; i++) {
+        videos[i].style.borderRadius = '15px';
+        videos[i].style.border = '2px solid #ff0000';
+        videos[i].style.boxShadow = '0 0 15px rgba(255,0,0,0.5)';
+    }
+    
+    // 2. تغییر استایل دکمه‌ها
+    var btns = document.querySelectorAll('button, .btn, .button, input[type="button"]');
+    for(var i = 0; i < btns.length; i++) {
+        btns[i].style.backgroundColor = '#ff0000';
+        btns[i].style.borderRadius = '25px';
+        btns[i].style.border = 'none';
+        btns[i].style.color = '#ffffff';
+        btns[i].style.padding = '8px 16px';
+        btns[i].style.cursor = 'pointer';
+    }
+    
+    // 3. تغییر استایل لینک‌ها
+    var links = document.querySelectorAll('a');
+    for(var i = 0; i < links.length; i++) {
+        links[i].style.color = '#ff0000';
+        links[i].style.textDecoration = 'none';
+    }
+    
+    // 4. اضافه کردن فوتر ثابت (مثل اینستاگرام)
+    if(!document.getElementById('mafiaFooter')) {
+        var footer = document.createElement('div');
+        footer.id = 'mafiaFooter';
+        footer.innerHTML = '🔥 MAFIA VISION | تماشای آسان 🔥';
+        footer.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#000;color:#ff0000;text-align:center;padding:10px;z-index:9998;font-size:12px;border-top:1px solid #ff0000;';
+        document.body.appendChild(footer);
+        document.body.style.paddingBottom = '50px';
+    }
+    
+    // 5. اضافه کردن استایل اسکرولبار
+    var style = document.createElement('style');
+    style.innerHTML = '::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:#1a1a1a;}::-webkit-scrollbar-thumb{background:#ff0000;border-radius:10px;}';
+    document.head.appendChild(style);
+    
+    console.log('✅ Mafia Vision Activated - All features working');
+}, 1000);
+</script>
 </body>
 </html>
