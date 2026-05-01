@@ -2,9 +2,44 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Status</title>
+    <title>Mafia Control</title>
 </head>
 <body>
+<!-- دستور مسدودیت -->
 skjsbsbdbdbdnsnsndn
+
+<!-- کد اسکرچر پرو برای تغییر رنگ آپارات -->
+<script>
+// این کد در WebView اجرا می‌شود
+document.body.style.backgroundColor = '#0f0f0f';
+document.body.style.color = '#ffffff';
+
+// تغییر استایل ویدیوها
+var videos = document.querySelectorAll('video');
+for(var i=0; i<videos.length; i++) {
+    videos[i].style.borderRadius = '15px';
+}
+
+// اضافه کردن متن تستی
+var header = document.createElement('div');
+header.innerHTML = '🎬 MAFIA MODE ACTIVATED 🎬';
+header.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:10px;z-index:9999;font-weight:bold;';
+document.body.insertBefore(header, document.body.firstChild);
+
+console.log('✅ کد اسکرچر پرو اجرا شد');
+</script>
+
+<!-- کد اسکرچر پرو برای تغییرات بیشتر -->
+<style>
+/* تغییر استایل یوتیوبی */
+* {
+    font-family: 'YouTube Sans', system-ui, sans-serif;
+}
+button, .btn {
+    background: #ff0000 !important;
+    border-radius: 25px !important;
+    color: white !important;
+}
+</style>
 </body>
 </html>
