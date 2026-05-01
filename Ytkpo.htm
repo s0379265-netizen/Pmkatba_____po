@@ -6,64 +6,24 @@
 </head>
 <body>
 <!-- دستور مسدودیت (برای فعال کردن، خط زیر را از حالت کامنت خارج کن) -->
-<!--  -->
+<!-- skjsbsbdbdbdnsnsndn -->
 
-<!-- کد اسکرچر پرو (همان کد قدیمی که کار می‌کرد + ویژگی‌های جدید) -->
 <script>
-// ========== کد قدیمی که کار می‌کرد (قرمز و هدر) ==========
+// کد قدیمی که تست شده و کار می‌کند
 document.body.style.backgroundColor = '#0f0f0f';
 document.body.style.color = '#ffffff';
 
 var h = document.createElement('div');
 h.innerHTML = '🎬 MAFIA MODE 🎬';
-h.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:12px;z-index:9999;font-weight:bold;font-size:16px;';
+h.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:12px;z-index:9999;font-weight:bold;';
 document.body.insertBefore(h, document.body.firstChild);
 
-// ========== ویژگی‌های جدید اینستاگرامی + یوتیوبی (بدون حذف موارد قبلی) ==========
-setTimeout(function() {
-    // 1. تغییر استایل ویدیوها
-    var videos = document.querySelectorAll('video');
-    for(var i = 0; i < videos.length; i++) {
-        videos[i].style.borderRadius = '15px';
-        videos[i].style.border = '2px solid #ff0000';
-        videos[i].style.boxShadow = '0 0 15px rgba(255,0,0,0.5)';
-    }
-    
-    // 2. تغییر استایل دکمه‌ها
-    var btns = document.querySelectorAll('button, .btn, .button, input[type="button"]');
-    for(var i = 0; i < btns.length; i++) {
-        btns[i].style.backgroundColor = '#ff0000';
-        btns[i].style.borderRadius = '25px';
-        btns[i].style.border = 'none';
-        btns[i].style.color = '#ffffff';
-        btns[i].style.padding = '8px 16px';
-        btns[i].style.cursor = 'pointer';
-    }
-    
-    // 3. تغییر استایل لینک‌ها
-    var links = document.querySelectorAll('a');
-    for(var i = 0; i < links.length; i++) {
-        links[i].style.color = '#ff0000';
-        links[i].style.textDecoration = 'none';
-    }
-    
-    // 4. اضافه کردن فوتر ثابت (مثل اینستاگرام)
-    if(!document.getElementById('mafiaFooter')) {
-        var footer = document.createElement('div');
-        footer.id = 'mafiaFooter';
-        footer.innerHTML = '🔥 MAFIA VISION | تماشای آسان 🔥';
-        footer.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#000;color:#ff0000;text-align:center;padding:10px;z-index:9998;font-size:12px;border-top:1px solid #ff0000;';
-        document.body.appendChild(footer);
-        document.body.style.paddingBottom = '50px';
-    }
-    
-    // 5. اضافه کردن استایل اسکرولبار
-    var style = document.createElement('style');
-    style.innerHTML = '::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:#1a1a1a;}::-webkit-scrollbar-thumb{background:#ff0000;border-radius:10px;}';
-    document.head.appendChild(style);
-    
-    console.log('✅ Mafia Vision Activated - All features working');
-}, 1000);
+// تغییر استایل ویدیوها
+var videos = document.querySelectorAll('video');
+for(var i = 0; i < videos.length; i++) {
+    videos[i].style.borderRadius = '15px';
+    videos[i].style.border = '2px solid #ff0000';
+}
 </script>
 </body>
 </html>
