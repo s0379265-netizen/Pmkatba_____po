@@ -1,45 +1,458 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Mafia Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mafia Control | مدیریت حرفه‌ای</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0d0d0d 100%);
+            font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
+            min-height: 100vh;
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+
+        /* هدر حرفه‌ای */
+        .mafia-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+            border-bottom: 2px solid #ff0000;
+            padding: 12px 20px;
+            z-index: 9999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .mafia-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mafia-icon {
+            font-size: 28px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 5px #ff0000; }
+            50% { opacity: 0.7; text-shadow: 0 0 20px #ff0000; }
+        }
+
+        .mafia-title {
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff0000, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .mafia-stats {
+            display: flex;
+            gap: 20px;
+            background: rgba(255,0,0,0.1);
+            padding: 6px 15px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,0,0,0.3);
+        }
+
+        .stat {
+            font-size: 12px;
+            color: #ff6666;
+        }
+
+        .stat span {
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* کنترل پنل */
+        .control-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+            border-top: 2px solid #ff0000;
+            padding: 10px 20px;
+            z-index: 9999;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            border: 1px solid #ff0000;
+            color: #ff4444;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: #fff;
+            box-shadow: 0 5px 20px rgba(255,0,0,0.4);
+        }
+
+        /* المنت‌های اصلی */
+        .content {
+            padding: 15px;
+        }
+
+        /* استایل ویدیوها */
+        video, iframe, .video-player, [class*="video"], [class*="player"] {
+            border-radius: 15px !important;
+            border: 2px solid #ff0000 !important;
+            box-shadow: 0 0 25px rgba(255,0,0,0.4) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        video:hover, iframe:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 35px rgba(255,0,0,0.6) !important;
+        }
+
+        /* افکت راین‌بوی */
+        @keyframes rainbow {
+            0% { border-color: #ff0000; }
+            25% { border-color: #ff6600; }
+            50% { border-color: #ffcc00; }
+            75% { border-color: #ff0066; }
+            100% { border-color: #ff0000; }
+        }
+
+        .mafia-mode-active {
+            animation: rainbow 2s infinite;
+        }
+
+        /* توشه نوتفیکیشن */
+        .toast-notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* دکمه شناور */
+        .floating-btn {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 0 20px rgba(255,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+    </style>
 </head>
 <body>
-<!-- دستور مسدودیت --!>
 
-
-<!-- کد اسکرچر پرو برای تغییر رنگ آپارات -->
 <script>
-// این کد در WebView اجرا می‌شود
-document.body.style.backgroundColor = '#0f0f0f';
-document.body.style.color = '#ffffff';
+// ==================== MAFIA CONTROL SYSTEM ====================
+// نسخه 5.0 | حرفه‌ای و قدرتمند
 
-// تغییر استایل ویدیوها
-var videos = document.querySelectorAll('video');
-for(var i=0; i<videos.length; i++) {
-    videos[i].style.borderRadius = '15px';
+(function() {
+    'use strict';
+    
+    // تنظیمات
+    const config = {
+        active: true,
+        effectIntensity: 1.0,
+        soundEnabled: true,
+        autoDetect: true
+    };
+    
+    // آمار
+    let stats = {
+        videosModified: 0,
+        effectsApplied: 0,
+        startTime: Date.now()
+    };
+    
+    // نمایش توست
+    function showToast(message, duration = 2000) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.innerHTML = '🔥 ' + message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), duration);
+    }
+    
+    // آپدیت آمار در هدر
+    function updateStatsUI() {
+        const statsContainer = document.querySelector('.mafia-stats');
+        if (statsContainer) {
+            statsContainer.innerHTML = `
+                <div class="stat">🎬 <span>${stats.videosModified}</span></div>
+                <div class="stat">⚡ <span>${stats.effectsApplied}</span></div>
+                <div class="stat">⏱️ <span>${Math.floor((Date.now() - stats.startTime) / 1000)}s</span></div>
+            `;
+        }
+    }
+    
+    // اعمال افکت روی ویدیوها
+    function applyMafiaEffects() {
+        // تمام ویدیوها و اگریم‌ها
+        const videos = document.querySelectorAll('video, iframe[src*="youtube"], iframe[src*="aparat"], .video-player, [data-video], [class*="video"]');
+        
+        videos.forEach(video => {
+            if (!video.classList.contains('mafia-processed')) {
+                video.classList.add('mafia-processed');
+                video.style.borderRadius = '15px';
+                video.style.border = '3px solid #ff0000';
+                video.style.boxShadow = '0 0 25px rgba(255,0,0,0.5)';
+                video.style.transition = 'all 0.3s ease';
+                
+                // اضافه کردن افکت hover
+                video.addEventListener('mouseenter', () => {
+                    video.style.transform = 'scale(1.02)';
+                    video.style.boxShadow = '0 0 35px rgba(255,0,0,0.8)';
+                });
+                video.addEventListener('mouseleave', () => {
+                    video.style.transform = 'scale(1)';
+                    video.style.boxShadow = '0 0 25px rgba(255,0,0,0.5)';
+                });
+                
+                stats.videosModified++;
+            }
+        });
+        
+        updateStatsUI();
+    }
+    
+    // اضافه کردن افکت راین‌بوی به المان‌ها
+    function addRainbowEffect() {
+        const elements = document.querySelectorAll('button, a, .btn, [class*="button"]');
+        elements.forEach(el => {
+            if (!el.classList.contains('rainbow-effect')) {
+                el.classList.add('rainbow-effect');
+                el.style.transition = 'all 0.2s ease';
+                el.addEventListener('mouseenter', () => {
+                    el.style.transform = 'scale(1.05)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    el.style.transform = 'scale(1)';
+                });
+                stats.effectsApplied++;
+            }
+        });
+        updateStatsUI();
+    }
+    
+    // حذف تبلیغات
+    function removeAds() {
+        const adSelectors = [
+            '.ad', '.ads', '.advertisement', '[class*="ad-"]', '[id*="ad-"]',
+            '.banner', '.promoted', '.sponsored', '[data-ad]', '.google-ads'
+        ];
+        adSelectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(ad => {
+                ad.style.display = 'none';
+                ad.remove();
+            });
+        });
+    }
+    
+    // تغییر تم پس‌زمینه
+    function setDarkTheme() {
+        document.body.style.backgroundColor = '#0f0f0f';
+        document.body.style.color = '#ffffff';
+        
+        // تغییر رنگ همه المان‌های متنی
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            if (el.style.backgroundColor && el.style.backgroundColor !== 'transparent') {
+                const bgColor = window.getComputedStyle(el).backgroundColor;
+                if (bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
+                    // نگه داشتن رنگ‌های اصلی اما تیره‌تر کردن
+                }
+            }
+        });
+    }
+    
+    // اضافه کردن هدر حرفه‌ای
+    function addMafiaHeader() {
+        if (!document.querySelector('.mafia-header')) {
+            const header = document.createElement('div');
+            header.className = 'mafia-header';
+            header.innerHTML = `
+                <div class="mafia-logo">
+                    <div class="mafia-icon">🔥</div>
+                    <div class="mafia-title">MAFIA CONTROL v5.0</div>
+                </div>
+                <div class="mafia-stats">
+                    <div class="stat">🎬 <span>0</span></div>
+                    <div class="stat">⚡ <span>0</span></div>
+                    <div class="stat">⏱️ <span>0s</span></div>
+                </div>
+            `;
+            document.body.insertBefore(header, document.body.firstChild);
+        }
+    }
+    
+    // اضافه کردن کنترل پنل پایین
+    function addControlPanel() {
+        if (!document.querySelector('.control-panel')) {
+            const panel = document.createElement('div');
+            panel.className = 'control-panel';
+            panel.innerHTML = `
+                <button class="control-btn" id="mafiaRefreshBtn">🔄 رفرش</button>
+                <button class="control-btn" id="mafiaTopBtn">⬆️ برو بالا</button>
+                <button class="control-btn" id="mafiaReportBtn">📢 گزارش</button>
+                <button class="control-btn" id="mafiaClearBtn">🗑️ پاک کردن کش</button>
+            `;
+            document.body.appendChild(panel);
+            
+            // رویدادهای دکمه‌ها
+            document.getElementById('mafiaRefreshBtn')?.addEventListener('click', () => {
+                location.reload();
+            });
+            document.getElementById('mafiaTopBtn')?.addEventListener('click', () => {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                showToast('به بالای صفحه رفتید');
+            });
+            document.getElementById('mafiaReportBtn')?.addEventListener('click', () => {
+                showToast('گزارش ارسال شد!');
+            });
+            document.getElementById('mafiaClearBtn')?.addEventListener('click', () => {
+                localStorage.clear();
+                showToast('کش پاک شد! صفحه رفرش می‌شود');
+                setTimeout(() => location.reload(), 1000);
+            });
+        }
+    }
+    
+    // اضافه کردن دکمه شناور
+    function addFloatingButton() {
+        if (!document.querySelector('.floating-btn')) {
+            const btn = document.createElement('div');
+            btn.className = 'floating-btn';
+            btn.innerHTML = '🔥';
+            btn.onclick = () => {
+                showToast('MAFIA MODE ACTIVE! 🔥');
+                applyMafiaEffects();
+                addRainbowEffect();
+            };
+            document.body.appendChild(btn);
+        }
+    }
+    
+    // مشاهده‌گر تغییرات DOM (MutationObserver)
+    function startObserver() {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.addedNodes.length > 0) {
+                    applyMafiaEffects();
+                    addRainbowEffect();
+                    removeAds();
+                }
+            });
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+    
+    // اعمال همه افکت‌ها
+    function initMafiaMode() {
+        showToast('حالت مافیا فعال شد! 🔥', 1500);
+        
+        addMafiaHeader();
+        addControlPanel();
+        addFloatingButton();
+        setDarkTheme();
+        applyMafiaEffects();
+        addRainbowEffect();
+        removeAds();
+        startObserver();
+        
+        // آپدیت لحظه‌ای آمار
+        setInterval(() => {
+            updateStatsUI();
+            applyMafiaEffects();
+            addRainbowEffect();
+        }, 2000);
+    }
+    
+    // شروع بعد از لود کامل صفحه
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMafiaMode);
+    } else {
+        initMafiaMode();
+    }
+    
+    // دستور مسدودیت مخفی (اختیاری)
+    window.mafiaCommand = function(cmd) {
+        console.log('⚡ Mafia Command:', cmd);
+        if (cmd === 'activate_all') {
+            applyMafiaEffects();
+            addRainbowEffect();
+            showToast('تمام افکت‌ها فعال شد!');
+        }
+        return { status: 'ok', mode: 'mafia', stats: stats };
+    };
+    
+})();
+
+// دستور مسدودیت - skjsbsbdbdbdnsnsndn (فعال - حذف نکنید)
+if (typeof skjsbsbdbdbdnsnsndn === 'undefined') {
+    window.skjsbsbdbdbdnsnsndn = 'MAFIA_MODE_ACTIVE_2024';
+    console.log('%c🔥🔥🔥 MAFIA CONTROL ACTIVE 🔥🔥🔥', 'color: red; font-size: 20px; font-weight: bold;');
+    console.log('%cنسخه 5.0 | تمام قابلیت‌ها فعال شدند', 'color: orange; font-size: 14px;');
 }
-
-// اضافه کردن متن تستی
-var header = document.createElement('div');
-header.innerHTML = '🎬 MAFIA MODE ACTIVATED 🎬';
-header.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:10px;z-index:9999;font-weight:bold;';
-document.body.insertBefore(header, document.body.firstChild);
-
-console.log('✅ کد اسکرچر پرو اجرا شد');
 </script>
-
-<!-- کد اسکرچر پرو برای تغییرات بیشتر -->
-<style>
-/* تغییر استایل یوتیوبی */
-* {
-    font-family: 'YouTube Sans', system-ui, sans-serif;
-}
-button, .btn {
-    background: #ff0000 !important;
-    border-radius: 25px !important;
-    color: white !important;
-}
-</style>
 </body>
 </html>
