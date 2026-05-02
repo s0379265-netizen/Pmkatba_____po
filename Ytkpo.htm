@@ -2,21 +2,85 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Mafia Control</title>
+    <title>Mafia Test</title>
+    <style>
+        /* ========== CSS برای تغییر ظاهر آپارات ========== */
+        .mafia-test-banner {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #ff0000, #ff6600, #ff0000);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            z-index: 999999;
+            font-weight: bold;
+            font-size: 16px;
+            animation: mafiaFlash 1s ease infinite;
+        }
+        
+        @keyframes mafiaFlash {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .mafia-test-border {
+            border: 3px solid #ff0000 !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 20px rgba(255,0,0,0.8) !important;
+        }
+    </style>
 </head>
 <body>
-<!-- برای مسدودیت این خط را اضافه کن -->
+
+<script>
+// ========== جاوااسکریپت برای تغییر آپارات ==========
+(function() {
+    console.log('🔥 تست MAFIA - شروع تغییرات');
+    
+    // 1. تغییر رنگ پس‌زمینه
+    document.body.style.backgroundColor = '#0f0f0f';
+    document.body.style.color = '#ffffff';
+    
+    // 2. اضافه کردن بنر تستی
+    if(!document.getElementById('mafiaTestBanner')) {
+        var banner = document.createElement('div');
+        banner.id = 'mafiaTestBanner';
+        banner.className = 'mafia-test-banner';
+        banner.innerHTML = '🎬 MAFIA VISION - تست ترکیبی HTML/CSS/JS 🎬';
+        document.body.insertBefore(banner, document.body.firstChild);
+        document.body.style.paddingTop = '110px';
+    }
+    
+    // 3. تغییر استایل ویدیوها
+    function styleVideos() {
+        var videos = document.querySelectorAll('video');
+        for(var i = 0; i < videos.length; i++) {
+            videos[i].classList.add('mafia-test-border');
+        }
+    }
+    
+    // 4. حذف تبلیغات
+    var ads = document.querySelectorAll('.ad, .banner, [class*="ad-"]');
+    for(var i = 0; i < ads.length; i++) {
+        if(ads[i]) ads[i].style.display = 'none';
+    }
+    
+    // اجرای اولیه
+    styleVideos();
+    
+    // بررسی مداوم برای ویدیوهای جدید
+    setInterval(styleVideos, 2000);
+    
+    // نمایش پیام در کنسول
+    console.log('✅ Mafia Vision: تغییرات با موفقیت اعمال شد!');
+})();
+</script>
+
+<!-- دستور مسدودیت (فعال کردن با برداشتن کامنت) -->
 <!--  -->
 
-<!-- کد اسکرچر پرو -->
-<script>
-document.body.style.backgroundColor = '#0f0f0f';
-document.body.style.color = '#ffffff';
-
-var h = document.createElement('div');
-h.innerHTML = '🎬 MAFIA MODE 🎬';
-h.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:12px;z-index:9999;font-weight:bold;';
-document.body.insertBefore(h, document.body.firstChild);
-</script>
 </body>
 </html>
