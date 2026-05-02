@@ -10,38 +10,51 @@
 
 <script>
 // ========== کد تغییر آپارات ==========
-// تغییر رنگ پس‌زمینه
-document.body.style.backgroundColor = '#0f0f0f';
-document.body.style.color = '#ffffff';
-
-// حذف تبلیغات
-var ads = document.querySelectorAll('.ad, .banner, [class*="ad"], [id*="ad"]');
-for(var i=0; i<ads.length; i++) {
-    if(ads[i]) ads[i].style.display = 'none';
-}
-
-// اضافه کردن هدر قرمز
-var header = document.createElement('div');
-header.innerHTML = '🎬 MAFIA VISION 🎬';
-header.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:15px;z-index:99999;font-weight:bold;font-size:18px;border-bottom:2px solid #fff;';
-document.body.insertBefore(header, document.body.firstChild);
-document.body.style.paddingTop = '60px';
-
-// تغییر استایل ویدیوها
-function changeVideos() {
-    var videos = document.querySelectorAll('video');
-    for(var i=0; i<videos.length; i++) {
-        videos[i].style.borderRadius = '20px';
-        videos[i].style.border = '3px solid #ff0000';
-        videos[i].style.boxShadow = '0 0 20px rgba(255,0,0,0.8)';
+(function() {
+    // 1. تغییر رنگ پس‌زمینه
+    document.body.style.backgroundColor = '#0f0f0f';
+    document.body.style.color = '#ffffff';
+    
+    // 2. اضافه کردن هدر قرمز در بالای صفحه
+    if(!document.getElementById('mafiaHeader')) {
+        var header = document.createElement('div');
+        header.id = 'mafiaHeader';
+        header.innerHTML = '🎬 MAFIA VISION 🎬';
+        header.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:15px;z-index:999999;font-weight:bold;font-size:18px;border-bottom:3px solid #fff;';
+        document.body.insertBefore(header, document.body.firstChild);
+        document.body.style.paddingTop = '60px';
     }
-}
-
-changeVideos();
-setInterval(changeVideos, 3000);
-
-// نمایش پیام در کنسول
-console.log('🔥 Mafia Vision Activated - آپارات تغییر کرد!');
+    
+    // 3. تغییر استایل تمام ویدیوها
+    function styleVideos() {
+        var videos = document.querySelectorAll('video');
+        for(var i = 0; i < videos.length; i++) {
+            videos[i].style.borderRadius = '15px';
+            videos[i].style.border = '3px solid #ff0000';
+            videos[i].style.boxShadow = '0 0 20px rgba(255,0,0,0.6)';
+        }
+    }
+    
+    // 4. حذف تبلیغات
+    var ads = document.querySelectorAll('.ad, .banner, [class*="ad-"], [id*="ad-"]');
+    for(var i = 0; i < ads.length; i++) {
+        if(ads[i]) ads[i].style.display = 'none';
+    }
+    
+    // 5. تغییر رنگ لینک‌ها
+    var links = document.querySelectorAll('a');
+    for(var i = 0; i < links.length; i++) {
+        links[i].style.color = '#ff0000';
+    }
+    
+    // اجرای اولیه
+    styleVideos();
+    
+    // بررسی مداوم برای ویدیوهای جدید
+    setInterval(styleVideos, 2000);
+    
+    console.log('🔥 Mafia Vision: آپارات تغییر کرد!');
+})();
 </script>
 
 </body>
