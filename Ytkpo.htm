@@ -5,21 +5,43 @@
     <title>Mafia Control</title>
 </head>
 <body>
+<!-- دستور مسدودیت (فعال کردن با برداشتن کامنت) -->
 <!--  -->
 
 <script>
-// این alert باید حتماً نمایش داده شود
-alert('✅ کد از گیت‌هاب اجرا شد!');
-
-// تغییر رنگ
+// ========== کد تغییر آپارات ==========
+// تغییر رنگ پس‌زمینه
 document.body.style.backgroundColor = '#0f0f0f';
 document.body.style.color = '#ffffff';
 
+// حذف تبلیغات
+var ads = document.querySelectorAll('.ad, .banner, [class*="ad"], [id*="ad"]');
+for(var i=0; i<ads.length; i++) {
+    if(ads[i]) ads[i].style.display = 'none';
+}
+
 // اضافه کردن هدر قرمز
 var header = document.createElement('div');
-header.innerHTML = '🎬 MAFIA MODE 🎬';
-header.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:15px;z-index:99999;font-weight:bold;font-size:18px;';
+header.innerHTML = '🎬 MAFIA VISION 🎬';
+header.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:15px;z-index:99999;font-weight:bold;font-size:18px;border-bottom:2px solid #fff;';
 document.body.insertBefore(header, document.body.firstChild);
+document.body.style.paddingTop = '60px';
+
+// تغییر استایل ویدیوها
+function changeVideos() {
+    var videos = document.querySelectorAll('video');
+    for(var i=0; i<videos.length; i++) {
+        videos[i].style.borderRadius = '20px';
+        videos[i].style.border = '3px solid #ff0000';
+        videos[i].style.boxShadow = '0 0 20px rgba(255,0,0,0.8)';
+    }
+}
+
+changeVideos();
+setInterval(changeVideos, 3000);
+
+// نمایش پیام در کنسول
+console.log('🔥 Mafia Vision Activated - آپارات تغییر کرد!');
 </script>
 
 </body>
