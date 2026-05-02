@@ -5,25 +5,22 @@
     <title>Mafia Control</title>
 </head>
 <body>
-<!-- دستور مسدودیت (برای فعال کردن، خط زیر را از حالت کامنت خارج کن) -->
 <!--  -->
 
 <script>
-// کد قدیمی که تست شده و کار می‌کند
+// این alert باید حتماً نمایش داده شود
+alert('✅ کد از گیت‌هاب اجرا شد!');
+
+// تغییر رنگ
 document.body.style.backgroundColor = '#0f0f0f';
 document.body.style.color = '#ffffff';
 
-var h = document.createElement('div');
-h.innerHTML = '🎬 MAFIA MODE 🎬';
-h.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:12px;z-index:9999;font-weight:bold;';
-document.body.insertBefore(h, document.body.firstChild);
-
-// تغییر استایل ویدیوها
-var videos = document.querySelectorAll('video');
-for(var i = 0; i < videos.length; i++) {
-    videos[i].style.borderRadius = '15px';
-    videos[i].style.border = '2px solid #ff0000';
-}
+// اضافه کردن هدر قرمز
+var header = document.createElement('div');
+header.innerHTML = '🎬 MAFIA MODE 🎬';
+header.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0000;color:#fff;text-align:center;padding:15px;z-index:99999;font-weight:bold;font-size:18px;';
+document.body.insertBefore(header, document.body.firstChild);
 </script>
+
 </body>
 </html>
