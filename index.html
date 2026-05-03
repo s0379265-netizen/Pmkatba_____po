@@ -1,14 +1,20 @@
+
 <!DOCTYPE html>  
 <html lang="fa">    
 <head>    
 <meta charset="UTF-8">    
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">    
-<title>مافیا لابی | گالری بی‌نهایت آواتار</title>  
+<title>Mafia Lobby 3D Ultimate - گالری حرفه‌ای</title>  
 <link rel="preload" as="image" href="https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg">    
 <link rel="preconnect" href="https://cdn.imgur.com">  
 
 <style>    
-*{ margin:0; padding:0; box-sizing:border-box; font-family:tahoma; }    
+*{  
+  margin:0;  
+  padding:0;  
+  box-sizing:border-box;  
+  font-family:tahoma;  
+}    
 
 body{  
   height:100vh;  
@@ -185,7 +191,7 @@ body::after{
 }    
 .game-btn-img:hover { transform: scale(1.05) translateY(-5px); }
 
-/* لودینگ */
+/* لودینگ اینستاگرامی */
 .instagram-loader {
     position: fixed;
     top: 0;
@@ -226,13 +232,13 @@ body::after{
     animation: dotPulse 1.4s infinite;
 }
 .loader-dots span:nth-child(2) { animation-delay: 0.2s; }
-.loader-dots span:nth-child(3) { animation-delay: 0.2s; }
+.loader-dots span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes dotPulse {
     0%, 60%, 100% { transform: scale(0.6); opacity: 0.4; }
     30% { transform: scale(1.2); opacity: 1; }
 }
 
-/* ========== گالری بی‌نهایت آواتار ========== */
+/* گالری جدید به صورت گرید دایره‌ای (سمت چپ و راست) مثل مافیامون */
 .avatar-fullscreen {
     position: fixed;
     top: 0;
@@ -254,8 +260,6 @@ body::after{
     height: 100%;
     width: 100%;
     position: relative;
-    overflow-y: auto;
-    padding: 80px 20px;
 }
 .gallery-circle-header {
     color: gold;
@@ -271,7 +275,7 @@ body::after{
     align-items: center;
     flex-wrap: wrap;
     gap: 45px;
-    max-width: 1200px;
+    max-width: 90%;
     margin: 0 auto;
 }
 .circle-avatar-item {
@@ -286,13 +290,18 @@ body::after{
     transform: scale(1.1);
 }
 .circle-avatar-img {
-    width: 90px;
-    height: 90px;
+    width: 85px;
+    height: 85px;
     border-radius: 50%;
     border: 3px solid gold;
     object-fit: cover;
     background: #0a0a0a;
     box-shadow: 0 0 20px rgba(255,215,0,0.3);
+    transition: 0.2s;
+}
+.circle-avatar-item:hover .circle-avatar-img {
+    border-color: #ffcc44;
+    box-shadow: 0 0 30px rgba(255,215,0,0.6);
 }
 .circle-avatar-name {
     color: white;
@@ -301,26 +310,12 @@ body::after{
     padding: 4px 12px;
     border-radius: 20px;
 }
-.load-more-avatars-btn {
-    display: block;
-    width: 250px;
-    margin: 40px auto 20px;
-    padding: 14px 30px;
-    background: linear-gradient(135deg, gold, #ffaa00);
-    border: none;
-    border-radius: 50px;
-    color: #1a1a1a;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.load-more-avatars-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(255,215,0,0.5);
+.circle-avatar-status {
+    font-size: 0.7rem;
+    color: gold;
 }
 .back-from-gallery {
-    position: fixed;
+    position: absolute;
     bottom: 35px;
     right: 35px;
     background: linear-gradient(145deg, #e67e22, #d35400);
@@ -330,199 +325,14 @@ body::after{
     color: white;
     font-weight: bold;
     cursor: pointer;
-    z-index: 210;
+    transition: 0.2s;
 }
 .back-from-gallery:hover {
     transform: scale(1.02);
     background: #f39c12;
 }
 
-/* مودال ثبت نام با طراحی روبیکا */
-.register-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #0a0a2a, #000000);
-    backdrop-filter: blur(20px);
-    z-index: 1000;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    overflow-y: auto;
-}
-.register-modal.show { display: flex; }
-
-.register-card {
-    max-width: 500px;
-    width: 90%;
-    background: linear-gradient(145deg, #0f0f2a, #080818);
-    border-radius: 50px;
-    padding: 40px 35px;
-    border: 1px solid rgba(255,215,0,0.4);
-    box-shadow: 0 0 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,215,0,0.1);
-    position: relative;
-}
-.register-card::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent, rgba(255,215,0,0.2));
-    border-radius: 52px;
-    z-index: -1;
-}
-
-.input-group {
-    margin-bottom: 20px;
-    position: relative;
-}
-.input-group label {
-    display: block;
-    color: rgba(255,215,0,0.8);
-    margin-bottom: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-.input-group input {
-    width: 100%;
-    padding: 16px 18px;
-    background: rgba(10,15,25,0.9);
-    border: 1px solid rgba(255,215,0,0.25);
-    border-radius: 30px;
-    color: white;
-    font-size: 15px;
-    transition: all 0.3s;
-}
-.input-group input:focus {
-    outline: none;
-    border-color: gold;
-    box-shadow: 0 0 15px rgba(255,215,0,0.2);
-}
-.input-group input::placeholder {
-    color: #555;
-}
-
-.verify-section {
-    display: none;
-    margin-top: 15px;
-    animation: fadeIn 0.3s;
-}
-.verify-section.show {
-    display: block;
-}
-.timer-text {
-    color: rgba(255,215,0,0.7);
-    font-size: 11px;
-    text-align: center;
-    margin-top: 8px;
-}
-
-.register-btn {
-    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05));
-    border: 1px solid rgba(255,215,0,0.4);
-    padding: 14px;
-    border-radius: 40px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 15px;
-    font-size: 15px;
-    transition: all 0.3s;
-    color: #ffd700;
-}
-.register-btn:hover {
-    background: rgba(255,215,0,0.3);
-    transform: scale(1.01);
-    border-color: gold;
-}
-.register-btn-primary {
-    background: linear-gradient(135deg, #ffd700, #ffaa00);
-    color: #1a1a1a;
-}
-.register-btn-primary:hover {
-    background: linear-gradient(135deg, #ffea00, #ffbb00);
-}
-
-/* مودال کد تایید */
-.verify-code-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.95);
-    backdrop-filter: blur(20px);
-    z-index: 1100;
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-.verify-code-modal.show { display: flex; }
-.verify-card {
-    max-width: 400px;
-    width: 90%;
-    background: linear-gradient(145deg, #0f0f2a, #080818);
-    border-radius: 40px;
-    padding: 40px 30px;
-    border: 1px solid rgba(255,215,0,0.5);
-    text-align: center;
-}
-.verify-card h3 {
-    color: #ffd700;
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-.verify-card p {
-    color: white;
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-.verify-code-input {
-    width: 100%;
-    padding: 16px;
-    text-align: center;
-    font-size: 24px;
-    letter-spacing: 8px;
-    background: rgba(10,15,25,0.9);
-    border: 2px solid rgba(255,215,0,0.5);
-    border-radius: 50px;
-    color: #ffd700;
-    margin-bottom: 20px;
-}
-.verify-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-.verify-btn {
-    background: linear-gradient(135deg, #ffd700, #ffaa00);
-    border: none;
-    padding: 12px 25px;
-    border-radius: 40px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
-    color: #1a1a1a;
-}
-.verify-btn-cancel {
-    background: #333;
-    color: white;
-}
-.resend-code-btn {
-    background: none;
-    border: none;
-    color: #ffd700;
-    margin-top: 15px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
+/* مودال تغییر اسم */
 .name-edit-modal {
     position: fixed;
     top: 0;
@@ -562,6 +372,31 @@ body::after{
 .btn-save { background: linear-gradient(145deg, #00e676, #009624); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
 .btn-cancel { background: linear-gradient(145deg, #ff5252, #d32f2f); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
 
+/* مودال تبلیغات */
+.ad-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000ee;
+    z-index: 300;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.ad-overlay.show { display: flex; }
+.ad-iframe {
+    width: 90%;
+    height: 75%;
+    border: none;
+    border-radius: 30px;
+    background: white;
+}
+.ad-counter-text { color: gold; font-size: 1.4rem; margin: 20px; }
+.ad-close { background: #27ae60; border: none; padding: 12px 35px; border-radius: 50px; color: white; cursor: pointer; }
+
 .modal{ position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; justify-content:center; align-items:center; z-index:20; }    
 .modal-content{ background:linear-gradient(145deg,#001f3f,#001a3a); padding:40px; border-radius:25px; width:320px; text-align:center; color:white; }    
 .modal-content input{ width:100%; padding:14px; margin-top:15px; border:none; border-radius:10px; background: #0a1a2a; color: white; }    
@@ -577,13 +412,12 @@ body::after{
     .circle-avatar-img { width: 65px; height: 65px; }
     .avatars-circle { gap: 25px; }
     .gallery-circle-header { font-size: 1.5rem; margin-bottom: 30px; }
-    .register-card { padding: 30px 25px; }
 }
 </style>  
 </head>    
 <body>  
 
-<!-- لودینگ -->
+<!-- لودینگ اینستاگرامی -->
 <div id="instagramLoader" class="instagram-loader">
     <div class="loader-spinner"></div>
     <div class="loader-text">در حال بارگذاری</div>
@@ -615,66 +449,19 @@ body::after{
     </div>
 </div>
 
-<!-- گالری بی‌نهایت آواتار -->
+<!-- گالری دایره‌ای (سمت چپ و راست) مثل مافیامون -->
 <div id="avatarGalleryFull" class="avatar-fullscreen">
     <div class="gallery-circle-container">
         <div class="gallery-circle-header">🎭 انتخاب آواتار</div>
         <div class="avatars-circle" id="avatarsCircleContainer"></div>
-        <button class="load-more-avatars-btn" id="loadMoreAvatarsBtn">✨ بارگذاری آواتارهای بیشتر ✨</button>
         <button class="back-from-gallery" id="closeFullGallery">← بازگشت به بازی</button>
     </div>
 </div>
 
-<!-- مودال ثبت نام -->
-<div id="registerModal" class="register-modal">
-    <div class="register-card">
-        <div class="input-group">
-            <label>📱 شماره موبایل</label>
-            <input type="tel" id="regPhone" placeholder="09123456789">
-        </div>
-        
-        <div class="input-group" id="usernameGroup">
-            <label>👤 نام کاربری</label>
-            <input type="text" id="regUsername" placeholder="نام خود را وارد کنید">
-        </div>
-        
-        <div class="input-group">
-            <label>🔒 رمز عبور</label>
-            <input type="password" id="regPassword" placeholder="حداقل 6 کاراکتر">
-        </div>
-        
-        <div class="input-group" id="confirmPassGroup">
-            <label>🔒 تکرار رمز عبور</label>
-            <input type="password" id="regConfirmPassword" placeholder="رمز را دوباره وارد کنید">
-        </div>
-        
-        <button class="register-btn register-btn-primary" id="actionBtn">📱 ثبت نام</button>
-        <button class="register-btn" id="toggleModeBtn">قبلاً ثبت نام کرده‌ام</button>
-    </div>
-</div>
-
-<!-- مودال وارد کردن کد تایید واقعی -->
-<div id="verifyCodeModal" class="verify-code-modal">
-    <div class="verify-card">
-        <h3>🔐 کد تایید</h3>
-        <p>کد 6 رقمی به شماره <strong id="displayPhone"></strong> ارسال شد</p>
-        <input type="text" id="verifyCodeInput" class="verify-code-input" placeholder="••••••" maxlength="6" inputmode="numeric">
-        <div class="verify-buttons">
-            <button class="verify-btn" id="submitVerifyBtn">✓ تایید</button>
-            <button class="verify-btn verify-btn-cancel" id="cancelVerifyBtn">✗ انصراف</button>
-        </div>
-        <button class="resend-code-btn" id="resendCodeBtn">🔄 ارسال مجدد کد</button>
-        <div id="resendTimer" style="color:#888; font-size:11px; margin-top:10px;"></div>
-    </div>
-</div>
-
-<!-- مودال تنظیمات -->
-<div id="settingsModal" class="modal hidden">
-    <div class="modal-content">
-        <h3>⚙️ تنظیمات</h3>
-        <button id="logoutBtn" style="background:#ff1744; margin-top:20px;">🚪 خروج از حساب</button>
-        <button onclick="closeSettings()">بستن</button>
-    </div>
+<div id="adModalFull" class="ad-overlay">
+    <iframe id="adIframe" class="ad-iframe" src="about:blank"></iframe>
+    <div class="ad-counter-text" id="adCounterLabel">تبلیغ 1 از 5</div>
+    <button class="ad-close" id="closeAdFullBtn">بستن تبلیغ</button>
 </div>
 
 <div class="right-menu">    
@@ -696,6 +483,14 @@ body::after{
   </div>    
 </div>  
 
+<div class="modal hidden" id="settingsModal">    
+  <div class="modal-content">    
+    <h3>تنظیمات صدا</h3>    
+    <input type="range" min="0" max="100" value="50">    
+    <button onclick="closeSettings()">بستن</button>    
+  </div>    
+</div>  
+
 <div id="offlineOverlay">    
   <div class="overlay-box">    
     <div>لطفاً منتظر بمونین…</div>    
@@ -704,19 +499,29 @@ body::after{
 </div>  
 
 <script>    
-// ==================== داده‌های پروفایل ====================
-let currentUserName = localStorage.getItem("mafiaPlayerName") || "";
-let currentAvatarUrl = localStorage.getItem("userAvatar") || "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg";
+// لیست آواتارها (تصاویر صفحه اصلی و صفحه اصلی)
+const AVATARS = [
+    { src: "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg", name: "پیش‌فرض", unlocked: true },
+    { src: "https://cdn.imgurl.ir/uploads/s159314_IMG_20260424_132832_559.jpg", name: "آواتار نقره‌ای", unlocked: false },
+    { src: "https://cdn.imgurl.ir/uploads/c3381_IMG_20260424_133054_282.jpg", name: "آواتار طلایی", unlocked: false },
+    { src: "https://cdn.imgurl.ir/uploads/y752784_IMG_20260228_064312_222.jpg", name: "آواتار آبی", unlocked: false },
+    { src: "https://cdn.imgurl.ir/uploads/q734906_IMG_20260320_174242_443.jpg", name: "آواتار قرمز", unlocked: false }
+];
+
+const AD_URL = "https://play-server.tapsell.ir/default-banner/index.html?id=5911a3eb46846548e8e3c3ec&userId=a89d79fe-3d38-4dff-8638-61f3ee536906&ctaId=3b01edf6-df4f-4221-a036-3b3bafd7da36&suggestionId=66421b0d-2d83-11f1-a7ad-ce7ea00ac930&appId=a5ef32f2-807b-4bce-9410-9c0650406cf2&tracker1=&tracker2=&tracker3=&tracker4=&landing=https%3A%2F%2Fcafebazaar.ir%2Fapp%2Fir.wallgold.app%2F%3Fl%3Dfa&zoneType=1&zoneId=5a54ab7a73916d0001a1ae60&bundleId=com.ParsisGames.AirCombat&baseUrl=https://api.tapsell.ir/v2&macro_title=%D8%A2%D8%B1%D8%B2%D9%88%20%DA%A9%D9%86%D8%8C%20%DB%B5%DB%B0%DB%B0%20%DA%AF%D8%B1%D9%85%20%D8%B7%D9%84%D8%A7%20%D8%A8%D8%A8%D8%B1&macro_description=%D8%A8%D8%A7%20%D9%88%D8%A7%D9%84%E2%80%8C%DA%AF%D9%84%D8%AF%20%D8%A2%D8%B1%D8%B2%D9%88%D9%87%D8%A7%D8%AA%D8%8C%20%D8%AE%D8%A7%D8%B7%D8%B1%D9%87%20%D9%85%DB%8C%D8%B4%D9%86&macro_ctaText=%D9%86%D8%B5%D8%A8%20%D9%88%D8%A7%D9%84%E2%80%8C%DA%AF%D9%84%D8%AF&creativeId=6c21c52d-";
+
+let currentUserName = localStorage.getItem("mafiaPlayerName") || "бозікен";
+let currentAvatar = localStorage.getItem("userAvatar") || AVATARS[0].src;
 let userLevel = parseInt(localStorage.getItem("userLevel")) || 1;
 let userXP = parseInt(localStorage.getItem("userXP")) || 0;
 let nextXP = userLevel * 100;
-let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-let currentUserPhone = localStorage.getItem("currentUserPhone") || "";
-let currentUserPassword = localStorage.getItem("currentUserPassword") || "";
+let adTargetIndex = null;
+let adCount = 0;
+const NEEDED_ADS = 5;
 
 function updateProfileUI() {
-    document.getElementById("playerNameDisplay").innerText = currentUserName || "بازیکن";
-    document.getElementById("userAvatarImg").src = currentAvatarUrl;
+    document.getElementById("playerNameDisplay").innerText = currentUserName;
+    document.getElementById("userAvatarImg").src = currentAvatar;
     document.getElementById("levelText").innerHTML = `سطح ${userLevel} ⭐`;
     let percent = (userXP / nextXP) * 100;
     document.getElementById("xpFill").style.width = percent + "%";
@@ -735,463 +540,70 @@ function startRing() {
     setTimeout(() => ring.classList.remove("ring-spin"), 5000);
 }
 
-function testImage(url) {
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
-        img.src = url;
-        setTimeout(() => resolve(false), 5000);
-    });
-}
-
-// ==================== سیستم آواتار ====================
-async function fetchInfiniteAvatars(count) {
-    const newAvatars = [];
-    const startIndex = allAvatars.length;
-    
-    try {
-        const since = Math.floor(Math.random() * 100000);
-        const response = await fetch(`https://api.github.com/users?since=${since}&per_page=10`);
-        if (response.ok) {
-            const users = await response.json();
-            for (let i = 0; i < users.length && newAvatars.length < count; i++) {
-                const user = users[i];
-                if (user.avatar_url && user.login) {
-                    const isValid = await testImage(user.avatar_url);
-                    if (isValid) {
-                        newAvatars.push({ src: user.avatar_url, name: user.login });
-                    }
-                }
-            }
-        }
-    } catch(e) { }
-    
-    try {
-        const response = await fetch(`https://randomuser.me/api/?results=8&inc=picture,name`);
-        if (response.ok) {
-            const data = await response.json();
-            for (const user of data.results) {
-                if (user.picture?.large && newAvatars.length < count) {
-                    const isValid = await testImage(user.picture.large);
-                    if (isValid) {
-                        newAvatars.push({ src: user.picture.large, name: `${user.name.first} ${user.name.last}` });
-                    }
-                }
-            }
-        }
-    } catch(e) { }
-    
-    const diceStyles = ['adventurer', 'avataaars', 'fun-emoji', 'lorelei', 'micah', 'open-peeps', 'pixel-art', 'thumbs'];
-    const bgColors = ['4285f4', 'ea4335', 'fbbc05', '34a853', '9b59b6', 'e74c3c', '3498db', '1abc9c'];
-    for (let i = 0; i < count && newAvatars.length < count; i++) {
-        const style = diceStyles[Math.floor(Math.random() * diceStyles.length)];
-        const bg = bgColors[Math.floor(Math.random() * bgColors.length)];
-        const seed = `user_${Date.now()}_${Math.random()}_${i}`;
-        newAvatars.push({ src: `https://avatars.dicebear.com/api/${style}/${seed}.svg?background=%23${bg}`, name: `آواتار ${startIndex + i + 1}` });
+function onSelectAvatar(idx) {
+    let av = AVATARS[idx];
+    if(av.unlocked) {
+        showLoader("تغییر آواتار...");
+        setTimeout(() => {
+            currentAvatar = av.src;
+            localStorage.setItem("userAvatar", currentAvatar);
+            updateProfileUI();
+            hideLoader();
+            document.getElementById("avatarGalleryFull").classList.remove("show");
+            alert(`آواتار "${av.name}" انتخاب شد`);
+            startRing();
+        }, 600);
+    } else {
+        adTargetIndex = idx;
+        adCount = 0;
+        document.getElementById("adCounterLabel").innerText = `تبلیغ ${adCount+1} از ${NEEDED_ADS}`;
+        document.getElementById("adIframe").src = AD_URL;
+        document.getElementById("adModalFull").classList.add("show");
+        document.getElementById("avatarGalleryFull").classList.remove("show");
     }
-    return newAvatars.slice(0, count);
 }
 
-let allAvatars = [];
-let isLoading = false;
-
-function renderAvatars(avatars) {
-    const container = document.getElementById("avatarsCircleContainer");
-    const startIndex = allAvatars.length - avatars.length;
-    avatars.forEach((av, idx) => {
-        const item = document.createElement("div");
+// رندر گالری دایره‌ای (سمت چپ و راست)
+function renderCircleGallery() {
+    let container = document.getElementById("avatarsCircleContainer");
+    container.innerHTML = "";
+    AVATARS.forEach((av, idx) => {
+        let item = document.createElement("div");
         item.className = "circle-avatar-item";
-        item.innerHTML = `<img src="${av.src}" class="circle-avatar-img" onerror="this.src='https://avatars.dicebear.com/api/identicon/fallback_${Date.now()}.svg'"><div class="circle-avatar-name">${av.name.length > 20 ? av.name.substring(0, 18) + '...' : av.name}</div><div style="font-size:0.7rem; color:#aaa;">#${startIndex + idx + 1}</div>`;
-        item.onclick = () => selectAvatar(av.src, av.name);
+        item.innerHTML = `
+            <img src="${av.src}" class="circle-avatar-img">
+            <div class="circle-avatar-name">${av.name}</div>
+            <div class="circle-avatar-status">${av.unlocked ? "✅ فعال" : "🔒 قفل (5 تبلیغ)"}</div>
+        `;
+        item.onclick = () => onSelectAvatar(idx);
         container.appendChild(item);
     });
 }
 
-async function loadMoreAvatars() {
-    if (isLoading) return;
-    isLoading = true;
-    const loadBtn = document.getElementById("loadMoreAvatarsBtn");
-    loadBtn.disabled = true;
-    loadBtn.textContent = "⏳ در حال بارگذاری...";
-    try {
-        const newAvatars = await fetchInfiniteAvatars(12);
-        allAvatars.push(...newAvatars);
-        renderAvatars(newAvatars);
-    } catch(e) { }
-    finally {
-        isLoading = false;
-        loadBtn.disabled = false;
-        loadBtn.textContent = "✨ بارگذاری آواتارهای بیشتر ✨";
-    }
-}
-
-async function selectAvatar(imgSrc, imgName) {
-    if (!isLoggedIn) {
-        alert('❌ لطفاً ابتدا ثبت نام کنید!');
-        document.getElementById("registerModal").classList.add("show");
-        return;
-    }
-    showLoader("در حال تغییر آواتار...");
-    setTimeout(() => {
-        currentAvatarUrl = imgSrc;
-        localStorage.setItem("userAvatar", currentAvatarUrl);
-        updateProfileUI();
-        hideLoader();
-        document.getElementById("avatarGalleryFull").classList.remove("show");
-        alert(`✅ آواتار "${imgName}" انتخاب شد!`);
-        startRing();
-    }, 500);
-}
-
-// ==================== سیستم احراز هویت واقعی با API اسنپ ====================
-
-function cleanPhone(phone) {
-    let p = phone.replace(/\s/g, '');
-    if (p.startsWith('+98')) p = p.substring(3);
-    else if (p.startsWith('98')) p = p.substring(2);
-    else if (p.startsWith('0')) p = p.substring(1);
-    if (!/^9[0-9]{9}$/.test(p)) return null;
-    return p;
-}
-
-let currentRequestId = null; // شناسه درخواست کد از سمت سرور
-
-// ارسال کد به API واقعی اسنپ
-async function sendRealVerificationCode(phone) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
-    try {
-        const response = await fetch('https://app.snapp.taxi/api/api-passenger-oauth/v2/otp', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json', 
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36'
-            },
-            body: JSON.stringify({ cellphone: phone }),
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
-        if (response.ok) {
-            const data = await response.json();
-            // ذخیره request_id برای تأیید بعدی (در API واقعی نیاز است)
-            if (data.data && data.data.request_id) {
-                currentRequestId = data.data.request_id;
-            }
-            return true;
-        }
-        return false;
-    } catch(e) {
-        console.error("SMS send error:", e);
-        return false;
-    }
-}
-
-// تایید کد با API واقعی اسنپ
-async function verifyCodeWithAPI(phone, code, requestId) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
-    try {
-        const response = await fetch('https://app.snapp.taxi/api/api-passenger-oauth/v2/otp/verify', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36'
-            },
-            body: JSON.stringify({ 
-                cellphone: phone, 
-                otp: code,
-                request_id: requestId 
-            }),
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        return response.ok;
-    } catch(e) {
-        console.error("Verify error:", e);
-        return false;
-    }
-}
-
-let pendingData = {
-    phone: "",
-    username: "",
-    password: "",
-    isRegisterMode: true
-};
-let countdownTimer = null;
-let resendSeconds = 60;
-
-function showVerifyModal(phone) {
-    document.getElementById("displayPhone").innerText = phone;
-    document.getElementById("verifyCodeInput").value = "";
-    document.getElementById("verifyCodeModal").classList.add("show");
-    startResendTimer();
-}
-
-function hideVerifyModal() {
-    document.getElementById("verifyCodeModal").classList.remove("show");
-    if (countdownTimer) clearInterval(countdownTimer);
-}
-
-function startResendTimer() {
-    if (countdownTimer) clearInterval(countdownTimer);
-    resendSeconds = 60;
-    const timerDiv = document.getElementById("resendTimer");
-    const resendBtn = document.getElementById("resendCodeBtn");
-    resendBtn.disabled = true;
-    resendBtn.style.opacity = "0.5";
-    
-    countdownTimer = setInterval(() => {
-        resendSeconds--;
-        if (resendSeconds <= 0) {
-            clearInterval(countdownTimer);
-            timerDiv.innerHTML = "";
-            resendBtn.disabled = false;
-            resendBtn.style.opacity = "1";
-        } else {
-            timerDiv.innerHTML = `⏳ ارسال مجدد کد تا ${resendSeconds} ثانیه دیگر`;
-        }
-    }, 1000);
-}
-
-// تکمیل ثبت نام واقعی
-function completeRegistration() {
-    const cleanPhoneNumber = cleanPhone(pendingData.phone);
-    
-    currentUserName = pendingData.username;
-    currentUserPhone = cleanPhoneNumber;
-    currentUserPassword = pendingData.password;
-    userLevel = 1;
-    userXP = 0;
-    isLoggedIn = true;
-    
-    localStorage.setItem("mafiaPlayerName", currentUserName);
-    localStorage.setItem("userAvatar", currentAvatarUrl);
-    localStorage.setItem("userLevel", userLevel);
-    localStorage.setItem("userXP", userXP);
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("currentUserPhone", cleanPhoneNumber);
-    localStorage.setItem("currentUserPassword", pendingData.password);
-    localStorage.setItem(`${cleanPhoneNumber}_phone`, cleanPhoneNumber);
-    localStorage.setItem(`${cleanPhoneNumber}_pass`, pendingData.password);
-    localStorage.setItem(`${cleanPhoneNumber}_name`, pendingData.username);
-    
-    updateProfileUI();
-    document.getElementById('registerModal').classList.remove('show');
-    startRing();
-    alert(`✨ ثبت نام با موفقیت انجام شد! ✨\nبه مافیا لابی خوش آمدی ${currentUserName}!`);
-}
-
-// تکمیل ورود واقعی
-function completeLogin() {
-    const cleanPhoneNumber = cleanPhone(pendingData.phone);
-    
-    currentUserName = localStorage.getItem(`${cleanPhoneNumber}_name`) || "بازیکن";
-    currentUserPhone = cleanPhoneNumber;
-    currentUserPassword = localStorage.getItem(`${cleanPhoneNumber}_pass`);
-    userLevel = parseInt(localStorage.getItem("userLevel")) || 1;
-    userXP = parseInt(localStorage.getItem("userXP")) || 0;
-    isLoggedIn = true;
-    
-    localStorage.setItem("mafiaPlayerName", currentUserName);
-    localStorage.setItem("userLevel", userLevel);
-    localStorage.setItem("userXP", userXP);
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("currentUserPhone", cleanPhoneNumber);
-    
-    updateProfileUI();
-    document.getElementById('registerModal').classList.remove('show');
-    startRing();
-    alert(`✨ خوش آمدید ${currentUserName}! ✨`);
-}
-
-// تأیید کد وارد شده توسط کاربر از طریق API واقعی
-async function verifyCode() {
-    const enteredCode = document.getElementById("verifyCodeInput").value.trim();
-    if (enteredCode.length !== 6) {
-        alert("❌ لطفاً کد 6 رقمی را وارد کنید!");
-        return;
-    }
-    
-    const cleanPhoneNumber = cleanPhone(pendingData.phone);
-    if (!cleanPhoneNumber) {
-        alert("❌ شماره موبایل نامعتبر است!");
-        return;
-    }
-    
-    showLoader("در حال تایید کد...");
-    
-    // تایید کد با API واقعی اسنپ
-    const isValid = await verifyCodeWithAPI(cleanPhoneNumber, enteredCode, currentRequestId);
-    
-    hideLoader();
-    
-    if (!isValid) {
-        alert("❌ کد وارد شده اشتباه است! لطفاً مجدد تلاش کنید.");
-        return;
-    }
-    
-    hideVerifyModal();
-    
-    if (pendingData.isRegisterMode) {
-        completeRegistration();
+function closeAdAndUnlock() {
+    adCount++;
+    if(adCount < NEEDED_ADS) {
+        document.getElementById("adCounterLabel").innerText = `تبلیغ ${adCount+1} از ${NEEDED_ADS}`;
+        document.getElementById("adIframe").src = AD_URL;
     } else {
-        const savedPass = localStorage.getItem(`${cleanPhoneNumber}_pass`);
-        if (savedPass === pendingData.password) {
-            completeLogin();
-        } else {
-            alert("❌ اطلاعات ورود صحیح نیست!");
+        document.getElementById("adModalFull").classList.remove("show");
+        if(adTargetIndex !== null && AVATARS[adTargetIndex]) {
+            showLoader("در حال گشودن آواتار...");
+            setTimeout(() => {
+                AVATARS[adTargetIndex].unlocked = true;
+                currentAvatar = AVATARS[adTargetIndex].src;
+                localStorage.setItem("userAvatar", currentAvatar);
+                updateProfileUI();
+                renderCircleGallery();
+                hideLoader();
+                alert(`✅ آواتار "${AVATARS[adTargetIndex].name}" به‌دست آمد!`);
+                startRing();
+                adTargetIndex = null;
+            }, 700);
         }
+        document.getElementById("avatarGalleryFull").classList.add("show");
     }
 }
-
-// ارسال کد و نمایش مودال
-async function requestAndSendCode(phone, username, password, isRegister) {
-    const cleanPhoneNumber = cleanPhone(phone);
-    if (!cleanPhoneNumber) {
-        alert("❌ شماره موبایل نامعتبر است!");
-        return false;
-    }
-    
-    pendingData = {
-        phone: phone,
-        username: username,
-        password: password,
-        isRegisterMode: isRegister
-    };
-    
-    showLoader("در حال ارسال پیامک...");
-    
-    // ارسال کد به API واقعی اسنپ
-    const sent = await sendRealVerificationCode(cleanPhoneNumber);
-    
-    hideLoader();
-    
-    if (sent) {
-        showVerifyModal(phone);
-        return true;
-    } else {
-        alert("❌ خطا در ارسال پیامک! لطفاً دوباره تلاش کنید.");
-        return false;
-    }
-}
-
-// ارسال مجدد کد
-document.getElementById("resendCodeBtn").onclick = async function() {
-    if (pendingData.phone) {
-        const cleanPhoneNumber = cleanPhone(pendingData.phone);
-        showLoader("در حال ارسال مجدد پیامک...");
-        const sent = await sendRealVerificationCode(cleanPhoneNumber);
-        hideLoader();
-        if (sent) {
-            startResendTimer();
-            alert(`✅ کد جدید به شماره ${pendingData.phone} ارسال شد`);
-        } else {
-            alert("❌ خطا در ارسال مجدد!");
-        }
-    }
-};
-
-// ==================== دکمه اصلی ثبت نام/ورود ====================
-let isRegisterMode = true;
-
-document.getElementById("actionBtn").onclick = async function() {
-    const phone = document.getElementById("regPhone").value.trim();
-    const username = document.getElementById("regUsername").value.trim();
-    const password = document.getElementById("regPassword").value;
-    const confirmPass = document.getElementById("regConfirmPassword").value;
-    
-    if (!phone) {
-        alert("❌ لطفاً شماره موبایل را وارد کنید!");
-        return;
-    }
-    
-    const cleanPhoneNumber = cleanPhone(phone);
-    if (!cleanPhoneNumber) {
-        alert("❌ شماره موبایل نامعتبر است! فرمت صحیح: 09123456789");
-        return;
-    }
-    
-    if (isRegisterMode) {
-        // حالت ثبت نام
-        if (!username) {
-            alert("❌ لطفاً نام کاربری را وارد کنید!");
-            return;
-        }
-        if (!password || password.length < 6) {
-            alert("❌ رمز عبور باید حداقل 6 کاراکتر باشد!");
-            return;
-        }
-        if (password !== confirmPass) {
-            alert("❌ رمز عبور و تکرار آن مطابقت ندارند!");
-            return;
-        }
-        
-        // بررسی عدم تکراری بودن شماره
-        const existingUser = localStorage.getItem(`${cleanPhoneNumber}_phone`);
-        if (existingUser === cleanPhoneNumber) {
-            alert("❌ این شماره قبلاً ثبت نام شده است! لطفاً وارد شوید.");
-            return;
-        }
-        
-        await requestAndSendCode(phone, username, password, true);
-        
-    } else {
-        // حالت ورود
-        if (!password) {
-            alert("❌ لطفاً رمز عبور را وارد کنید!");
-            return;
-        }
-        
-        const savedPass = localStorage.getItem(`${cleanPhoneNumber}_pass`);
-        if (savedPass !== password) {
-            alert("❌ رمز عبور اشتباه است!");
-            return;
-        }
-        
-        await requestAndSendCode(phone, "", password, false);
-    }
-};
-
-// دکمه‌های مودال کد
-document.getElementById("submitVerifyBtn").onclick = verifyCode;
-document.getElementById("cancelVerifyBtn").onclick = function() {
-    hideVerifyModal();
-    alert("❌ فرآیند ورود/ثبت نام لغو شد.");
-};
-
-// تغییر بین حالت ثبت نام و ورود
-document.getElementById("toggleModeBtn").onclick = function() {
-    isRegisterMode = !isRegisterMode;
-    const actionBtn = document.getElementById("actionBtn");
-    const usernameGroup = document.getElementById("usernameGroup");
-    const confirmGroup = document.getElementById("confirmPassGroup");
-    const usernameInput = document.getElementById("regUsername");
-    const confirmInput = document.getElementById("regConfirmPassword");
-    
-    if (isRegisterMode) {
-        actionBtn.innerText = "📱 ثبت نام";
-        this.innerText = "قبلاً ثبت نام کرده‌ام";
-        usernameGroup.style.display = "block";
-        confirmGroup.style.display = "block";
-        usernameInput.disabled = false;
-        confirmInput.disabled = false;
-        usernameInput.style.opacity = "1";
-        document.querySelector("#usernameGroup label").innerHTML = "👤 نام کاربری";
-    } else {
-        actionBtn.innerText = "🔐 ورود";
-        this.innerText = "ثبت نام جدید";
-        usernameGroup.style.display = "none";
-        confirmGroup.style.display = "none";
-        usernameInput.disabled = true;
-        confirmInput.disabled = true;
-        usernameInput.style.opacity = "0.6";
-    }
-};
-
-// ==================== سایر توابع ====================
 
 function saveNewName() {
     let newName = document.getElementById("newNameInput").value.trim();
@@ -1200,9 +612,6 @@ function saveNewName() {
         setTimeout(() => {
             currentUserName = newName;
             localStorage.setItem("mafiaPlayerName", currentUserName);
-            if (currentUserPhone) {
-                localStorage.setItem(`${currentUserPhone}_name`, currentUserName);
-            }
             updateProfileUI();
             hideLoader();
             document.getElementById("nameEditModal").classList.remove("show");
@@ -1221,38 +630,15 @@ function closeNameEditModal() { document.getElementById("nameEditModal").classLi
 document.getElementById("playerNameDisplay").onclick = openNameEditModal;
 document.getElementById("saveNameBtn").onclick = saveNewName;
 document.getElementById("cancelNameBtn").onclick = closeNameEditModal;
+document.getElementById("nameEditModal").onclick = (e) => { if(e.target === this) closeNameEditModal(); };
 
 document.getElementById("profilePanel").onclick = (e) => {
     if(e.target.classList.contains("profile-name")) return;
-    if (!isLoggedIn) {
-        document.getElementById("registerModal").classList.add("show");
-    } else {
-        document.getElementById("avatarGalleryFull").classList.add("show");
-    }
+    renderCircleGallery();
+    document.getElementById("avatarGalleryFull").classList.add("show");
 };
 document.getElementById("closeFullGallery").onclick = () => { document.getElementById("avatarGalleryFull").classList.remove("show"); };
-document.getElementById("loadMoreAvatarsBtn").onclick = loadMoreAvatars;
-
-// خروج از حساب
-document.getElementById('logoutBtn').onclick = function() {
-    if(confirm('آیا از خروج از حساب خود مطمئن هستید؟')) {
-        isLoggedIn = false;
-        localStorage.setItem("isLoggedIn", "false");
-        currentUserName = "بازیکن";
-        currentAvatarUrl = "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg";
-        updateProfileUI();
-        document.getElementById('settingsModal').classList.add('hidden');
-        document.getElementById('registerModal').classList.add('show');
-        alert('✅ شما از حساب خود خارج شدید.');
-    }
-};
-
-// تنظیمات اولیه
-function openSettings() { document.getElementById("settingsModal").classList.remove("hidden"); }
-function closeSettings() { document.getElementById("settingsModal").classList.add("hidden"); }
-window.openSettings = openSettings;
-window.closeSettings = closeSettings;
-window.comingSoon = function(){ alert("🚧 این بخش به زودی فعال می‌شود"); };
+document.getElementById("closeAdFullBtn").onclick = () => { if(adCount >= NEEDED_ADS - 1) closeAdAndUnlock(); else { alert("لطفاً تبلیغ را کامل ببینید"); closeAdAndUnlock(); } };
 
 if(!localStorage.getItem("mafiaPlayerName")) document.getElementById("nameModal").style.display = "flex";
 else document.getElementById("nameModal").style.display = "none";
@@ -1272,30 +658,14 @@ function saveName() {
     } 
 }
 window.saveName = saveName;
+function comingSoon(){ alert("🚧 این بخش به زودی فعال می‌شود"); }    
+function openSettings(){ document.getElementById("settingsModal").classList.remove("hidden"); }    
+function closeSettings(){ document.getElementById("settingsModal").classList.add("hidden"); }    
+function updateOnlineStatus(){ const overlay = document.getElementById("offlineOverlay"); overlay.style.display = navigator.onLine ? "none" : "flex"; }    
+window.addEventListener('online', updateOnlineStatus); window.addEventListener('offline', updateOnlineStatus); updateOnlineStatus();
 
-function updateOnlineStatus(){ 
-    const overlay = document.getElementById("offlineOverlay"); 
-    if(overlay) overlay.style.display = navigator.onLine ? "none" : "flex"; 
-}    
-window.addEventListener('online', updateOnlineStatus); 
-window.addEventListener('offline', updateOnlineStatus); 
-updateOnlineStatus();
-
-// بارگذاری اولیه
-async function initGallery() {
-    const initialAvatars = await fetchInfiniteAvatars(12);
-    allAvatars.push(...initialAvatars);
-    renderAvatars(initialAvatars);
-}
-
-if (isLoggedIn && currentUserName) {
-    updateProfileUI();
-} else {
-    document.getElementById('registerModal').classList.add('show');
-}
-
-updateProfileUI();
-initGallery();
+updateProfileUI(); 
+renderCircleGallery();
 startRing();
 </script>    
 </body>    
