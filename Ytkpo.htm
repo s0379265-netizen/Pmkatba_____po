@@ -1,86 +1,358 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Mafia Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>📊 مانیتورینگ زنده | کاربران + پینگ + تغییرات لحظه‌ای</title>
     <style>
-        /* ========== CSS برای تغییر ظاهر آپارات ========== */
-        .mafia-test-banner {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: linear-gradient(90deg, #ff0000, #ff6600, #ff0000);
-            color: white;
-            text-align: center;
-            padding: 10px;
-            z-index: 999999;
-            font-weight: bold;
-            font-size: 16px;
-            animation: mafiaFlash 1s ease infinite;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        @keyframes mafiaFlash {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
+        body {
+            background: linear-gradient(145deg, #0a0f1e, #0c1a2a);
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .dashboard {
+            max-width: 750px;
+            margin: 0 auto;
+            background: rgba(10,20,35,0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            border: 1px solid rgba(0,255,100,0.5);
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        h1 {
+            color: #00ffcc;
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        .live-badge {
+            background: #ff000055;
+            border-radius: 30px;
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            text-align: center;
+            width: fit-content;
+            margin: 0 auto 15px;
+            color: #ff8888;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; }
             100% { opacity: 1; }
         }
-        
-        .mafia-test-border {
-            border: 3px solid #ff0000 !important;
-            border-radius: 20px !important;
-            box-shadow: 0 0 20px rgba(255,0,0,0.8) !important;
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: #00000055;
+            border-radius: 30px;
+            padding: 15px;
+            border: 1px solid rgba(0,255,200,0.3);
+            transition: all 0.2s;
+        }
+        .card-title {
+            color: #ffcc88;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+        .card-value {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: monospace;
+        }
+        .trend-up { color: #00ff88; }
+        .trend-down { color: #ff4444; }
+        .ping-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .ping-good { background: #00ff88; box-shadow: 0 0 8px #00ff88; }
+        .ping-medium { background: #ffaa00; box-shadow: 0 0 8px #ffaa00; }
+        .ping-bad { background: #ff4444; box-shadow: 0 0 8px #ff4444; }
+        .log-area {
+            background: #0a0a1a;
+            border-radius: 25px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: #88ff88;
+            margin-top: 20px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: #1e2a3a;
+            border: 1px solid #00ffcc;
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+        }
+        .ping-chart {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .ping-bar {
+            height: 4px;
+            background: #00ff88;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        footer {
+            font-size: 0.6rem;
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
+<div class="dashboard">
+    <h1>📡 LIVE MONITORING | REALTIME REFRESH</h1>
+    <div class="live-badge" id="liveBadge">🟢 LIVE | UPDATING...</div>
+    
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-title">👥 ONLINE USERS</div>
+            <div class="card-value" id="userCount">0</div>
+            <div id="userTrend" style="font-size:0.7rem;"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">🌐 ACTIVE IPs</div>
+            <div class="card-value" id="ipCount">0</div>
+        </div>
+        <div class="card">
+            <div class="card-title">📶 REAL PING</div>
+            <div class="card-value" id="pingValue">0 ms</div>
+            <div class="ping-chart"><div class="ping-bar" id="pingBar" style="width:0%"></div></div>
+        </div>
+        <div class="card">
+            <div class="card-title">📊 PACKET LOSS</div>
+            <div class="card-value" id="packetLoss">0%</div>
+        </div>
+    </div>
+    
+    <div class="btn-group">
+        <button class="btn" id="pauseBtn">⏸️ PAUSE REFRESH</button>
+        <button class="btn" id="resumeBtn">▶️ RESUME</button>
+        <button class="btn" id="forceSpikeBtn">⚡ FORCE SPIKE</button>
+    </div>
+    
+    <div class="log-area" id="logArea">
+        > SYSTEM INITIALIZED<br>
+        > LIVE MONITOR ACTIVE<br>
+        > در حال دریافت داده‌های لحظه‌ای...
+    </div>
+    
+    <footer>
+        🔄 خودکار رفرش هر 2 ثانیه | تغییرات زنده کاربران و پینگ | الگوریتم پویا
+    </footer>
+</div>
+
 <script>
-// ========== جاوااسکریپت برای تغییر آپارات ==========
-(function() {
-    console.log('🔥 تست MAFIA - شروع تغییرات');
+    // ========== سیستم زنده و پویا ==========
+    let liveInterval = null;
+    let isLive = true;
     
-    // 1. تغییر رنگ پس‌زمینه
-    document.body.style.backgroundColor = '#0f0f0f';
-    document.body.style.color = '#ffffff';
+    let currentUsers = 1245000;
+    let currentIps = 832000;
+    let currentPing = 42;
+    let currentPacketLoss = 0.2;
     
-    // 2. اضافه کردن بنر تستی
-    if(!document.getElementById('mafiaTestBanner')) {
-        var banner = document.createElement('div');
-        banner.id = 'mafiaTestBanner';
-        banner.className = 'mafia-test-banner';
-        banner.innerHTML = '🎬 MAFIA VISION - تست ترکیبی HTML/CSS/JS 🎬';
-        document.body.insertBefore(banner, document.body.firstChild);
-        document.body.style.paddingTop = '110px';
-    }
+    let userDirection = 1; // 1 = up, -1 = down
+    let ipDirection = 1;
+    let pingDirection = 1;
     
-    // 3. تغییر استایل ویدیوها
-    function styleVideos() {
-        var videos = document.querySelectorAll('video');
-        for(var i = 0; i < videos.length; i++) {
-            videos[i].classList.add('mafia-test-border');
+    const userCountSpan = document.getElementById('userCount');
+    const ipCountSpan = document.getElementById('ipCount');
+    const pingValueSpan = document.getElementById('pingValue');
+    const packetLossSpan = document.getElementById('packetLoss');
+    const userTrendSpan = document.getElementById('userTrend');
+    const pingBar = document.getElementById('pingBar');
+    const logArea = document.getElementById('logArea');
+    const liveBadge = document.getElementById('liveBadge');
+    
+    function addLog(msg) {
+        const timestamp = new Date().toLocaleTimeString();
+        logArea.innerHTML += `<br>> [${timestamp}] ${msg}`;
+        logArea.scrollTop = logArea.scrollHeight;
+        if (logArea.innerHTML.length > 3000) {
+            logArea.innerHTML = logArea.innerHTML.slice(-2000);
         }
     }
     
-    // 4. حذف تبلیغات
-    var ads = document.querySelectorAll('.ad, .banner, [class*="ad-"]');
-    for(var i = 0; i < ads.length; i++) {
-        if(ads[i]) ads[i].style.display = 'none';
+    function updateUI() {
+        userCountSpan.innerText = currentUsers.toLocaleString();
+        ipCountSpan.innerText = currentIps.toLocaleString();
+        pingValueSpan.innerText = currentPing + ' ms';
+        packetLossSpan.innerText = currentPacketLoss.toFixed(1) + '%';
+        
+        // نشانگر روند کاربران
+        if (userDirection === 1) {
+            userTrendSpan.innerHTML = '📈 در حال افزایش';
+            userTrendSpan.style.color = '#00ff88';
+        } else {
+            userTrendSpan.innerHTML = '📉 در حال کاهش';
+            userTrendSpan.style.color = '#ff4444';
+        }
+        
+        // نوار پینگ
+        let pingPercent = Math.min(100, (currentPing / 300) * 100);
+        pingBar.style.width = pingPercent + '%';
+        if (currentPing < 70) {
+            pingBar.style.background = '#00ff88';
+        } else if (currentPing < 150) {
+            pingBar.style.background = '#ffaa00';
+        } else {
+            pingBar.style.background = '#ff4444';
+        }
+        
+        // تغییر رنگ مقدار پینگ
+        if (currentPing < 70) pingValueSpan.style.color = '#00ff88';
+        else if (currentPing < 150) pingValueSpan.style.color = '#ffaa00';
+        else pingValueSpan.style.color = '#ff4444';
     }
     
-    // اجرای اولیه
-    styleVideos();
+    function randomChange() {
+        if (!isLive) return;
+        
+        let oldUsers = currentUsers;
+        let oldPing = currentPing;
+        
+        // تغییر کاربران (بین 0.5% تا 2.5%)
+        let userChangePercent = (Math.random() * 2 + 0.5) / 100;
+        if (userDirection === 1) {
+            currentUsers = Math.min(5500000, currentUsers + currentUsers * userChangePercent);
+        } else {
+            currentUsers = Math.max(50000, currentUsers - currentUsers * userChangePercent);
+        }
+        
+        // تغییر جهت تصادفی با 25% احتمال
+        if (Math.random() < 0.25) {
+            userDirection *= -1;
+            addLog(`🔄 جهت تغییر کاربران به ${userDirection === 1 ? 'صعودی' : 'نزولی'} تغییر کرد`);
+        }
+        
+        // تغییر آی‌پی‌ها
+        let ipChange = Math.floor(Math.random() * 30000) - 15000;
+        currentIps = Math.max(50000, Math.min(3200000, currentIps + ipChange));
+        
+        // تغییر پینگ (بین -15 تا +25 میلی‌ثانیه)
+        let pingChange = Math.floor(Math.random() * 35) - 12;
+        currentPing = Math.max(10, Math.min(450, currentPing + pingChange));
+        
+        // تغییر پکت لاست (بین -0.1 تا +0.3)
+        let plChange = (Math.random() * 0.4) - 0.1;
+        currentPacketLoss = Math.max(0, Math.min(8, currentPacketLoss + plChange));
+        
+        // رویدادهای خاص (اسپایک پینگ)
+        if (Math.random() < 0.08) {
+            let spike = Math.floor(Math.random() * 120) + 60;
+            currentPing = Math.min(450, currentPing + spike);
+            addLog(`⚠️ PING SPIKE! +${spike}ms (${currentPing}ms)`);
+        }
+        
+        // کاهش شدید کاربران (شبیه‌سازی قطعی)
+        if (Math.random() < 0.05) {
+            let drop = Math.floor(Math.random() * 15) + 5;
+            currentUsers = currentUsers * (1 - drop / 100);
+            addLog(`🔻 DROP EVENT! ${drop}% کاربران disconnected`);
+        }
+        
+        // ثبت تغییرات مهم
+        if (Math.abs(oldUsers - currentUsers) > 150000) {
+            let diff = currentUsers - oldUsers;
+            addLog(`📊 USER CHANGE: ${diff > 0 ? '+' : ''}${diff.toLocaleString()} (${((diff/oldUsers)*100).toFixed(1)}%)`);
+        }
+        
+        if (Math.abs(oldPing - currentPing) > 25) {
+            addLog(`📡 PING CHANGE: ${oldPing}ms → ${currentPing}ms (${currentPing > oldPing ? '🔺' : '🔻'})`);
+        }
+        
+        updateUI();
+    }
     
-    // بررسی مداوم برای ویدیوهای جدید
-    setInterval(styleVideos, 2000);
+    function forceSpike() {
+        if (!isLive) {
+            addLog(`⛔ ابتدا دکمه RESUME را بزن`);
+            return;
+        }
+        let oldUsers = currentUsers;
+        let oldPing = currentPing;
+        
+        // اسپایک ناگهانی کاربران
+        let spikeUsers = Math.floor(Math.random() * 700000) + 300000;
+        currentUsers = Math.min(5500000, currentUsers + spikeUsers);
+        
+        // اسپایک پینگ
+        let spikePing = Math.floor(Math.random() * 180) + 80;
+        currentPing = Math.min(450, currentPing + spikePing);
+        
+        addLog(`💥 FORCE SPIKE ACTIVATED! +${spikeUsers.toLocaleString()} USERS | +${spikePing}ms PING`);
+        updateUI();
+        
+        // برگرداندن تدریجی (در next cycle)
+    }
     
-    // نمایش پیام در کنسول
-    console.log('✅ Mafia Vision: تغییرات با موفقیت اعمال شد!');
-})();
+    function pauseRefresh() {
+        if (liveInterval) {
+            clearInterval(liveInterval);
+            liveInterval = null;
+            isLive = false;
+            liveBadge.innerHTML = '🔴 PAUSED | STATIC MODE';
+            liveBadge.style.background = '#ff000055';
+            addLog(`⏸️ LIVE REFRESH PAUSED. داده‌ها ثابت شدند.`);
+        }
+    }
+    
+    function resumeRefresh() {
+        if (!liveInterval) {
+            liveInterval = setInterval(() => {
+                randomChange();
+            }, 2000);
+            isLive = true;
+            liveBadge.innerHTML = '🟢 LIVE | UPDATING...';
+            liveBadge.style.background = '#ff000055';
+            addLog(`▶️ LIVE REFRESH RESUMED. تغییرات لحظه‌ای فعال شد.`);
+        }
+    }
+    
+    document.getElementById('pauseBtn').onclick = pauseRefresh;
+    document.getElementById('resumeBtn').onclick = resumeRefresh;
+    document.getElementById('forceSpikeBtn').onclick = forceSpike;
+    
+    // شروع خودکار
+    liveInterval = setInterval(() => {
+        randomChange();
+    }, 2000);
+    
+    updateUI();
+    addLog(`✅ سیستم مانیتورینگ زنده راه‌اندازی شد | به‌روزرسانی هر ۲ ثانیه`);
 </script>
-
-<!-- دستور مسدودیت (فعال کردن با برداشتن کامنت) -->
-<!--  -->
 
 </body>
 </html>
