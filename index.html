@@ -1,375 +1,557 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="fa">
+<html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>دیالوگ سه بعدی | تیم توسعه</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Mafia Lobby 3D Ultimate</title>
+<link rel="preload" as="image" href="https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg">
+<link rel="preconnect" href="https://cdn.imgurl.ir">
 
-        body {
-            background: #000000;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', 'Tahoma', 'Vazirmatn', sans-serif;
-            position: relative;
-            overflow: hidden;
-            cursor: default;
-        }
+<style>    
+*{    
+  margin:0;    
+  padding:0;    
+  box-sizing:border-box;    
+  font-family:tahoma;    
+}    
+    
+body{    
+  height:100vh;    
+  background:    
+    linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.35)),    
+    url('https://cdn.imgurl.ir/uploads/d084228_IMG_20260424_093435_085.jpg') no-repeat center center/cover;    
+  background-size: cover;
+  display:flex;    
+  flex-direction:column;    
+  justify-content:flex-end;    
+  position:relative;    
+  overflow:hidden;    
+  image-rendering: auto;    
+}    
+    
+body::after{    
+  content:'';    
+  position:absolute;    
+  inset:0;    
+  background:radial-gradient(circle at 70% 15%, rgba(0,120,255,0.2), transparent 65%);    
+  pointer-events:none;    
+}    
 
-        /* پس‌زمینه سیاه با ذرات سه بعدی */
-        .particles-3d {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
+/* ========== تاپ بار ========== */
+.top-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 55px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 30;
+    padding: 5px 5px 0 5px;
+}
 
-        .particle-3d {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: radial-gradient(circle, #ffd700, #ff8800);
-            border-radius: 50%;
-            opacity: 0;
-            animation: particleRise 5s ease-in-out infinite;
-            box-shadow: 0 0 12px #ffd700;
-        }
+/* کارت سکه و الماس */
+.treasure-card-wide {
+    background: linear-gradient(180deg, #061a3a 0%, #0a2857 40%, #0d3268 100%);
+    border: 2px solid #2a6fff;
+    border-radius: 16px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    box-shadow: 
+        0 0 18px rgba(20, 80, 255, 0.65),
+        0 0 35px rgba(10, 50, 200, 0.4),
+        inset 0 0 12px rgba(30, 100, 255, 0.15);
+    animation: cardPulse 3s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+@keyframes cardPulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(20,80,255,0.65), 0 0 35px rgba(10,50,200,0.4); border-color: #2a6fff; }
+    50% { box-shadow: 0 0 28px rgba(30,100,255,0.85), 0 0 55px rgba(20,70,240,0.6); border-color: #4a8fff; }
+}
+.treasure-card-wide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(55deg, transparent 0px, transparent 6px, rgba(30,90,255,0.05) 6px, rgba(30,90,255,0.05) 8px);
+    border-radius: 14px;
+    pointer-events: none;
+}
 
-        @keyframes particleRise {
-            0% {
-                transform: translateY(100vh) translateX(0) scale(0);
-                opacity: 0;
-            }
-            30% {
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(-20vh) translateX(20px) scale(1.8);
-                opacity: 0;
-            }
-        }
+.treasure-item-wide {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+}
+.treasure-icon-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+.icon-coin { background: linear-gradient(135deg, #ffd700, #e6a800); box-shadow: 0 0 10px rgba(255,200,0,0.7); }
+.icon-gem { background: linear-gradient(135deg, #9b6dff, #6b3df0); box-shadow: 0 0 10px rgba(140,80,255,0.7); }
+.treasure-info-small { display: flex; flex-direction: column; align-items: flex-start; }
+.treasure-value-small { font-size: 0.95rem; font-weight: bold; color: #fff; text-shadow: 0 0 6px rgba(100,180,255,0.7); }
+.treasure-label-small { font-size: 0.5rem; color: #8ab8ff; text-transform: uppercase; letter-spacing: 1px; }
+.wide-divider { width: 1px; height: 26px; background: linear-gradient(transparent, rgba(70,140,255,0.6), transparent); }
 
-        /* کانتینر دیالوگ وسط صفحه - بدون قابلیت حرکت */
-        .dialog-container {
-            position: relative;
-            z-index: 20;
-            perspective: 1500px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            pointer-events: auto;
-        }
+/* پروفایل چسبیده زیر کارت */
+.profile-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(14px);
+    padding: 7px 16px 7px 12px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 215, 0, 0.65);
+    box-shadow: 0 0 18px rgba(0,0,0,0.5);
+    cursor: pointer;
+    transition: 0.2s;
+    width: fit-content;
+    align-self: flex-start;
+}
+.profile-inline:hover { transform: scale(1.02); background: rgba(0,0,0,0.85); border-color: gold; }
+.profile-img-small {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 3px solid gold;
+    box-shadow: 0 0 0 3px rgba(0,100,255,0.5);
+    object-fit: cover;
+}
+.profile-details { display: flex; flex-direction: column; }
+.profile-name-small { color: white; font-size: 0.85rem; font-weight: bold; }
+.profile-level-small { color: #ffcc88; font-size: 0.6rem; background: #00000066; padding: 2px 8px; border-radius: 20px; margin-top: 2px; width: fit-content; }
+.xp-bar-small { width: 75px; height: 4px; background: #2a3a50; border-radius: 10px; margin-top: 4px; overflow: hidden; }
+.xp-fill-small { height: 100%; width: 0%; background: linear-gradient(145deg, #ffcc00, #ffaa00); border-radius: 10px; }
 
-        /* دیالوگ سه بعدی فوق العاده خفن - بدون hover حرکت */
-        .dialog-ultra-3d {
-            width: 340px;
-            max-width: 88vw;
-            background: linear-gradient(145deg, rgba(8,12,25,0.98), rgba(3,5,12,0.98));
-            backdrop-filter: blur(20px);
-            border-radius: 50px;
-            padding: 35px 30px;
-            text-align: center;
-            position: relative;
-            transform-style: preserve-3d;
-            transform: translateZ(30px) rotateX(6deg) rotateY(2deg);
-            box-shadow: 
-                0 40px 70px rgba(0,0,0,0.8),
-                0 0 0 2px rgba(255,215,0,0.4),
-                0 0 0 5px rgba(0,0,0,0.3),
-                0 0 50px rgba(255,215,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
-            animation: ultraFloat 4s ease-in-out infinite;
-            transition: none;
-            cursor: default;
-            pointer-events: auto;
-        }
+.right-menu{    
+  position:absolute;    
+  right:0;    
+  top: 0;
+  display:flex;    
+  flex-direction:column;    
+  gap:6px;    
+  padding:6px;    
+  border-bottom-left-radius:35px;    
+  background:linear-gradient(145deg, rgba(0,120,255,0.25), rgba(0,40,120,0.35));    
+  backdrop-filter:blur(16px);    
+  border-left:2px solid rgba(0,180,255,0.4);    
+  border-bottom:2px solid rgba(0,180,255,0.4);    
+  box-shadow:0 0 26px rgba(0,140,255,0.65), inset 0 0 22px rgba(0,200,255,0.35);    
+  z-index:25;    
+}    
+    
+.side-img{    
+  width:48px;    
+  height:48px;    
+  object-fit:cover;    
+  border-radius:14px;    
+  cursor:pointer;    
+  transition: all 0.35s ease;    
+  background:linear-gradient(145deg, rgba(0,160,255,0.35), rgba(0,60,130,0.45));    
+  padding:4px;    
+  border:2px solid rgba(0,210,255,0.5);    
+  box-shadow:0 0 14px rgba(0,150,255,0.65), inset 0 0 10px rgba(0,210,255,0.35);    
+}    
 
-        /* حذف هرگونه حرکت با هاور */
-        .dialog-ultra-3d:hover {
-            transform: translateZ(30px) rotateX(6deg) rotateY(2deg);
-            box-shadow: 
-                0 40px 70px rgba(0,0,0,0.8),
-                0 0 0 2px rgba(255,215,0,0.5),
-                0 0 60px rgba(255,215,0,0.4);
-        }
+.main-buttons{    
+  display:flex;    
+  justify-content:center;    
+  align-items:center;
+  gap: 30px;
+  padding: 0 20px 25px 20px;    
+  z-index:2;    
+  width: 100%;
+}    
 
-        @keyframes ultraFloat {
-            0% { transform: translateZ(30px) rotateX(6deg) rotateY(2deg) translateY(0px); }
-            50% { transform: translateZ(40px) rotateX(6deg) rotateY(2deg) translateY(-8px); }
-            100% { transform: translateZ(30px) rotateX(6deg) rotateY(2deg) translateY(0px); }
-        }
+.game-btn-img {    
+  width: 140px;    
+  max-width: 40vw;    
+  height: auto;    
+  cursor: pointer;    
+  background: transparent;    
+  transition: transform 0.2s ease;    
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));    
+}    
+.game-btn-img:hover { transform: scale(1.03); }    
+.game-btn-img:active { transform: scale(0.97); }    
 
-        /* هاله نورانی سه بعدی پشت دیالوگ */
-        .glow-aura {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 140%;
-            height: 140%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(255,215,0,0.2), rgba(255,215,0,0.05), transparent 80%);
-            border-radius: 50%;
-            z-index: -1;
-            animation: auraPulse 3.5s ease-in-out infinite;
-            filter: blur(20px);
-        }
+/* دیالوگ خوش‌آمد */
+.welcome-dialog {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+    z-index: 900; display: none; justify-content: center; align-items: center;
+}
+.welcome-dialog.show { display: flex; }
+.welcome-card {
+    background: linear-gradient(160deg, #0a1225, #0d1b38); border: 2px solid #ffd700;
+    border-radius: 24px; padding: 30px 24px; text-align: center; max-width: 340px; width: 90%;
+    box-shadow: 0 0 40px rgba(255,215,0,0.4); animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.welcome-icon { font-size: 60px; display: block; margin-bottom: 10px; }
+.welcome-title { font-size: 1.3rem; font-weight: bold; color: #ffd700; margin-bottom: 6px; }
+.welcome-subtitle { font-size: 0.85rem; color: #aaccff; margin-bottom: 15px; }
+.welcome-gifts { display: flex; justify-content: center; gap: 20px; margin: 15px 0; }
+.welcome-gift-item { background: rgba(0,20,60,0.6); border: 1px solid rgba(60,140,255,0.4); border-radius: 16px; padding: 12px 18px; text-align: center; }
+.welcome-gift-icon { font-size: 30px; display: block; }
+.welcome-gift-value { font-size: 1.1rem; font-weight: bold; color: #ffd700; margin-top: 4px; }
+.welcome-gift-label { font-size: 0.6rem; color: #8ab8ff; }
+.welcome-btn {
+    background: #2ecc71; border: none; padding: 12px 30px; border-radius: 25px;
+    color: white; font-weight: bold; font-size: 0.9rem; cursor: pointer; margin-top: 12px;
+}
+.welcome-btn:hover { background: #27ae60; }
 
-        @keyframes auraPulse {
-            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
-            50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.1); }
-            100% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
-        }
+/* Toast */
+.toast-simple {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    background: rgba(0,0,0,0.92); border: 2px solid #ffd700; border-radius: 20px;
+    padding: 20px 24px; text-align: center; z-index: 9999;
+    animation: toastIn 0.3s ease, toastOut 0.3s ease 2.2s forwards;
+    box-shadow: 0 0 25px rgba(255,215,0,0.5); max-width: 280px; width: 85%;
+}
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%,-50%) scale(0.7); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+@keyframes toastOut { from { opacity: 1; transform: translate(-50%,-50%) scale(1); } to { opacity: 0; transform: translate(-50%,-50%) scale(0.7); } }
+.toast-simple .icon { font-size: 44px; display: block; margin-bottom: 6px; }
+.toast-simple .title { font-size: 1rem; font-weight: bold; color: #ffd700; }
+.toast-simple .subtitle { font-size: 0.8rem; color: #ccbbff; margin-top: 3px; }
 
-        /* لایه بازتاب (reflection) */
-        .reflection {
-            position: absolute;
-            bottom: -20px;
-            left: 10%;
-            width: 80%;
-            height: 30px;
-            background: radial-gradient(ellipse, rgba(255,215,0,0.2), transparent);
-            filter: blur(10px);
-            border-radius: 50%;
-            z-index: -1;
-        }
+/* مودال خرید */
+.shop-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 600; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+.shop-modal.show { display: flex; }
+.shop-card { background: linear-gradient(160deg, #0a1225, #0d1b38); border: 2px solid #3a8fff; border-radius: 24px; padding: 24px 20px; text-align: center; max-width: 320px; width: 90%; box-shadow: 0 0 40px rgba(20,80,255,0.5); }
+.shop-card h3 { color: #ffd700; margin-bottom: 12px; font-size: 1.1rem; }
+.shop-card .price { font-size: 1rem; color: white; margin: 8px 0; }
+.shop-btn { padding: 10px 22px; border-radius: 25px; border: none; font-weight: bold; cursor: pointer; margin: 5px; font-size: 0.85rem; }
+.shop-btn.buy { background: #2ecc71; color: white; }
+.shop-btn.cancel { background: #555; color: white; }
+.shop-input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #3a8fff; background: #0a1225; color: white; text-align: center; margin: 8px 0; font-family: tahoma; display: none; }
 
-        /* آیکون سه بعدی چرخان بدون حرکت ماوس */
-        .icon-3d-rotate {
-            font-size: 60px;
-            display: inline-block;
-            animation: icon3DRotate 4s ease-in-out infinite;
-            filter: drop-shadow(0 0 20px #ffd700);
-            margin-bottom: 15px;
-        }
+/* پروفایل فول */
+.profile-fullscreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0a0f1e, #0a1a2f); z-index: 400; display: none; flex-direction: column; overflow-y: auto; }
+.profile-fullscreen.show { display: flex; }
+.profile-close-btn { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,100,100,0.8); border-radius: 50%; color: #ff6666; font-size: 24px; cursor: pointer; z-index: 410; display: flex; align-items: center; justify-content: center; }
+.treasure-card-profile {
+    background: linear-gradient(180deg, #061a3a, #0d3268); border: 2px solid #2a6fff; border-radius: 16px;
+    padding: 10px 16px; display: flex; align-items: center; justify-content: space-evenly;
+    margin: 8px 15px 5px 15px; box-shadow: 0 0 18px rgba(20,80,255,0.65); position: relative; overflow: hidden;
+}
+.treasure-card-profile::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(55deg, transparent 0px, transparent 6px, rgba(30,90,255,0.05) 6px, rgba(30,90,255,0.05) 8px); pointer-events: none; }
+.treasure-card-profile .treasure-icon-circle { width: 34px; height: 34px; border-radius: 50%; font-size: 16px; }
+.profile-header-section { background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); padding: 18px 20px; border-bottom: 2px solid rgba(255,215,0,0.5); }
+.profile-header-row { display: flex; align-items: center; gap: 16px; }
+.profile-avatar-large { width: 80px; height: 80px; border-radius: 50%; border: 4px solid gold; object-fit: cover; }
+.profile-info-area { flex: 1; }
+.profile-name-large { font-size: 1.5rem; font-weight: bold; color: white; }
+.verified-icon { background: #2ecc71; font-size: 0.6rem; padding: 2px 7px; border-radius: 50px; color: white; margin-left: 6px; }
+.profile-level-badge { display: inline-block; background: linear-gradient(135deg, #ffd700, #ffaa00); padding: 3px 12px; border-radius: 50px; font-weight: bold; color: #1a1a2e; font-size: 0.75rem; margin-top: 5px; }
+.xp-bar-container { margin-top: 8px; max-width: 220px; }
+.xp-bar-bg { background: rgba(255,255,255,0.2); border-radius: 20px; height: 8px; overflow: hidden; }
+.xp-bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #ffcc44, #ff8800); border-radius: 20px; }
+.xp-text-small { color: #aaccee; font-size: 0.65rem; margin-top: 3px; }
+.user-code-area { background: rgba(0,0,0,0.4); border-radius: 30px; padding: 5px 14px; margin: 12px 20px; display: inline-block; border: 1px solid rgba(0,200,255,0.4); align-self: flex-start; }
+.user-code-label { color: #88aaff; font-size: 0.65rem; }
+.user-code-value { color: #ffdd88; font-weight: bold; font-family: monospace; font-size: 0.8rem; }
+.action-buttons-profile { display: flex; gap: 10px; margin-top: 15px; padding: 0 20px 25px; }
+.action-btn { flex: 1; background: rgba(0,100,200,0.4); border: 1px solid rgba(0,200,255,0.5); border-radius: 50px; padding: 10px; color: white; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.75rem; }
+.action-btn:hover { background: rgba(0,150,255,0.7); }
+.action-btn .cost { display: block; font-size: 0.6rem; color: #ffd700; margin-top: 2px; }
 
-        @keyframes icon3DRotate {
-            0% { transform: rotateY(0deg) rotateX(0deg) scale(1); }
-            25% { transform: rotateY(90deg) rotateX(5deg) scale(1.05); }
-            50% { transform: rotateY(180deg) rotateX(0deg) scale(1.1); }
-            75% { transform: rotateY(270deg) rotateX(-5deg) scale(1.05); }
-            100% { transform: rotateY(360deg) rotateX(0deg) scale(1); }
-        }
+.announcement-page { position: fixed; inset: 0; background: linear-gradient(135deg, #0a0f1e, #0a1a2f); z-index: 450; display: none; justify-content: center; align-items: center; padding: 20px; }
+.announcement-page.show { display: flex; }
+.announcement-card { background: rgba(10,20,40,0.85); border: 2px solid rgba(255,215,0,0.6); border-radius: 48px; padding: 30px; text-align: center; max-width: 400px; width: 90%; }
+.announcement-title { font-size: 1.8rem; font-weight: bold; color: #ffdd99; margin-bottom: 20px; }
+.message-box { background: rgba(0,0,0,0.5); border-radius: 30px; padding: 22px; margin: 18px 0; border: 2px solid #00aaff; }
+.message-text { font-size: 1.2rem; color: white; font-weight: bold; }
+.signature { margin-top: 12px; color: #88aaff; font-size: 0.85rem; }
+.close-announcement { background: linear-gradient(135deg, #ff6600, #ff3300); border: none; padding: 10px 28px; border-radius: 50px; color: white; font-weight: bold; cursor: pointer; margin-top: 15px; }
 
-        /* عنوان سه بعدی */
-        .title-3d-ultra {
-            font-size: 24px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #ffd700, #ffaa33, #ff8800, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 18px;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 15px rgba(255,215,0,0.5);
-            transform: translateZ(15px);
-        }
+.avatar-fullscreen { position: fixed; inset: 0; background: linear-gradient(135deg, #001c3d, #000b1a); z-index: 500; display: none; }
+.avatar-fullscreen.show { display: flex; }
+.gallery-list { width: 280px; height: 100%; background: rgba(0,0,0,0.7); border-right: 3px solid gold; padding: 80px 18px 25px; overflow-y: auto; }
+.avatar-list-item { display: flex; align-items: center; gap: 12px; background: rgba(20,40,70,0.6); padding: 8px 14px; border-radius: 50px; cursor: pointer; margin-bottom: 8px; }
+.avatar-list-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid gold; object-fit: cover; }
+.back-from-gallery { position: absolute; bottom: 25px; left: 25px; background: #e67e22; border: none; padding: 10px 25px; border-radius: 50px; color: white; cursor: pointer; }
 
-        /* متن */
-        .message-3d {
-            color: #ccddee;
-            font-size: 14px;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            transform: translateZ(10px);
-        }
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; z-index:20; }    
+.modal-content{ background:linear-gradient(145deg,#001f3f,#003c8f); padding:30px; border-radius:22px; width:280px; text-align:center; color:white; }    
+.modal-content input{ width:100%; padding:10px; margin-top:12px; border:none; border-radius:10px; }    
+.modal-content button{ margin-top:18px; padding:10px 22px; border:none; border-radius:15px; background:#ff1744; color:white; cursor:pointer; }    
+.hidden{ display:none; }    
 
-        .highlight-gold {
-            color: #ffd700;
-            font-weight: bold;
-            text-shadow: 0 0 8px #ffd700;
-        }
-
-        /* بدج‌های سه بعدی */
-        .badge-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            margin: 18px 0;
-        }
-
-        .badge-3d {
-            background: linear-gradient(145deg, rgba(255,215,0,0.15), rgba(255,150,0,0.05));
-            border: 1px solid rgba(255,215,0,0.4);
-            border-radius: 40px;
-            padding: 6px 15px;
-            font-size: 12px;
-            color: #ffeecc;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transform: translateZ(8px);
-            backdrop-filter: blur(4px);
-        }
-
-        /* دکمه سه بعدی با افکت بدون حرکت */
-        .btn-3d-solid {
-            background: linear-gradient(145deg, #ffd700, #ff9900);
-            border: none;
-            padding: 14px 35px;
-            margin-top: 15px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            color: #1a1a2e;
-            box-shadow: 0 6px 0 #b87700, 0 0 20px rgba(255,215,0,0.6);
-            transform: translateY(-3px);
-            transition: all 0.1s ease;
-            position: relative;
-        }
-
-        .btn-3d-solid:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #b87700;
-        }
-
-        /* دکمه بستن سه بعدی */
-        .close-btn-ultra {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: rgba(255,80,80,0.2);
-            border: 1px solid rgba(255,100,100,0.6);
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #ff9999;
-            font-size: 18px;
-            backdrop-filter: blur(4px);
-        }
-
-        .close-btn-ultra:hover {
-            background: rgba(255,60,60,0.6);
-            transform: scale(1.08);
-            color: white;
-            box-shadow: 0 0 12px rgba(255,0,0,0.6);
-        }
-
-        /* قفل حرکت ماوس روی کل صفحه */
-        body {
-            cursor: default;
-        }
-
-        @media (max-width: 550px) {
-            .dialog-ultra-3d {
-                width: 300px;
-                padding: 25px 20px;
-            }
-            .title-3d-ultra {
-                font-size: 20px;
-            }
-            .badge-3d {
-                font-size: 10px;
-                padding: 4px 12px;
-            }
-            .btn-3d-solid {
-                padding: 12px 30px;
-                font-size: 14px;
-            }
-        }
-    </style>
+@media (max-width: 550px) {
+    .treasure-card-wide { padding: 8px 12px; }
+    .treasure-icon-circle { width: 28px; height: 28px; font-size: 13px; }
+    .treasure-value-small { font-size: 0.8rem; }
+    .profile-img-small { width: 38px; height: 38px; }
+    .profile-name-small { font-size: 0.75rem; }
+    .game-btn-img { width: 120px; }
+}
+</style>
 </head>
 <body>
 
-<div class="particles-3d" id="particlesContainer"></div>
+<div id="homePage" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; width: 100%;">
 
-<div class="dialog-container">
-    <div class="glow-aura"></div>
-    <div class="dialog-ultra-3d" id="dialog3d">
-        <div class="close-btn-ultra" id="closeBtn3d">✖</div>
-        <div class="reflection"></div>
-        <div class="icon-3d-rotate">🌀</div>
-        <div class="title-3d-ultra">تیم توسعه دهنده</div>
-        <div class="message-3d">
-            <span class="highlight-gold">🔧 تیم توسعه در حال بروزرسانی است 🔧</span><br>
-            لطفاً شکیبا باشید و منتظر بمانید...
+    <div class="top-section">
+        <div class="treasure-card-wide">
+            <div class="treasure-item-wide">
+                <div class="treasure-icon-circle icon-coin">🪙</div>
+                <div class="treasure-info-small">
+                    <div class="treasure-value-small" id="mainCoins">۱۴۰۰۰</div>
+                    <div class="treasure-label-small">Coins</div>
+                </div>
+            </div>
+            <div class="wide-divider"></div>
+            <div class="treasure-item-wide">
+                <div class="treasure-icon-circle icon-gem">💎</div>
+                <div class="treasure-info-small">
+                    <div class="treasure-value-small" id="mainGems">۴۰</div>
+                    <div class="treasure-label-small">Gems</div>
+                </div>
+            </div>
         </div>
-        <div class="badge-container">
-            <span class="badge-3d">🎮 مافیا ۳ بعدی</span>
-            <span class="badge-3d">🎙️ چت صوتی</span>
-            <span class="badge-3d">🏆 لیگ حرفه‌ای</span>
-            <span class="badge-3d">⚡ رقابت زنده</span>
+        
+        <div class="profile-inline" id="profilePanel">
+            <img src="https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg" class="profile-img-small" id="userAvatarImg">
+            <div class="profile-details">
+                <div class="profile-name-small" id="playerNameDisplay">بازیکن</div>
+                <div class="profile-level-small" id="levelText">سطح 1</div>
+                <div class="xp-bar-small"><div class="xp-fill-small" id="xpFill"></div></div>
+            </div>
         </div>
-        <button class="btn-3d-solid" id="retryBtn3d">🔄 تلاش مجدد</button>
+    </div>
+
+    <div class="right-menu">    
+        <img src="https://cdn.imgurl.ir/uploads/y752784_IMG_20260228_064312_222.jpg" class="side-img" id="settingsBtn">
+        <img src="https://cdn.imgurl.ir/uploads/q734906_IMG_20260320_174242_443.jpg" class="side-img" id="soonBtn">
+        <img src="https://uploadkon.ir/uploads/931328_26IMG-20260228-064052-671.jpg" class="side-img" id="announcementBtn">
+    </div>  
+
+    <div style="flex:1"></div>
+
+    <div class="main-buttons">    
+        <img src="https://cdn.imgurl.ir/uploads/b95105_IMG_20260424_135421_097.jpg" class="game-btn-img" onclick="showToast('🎖 بخش بازی امتیازی', 'به زودی فعال می‌شود')">
+        <img src="https://cdn.imgurl.ir/uploads/m844273_IMG_20260424_135426_174.jpg" class="game-btn-img" onclick="showToast('🤝 بخش بازی دوستانه', 'به زودی فعال می‌شود')">
+    </div>
+    <div style="height: 15px;"></div>
+</div>
+
+<div class="welcome-dialog" id="welcomeDialog">
+    <div class="welcome-card">
+        <span class="welcome-icon">🎁</span>
+        <div class="welcome-title">🎉 به مافیا دارک شات خوش اومدی!</div>
+        <div class="welcome-subtitle">یه هدیه ویژه برات داریم:</div>
+        <div class="welcome-gifts">
+            <div class="welcome-gift-item"><span class="welcome-gift-icon">🪙</span><div class="welcome-gift-value">۱۴۰۰۰</div><div class="welcome-gift-label">سکه هدیه</div></div>
+            <div class="welcome-gift-item"><span class="welcome-gift-icon">💎</span><div class="welcome-gift-value">۴۰</div><div class="welcome-gift-label">الماس هدیه</div></div>
+        </div>
+        <p style="font-size:0.7rem;color:#8ab8ff;margin-top:8px;">با سکه اسم عوض کن | با الماس آواتار بخر</p>
+        <button class="welcome-btn" onclick="closeWelcome()">🚀 بزن بریم!</button>
     </div>
 </div>
 
+<div id="toastOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;" onclick="hideToast()">
+    <div class="toast-simple" onclick="event.stopPropagation()"><span class="icon">⏳</span><div class="title" id="toastTitle"></div><div class="subtitle" id="toastSubtitle"></div></div>
+</div>
+
+<div class="shop-modal" id="shopModal">
+    <div class="shop-card">
+        <h3 id="shopTitle"></h3><p id="shopDesc" style="color:#ccc;font-size:0.85rem;"></p>
+        <input class="shop-input" id="shopNameInput" placeholder="نام جدید..." />
+        <div class="price">💰 هزینه: <span id="shopPrice"></span></div>
+        <div style="color:#ff6666;font-size:0.7rem;margin:6px 0;display:none;" id="shopError"></div>
+        <button class="shop-btn buy" onclick="confirmPurchase()">✅ خرید</button>
+        <button class="shop-btn cancel" onclick="closeShop()">✖ لغو</button>
+    </div>
+</div>
+
+<div id="announcementPage" class="announcement-page">
+    <div class="announcement-card"><div class="announcement-title">📢 اطلاعیه</div><div class="message-box"><div class="message-text">اپ بزرگ مافیا دارک شات</div><div class="signature">از طرف سازنده</div></div><button class="close-announcement" id="closeAnnouncementBtn">✖ بستن</button></div>
+</div>
+
+<div id="profileFullscreen" class="profile-fullscreen">
+    <button class="profile-close-btn" id="closeProfileBtn">✖</button>
+    <div class="treasure-card-profile">
+        <div class="treasure-item-wide"><div class="treasure-icon-circle icon-coin">🪙</div><div class="treasure-info-small"><div class="treasure-value-small" id="profileCoins">۱۴۰۰۰</div><div class="treasure-label-small">Coins</div></div></div>
+        <div class="wide-divider"></div>
+        <div class="treasure-item-wide"><div class="treasure-icon-circle icon-gem">💎</div><div class="treasure-info-small"><div class="treasure-value-small" id="profileGems">۴۰</div><div class="treasure-label-small">Gems</div></div></div>
+    </div>
+    <div class="profile-header-section">
+        <div class="profile-header-row">
+            <img src="" id="profileLargeAvatar" class="profile-avatar-large">
+            <div class="profile-info-area">
+                <div class="profile-name-large"><span id="profileLargeName"></span><span class="verified-icon">✓ رسمی</span></div>
+                <div><span class="profile-level-badge" id="profileLargeLevel"></span></div>
+                <div class="xp-bar-container"><div class="xp-bar-bg"><div class="xp-bar-fill" id="profileXpFill"></div></div><div class="xp-text-small" id="profileXpText"></div></div>
+            </div>
+        </div>
+    </div>
+    <div class="user-code-area"><span class="user-code-label">🆔 کد کاربری | </span><span class="user-code-value" id="profileUserCode"></span></div>
+    <div class="action-buttons-profile">
+        <div class="action-btn" onclick="openEditNameShop()">✏️ ویرایش نام<span class="cost">🪙 ۱۰۰ سکه</span></div>
+        <div class="action-btn" onclick="openAvatarShop()">🎭 تغییر آواتار<span class="cost">💎 ۵۰ الماس</span></div>
+    </div>
+</div>
+
+<div id="avatarGalleryFull" class="avatar-fullscreen">
+    <div class="gallery-list"><div style="font-size:1.6rem;color:#ffdd99;text-align:center;margin-bottom:25px;">🎭 آواتارها</div><div id="avatarsListContainer"></div></div>
+    <button class="back-from-gallery" id="closeFullGallery">← بازگشت</button>
+</div>
+
+<div class="modal" id="nameModal"><div class="modal-content"><h3>نام خود را وارد کنید</h3><input type="text" id="nameInput" placeholder="نام شما"><button onclick="saveName()">ثبت</button></div></div>
+<div class="modal hidden" id="settingsModal"><div class="modal-content"><h3>تنظیمات صدا</h3><input type="range" min="0" max="100" value="50"><button onclick="closeSettings()">بستن</button></div></div>
+
 <script>
-    // ذرات سه بعدی طلایی
-    function createParticles3d() {
-        const container = document.getElementById('particlesContainer');
-        const particleCount = 100;
-        for (let i = 0; i < particleCount; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle-3d';
-            p.style.left = Math.random() * 100 + '%';
-            p.style.animationDelay = Math.random() * 6 + 's';
-            p.style.animationDuration = 4 + Math.random() * 5 + 's';
-            p.style.width = 2 + Math.random() * 5 + 'px';
-            p.style.height = p.style.width;
-            p.style.opacity = 0.3 + Math.random() * 0.6;
-            container.appendChild(p);
-        }
+let currentUserName = localStorage.getItem("mafiaPlayerName") || "";
+let currentAvatar = localStorage.getItem("userAvatar") || "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg";
+let userLevel = parseInt(localStorage.getItem("userLevel")) || 1;
+let userXP = parseInt(localStorage.getItem("userXP")) || 0;
+let nextXP = userLevel * 100;
+let userCode = localStorage.getItem("userCode") || "MF-" + Math.floor(Math.random()*9000+1000) + "-" + Math.floor(Math.random()*9000+1000);
+let userCoins = parseInt(localStorage.getItem("userCoins")) || 14000;
+let userGems = parseInt(localStorage.getItem("userGems")) || 40;
+let isFirstTime = !localStorage.getItem("mafiaPlayerName");
+if (isFirstTime) { userCoins = 14000; userGems = 40; }
+let shopAction = null;
+
+function saveAll() {
+    localStorage.setItem("mafiaPlayerName", currentUserName);
+    localStorage.setItem("userAvatar", currentAvatar);
+    localStorage.setItem("userLevel", userLevel);
+    localStorage.setItem("userXP", userXP);
+    localStorage.setItem("userCode", userCode);
+    localStorage.setItem("userCoins", userCoins);
+    localStorage.setItem("userGems", userGems);
+}
+
+function updateAllUI() {
+    let pct = Math.min((userXP / nextXP) * 100, 100);
+    document.getElementById("playerNameDisplay").innerText = currentUserName || "بازیکن";
+    document.getElementById("userAvatarImg").src = currentAvatar;
+    document.getElementById("levelText").innerHTML = `سطح ${userLevel} ⭐`;
+    document.getElementById("xpFill").style.width = pct + "%";
+    document.getElementById("mainCoins").innerText = userCoins.toLocaleString('fa-IR');
+    document.getElementById("mainGems").innerText = userGems.toLocaleString('fa-IR');
+    document.getElementById("profileLargeName").innerText = currentUserName || "بازیکن";
+    document.getElementById("profileLargeAvatar").src = currentAvatar;
+    document.getElementById("profileLargeLevel").innerHTML = `سطح ${userLevel}`;
+    document.getElementById("profileXpFill").style.width = pct + "%";
+    document.getElementById("profileXpText").innerHTML = `${userXP} / ${nextXP} XP`;
+    document.getElementById("profileUserCode").innerText = userCode;
+    document.getElementById("profileCoins").innerText = userCoins.toLocaleString('fa-IR');
+    document.getElementById("profileGems").innerText = userGems.toLocaleString('fa-IR');
+}
+
+function showWelcomeDialog() { document.getElementById("welcomeDialog").classList.add("show"); }
+function closeWelcome() { document.getElementById("welcomeDialog").classList.remove("show"); saveAll(); updateAllUI(); showToast('🎁 هدیه دریافت شد!', '۱۴۰۰۰ سکه + ۴۰ الماس'); }
+
+function showProfileScreen() { updateAllUI(); document.getElementById("profileFullscreen").classList.add("show"); document.getElementById("homePage").style.display = "none"; }
+function closeProfileScreen() { document.getElementById("profileFullscreen").classList.remove("show"); document.getElementById("homePage").style.display = "flex"; }
+
+function openEditNameShop() {
+    if (userCoins < 100) { showToast('❌ سکه ناکافی', `${userCoins} سکه داری - ۱۰۰ سکه نیازه`); return; }
+    shopAction = 'changeName';
+    document.getElementById("shopTitle").textContent = '✏️ تغییر نام';
+    document.getElementById("shopDesc").textContent = 'نام جدید وارد کن';
+    document.getElementById("shopPrice").textContent = '۱۰۰ 🪙';
+    document.getElementById("shopError").style.display = 'none';
+    document.getElementById("shopNameInput").style.display = 'block';
+    document.getElementById("shopNameInput").value = currentUserName;
+    document.getElementById("shopModal").classList.add("show");
+}
+function openAvatarShop() {
+    if (userGems < 50) { showToast('❌ الماس ناکافی', `${userGems} الماس داری - ۵۰ الماس نیازه`); return; }
+    shopAction = 'changeAvatar';
+    document.getElementById("shopTitle").textContent = '🎭 خرید آواتار';
+    document.getElementById("shopDesc").textContent = 'می‌خوای آواتار جدید بخری؟';
+    document.getElementById("shopPrice").textContent = '۵۰ 💎';
+    document.getElementById("shopError").style.display = 'none';
+    document.getElementById("shopNameInput").style.display = 'none';
+    document.getElementById("shopModal").classList.add("show");
+}
+function confirmPurchase() {
+    document.getElementById("shopError").style.display = 'none';
+    if (shopAction === 'changeName') {
+        let n = document.getElementById("shopNameInput").value.trim();
+        if (!n || n.length < 2) { document.getElementById("shopError").textContent = '❌ نام معتبر وارد کن!'; document.getElementById("shopError").style.display = 'block'; return; }
+        if (userCoins < 100) { document.getElementById("shopError").textContent = '❌ سکه کافی نیست!'; document.getElementById("shopError").style.display = 'block'; return; }
+        userCoins -= 100; currentUserName = n; saveAll(); updateAllUI(); closeShop();
+        showToast('✅ موفق!', `نام به "${n}" تغییر کرد`);
+    } else if (shopAction === 'changeAvatar') {
+        if (userGems < 50) { document.getElementById("shopError").textContent = '❌ الماس کافی نیست!'; document.getElementById("shopError").style.display = 'block'; return; }
+        userGems -= 50; saveAll(); updateAllUI(); closeShop(); openAvatarGallery();
     }
+}
+function closeShop() { document.getElementById("shopModal").classList.remove("show"); document.getElementById("shopError").style.display = 'none'; shopAction = null; }
 
-    let dialogVisible = true;
-    const dialog = document.getElementById('dialog3d');
-
-    function showDialog() {
-        dialog.style.display = 'block';
-        dialog.style.animation = 'none';
-        dialog.offsetHeight;
-        dialog.style.animation = 'ultraFloat 4s ease-in-out infinite';
-        dialogVisible = true;
-    }
-
-    function closeDialog() {
-        dialog.style.display = 'none';
-        dialogVisible = false;
-    }
-
-    function retry() {
-        const btn = document.getElementById('retryBtn3d');
-        btn.disabled = true;
-        btn.textContent = '⏳ در حال بررسی...';
-        
-        setTimeout(() => {
-            btn.disabled = false;
-            btn.textContent = '🔄 تلاش مجدد';
-            if (!dialogVisible) {
-                showDialog();
-            }
-        }, 700);
-    }
-
-    document.getElementById('closeBtn3d').onclick = closeDialog;
-    document.getElementById('retryBtn3d').onclick = () => {
-        closeDialog();
-        retry();
-    };
-
-    createParticles3d();
-    showDialog();
-
-    // قفل کامل حرکت دیالوگ با ماوس
-    document.querySelectorAll('.dialog-ultra-3d, .dialog-ultra-3d *').forEach(el => {
-        el.style.pointerEvents = 'auto';
+const AVATARS = [
+    { src: "https://uploadkon.ir/uploads/9cf827_26IMG-20260227-200022-144.jpg", name: "پیش‌فرض", cost: 0 },
+    { src: "https://cdn.imgurl.ir/uploads/s159314_IMG_20260424_132832_559.jpg", name: "نقره‌ای", cost: 30 },
+    { src: "https://cdn.imgurl.ir/uploads/c3381_IMG_20260424_133054_282.jpg", name: "طلایی", cost: 50 }
+];
+function renderAvatarGallery() {
+    let c = document.getElementById("avatarsListContainer"); if(!c) return; c.innerHTML = "";
+    AVATARS.forEach(av => {
+        let item = document.createElement("div"); item.className = "avatar-list-item";
+        item.innerHTML = `<img src="${av.src}" class="avatar-list-img"><div><div style="font-size:0.85rem;color:white;">${av.name}</div><div style="font-size:0.6rem;color:#ffd700;">${av.cost > 0 ? '💎 ' + av.cost : '✅ رایگان'}</div></div>`;
+        item.onclick = () => {
+            if (av.cost > 0 && userGems < av.cost) { showToast('❌ الماس ناکافی', `${av.cost} الماس نیاز داری`); return; }
+            if (av.cost > 0) { userGems -= av.cost; saveAll(); }
+            currentAvatar = av.src; saveAll(); updateAllUI();
+            document.getElementById("avatarGalleryFull").classList.remove("show");
+            showToast('✅ آواتار تغییر کرد!', av.name);
+        };
+        c.appendChild(item);
     });
+}
+function openAvatarGallery() { renderAvatarGallery(); document.getElementById("avatarGalleryFull").classList.add("show"); }
+
+function showAnnouncement() { document.getElementById("announcementPage").classList.add("show"); document.getElementById("homePage").style.display = "none"; }
+function closeAnnouncement() { document.getElementById("announcementPage").classList.remove("show"); document.getElementById("homePage").style.display = "flex"; }
+function showToast(t, s) { document.getElementById("toastTitle").textContent = t; document.getElementById("toastSubtitle").textContent = s; document.getElementById("toastOverlay").style.display = "flex"; clearTimeout(window._toastTimer); window._toastTimer = setTimeout(hideToast, 2200); }
+function hideToast() { document.getElementById("toastOverlay").style.display = "none"; }
+function saveName() { 
+    let n = document.getElementById("nameInput").value.trim(); 
+    if(n && n.length >= 2) { currentUserName = n; saveAll(); updateAllUI(); document.getElementById("nameModal").style.display = "none"; if (isFirstTime) { setTimeout(showWelcomeDialog, 400); isFirstTime = false; } }
+}
+
+document.getElementById("profilePanel").addEventListener("click", showProfileScreen);
+document.getElementById("closeProfileBtn").addEventListener("click", closeProfileScreen);
+document.getElementById("closeFullGallery").addEventListener("click", () => document.getElementById("avatarGalleryFull").classList.remove("show"));
+document.getElementById("announcementBtn").addEventListener("click", showAnnouncement);
+document.getElementById("closeAnnouncementBtn").addEventListener("click", closeAnnouncement);
+document.getElementById("settingsBtn").addEventListener("click", () => document.getElementById("settingsModal").classList.remove("hidden"));
+document.getElementById("soonBtn").addEventListener("click", () => showToast('🚧 به زودی', 'در آپدیت بعدی'));
+document.getElementById("shopModal").addEventListener("click", function(e) { if (e.target === this) closeShop(); });
+function openSettings(){ document.getElementById("settingsModal").classList.remove("hidden"); }
+function closeSettings(){ document.getElementById("settingsModal").classList.add("hidden"); }
+
+if (!localStorage.getItem("mafiaPlayerName")) { document.getElementById("nameModal").style.display = "flex"; }
+else { document.getElementById("nameModal").style.display = "none"; }
+
+window.saveName = saveName;
+window.openSettings = openSettings;
+window.closeSettings = closeSettings;
+window.confirmPurchase = confirmPurchase;
+window.closeShop = closeShop;
+window.closeWelcome = closeWelcome;
+
+updateAllUI();
+if (!isFirstTime) saveAll();
+if (isFirstTime) { localStorage.setItem("userCoins", "14000"); localStorage.setItem("userGems", "40"); }
 </script>
 </body>
 </html>
