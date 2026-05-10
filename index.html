@@ -35,10 +35,20 @@ body::after{content:'';position:absolute;inset:0;background:radial-gradient(circ
 .game-btn-img:hover{transform:scale(1.03)}
 .game-btn-img:active{transform:scale(0.97)}
 
-/* ===== پروفایل فول با گرافیک 3D ===== */
+/* ===== پروفایل فول با گرافیک 3D و پس‌زمینه خاکستری پروفایل ===== */
 .profile-fullscreen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(160deg,#0a1628 0%,#0d2240 30%,#0f2d58 60%,#0a1628 100%);z-index:400;display:none;flex-direction:column;overflow-y:auto}
 .profile-fullscreen.show{display:flex}
 .profile-close-btn{position:absolute;top:15px;right:15px;width:40px;height:40px;background:rgba(0,0,0,0.6);border:2px solid rgba(255,100,100,0.8);border-radius:50%;color:#ff6666;font-size:24px;cursor:pointer;z-index:410;display:flex;align-items:center;justify-content:center}
+/* بخش پروفایل کاربری با رنگ خاکستری 🩶 */
+.profile-header-section{
+    background: #2c2c34; /* رنگ خاکستری */
+    backdrop-filter: blur(20px);
+    padding: 16px 20px;
+    border-bottom: 2px solid rgba(100,180,255,0.3);
+    margin: 0 12px;
+    border-radius: 18px 18px 0 0;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 5px 15px rgba(0,0,0,0.3);
+}
 
 /* کارت سکه و الماس بزرگ تو پروفایل */
 .treasure-card-profile{
@@ -55,7 +65,6 @@ body::after{content:'';position:absolute;inset:0;background:radial-gradient(circ
 .treasure-card-profile .treasure-icon-circle{width:42px;height:42px;font-size:20px}
 .treasure-card-profile .treasure-value-small{font-size:1.2rem}
 
-.profile-header-section{background:rgba(10,20,40,0.7);backdrop-filter:blur(20px);padding:16px 20px;border-bottom:2px solid rgba(100,180,255,0.3);margin:0 12px;border-radius:18px 18px 0 0}
 .profile-header-row{display:flex;align-items:center;gap:16px}
 .profile-avatar-large{width:80px;height:80px;border-radius:50%;border:4px solid #4a9eff;object-fit:cover;box-shadow:0 0 20px rgba(74,158,255,0.5)}
 .profile-name-large{font-size:1.5rem;font-weight:bold;color:#e0f0ff;text-shadow:0 2px 10px rgba(0,150,255,0.4)}
@@ -151,6 +160,7 @@ body::after{content:'';position:absolute;inset:0;background:radial-gradient(circ
 .modal-content input{width:100%;padding:10px;margin-top:12px;border:none;border-radius:10px}
 .modal-content button{margin-top:18px;padding:10px 22px;border:none;border-radius:15px;background:#ff1744;color:white;cursor:pointer}
 .hidden{display:none}
+.length-error{color:#ff8888;font-size:0.65rem;margin-top:6px;display:none}
 </style>
 </head>
 <body>
@@ -177,7 +187,7 @@ body::after{content:'';position:absolute;inset:0;background:radial-gradient(circ
 
 <div id="toastOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;justify-content:center;align-items:center" onclick="hideToast()"><div class="toast-simple" onclick="event.stopPropagation()"><span>⏳</span><div class="title" id="toastTitle"></div><div class="subtitle" id="toastSubtitle"></div></div></div>
 
-<div class="shop-modal" id="shopModal"><div class="shop-card"><h3 id="shopTitle"></h3><p id="shopDesc" style="color:#ccc;font-size:0.85rem"></p><input class="shop-input" id="shopNameInput" placeholder="نام جدید..."/><div>💰 هزینه: <span id="shopPrice"></span></div><div style="color:#ff6666;font-size:0.7rem;margin:6px 0;display:none" id="shopError"></div><button class="shop-btn buy" onclick="confirmPurchase()">✅ خرید</button><button class="shop-btn cancel" onclick="closeShop()">✖ لغو</button></div></div>
+<div class="shop-modal" id="shopModal"><div class="shop-card"><h3 id="shopTitle"></h3><p id="shopDesc" style="color:#ccc;font-size:0.85rem"></p><input class="shop-input" id="shopNameInput" placeholder="نام جدید..." maxlength="12"/><div style="font-size:0.65rem;color:#ffaa88;margin-top:3px;display:none" id="nameLengthWarning">⚠️ حداکثر ۱۲ کاراکتر</div><div>💰 هزینه: <span id="shopPrice"></span></div><div style="color:#ff6666;font-size:0.7rem;margin:6px 0;display:none" id="shopError"></div><button class="shop-btn buy" onclick="confirmPurchase()">✅ خرید</button><button class="shop-btn cancel" onclick="closeShop()">✖ لغو</button></div></div>
 
 <div id="announcementPage" class="announcement-page"><div class="announcement-card"><div class="announcement-title">📢 اطلاعیه</div><div class="message-box"><div class="message-text">اپ بزرگ مافیا دارک شات</div><div class="signature">از طرف سازنده</div></div><button class="close-announcement" id="closeAnnouncementBtn">✖ بستن</button></div></div>
 
@@ -188,6 +198,7 @@ body::after{content:'';position:absolute;inset:0;background:radial-gradient(circ
         <div class="wide-divider"></div>
         <div class="treasure-item-wide"><div class="treasure-icon-circle icon-gem">💎</div><div class="treasure-info-small"><div class="treasure-value-small" id="profileGems">۴۰</div><div class="treasure-label-small">Gems</div></div></div>
     </div>
+    <!-- رنگ پروفایل کاربری خاکستری 🩶 روی هدر -->
     <div class="profile-header-section">
         <div class="profile-header-row">
             <img src="" id="profileLargeAvatar" class="profile-avatar-large">
@@ -251,7 +262,7 @@ body::after{content:'';position:absolute;inset:0;background:radial-gradient(circ
 </div>
 
 <div id="avatarGalleryFull" class="avatar-fullscreen"><div class="gallery-list"><div style="font-size:1.6rem;color:#ffdd99;text-align:center;margin-bottom:25px">🎭 آواتارها</div><div id="avatarsListContainer"></div></div><button class="back-from-gallery" id="closeFullGallery">← بازگشت</button></div>
-<div class="modal" id="nameModal"><div class="modal-content"><h3>نام خود را وارد کنید</h3><input type="text" id="nameInput" placeholder="نام شما"><button onclick="saveName()">ثبت</button></div></div>
+<div class="modal" id="nameModal"><div class="modal-content"><h3>نام خود را وارد کنید</h3><input type="text" id="nameInput" placeholder="نام شما" maxlength="12"><div id="initNameError" class="length-error"></div><button onclick="saveName()">ثبت</button></div></div>
 <div class="modal hidden" id="settingsModal"><div class="modal-content"><h3>تنظیمات صدا</h3><input type="range" min="0" max="100" value="50"><button onclick="closeSettings()">بستن</button></div></div>
 
 <script>
@@ -351,11 +362,12 @@ function openEditNameShop(){
     if(userCoins<100){showToast('❌ سکه ناکافی',`${userCoins} سکه داری - ۱۰۰ سکه نیازه`);return}
     shopAction='changeName';
     document.getElementById("shopTitle").textContent='✏️ تغییر نام';
-    document.getElementById("shopDesc").textContent='نام جدید وارد کن';
+    document.getElementById("shopDesc").textContent='نام جدید وارد کن (حداکثر ۱۲ حرف)';
     document.getElementById("shopPrice").textContent='۱۰۰ 🪙';
     document.getElementById("shopError").style.display='none';
     document.getElementById("shopNameInput").style.display='block';
     document.getElementById("shopNameInput").value=currentUserName;
+    document.getElementById("shopNameInput").maxLength=12;
     document.getElementById("shopModal").classList.add("show");
 }
 function openAvatarShop(){
@@ -373,6 +385,7 @@ async function confirmPurchase(){
     if(shopAction==='changeName'){
         let n=document.getElementById("shopNameInput").value.trim();
         if(!n||n.length<2){document.getElementById("shopError").textContent='❌ نام معتبر وارد کن!';document.getElementById("shopError").style.display='block';return}
+        if(n.length>12){document.getElementById("shopError").textContent='❌ نام نباید بیشتر از ۱۲ کاراکتر باشد!';document.getElementById("shopError").style.display='block';return}
         if(userCoins<100){document.getElementById("shopError").textContent='❌ سکه کافی نیست!';document.getElementById("shopError").style.display='block';return}
         userCoins-=100;currentUserName=n;await saveAll();updateAllUI();closeShop();
         showToast('✅ موفق!',`نام به "${n}" تغییر کرد`);
@@ -405,7 +418,26 @@ function showAnnouncement(){document.getElementById("announcementPage").classLis
 function closeAnnouncement(){document.getElementById("announcementPage").classList.remove("show");document.getElementById("homePage").style.display="flex"}
 function showToast(t,s){document.getElementById("toastTitle").textContent=t;document.getElementById("toastSubtitle").textContent=s;document.getElementById("toastOverlay").style.display="flex";clearTimeout(window._toastTimer);window._toastTimer=setTimeout(hideToast,2200)}
 function hideToast(){document.getElementById("toastOverlay").style.display="none"}
-async function saveName(){let n=document.getElementById("nameInput").value.trim();if(n&&n.length>=2){currentUserName=n;await saveAll();updateAllUI();document.getElementById("nameModal").style.display="none";if(isFirstTime){setTimeout(showWelcomeDialog,400);isFirstTime=false}}}
+async function saveName(){
+    let n=document.getElementById("nameInput").value.trim();
+    let errorDiv=document.getElementById("initNameError");
+    if(!n||n.length<2){
+        errorDiv.textContent='❌ نام باید حداقل ۲ حرف باشد';
+        errorDiv.style.display='block';
+        return;
+    }
+    if(n.length>12){
+        errorDiv.textContent='❌ نام نباید بیشتر از ۱۲ کاراکتر باشد';
+        errorDiv.style.display='block';
+        return;
+    }
+    errorDiv.style.display='none';
+    currentUserName=n;
+    await saveAll();
+    updateAllUI();
+    document.getElementById("nameModal").style.display="none";
+    if(isFirstTime){setTimeout(showWelcomeDialog,400);isFirstTime=false}
+}
 
 document.getElementById("profilePanel").addEventListener("click",showProfileScreen);
 document.getElementById("closeProfileBtn").addEventListener("click",closeProfileScreen);
