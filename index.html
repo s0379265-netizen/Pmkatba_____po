@@ -1,89 +1,668 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error 224 - Server Disconnected</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>بازی من - صفحه ورود کاربر</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        body {
-            background: #202124;
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #e8eaed;
-            padding: 20px;
-        }
-
-        .error-page {
-            text-align: center;
-            max-width: 600px;
-        }
-
-        .dino-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            opacity: 0.9;
             user-select: none;
         }
 
-        .error-heading {
-            font-size: 1.4rem;
-            font-weight: 400;
-            color: #e8eaed;
-            margin-bottom: 12px;
-            line-height: 1.5;
+        body {
+            min-height: 100vh;
+            background: url('https://cdn.imgurl.ir/uploads/b490554_IMG_20260513_141855_181.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
-        .error-heading strong {
-            color: #f28b82;
-            font-weight: 500;
+        /* مدال انتخاب نام کاربری */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
 
-        .error-subtitle {
-            font-size: 0.9rem;
-            color: #9aa0a6;
-            line-height: 1.7;
-            margin-bottom: 8px;
+        .modal-content {
+            background: #1e1e2f;
+            padding: 2rem;
+            border-radius: 2rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 350px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .error-code-text {
-            font-size: 0.8rem;
-            color: #5f6368;
-            margin-top: 20px;
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 50px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+
+        .modal-content button {
+            background: #ff9800;
+            color: #1e1e2f;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+
+        /* نوار بالایی شفاف */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 25px;
+            z-index: 200;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            direction: ltr;
+        }
+
+        .currency-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 18px;
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
+        }
+
+        .currency-emoji {
+            font-size: 1.8rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .currency-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd966;
+            text-shadow: 0 1px 2px black;
+            letter-spacing: 1px;
+        }
+
+        /* پنل پروفایل کاربر */
+        .user-panel {
+            position: fixed;
+            top: 85px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 200;
+            direction: ltr;
+        }
+
+        /* ===== رینگ اینستاگرامی زنده و چرخشی ===== */
+        .instagram-story-ring-wrapper {
+            position: relative;
+            width: 92px;
+            height: 92px;
+            flex-shrink: 0;
+        }
+
+        .instagram-story-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ffdc80, #f09433, #e6683c, #dc2743, #cc2366, #bc1888,
+                #cc2366, #dc2743, #e6683c, #f09433, #ffdc80
+            );
+            padding: 3px;
+            animation: rotateRing 3s linear infinite;
+            z-index: 1;
+            filter: brightness(1.2) saturate(1.4);
+        }
+
+        .instagram-story-ring::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                transparent, rgba(255, 255, 255, 0.4), rgba(255, 200, 100, 0.6), rgba(255, 100, 100, 0.4), rgba(255, 255, 255, 0.3), transparent
+            );
+            animation: rotateRing 2s linear infinite;
+            z-index: -1;
+            filter: blur(6px);
+        }
+
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .avatar-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            padding: 3px;
+        }
+
+        .avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #2c2c3a;
+            display: block;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .username-bar {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(20px);
+            padding: 0.9rem 1.8rem 0.9rem 2.2rem;
+            border-radius: 0 50px 50px 0;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
             letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-left: none;
+            margin-left: -14px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            white-space: nowrap;
+            max-width: 250px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
-        .error-code-text span {
-            font-family: 'Courier New', monospace;
-            color: #8ab4f8;
+        /* ===== گالری عمودی سمت راست ===== */
+        .right-vertical-gallery {
+            position: fixed;
+            top: 54px;
+            right: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            z-index: 180;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            direction: ltr;
+            background: transparent;
+            backdrop-filter: none;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        /* اسکرول مخفی */
+        .right-vertical-gallery::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+        
+        .right-vertical-gallery {
+            scrollbar-width: none;
+        }
+
+        /* دکمه هر عکس */
+        .gallery-img-btn {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            display: block;
+            line-height: 0;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .gallery-img-btn img {
+            width: 130px;
+            height: auto;
+            max-height: 145px;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        .gallery-img-btn:active {
+            transform: scale(0.94);
+        }
+
+        /* ردیف دو عکس دکمه‌ای وسط صفحه */
+        .top-row {
+            position: fixed;
+            bottom: 170px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            z-index: 200;
+            direction: rtl;
+        }
+
+        .top-btn {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            outline: none;
+        }
+
+        .top-btn img {
+            max-width: 320px;
+            max-height: 320px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
+            pointer-events: none;
+        }
+
+        .top-btn:active {
+            transform: scale(0.94);
+        }
+
+        /* سه عکس پایین صفحه */
+        .bottom-group {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 200;
+            direction: rtl;
+        }
+
+        .bottom-images {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 0;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .bottom-btn {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            display: inline-block;
+        }
+
+        .bottom-btn img {
+            max-width: 170px;
+            max-height: 170px;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .bottom-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* پیام به زودی */
+        .toast-soon {
+            position: fixed;
+            bottom: 300px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff5722ee;
+            color: white;
+            padding: 14px 36px;
+            border-radius: 80px;
+            font-weight: bold;
+            font-size: 1.6rem;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            animation: fadeOutUp 1.2s forwards;
+            pointer-events: none;
+            white-space: nowrap;
+            font-family: inherit;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        @keyframes fadeOutUp {
+            0% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            70% { opacity: 1; }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-50px);
+                visibility: hidden;
+            }
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 900px) {
+            .top-btn img {
+                max-width: 240px;
+                max-height: 240px;
+            }
+            .top-row {
+                gap: 40px;
+                bottom: 150px;
+            }
+            .currency-value { font-size: 1rem; }
+            .currency-emoji { font-size: 1.4rem; }
+            .top-bar { padding: 8px 18px; }
+            .toast-soon { bottom: 270px; font-size: 1.3rem; }
+            .instagram-story-ring-wrapper { width: 84px; height: 84px; }
+            .avatar-container { width: 74px; height: 74px; }
+            .avatar { width: 68px; height: 68px; }
+            
+            .gallery-img-btn img { width: 110px; max-height: 125px; }
+            .right-vertical-gallery { top: 50px; right: 8px; gap: 2px; }
+        }
+
+        @media (max-width: 700px) {
+            .instagram-story-ring-wrapper { width: 78px; height: 78px; }
+            .avatar-container { width: 68px; height: 68px; }
+            .avatar { width: 62px; height: 62px; }
+            .user-panel { top: 75px; }
+            .username-bar { font-size: 1rem; padding: 0.6rem 1.4rem 0.6rem 1.8rem; max-width: 180px; }
+            .top-btn img { max-width: 190px; max-height: 190px; }
+            .bottom-btn img { max-width: 130px; max-height: 130px; }
+            .top-row { gap: 30px; bottom: 130px; }
+            .bottom-group { bottom: 15px; }
+            .currency-value { font-size: 0.9rem; }
+            .toast-soon { bottom: 250px; font-size: 1.1rem; padding: 10px 24px; }
+            
+            .gallery-img-btn img { width: 95px; max-height: 105px; }
+            .right-vertical-gallery { top: 48px; right: 6px; gap: 2px; }
+        }
+
+        @media (max-width: 550px) {
+            .top-btn img { max-width: 150px; max-height: 150px; }
+            .bottom-btn img { max-width: 105px; max-height: 105px; }
+            .top-row { gap: 20px; bottom: 110px; }
+            .toast-soon { font-size: 0.9rem; bottom: 210px; padding: 8px 18px; }
+            .bottom-images { padding: 5px 8px; }
+            .currency-item { padding: 4px 12px; }
+            .instagram-story-ring-wrapper { width: 72px; height: 72px; }
+            .avatar-container { width: 62px; height: 62px; }
+            .avatar { width: 56px; height: 56px; }
+            
+            .gallery-img-btn img { width: 80px; max-height: 90px; }
+            .right-vertical-gallery { top: 46px; right: 5px; gap: 1px; }
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="error-page">
-        <div class="dino-icon"></div>
-        
-        <p class="error-heading">
-            <strong>Server disconnected</strong><br>
-            The connection was closed by the developer
-        </p>
-        
-        <p class="error-subtitle">
-            This server has been terminated by its operator.<br>
-            The service is no longer available on this address.
-        </p>
 
-        <p class="error-code-text">
-            <span>ERR_CONNECTION_CLOSED</span> &nbsp;|&nbsp; Error 224
-        </p>
+    <!-- مدال نام کاربری -->
+    <div id="usernameModal" class="modal">
+        <div class="modal-content">
+            <h2>🎮 انتخاب نام کاربری 🎮</h2>
+            <input type="text" id="usernameInput" placeholder="نام خود را وارد کنید..." maxlength="20" autocomplete="off">
+            <button id="saveNameBtn">ورود به بازی</button>
+        </div>
     </div>
+
+    <!-- نوار بالایی شفاف (جواهر و سکه) -->
+    <div class="top-bar">
+        <div class="currency-item">
+            <span class="currency-emoji">💎</span>
+            <span class="currency-value" id="gemsValue">0</span>
+        </div>
+        <div class="currency-item">
+            <span class="currency-emoji">🪙</span>
+            <span class="currency-value" id="coinsValue">0</span>
+        </div>
+    </div>
+
+    <!-- پنل کاربری با رینگ اینستاگرامی -->
+    <div class="user-panel">
+        <div class="instagram-story-ring-wrapper">
+            <div class="instagram-story-ring"></div>
+            <div class="avatar-container">
+                <img class="avatar" id="userAvatar" src="https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg" alt="Avatar">
+            </div>
+        </div>
+        <div class="username-bar" id="usernameDisplay">---</div>
+    </div>
+
+    <!-- گالری عمودی سمت راست -->
+    <div class="right-vertical-gallery" id="rightGallery">
+        <div class="gallery-img-btn" data-img="1">
+            <img src="https://cdn.imgurl.ir/uploads/y004260_InShot__.png" alt="تصویر 1">
+        </div>
+        <div class="gallery-img-btn" data-img="2">
+            <img src="https://cdn.imgurl.ir/uploads/b855600_InShot__.png" alt="تصویر 2">
+        </div>
+        <div class="gallery-img-btn" data-img="3">
+            <img src="https://cdn.imgurl.ir/uploads/58616_InShot__.png" alt="تصویر 3">
+        </div>
+        <div class="gallery-img-btn" data-img="4">
+            <img src="https://cdn.imgurl.ir/uploads/m347400_InShot__.png" alt="تصویر 4">
+        </div>
+        <div class="gallery-img-btn" data-img="5">
+            <img src="https://cdn.imgurl.ir/uploads/l33891_InShot__.png" alt="تصویر 5">
+        </div>
+    </div>
+
+    <!-- ردیف دو عکس دکمه‌ای وسط صفحه -->
+    <div class="top-row">
+        <div class="top-btn" id="topRightBtn">
+            <img src="https://cdn.imgurl.ir/uploads/t03630_InShot__.png" alt="عکس بالایی راست">
+        </div>
+        <div class="top-btn" id="topLeftBtn">
+            <img src="https://cdn.imgurl.ir/uploads/u338374_InShot__.png" alt="عکس بالایی چپ">
+        </div>
+    </div>
+
+    <!-- گروه سه عکس پایین -->
+    <div class="bottom-group">
+        <div class="bottom-images">
+            <div class="bottom-btn" id="bottomRightImg">
+                <img src="https://cdn.imgurl.ir/uploads/o580196_IMG_20260511_184033_171.jpg" alt="پایین راست">
+            </div>
+            <div class="bottom-btn" id="bottomCenterImg">
+                <img src="https://cdn.imgurl.ir/uploads/d8154_IMG_20260511_184138_470.jpg" alt="پایین وسط">
+            </div>
+            <div class="bottom-btn" id="bottomLeftImg">
+                <img src="https://cdn.imgurl.ir/uploads/b267514_IMG_20260511_184145_633.jpg" alt="پایین چپ">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('usernameModal');
+        const usernameInput = document.getElementById('usernameInput');
+        const saveBtn = document.getElementById('saveNameBtn');
+        const usernameDisplaySpan = document.getElementById('usernameDisplay');
+        const avatarImg = document.getElementById('userAvatar');
+
+        const gemsSpan = document.getElementById('gemsValue');
+        const coinsSpan = document.getElementById('coinsValue');
+
+        const topRight = document.getElementById('topRightBtn');
+        const topLeft = document.getElementById('topLeftBtn');
+        const bottomRight = document.getElementById('bottomRightImg');
+        const bottomCenter = document.getElementById('bottomCenterImg');
+        const bottomLeft = document.getElementById('bottomLeftImg');
+        
+        const galleryBtns = document.querySelectorAll('.gallery-img-btn');
+
+        function loadCurrencies() {
+            let gems = localStorage.getItem('userGems');
+            let coins = localStorage.getItem('userCoins');
+            if (gems === null) gems = 1250;
+            if (coins === null) coins = 8300;
+            gemsSpan.innerText = Number(gems).toLocaleString();
+            coinsSpan.innerText = Number(coins).toLocaleString();
+        }
+
+        function showSoonToast() {
+            const existingToast = document.querySelector('.toast-soon');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-soon';
+            toast.innerText = '⚡ به زودی... ⚡';
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                if (toast && toast.remove) toast.remove();
+            }, 1300);
+        }
+
+        function loadUser() {
+            const savedName = localStorage.getItem('gameUsername');
+            if (savedName && savedName.trim() !== "") {
+                usernameDisplaySpan.innerText = savedName;
+                modal.classList.add('hidden');
+            } else {
+                modal.classList.remove('hidden');
+                usernameInput.value = '';
+                usernameInput.focus();
+            }
+        }
+
+        function saveUsername() {
+            let newName = usernameInput.value.trim();
+            if (newName === "") {
+                alert("لطفاً یک نام برای خود انتخاب کنید!");
+                return;
+            }
+            if (newName.length > 20) newName = newName.slice(0, 20);
+            localStorage.setItem('gameUsername', newName);
+            usernameDisplaySpan.innerText = newName;
+            modal.classList.add('hidden');
+        }
+
+        saveBtn.addEventListener('click', saveUsername);
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveUsername();
+            }
+        });
+
+        if (topRight) topRight.addEventListener('click', showSoonToast);
+        if (topLeft) topLeft.addEventListener('click', showSoonToast);
+        if (bottomRight) bottomRight.addEventListener('click', showSoonToast);
+        if (bottomCenter) bottomCenter.addEventListener('click', showSoonToast);
+        if (bottomLeft) bottomLeft.addEventListener('click', showSoonToast);
+        
+        if (galleryBtns.length > 0) {
+            galleryBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showSoonToast();
+                });
+            });
+        }
+
+        usernameDisplaySpan.addEventListener('dblclick', () => {
+            modal.classList.remove('hidden');
+            usernameInput.value = localStorage.getItem('gameUsername') || '';
+            usernameInput.focus();
+        });
+
+        avatarImg.onerror = () => {
+            console.warn("آواتار لود نشد");
+            avatarImg.src = "https://via.placeholder.com/80?text=Avatar";
+        };
+
+        const allImages = document.querySelectorAll('img');
+        allImages.forEach(img => {
+            img.onerror = () => {
+                console.warn("تصویر لود نشد:", img.src);
+            };
+        });
+
+        loadUser();
+        loadCurrencies();
+
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('gameUsername')) modal.classList.add('hidden');
+            
+            const gallery = document.getElementById('rightGallery');
+            if (gallery) {
+                gallery.style.background = 'transparent';
+                gallery.style.backdropFilter = 'none';
+                gallery.style.border = 'none';
+                gallery.style.boxShadow = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
