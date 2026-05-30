@@ -297,6 +297,39 @@
         .player-seat img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.96); box-shadow: 0 0 18px rgba(255,255,255,.16); }
         .empty-icon { font-size: 38px; color: rgba(255,255,255,.24); }
         .player-name-label { position: absolute; bottom: -35px; background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 20px; font-size: 12px; color: white; white-space: nowrap; }
+        
+        /* دکمه میکروفون روی صندلی */
+        .mic-button {
+            position: absolute;
+            bottom: -12px;
+            right: -12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #2a3a5a, #1a2a4a);
+            border: 2px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: 0.2s;
+            font-size: 16px;
+        }
+        .mic-button.active {
+            background: linear-gradient(145deg, #00cc88, #009966);
+            border-color: #fff;
+            box-shadow: 0 0 12px rgba(0,255,136,0.5);
+        }
+        .mic-button.recording {
+            animation: pulseMic 1s infinite;
+        }
+        @keyframes pulseMic {
+            0% { box-shadow: 0 0 0 0 rgba(255,68,68,0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(255,68,68,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,68,68,0); }
+        }
+        
         .room-center { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; pointer-events: none; }
         .room-bottom-bar { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; z-index: 50; }
         .exit-room-btn, .room-ready-btn { border: none; border-radius: 20px; padding: 18px 34px; font-size: 17px; font-weight: bold; color: white; cursor: pointer; transition: .22s; }
@@ -310,6 +343,7 @@
             .player-seat img{ width:58px; height:58px; } .empty-icon{ font-size:30px; }
             .room-bottom-bar{ width:95%; gap:10px; }
             .exit-room-btn, .room-ready-btn{ flex:1; padding:15px 10px; font-size:15px; }
+            .mic-button { width: 26px; height: 26px; font-size: 12px; bottom: -8px; right: -8px; }
             .p1{ left:8px; top:8%; } .p2{ left:8px; top:23%; } .p3{ left:8px; top:38%; }
             .p4{ left:8px; top:53%; } .p5{ left:8px; top:68%; } .p6{ right:8px; top:8%; }
             .p7{ right:8px; top:23%; } .p8{ right:8px; top:38%; } .p9{ right:8px; top:53%; } .p10{ right:8px; top:68%; }
@@ -376,6 +410,15 @@
         @keyframes liveMove { 0% { right: -40%; } 100% { right: 120%; } }
         @keyframes dialogShow { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
         
+        /* نشانگر صحبت کردن */
+        .speaking {
+            animation: speakGlow 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes speakGlow {
+            from { box-shadow: 0 0 5px rgba(0,255,0,0.5); border-color: #00ff88; }
+            to { box-shadow: 0 0 20px rgba(0,255,0,0.9); border-color: #00ff88; }
+        }
+        
         @media (max-width: 600px) { .packs-grid { gap: 16px; padding: 0 15px; } .pack-icon { font-size: 2.8rem; } .pack-coins { font-size: 1.4rem; } .pack-name { font-size: 0.8rem; } .shop-header h1 { font-size: 1.9rem; } .close-shop-btn { font-size: 1rem; padding: 10px 24px; } .profile-content { padding: 1.5rem; } .profile-code { font-size: 0.7rem; } .toast-msg { font-size: 0.8rem; white-space: normal; text-align: center; width: 80%; } }
         @media (max-width: 450px) { .packs-grid { gap: 12px; } .mafia-pack-card { padding: 15px 8px; } .pack-icon { font-size: 2.4rem; } .pack-coins { font-size: 1.2rem; } }
         @media (max-width: 900px) { .top-btn img { max-width: 240px; max-height: 240px; } .top-row { gap: 40px; bottom: 150px; } .currency-value { font-size: 1rem; } .instagram-story-ring-wrapper { width: 84px; height: 84px; } .avatar-container { width: 74px; height: 74px; } .avatar { width: 68px; height: 68px; } .gallery-img-btn img { width: 110px; max-height: 125px; } }
@@ -437,6 +480,112 @@
             const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
             return number.toString().replace(/\d/g, function(x) { return persianDigits[parseInt(x)]; });
         }
+
+        // ===== سیستم صوتی آنلاین با WebRTC و Ably =====
+        let localStream = null;
+        let peerConnections = {};
+        let audioContext = null;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+        let voiceChannel = null;
+        
+        // راه‌اندازی کانال صوتی Ably
+        function initVoiceChannel(lobbyId) {
+            if(!ablyVoice) {
+                ablyVoice = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
+                ablyVoice.connection.on('connected', () => {
+                    voiceChannel = ablyVoice.channels.get('voice-channel-' + lobbyId);
+                    voiceChannel.subscribe('voice-data', (message) => {
+                        if(message.data && message.data.senderId !== currentUserId) {
+                            playAudioData(message.data.audioData);
+                        }
+                    });
+                    voiceChannel.subscribe('voice-start', (message) => {
+                        if(message.data && message.data.senderId !== currentUserId) {
+                            showToast(`🎤 ${message.data.senderName} در حال صحبت کردن است...`, 800);
+                            const seatElement = document.querySelector(`.player-seat img[alt*="${message.data.senderName}"]`)?.closest('.player-seat');
+                            if(seatElement) seatElement.classList.add('speaking');
+                        }
+                    });
+                    voiceChannel.subscribe('voice-stop', (message) => {
+                        if(message.data && message.data.senderId !== currentUserId) {
+                            const seatElement = document.querySelector(`.player-seat img[alt*="${message.data.senderName}"]`)?.closest('.player-seat');
+                            if(seatElement) seatElement.classList.remove('speaking');
+                        }
+                    });
+                });
+            }
+        }
+        
+        function playAudioData(base64Data) {
+            const audio = new Audio(base64Data);
+            audio.play().catch(e => console.log('Audio play error:', e));
+        }
+        
+        async function startRecording(lobbyId) {
+            if(isRecording) return;
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(localStream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if(event.data.size > 0) {
+                        audioChunks.push(event.data);
+                        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            const base64Audio = reader.result;
+                            if(voiceChannel && voiceChannel.connection && voiceChannel.connection.state === 'connected') {
+                                voiceChannel.publish('voice-data', {
+                                    senderId: currentUserId,
+                                    senderName: currentUsername,
+                                    audioData: base64Audio,
+                                    timestamp: Date.now()
+                                });
+                            }
+                        };
+                        reader.readAsDataURL(blob);
+                        audioChunks = [];
+                    }
+                };
+                
+                mediaRecorder.start(100);
+                isRecording = true;
+                if(voiceChannel) {
+                    voiceChannel.publish('voice-start', {
+                        senderId: currentUserId,
+                        senderName: currentUsername,
+                        lobbyId: lobbyId
+                    });
+                }
+                showToast('🎙️ میکروفون روشن شد...', 1000);
+            } catch(e) {
+                console.error('Microphone error:', e);
+                showToast('❌ دسترسی به میکروفون امکانپذیر نیست!', 2000);
+            }
+        }
+        
+        function stopRecording() {
+            if(mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                if(localStream) {
+                    localStream.getTracks().forEach(track => track.stop());
+                    localStream = null;
+                }
+                if(voiceChannel) {
+                    voiceChannel.publish('voice-stop', {
+                        senderId: currentUserId,
+                        senderName: currentUsername
+                    });
+                }
+                showToast('🔇 میکروفون خاموش شد', 1000);
+            }
+        }
+        
+        let ablyVoice = null;
 
         // ===== سیستم لاوی آنلاین با Ably =====
         let lobbies = [];
@@ -512,9 +661,6 @@
                                 if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
                                     window.currentLobbyPage.refreshList();
                                 }
-                                if(lobby.ownerId === currentUserId && data.userId !== currentUserId) {
-                                    showToast(`👤 ${data.userName || 'یک کاربر'} از لاوی "${lobby.name}" خارج شد`, 1500);
-                                }
                             }
                         }
                     });
@@ -559,6 +705,7 @@
         }
         
         function leaveLobby(lobbyId) {
+            if(voiceChannel) stopRecording();
             const lobby = lobbies.find(l => l.id === lobbyId);
             if(lobby && lobbyChannel && lobbyChannel.connection && lobbyChannel.connection.state === 'connected') {
                 lobbyChannel.publish('lobby-leave', {
@@ -589,6 +736,9 @@
             if(!lobby) { showToast('لاوی وجود ندارد'); return; }
             if(!lobby.players.some(p => p.id === currentUserId)) { showToast('شما عضو این لاوی نیستید'); return; }
             
+            // راه‌اندازی کانال صوتی برای این لاوی
+            initVoiceChannel(lobbyId);
+            
             const existingRoom = document.querySelector('.room-table');
             if(existingRoom && existingRoom.parentNode) existingRoom.remove();
             
@@ -603,6 +753,8 @@
             roomPage.style.overflow = 'hidden';
             
             const seatPositions = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
+            
+            let micActive = false;
             
             function updateRoomUI() {
                 const currentLobby = lobbies.find(l => l.id === lobbyId);
@@ -620,7 +772,13 @@
                 for(let i = 0; i < 10; i++) {
                     const player = currentLobby.players[i];
                     if(player) {
-                        seatsHtml += `<div class="player-seat ${seatPositions[i]}"><img src="${player.avatar}" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'"><div class="player-name-label">${player.name}</div></div>`;
+                        seatsHtml += `<div class="player-seat ${seatPositions[i]}" data-player-id="${player.id}">
+                            <img src="${player.avatar}" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'">
+                            <div class="player-name-label">${player.name}</div>
+                            ${player.id === currentUserId ? 
+                                `<div class="mic-button ${micActive ? 'active recording' : ''}" id="micToggleBtn">${micActive ? '🎤' : '🎙️'}</div>` : 
+                                ''}
+                        </div>`;
                     } else {
                         seatsHtml += `<div class="player-seat empty-seat ${seatPositions[i]}"><div class="empty-icon">+</div><div class="player-name-label">صندلی خالی</div></div>`;
                     }
@@ -628,6 +786,24 @@
                 const centerHtml = `<div class="room-center"><div style="background:rgba(0,0,0,0.6);border-radius:50px;padding:15px 30px;color:white;font-weight:bold;text-align:center;">🎮 ${currentLobby.name} 🎮<br><span style="font-size:12px;">👥 ${currentLobby.players.length}/10 نفر</span></div></div>`;
                 const bottomHtml = `<div class="room-bottom-bar"><button class="room-ready-btn" id="roomReadyBtn">آماده نیستم</button><button class="exit-room-btn" id="exitRoomBtn">🔙 خروج از لاوی</button></div>`;
                 roomPage.innerHTML = `<div class="room-table">${seatsHtml}${centerHtml}${bottomHtml}</div>`;
+                
+                const micBtn = document.getElementById('micToggleBtn');
+                if(micBtn) {
+                    micBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        if(micActive) {
+                            stopRecording();
+                            micActive = false;
+                            micBtn.classList.remove('active', 'recording');
+                            micBtn.innerHTML = '🎙️';
+                        } else {
+                            startRecording(lobbyId);
+                            micActive = true;
+                            micBtn.classList.add('active', 'recording');
+                            micBtn.innerHTML = '🎤';
+                        }
+                    };
+                }
                 
                 const readyBtn = document.getElementById('roomReadyBtn');
                 if(readyBtn) {
@@ -639,7 +815,12 @@
                     };
                 }
                 const exitBtn = document.getElementById('exitRoomBtn');
-                if(exitBtn) exitBtn.onclick = () => { leaveLobby(lobbyId); if(roomPage && roomPage.parentNode) roomPage.remove(); setTimeout(() => showFriendsPage(), 100); };
+                if(exitBtn) exitBtn.onclick = () => { 
+                    if(micActive) stopRecording();
+                    leaveLobby(lobbyId); 
+                    if(roomPage && roomPage.parentNode) roomPage.remove(); 
+                    setTimeout(() => showFriendsPage(), 100); 
+                };
             }
             
             updateRoomUI();
