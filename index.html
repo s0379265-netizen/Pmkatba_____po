@@ -481,46 +481,27 @@
             return number.toString().replace(/\d/g, function(x) { return persianDigits[parseInt(x)]; });
         }
 
-        // ===== سیستم صوتی آنلاین با WebRTC و Ably =====
+        // ===== سیستم صوتی آنلاین =====
         let localStream = null;
-        let peerConnections = {};
-        let audioContext = null;
         let mediaRecorder = null;
         let audioChunks = [];
         let isRecording = false;
         let voiceChannel = null;
+        let ablyVoice = null;
         
-        // راه‌اندازی کانال صوتی Ably
         function initVoiceChannel(lobbyId) {
             if(!ablyVoice) {
                 ablyVoice = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
                 ablyVoice.connection.on('connected', () => {
-                    voiceChannel = ablyVoice.channels.get('voice-channel-' + lobbyId);
+                    voiceChannel = ablyVoice.channels.get('voice-' + lobbyId);
                     voiceChannel.subscribe('voice-data', (message) => {
                         if(message.data && message.data.senderId !== currentUserId) {
-                            playAudioData(message.data.audioData);
-                        }
-                    });
-                    voiceChannel.subscribe('voice-start', (message) => {
-                        if(message.data && message.data.senderId !== currentUserId) {
-                            showToast(`🎤 ${message.data.senderName} در حال صحبت کردن است...`, 800);
-                            const seatElement = document.querySelector(`.player-seat img[alt*="${message.data.senderName}"]`)?.closest('.player-seat');
-                            if(seatElement) seatElement.classList.add('speaking');
-                        }
-                    });
-                    voiceChannel.subscribe('voice-stop', (message) => {
-                        if(message.data && message.data.senderId !== currentUserId) {
-                            const seatElement = document.querySelector(`.player-seat img[alt*="${message.data.senderName}"]`)?.closest('.player-seat');
-                            if(seatElement) seatElement.classList.remove('speaking');
+                            const audio = new Audio(message.data.audioData);
+                            audio.play().catch(e => console.log('Audio error:', e));
                         }
                     });
                 });
             }
-        }
-        
-        function playAudioData(base64Data) {
-            const audio = new Audio(base64Data);
-            audio.play().catch(e => console.log('Audio play error:', e));
         }
         
         async function startRecording(lobbyId) {
@@ -536,13 +517,10 @@
                         const blob = new Blob(audioChunks, { type: 'audio/webm' });
                         const reader = new FileReader();
                         reader.onloadend = () => {
-                            const base64Audio = reader.result;
                             if(voiceChannel && voiceChannel.connection && voiceChannel.connection.state === 'connected') {
                                 voiceChannel.publish('voice-data', {
                                     senderId: currentUserId,
-                                    senderName: currentUsername,
-                                    audioData: base64Audio,
-                                    timestamp: Date.now()
+                                    audioData: reader.result
                                 });
                             }
                         };
@@ -551,18 +529,10 @@
                     }
                 };
                 
-                mediaRecorder.start(100);
+                mediaRecorder.start(200);
                 isRecording = true;
-                if(voiceChannel) {
-                    voiceChannel.publish('voice-start', {
-                        senderId: currentUserId,
-                        senderName: currentUsername,
-                        lobbyId: lobbyId
-                    });
-                }
                 showToast('🎙️ میکروفون روشن شد...', 1000);
             } catch(e) {
-                console.error('Microphone error:', e);
                 showToast('❌ دسترسی به میکروفون امکانپذیر نیست!', 2000);
             }
         }
@@ -571,50 +541,49 @@
             if(mediaRecorder && isRecording) {
                 mediaRecorder.stop();
                 isRecording = false;
-                if(localStream) {
-                    localStream.getTracks().forEach(track => track.stop());
-                    localStream = null;
-                }
-                if(voiceChannel) {
-                    voiceChannel.publish('voice-stop', {
-                        senderId: currentUserId,
-                        senderName: currentUsername
-                    });
-                }
+                if(localStream) localStream.getTracks().forEach(track => track.stop());
                 showToast('🔇 میکروفون خاموش شد', 1000);
             }
         }
-        
-        let ablyVoice = null;
 
         // ===== سیستم لاوی آنلاین با Ably =====
         let lobbies = [];
         let ablyLobby = null;
         let lobbyChannel = null;
         
-        function loadLobbiesFromStorage() {
-            const saved = localStorage.getItem('onlineLobbies');
-            if(saved) lobbies = JSON.parse(saved);
-            else lobbies = [];
-        }
-        
-        function saveLobbiesToStorage() {
-            localStorage.setItem('onlineLobbies', JSON.stringify(lobbies));
-            if(lobbyChannel && lobbyChannel.connection && lobbyChannel.connection.state === 'connected') {
-                lobbyChannel.publish('lobbies-updated', { lobbies: lobbies, timestamp: Date.now() });
+        // بارگذاری لاوی‌ها از localStorage
+        function loadLobbies() {
+            const saved = localStorage.getItem('mafiaLobbies');
+            if(saved) {
+                lobbies = JSON.parse(saved);
+            } else {
+                lobbies = [];
+            }
+            // بروزرسانی لیست
+            if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
+                window.currentLobbyPage.refreshList();
             }
         }
         
-        function connectToLobbySystem() {
+        // ذخیره لاوی‌ها در localStorage و ارسال به Ably
+        function saveLobbies() {
+            localStorage.setItem('mafiaLobbies', JSON.stringify(lobbies));
+            if(lobbyChannel && lobbyChannel.connection && lobbyChannel.connection.state === 'connected') {
+                lobbyChannel.publish('lobbies-sync', { lobbies: lobbies });
+            }
+        }
+        
+        // اتصال به Ably برای همگام‌سازی لاوی‌ها
+        function connectLobbySync() {
             if(typeof Ably === 'undefined' || !currentUserId) return;
             try {
                 ablyLobby = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
                 ablyLobby.connection.on('connected', () => {
-                    lobbyChannel = ablyLobby.channels.get('lobby-system-channel');
-                    lobbyChannel.subscribe('lobbies-updated', (message) => {
+                    lobbyChannel = ablyLobby.channels.get('lobby-sync');
+                    lobbyChannel.subscribe('lobbies-sync', (message) => {
                         if(message.data && message.data.lobbies) {
                             lobbies = message.data.lobbies;
-                            saveLobbiesToStorage();
+                            localStorage.setItem('mafiaLobbies', JSON.stringify(lobbies));
                             if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
                                 window.currentLobbyPage.refreshList();
                             }
@@ -623,98 +592,46 @@
                             }
                         }
                     });
-                    lobbyChannel.subscribe('lobby-join', (message) => {
-                        const data = message.data;
-                        const lobby = lobbies.find(l => l.id === data.lobbyId);
-                        if(lobby && !lobby.players.some(p => p.id === data.userId) && lobby.players.length < 10) {
-                            lobby.players.push({ id: data.userId, name: data.userName, avatar: data.avatar });
-                            saveLobbiesToStorage();
-                            if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId && window.currentLobbyRoom.updateUI) {
-                                window.currentLobbyRoom.updateUI();
-                            }
-                            if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                                window.currentLobbyPage.refreshList();
-                            }
-                            if(lobby.ownerId === currentUserId) {
-                                showToast(`👤 ${data.userName} به لاوی "${lobby.name}" پیوست`, 2000);
-                            }
-                        }
-                    });
-                    lobbyChannel.subscribe('lobby-leave', (message) => {
-                        const data = message.data;
-                        const lobby = lobbies.find(l => l.id === data.lobbyId);
-                        if(lobby) {
-                            const index = lobby.players.findIndex(p => p.id === data.userId);
-                            if(index !== -1) {
-                                lobby.players.splice(index, 1);
-                                if(lobby.players.length === 0) {
-                                    const lobbyIndex = lobbies.findIndex(l => l.id === data.lobbyId);
-                                    if(lobbyIndex !== -1) lobbies.splice(lobbyIndex, 1);
-                                } else if(lobby.ownerId === data.userId && lobby.players.length > 0) {
-                                    lobby.ownerId = lobby.players[0].id;
-                                    lobby.ownerName = lobby.players[0].name;
-                                }
-                                saveLobbiesToStorage();
-                                if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId && window.currentLobbyRoom.updateUI) {
-                                    window.currentLobbyRoom.updateUI();
-                                }
-                                if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                                    window.currentLobbyPage.refreshList();
-                                }
-                            }
-                        }
-                    });
+                    // بعد از اتصال، لاوی‌های خود را همگام کن
+                    lobbyChannel.publish('lobbies-sync', { lobbies: lobbies });
                 });
-            } catch(e) { console.error('Lobby connection error:', e); }
+            } catch(e) { console.error('Sync error:', e); }
         }
         
-        function createLobby(lobbyName) {
+        // ایجاد لاوی جدید
+        function createLobby(name) {
             if(!currentUserId || !currentUsername) return false;
             const newLobby = {
-                id: 'lobby_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-                name: lobbyName,
+                id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 4),
+                name: name,
                 ownerId: currentUserId,
                 ownerName: currentUsername,
-                players: [{ id: currentUserId, name: currentUsername, avatar: avatarImg.src }]
+                players: [{ id: currentUserId, name: currentUsername, avatar: avatarImg.src }],
+                createdAt: Date.now()
             };
             lobbies.push(newLobby);
-            saveLobbiesToStorage();
-            showToast(`✅ لاوی "${lobbyName}" ساخته شد!`, 3000);
+            saveLobbies();
+            showToast(`✅ لاوی "${name}" ساخته شد!`, 2000);
             return newLobby;
         }
         
+        // پیوستن به لاوی
         function joinLobby(lobbyId) {
             const lobby = lobbies.find(l => l.id === lobbyId);
-            if(!lobby) { showToast('❌ لاوی وجود ندارد!'); return null; }
-            if(lobby.players.some(p => p.id === currentUserId)) { showToast('❌ قبلاً در این لاوی هستید!'); return null; }
-            if(lobby.players.length >= 10) { showToast('❌ لاوی پر است (حداکثر 10 نفر)!'); return null; }
+            if(!lobby) { showToast('❌ لاوی یافت نشد!'); return null; }
+            if(lobby.players.some(p => p.id === currentUserId)) { showToast('❌ شما قبلاً در این لاوی هستید!'); return null; }
+            if(lobby.players.length >= 10) { showToast('❌ لاوی پر است!'); return null; }
             
-            if(lobbyChannel && lobbyChannel.connection && lobbyChannel.connection.state === 'connected') {
-                lobbyChannel.publish('lobby-join', {
-                    lobbyId: lobbyId,
-                    userId: currentUserId,
-                    userName: currentUsername,
-                    avatar: avatarImg.src,
-                    timestamp: Date.now()
-                });
-            }
             lobby.players.push({ id: currentUserId, name: currentUsername, avatar: avatarImg.src });
-            saveLobbiesToStorage();
-            showToast(`✅ شما به لاوی "${lobby.name}" پیوستید!`);
+            saveLobbies();
+            showToast(`✅ شما به لاوی "${lobby.name}" پیوستید!`, 2000);
             return lobby;
         }
         
+        // خروج از لاوی
         function leaveLobby(lobbyId) {
             if(voiceChannel) stopRecording();
             const lobby = lobbies.find(l => l.id === lobbyId);
-            if(lobby && lobbyChannel && lobbyChannel.connection && lobbyChannel.connection.state === 'connected') {
-                lobbyChannel.publish('lobby-leave', {
-                    lobbyId: lobbyId,
-                    userId: currentUserId,
-                    userName: currentUsername,
-                    timestamp: Date.now()
-                });
-            }
             if(lobby) {
                 const index = lobby.players.findIndex(p => p.id === currentUserId);
                 if(index !== -1) lobby.players.splice(index, 1);
@@ -725,18 +642,17 @@
                     lobby.ownerId = lobby.players[0].id;
                     lobby.ownerName = lobby.players[0].name;
                 }
-                saveLobbiesToStorage();
+                saveLobbies();
             }
             showToast('🚪 شما لاوی را ترک کردید');
         }
         
-        // صفحه نمایش لاوی (اتاق مافیایی)
+        // نمایش صفحه لاوی (اتاق)
         function showLobbyRoom(lobbyId) {
             const lobby = lobbies.find(l => l.id === lobbyId);
             if(!lobby) { showToast('لاوی وجود ندارد'); return; }
             if(!lobby.players.some(p => p.id === currentUserId)) { showToast('شما عضو این لاوی نیستید'); return; }
             
-            // راه‌اندازی کانال صوتی برای این لاوی
             initVoiceChannel(lobbyId);
             
             const existingRoom = document.querySelector('.room-table');
@@ -750,47 +666,38 @@
             roomPage.style.height = '100%';
             roomPage.style.zIndex = '400';
             roomPage.style.background = 'radial-gradient(circle at top, rgba(0,220,255,.20), transparent 28%), radial-gradient(circle at bottom, rgba(0,100,255,.14), transparent 40%), linear-gradient(180deg, #123c72 0%, #0a2850 22%, #071c38 46%, #051427 70%, #020914 100%)';
-            roomPage.style.overflow = 'hidden';
             
             const seatPositions = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
-            
             let micActive = false;
             
-            function updateRoomUI() {
+            function updateRoom() {
                 const currentLobby = lobbies.find(l => l.id === lobbyId);
-                if(!currentLobby) { 
-                    if(roomPage && roomPage.parentNode) roomPage.remove(); 
-                    showToast('لاوی بسته شده است'); 
-                    return; 
+                if(!currentLobby) {
+                    if(roomPage && roomPage.parentNode) roomPage.remove();
+                    showToast('لاوی بسته شده است');
+                    return;
                 }
                 if(!currentLobby.players.some(p => p.id === currentUserId)) {
                     if(roomPage && roomPage.parentNode) roomPage.remove();
                     showToast('شما از لاوی خارج شده‌اید');
                     return;
                 }
+                
                 let seatsHtml = '';
                 for(let i = 0; i < 10; i++) {
                     const player = currentLobby.players[i];
                     if(player) {
-                        seatsHtml += `<div class="player-seat ${seatPositions[i]}" data-player-id="${player.id}">
-                            <img src="${player.avatar}" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'">
-                            <div class="player-name-label">${player.name}</div>
-                            ${player.id === currentUserId ? 
-                                `<div class="mic-button ${micActive ? 'active recording' : ''}" id="micToggleBtn">${micActive ? '🎤' : '🎙️'}</div>` : 
-                                ''}
-                        </div>`;
+                        seatsHtml += `<div class="player-seat ${seatPositions[i]}"><img src="${player.avatar}" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'"><div class="player-name-label">${player.name}</div>${player.id === currentUserId ? `<div class="mic-button ${micActive ? 'active recording' : ''}" id="micBtn">${micActive ? '🎤' : '🎙️'}</div>` : ''}</div>`;
                     } else {
                         seatsHtml += `<div class="player-seat empty-seat ${seatPositions[i]}"><div class="empty-icon">+</div><div class="player-name-label">صندلی خالی</div></div>`;
                     }
                 }
-                const centerHtml = `<div class="room-center"><div style="background:rgba(0,0,0,0.6);border-radius:50px;padding:15px 30px;color:white;font-weight:bold;text-align:center;">🎮 ${currentLobby.name} 🎮<br><span style="font-size:12px;">👥 ${currentLobby.players.length}/10 نفر</span></div></div>`;
-                const bottomHtml = `<div class="room-bottom-bar"><button class="room-ready-btn" id="roomReadyBtn">آماده نیستم</button><button class="exit-room-btn" id="exitRoomBtn">🔙 خروج از لاوی</button></div>`;
-                roomPage.innerHTML = `<div class="room-table">${seatsHtml}${centerHtml}${bottomHtml}</div>`;
                 
-                const micBtn = document.getElementById('micToggleBtn');
+                roomPage.innerHTML = `<div class="room-table">${seatsHtml}<div class="room-center"><div style="background:rgba(0,0,0,0.6);border-radius:50px;padding:15px 30px;color:white;font-weight:bold;text-align:center;">🎮 ${currentLobby.name} 🎮<br><span style="font-size:12px;">👥 ${currentLobby.players.length}/10 نفر</span></div></div><div class="room-bottom-bar"><button class="room-ready-btn" id="readyBtn">آماده نیستم</button><button class="exit-room-btn" id="exitBtn">🔙 خروج</button></div></div>`;
+                
+                const micBtn = document.getElementById('micBtn');
                 if(micBtn) {
-                    micBtn.onclick = (e) => {
-                        e.stopPropagation();
+                    micBtn.onclick = () => {
                         if(micActive) {
                             stopRecording();
                             micActive = false;
@@ -805,7 +712,7 @@
                     };
                 }
                 
-                const readyBtn = document.getElementById('roomReadyBtn');
+                const readyBtn = document.getElementById('readyBtn');
                 if(readyBtn) {
                     let ready = false;
                     readyBtn.onclick = () => {
@@ -814,51 +721,52 @@
                         else { readyBtn.classList.remove('active'); readyBtn.innerText = 'آماده نیستم'; }
                     };
                 }
-                const exitBtn = document.getElementById('exitRoomBtn');
-                if(exitBtn) exitBtn.onclick = () => { 
+                
+                const exitBtn = document.getElementById('exitBtn');
+                if(exitBtn) exitBtn.onclick = () => {
                     if(micActive) stopRecording();
-                    leaveLobby(lobbyId); 
-                    if(roomPage && roomPage.parentNode) roomPage.remove(); 
-                    setTimeout(() => showFriendsPage(), 100); 
+                    leaveLobby(lobbyId);
+                    if(roomPage && roomPage.parentNode) roomPage.remove();
+                    setTimeout(() => showFriendsPage(), 100);
                 };
             }
             
-            updateRoomUI();
+            updateRoom();
             document.body.appendChild(roomPage);
             
-            window.currentLobbyRoom = { lobbyId: lobbyId, updateUI: updateRoomUI };
+            window.currentLobbyRoom = { updateUI: updateRoom };
             const interval = setInterval(() => {
                 if(document.body.contains(roomPage)) {
                     const currentLobby = lobbies.find(l => l.id === lobbyId);
                     if(currentLobby && currentLobby.players.some(p => p.id === currentUserId)) {
-                        updateRoomUI();
+                        updateRoom();
                     } else {
                         clearInterval(interval);
                         if(document.body.contains(roomPage)) roomPage.remove();
                     }
                 } else { clearInterval(interval); }
-            }, 1500);
+            }, 2000);
         }
         
-        // صفحه اصلی لاوی‌ها (لیست آنلاین)
+        // صفحه اصلی لیست لاوی‌ها
         function showFriendsPage() {
-            if (!currentUserId) { showToast('❌ ابتدا نام کاربری خود را انتخاب کنید'); return; }
+            if(!currentUserId) { showToast('❌ ابتدا نام کاربری خود را انتخاب کنید'); return; }
             
             const existingPage = document.querySelector('.friends-page');
             if(existingPage) existingPage.remove();
             
-            const friendsPage = document.createElement('div');
-            friendsPage.className = 'friends-page';
-            friendsPage.innerHTML = `
-                <div class="search-card"><h3>🔍 جستجوی دوستان</h3><div class="search-input-group"><input type="text" id="friendSearchInput" placeholder="کد کاربری دوست خود را وارد کنید..." autocomplete="off"><button id="searchFriendBtn">جستجو</button></div><div id="searchResult" class="search-result"></div></div>
-                <button class="create-lobby-btn" id="createLobbyBtn">➕ ایجاد لاوی آنلاین</button>
-                <div class="lobbies-list" id="lobbiesListContainer"><div style="text-align:center;color:white;padding:20px;">در حال بارگذاری لاوی‌ها...</div></div>
-                <button class="close-friends-btn">🔙 بازگشت به بازی</button>
+            const page = document.createElement('div');
+            page.className = 'friends-page';
+            page.innerHTML = `
+                <div class="search-card"><h3>🔍 جستجوی دوستان</h3><div class="search-input-group"><input type="text" id="searchInput" placeholder="کد کاربری دوست خود را وارد کنید..."><button id="searchBtn">جستجو</button></div><div id="searchResult" class="search-result"></div></div>
+                <button class="create-lobby-btn" id="createBtn">➕ ایجاد لاوی آنلاین</button>
+                <div class="lobbies-list" id="lobbiesList"></div>
+                <button class="close-friends-btn">🔙 بازگشت</button>
             `;
-            document.body.appendChild(friendsPage);
+            document.body.appendChild(page);
             
-            function refreshLobbiesList() {
-                const container = document.getElementById('lobbiesListContainer');
+            function refreshList() {
+                const container = document.getElementById('lobbiesList');
                 if(!container) return;
                 if(lobbies.length === 0) {
                     container.innerHTML = '<div style="text-align:center;color:white;padding:20px;">🎮 هیچ لاوی فعالی وجود ندارد</div>';
@@ -871,53 +779,48 @@
                             <p>👑 ${lobby.ownerName} | 👥 ${lobby.players.length}/10 نفر</p>
                         </div>
                         ${!lobby.players.some(p => p.id === currentUserId) ? 
-                            `<button class="lobby-join-btn" onclick="window.joinLobbyById('${lobby.id}')">➕ ورود به لاوی</button>` :
-                            `<button class="lobby-join-btn" style="background:#44aa44;" onclick="window.enterLobbyById('${lobby.id}')">🎮 ورود به لاوی</button>`
+                            `<button class="lobby-join-btn" onclick="window.joinLobbyHandler('${lobby.id}')">➕ ورود</button>` :
+                            `<button class="lobby-join-btn" style="background:#44aa44;" onclick="window.enterLobbyHandler('${lobby.id}')">🎮 ورود</button>`
                         }
                     </div>
                 `).join('');
             }
             
-            window.joinLobbyById = (lobbyId) => {
-                const lobby = joinLobby(lobbyId);
-                if(lobby) { refreshLobbiesList(); showLobbyRoom(lobbyId); friendsPage.remove(); }
+            window.joinLobbyHandler = (id) => {
+                const lobby = joinLobby(id);
+                if(lobby) { refreshList(); showLobbyRoom(id); page.remove(); }
             };
-            window.enterLobbyById = (lobbyId) => { showLobbyRoom(lobbyId); friendsPage.remove(); };
+            window.enterLobbyHandler = (id) => { showLobbyRoom(id); page.remove(); };
             
-            const searchInput = document.getElementById('friendSearchInput');
-            const searchBtn = document.getElementById('searchFriendBtn');
-            const resultDiv = document.getElementById('searchResult');
-            searchBtn.onclick = () => {
-                const targetCode = searchInput.value.trim();
-                if(!targetCode) { resultDiv.innerHTML = '⚠️ لطفاً کد کاربری را وارد کنید.'; return; }
-                if(targetCode === currentUserId) { resultDiv.innerHTML = '🎭 این کد کاربری متعلق به شماست!'; return; }
-                resultDiv.innerHTML = `✅ کاربر با کد ${targetCode} پیدا شد! برای ارسال هدیه به صفحه فروشگاه بروید.`;
+            document.getElementById('searchBtn').onclick = () => {
+                const code = document.getElementById('searchInput').value.trim();
+                const resultDiv = document.getElementById('searchResult');
+                if(!code) { resultDiv.innerHTML = '⚠️ کد را وارد کنید'; return; }
+                if(code === currentUserId) { resultDiv.innerHTML = '🎭 این کد شماست!'; return; }
+                resultDiv.innerHTML = `✅ کاربر با کد ${code} پیدا شد! برای ارسال هدیه به فروشگاه بروید.`;
             };
-            searchInput.onkeypress = (e) => { if(e.key === 'Enter') searchBtn.click(); };
             
-            document.getElementById('createLobbyBtn').onclick = () => {
+            document.getElementById('createBtn').onclick = () => {
                 const modalDiv = document.createElement('div');
                 modalDiv.className = 'create-lobby-modal';
-                modalDiv.innerHTML = `<div class="create-lobby-content"><h2>🎮 ایجاد لاوی جدید</h2><input type="text" id="lobbyNameInput" placeholder="اسم لاوی خود را وارد کنید..." maxlength="30" autocomplete="off"><div class="create-lobby-buttons"><button class="confirm-create-btn" id="confirmCreateBtn">✨ ایجاد لاوی</button><button class="cancel-create-btn" id="cancelCreateBtn">❌ انصراف</button></div></div>`;
+                modalDiv.innerHTML = `<div class="create-lobby-content"><h2>🎮 لاوی جدید</h2><input type="text" id="lobbyName" placeholder="اسم لاوی..."><div class="create-lobby-buttons"><button class="confirm-create-btn" id="confirmCreate">✨ ایجاد</button><button class="cancel-create-btn" id="cancelCreate">❌ انصراف</button></div></div>`;
                 document.body.appendChild(modalDiv);
-                document.getElementById('confirmCreateBtn').onclick = () => {
-                    const lobbyName = document.getElementById('lobbyNameInput').value.trim();
-                    if(!lobbyName) { showToast('❌ لطفاً اسم لاوی را وارد کنید!', 1500); return; }
-                    const newLobby = createLobby(lobbyName);
-                    if(newLobby) { modalDiv.remove(); friendsPage.remove(); showLobbyRoom(newLobby.id); }
+                document.getElementById('confirmCreate').onclick = () => {
+                    const name = document.getElementById('lobbyName').value.trim();
+                    if(!name) { showToast('❌ اسم لاوی را وارد کنید'); return; }
+                    const newLobby = createLobby(name);
+                    if(newLobby) { modalDiv.remove(); page.remove(); showLobbyRoom(newLobby.id); }
                 };
-                document.getElementById('cancelCreateBtn').onclick = () => modalDiv.remove();
-                document.getElementById('lobbyNameInput').focus();
+                document.getElementById('cancelCreate').onclick = () => modalDiv.remove();
             };
             
-            friendsPage.querySelector('.close-friends-btn').onclick = () => friendsPage.remove();
-            friendsPage.onclick = (e) => { if(e.target === friendsPage) friendsPage.remove(); };
+            page.querySelector('.close-friends-btn').onclick = () => page.remove();
             
-            window.currentLobbyPage = { refreshList: refreshLobbiesList };
-            refreshLobbiesList();
+            window.currentLobbyPage = { refreshList: refreshList };
+            refreshList();
         }
         
-        // ===== بخش اصلی کد شما =====
+        // ===== بخش اصلی کد =====
         const modal = document.getElementById('usernameModal');
         const usernameInput = document.getElementById('usernameInput');
         const saveBtn = document.getElementById('saveNameBtn');
@@ -937,98 +840,113 @@
         let ably = null, channel = null;
         let currentUserId = '', currentCoins = 0, currentUsername = '';
         
-        const DAILY_PACKS = [{ id: 0, coins: 250, name: "بسته نقره‌ای", emoji: "🥈" },{ id: 1, coins: 500, name: "بسته طلایی", emoji: "🌟" },{ id: 2, coins: 100, name: "بسته الماسی", emoji: "💎" },{ id: 3, coins: 150, name: "بسته رویایی", emoji: "✨" }];
+        const DAILY_PACKS = [{ id: 0, coins: 250, name: "نقره‌ای", emoji: "🥈" },{ id: 1, coins: 500, name: "طلایی", emoji: "🌟" },{ id: 2, coins: 100, name: "الماسی", emoji: "💎" },{ id: 3, coins: 150, name: "رویایی", emoji: "✨" }];
         
-        function updateDisplayCoins() { coinsSpan.innerText = toPersianNumber(currentCoins); }
-        function loadCurrencies() { let gems = localStorage.getItem('userGems') || 1250; let coins = localStorage.getItem('userCoins') || 8300; localStorage.setItem('userGems', gems); localStorage.setItem('userCoins', coins); gemsSpan.innerText = toPersianNumber(Number(gems)); currentCoins = Number(coins); updateDisplayCoins(); }
-        function addCoins(amount) { let currentCoinsVal = parseInt(localStorage.getItem('userCoins')) || 0; currentCoinsVal += amount; localStorage.setItem('userCoins', currentCoinsVal); currentCoins = currentCoinsVal; updateDisplayCoins(); return currentCoinsVal; }
-        function removeCoins(amount) { let currentCoinsVal = parseInt(localStorage.getItem('userCoins')) || 0; if (currentCoinsVal >= amount) { currentCoinsVal -= amount; localStorage.setItem('userCoins', currentCoinsVal); currentCoins = currentCoinsVal; updateDisplayCoins(); return true; } return false; }
-        function getPackStatus() { let lastClaim = localStorage.getItem('dailyPackClaims'); if (!lastClaim) return {}; try { return JSON.parse(lastClaim); } catch(e) { return {}; } }
-        function updatePackStatus(packId) { let status = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); status[packId] = today; localStorage.setItem('dailyPackClaims', JSON.stringify(status)); }
-        function canClaimPack(packId) { let status = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); const lastDate = status[packId]; return !lastDate || lastDate !== today; }
-        function showToast(message, duration = 2000) { const toast = document.createElement('div'); toast.className = 'toast-msg'; toast.innerText = message; document.body.appendChild(toast); setTimeout(() => toast.remove(), duration); }
+        function updateCoins() { coinsSpan.innerText = toPersianNumber(currentCoins); }
+        function loadCurrencies() { let gems = localStorage.getItem('userGems') || 1250; let coins = localStorage.getItem('userCoins') || 8300; localStorage.setItem('userGems', gems); localStorage.setItem('userCoins', coins); gemsSpan.innerText = toPersianNumber(Number(gems)); currentCoins = Number(coins); updateCoins(); }
+        function addCoins(amount) { let val = parseInt(localStorage.getItem('userCoins')) || 0; val += amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return val; }
+        function removeCoins(amount) { let val = parseInt(localStorage.getItem('userCoins')) || 0; if(val >= amount) { val -= amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return true; } return false; }
+        function getPackStatus() { let last = localStorage.getItem('dailyPackClaims'); if(!last) return {}; try { return JSON.parse(last); } catch(e) { return {}; } }
+        function updatePackStatus(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); s[id] = today; localStorage.setItem('dailyPackClaims', JSON.stringify(s)); }
+        function canClaimPack(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); return !s[id] || s[id] !== today; }
+        function showToast(msg, dur = 2000) { const t = document.createElement('div'); t.className = 'toast-msg'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => t.remove(), dur); }
         
-        function showProfileModal() {
-            if (!currentUserId) { showToast('❌ ابتدا نام کاربری خود را انتخاب کنید'); return; }
-            const modalDiv = document.createElement('div'); modalDiv.className = 'profile-modal';
-            modalDiv.innerHTML = `<div class="profile-content"><h2>👤 پروفایل کاربری</h2><p style="margin-bottom:5px;">نام کاربری:</p><h3 style="color:#ffaa66;">${currentUsername}</h3><p style="margin-top:15px;">🆔 کد کاربری شما:</p><div class="profile-code" id="profileCodeText">${currentUserId}</div><button class="profile-copy-btn" id="copyCodeFromProfile">📋 کپی کد کاربری</button><div><button class="close-profile-btn" id="closeProfileBtn">🔙 بستن</button></div></div>`;
-            document.body.appendChild(modalDiv);
-            document.getElementById('copyCodeFromProfile').addEventListener('click', () => { navigator.clipboard.writeText(currentUserId); showToast('📋 کد کاربری کپی شد!', 1500); });
-            document.getElementById('closeProfileBtn').addEventListener('click', () => modalDiv.remove());
-            modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
+        function showProfile() {
+            if(!currentUserId) { showToast('❌ ابتدا نام کاربری را انتخاب کنید'); return; }
+            const d = document.createElement('div'); d.className = 'profile-modal';
+            d.innerHTML = `<div class="profile-content"><h2>👤 پروفایل</h2><h3 style="color:#ffaa66;">${currentUsername}</h3><div class="profile-code">${currentUserId}</div><button class="profile-copy-btn" id="copyBtn">📋 کپی</button><button class="close-profile-btn" id="closeBtn">🔙 بستن</button></div>`;
+            document.body.appendChild(d);
+            document.getElementById('copyBtn').onclick = () => { navigator.clipboard.writeText(currentUserId); showToast('📋 کپی شد!'); };
+            document.getElementById('closeBtn').onclick = () => d.remove();
         }
         
-        function connectToAbly() { if (typeof Ably === 'undefined' || !currentUserId) return; try { ably = new Ably.Realtime({ key: ABLY_KEY, clientId: currentUserId }); ably.connection.on('connected', () => { channel = ably.channels.get('gift-system-channel'); channel.subscribe('send-gift', (message) => { if (message.data && message.data.toUserId === currentUserId) { addCoins(message.data.amount); showToast(`🎁 ${message.data.fromName} به شما ${toPersianNumber(message.data.amount)} سکه هدیه داد! 🎉`); } }); }); } catch(e) { console.error(e); } }
+        function connectGift() { if(typeof Ably === 'undefined' || !currentUserId) return; try { ably = new Ably.Realtime({ key: ABLY_KEY, clientId: currentUserId }); ably.connection.on('connected', () => { channel = ably.channels.get('gift-channel'); channel.subscribe('gift', (msg) => { if(msg.data && msg.data.to === currentUserId) { addCoins(msg.data.amount); showToast(`🎁 ${msg.data.from} به شما ${toPersianNumber(msg.data.amount)} سکه هدیه داد!`); } }); }); } catch(e) { console.error(e); } }
         
-        function showGiftModal() {
-            const MIN_GIFT_AMOUNT = 50;
-            if (!currentUserId) { showToast('❌ ابتدا نام کاربری خود را انتخاب کنید'); return; }
-            if (currentCoins < MIN_GIFT_AMOUNT) { showToast(`❌ حداقل سکه برای هدیه ${toPersianNumber(MIN_GIFT_AMOUNT)} عدد است! موجودی: ${toPersianNumber(currentCoins)}`); return; }
-            const modalDiv = document.createElement('div'); modalDiv.className = 'gift-modal';
-            modalDiv.innerHTML = `<div class="gift-content"><h2>🎁 هدیه سکه به دوست 🎁</h2><input type="text" id="targetUserCode" placeholder="کد کاربری دوست خود را وارد کنید..." autocomplete="off"><select id="giftAmountSelect"><option value="50">۵۰ سکه</option><option value="100">۱۰۰ سکه</option><option value="200">۲۰۰ سکه</option><option value="500">۵۰۰ سکه</option><option value="1000">۱۰۰۰ سکه</option></select><div class="gift-buttons"><button class="send-gift-btn" id="confirmGiftBtn">🎁 ارسال هدیه</button><button class="cancel-gift-btn" id="cancelGiftBtn">❌ انصراف</button></div></div>`;
-            document.body.appendChild(modalDiv);
-            const closeModal = () => modalDiv.remove();
-            document.getElementById('cancelGiftBtn').addEventListener('click', closeModal);
-            document.getElementById('confirmGiftBtn').addEventListener('click', () => {
-                const targetCode = document.getElementById('targetUserCode').value.trim();
-                const amount = parseInt(document.getElementById('giftAmountSelect').value);
-                if (!targetCode) { showToast('لطفاً کد کاربری دوست خود را وارد کنید'); return; }
-                if (targetCode === currentUserId) { showToast('❌ نمی‌توانید به خودتان سکه هدیه دهید!'); return; }
-                if (currentCoins < amount) { showToast(`❌ سکه کافی ندارید! موجودی: ${toPersianNumber(currentCoins)}`); return; }
-                if (channel) { removeCoins(amount); channel.publish('send-gift', { toUserId: targetCode, fromUserId: currentUserId, fromName: currentUsername, amount: amount, timestamp: Date.now() }); showToast(`✅ ${toPersianNumber(amount)} سکه با موفقیت ارسال شد!`); closeModal(); }
-                else { showToast('❌ اتصال به سرور برقرار نیست'); closeModal(); }
-            });
+        function showGift() {
+            if(!currentUserId) { showToast('❌ ابتدا نام خود را انتخاب کنید'); return; }
+            if(currentCoins < 50) { showToast(`❌ حداقل ۵۰ سکه نیاز است!`); return; }
+            const d = document.createElement('div'); d.className = 'gift-modal';
+            d.innerHTML = `<div class="gift-content"><h2>🎁 هدیه سکه</h2><input type="text" id="targetCode" placeholder="کد کاربری دوست..."><select id="amountSelect"><option value="50">۵۰</option><option value="100">۱۰۰</option><option value="200">۲۰۰</option><option value="500">۵۰۰</option><option value="1000">۱۰۰۰</option></select><div class="gift-buttons"><button class="send-gift-btn" id="sendBtn">🎁 ارسال</button><button class="cancel-gift-btn" id="cancelBtn">❌ انصراف</button></div></div>`;
+            document.body.appendChild(d);
+            document.getElementById('sendBtn').onclick = () => {
+                const target = document.getElementById('targetCode').value.trim();
+                const amount = parseInt(document.getElementById('amountSelect').value);
+                if(!target) { showToast('کد را وارد کنید'); return; }
+                if(target === currentUserId) { showToast('نمی‌توانید به خودتان هدیه دهید'); return; }
+                if(currentCoins < amount) { showToast('سکه کافی ندارید'); return; }
+                if(channel) { removeCoins(amount); channel.publish('gift', { to: target, from: currentUsername, amount: amount }); showToast(`✅ ${toPersianNumber(amount)} سکه ارسال شد!`); d.remove(); }
+                else { showToast('❌ خطا در اتصال'); }
+            };
+            document.getElementById('cancelBtn').onclick = () => d.remove();
         }
         
-        function showShopPage() {
-            const existingShop = document.querySelector('.shop-page'); if (existingShop) existingShop.remove();
-            const shopPage = document.createElement('div'); shopPage.className = 'shop-page';
-            shopPage.innerHTML = `<div class="shop-main-content"><div class="shop-header"><h1>🏪 بازار سیاه</h1><p>✨ هر روز یک بسته رایگان ویژه ✨</p></div><div class="packs-grid" id="packsGrid"></div><button class="shop-gift-btn" id="shopGiftBtn">🎁 هدیه سکه به دوست</button><button class="close-shop-btn">🔙 خروج</button></div>`;
-            document.body.appendChild(shopPage);
-            function renderPacks() { const grid = document.getElementById('packsGrid'); if (!grid) return; grid.innerHTML = ''; DAILY_PACKS.forEach(pack => { const available = canClaimPack(pack.id); const card = document.createElement('div'); card.className = `mafia-pack-card ${!available ? 'disabled-pack' : ''}`; card.innerHTML = `<div class="pack-icon">${pack.emoji}</div><div class="pack-coins">+${toPersianNumber(pack.coins)} <span>سکه</span></div><div class="pack-name">${pack.name}</div><div class="pack-status">${available ? '🔥 دریافت کن' : '✅ انجام شد'}</div>`; if (available) { card.addEventListener('click', (e) => { e.stopPropagation(); addCoins(pack.coins); updatePackStatus(pack.id); showToast(`🎁 +${toPersianNumber(pack.coins)} سکه به خزانه اضافه شد! 🎁`); renderPacks(); }); } grid.appendChild(card); }); }
-            renderPacks();
-            const giftBtnInShop = document.getElementById('shopGiftBtn'); if (giftBtnInShop) giftBtnInShop.addEventListener('click', () => showGiftModal());
-            const closeBtn = shopPage.querySelector('.close-shop-btn'); if (closeBtn) closeBtn.addEventListener('click', () => shopPage.remove());
-            shopPage.addEventListener('click', (e) => { if (e.target === shopPage) shopPage.remove(); });
+        function showShop() {
+            const existing = document.querySelector('.shop-page'); if(existing) existing.remove();
+            const page = document.createElement('div'); page.className = 'shop-page';
+            page.innerHTML = `<div class="shop-main-content"><div class="shop-header"><h1>🏪 بازار سیاه</h1><p>✨ بسته روزانه ✨</p></div><div class="packs-grid" id="packsGrid"></div><button class="shop-gift-btn" id="giftBtn">🎁 هدیه سکه</button><button class="close-shop-btn">🔙 خروج</button></div>`;
+            document.body.appendChild(page);
+            function render() { const grid = document.getElementById('packsGrid'); if(!grid) return; grid.innerHTML = ''; DAILY_PACKS.forEach(p => { const avail = canClaimPack(p.id); const card = document.createElement('div'); card.className = `mafia-pack-card ${!avail ? 'disabled-pack' : ''}`; card.innerHTML = `<div class="pack-icon">${p.emoji}</div><div class="pack-coins">+${toPersianNumber(p.coins)} <span>سکه</span></div><div class="pack-name">${p.name}</div><div class="pack-status">${avail ? '🔥 دریافت' : '✅ انجام شد'}</div>`; if(avail) { card.onclick = () => { addCoins(p.coins); updatePackStatus(p.id); showToast(`🎁 +${toPersianNumber(p.coins)} سکه`); render(); }; } grid.appendChild(card); }); }
+            render();
+            document.getElementById('giftBtn').onclick = () => showGift();
+            page.querySelector('.close-shop-btn').onclick = () => page.remove();
         }
         
         function loadUser() {
-            const savedName = localStorage.getItem('gameUsername'); const savedId = localStorage.getItem('userId');
-            if (savedName && savedName.trim() !== "") { currentUsername = savedName; usernameDisplaySpan.innerText = currentUsername; modal.classList.add('hidden'); if (savedId) currentUserId = savedId; else { currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); localStorage.setItem('userId', currentUserId); } connectToAbly(); connectToLobbySystem(); loadLobbiesFromStorage(); }
-            else { modal.classList.remove('hidden'); usernameInput.value = ''; usernameInput.focus(); }
+            const savedName = localStorage.getItem('gameUsername');
+            const savedId = localStorage.getItem('userId');
+            if(savedName && savedName.trim() !== "") {
+                currentUsername = savedName;
+                usernameDisplaySpan.innerText = currentUsername;
+                modal.style.display = 'none';
+                if(savedId) currentUserId = savedId;
+                else { currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); localStorage.setItem('userId', currentUserId); }
+                connectGift();
+                connectLobbySync();
+                loadLobbies();
+            } else { modal.style.display = 'flex'; usernameInput.focus(); }
         }
         
-        function saveUsername() {
-            let newName = usernameInput.value.trim(); if (newName === "") { alert("لطفاً یک نام برای خود انتخاب کنید!"); return; } if (newName.length > 20) newName = newName.slice(0, 20);
-            currentUsername = newName; currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); localStorage.setItem('gameUsername', currentUsername); localStorage.setItem('userId', currentUserId); usernameDisplaySpan.innerText = currentUsername; modal.classList.add('hidden'); connectToAbly(); connectToLobbySystem(); loadLobbiesFromStorage();
+        function saveUser() {
+            let name = usernameInput.value.trim();
+            if(!name) { alert("لطفاً نام خود را وارد کنید!"); return; }
+            if(name.length > 20) name = name.slice(0,20);
+            currentUsername = name;
+            currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
+            localStorage.setItem('gameUsername', currentUsername);
+            localStorage.setItem('userId', currentUserId);
+            usernameDisplaySpan.innerText = currentUsername;
+            modal.style.display = 'none';
+            connectGift();
+            connectLobbySync();
+            loadLobbies();
+            showToast(`✅ خوش آمدی ${currentUsername}!`);
         }
         
-        saveBtn.addEventListener('click', saveUsername);
-        usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') saveUsername(); });
-        if (shopButton) shopButton.addEventListener('click', (e) => { e.stopPropagation(); showShopPage(); });
-        if (profileBtn) profileBtn.addEventListener('click', () => { showProfileModal(); });
-        if (topRight) topRight.addEventListener('click', (e) => { e.stopPropagation(); showFriendsPage(); });
+        saveBtn.onclick = saveUser;
+        usernameInput.onkeypress = (e) => { if(e.key === 'Enter') saveUser(); };
+        if(shopButton) shopButton.onclick = (e) => { e.stopPropagation(); showShop(); };
+        if(profileBtn) profileBtn.onclick = (e) => { e.stopPropagation(); showProfile(); };
+        if(topRight) topRight.onclick = (e) => { e.stopPropagation(); showFriendsPage(); };
         
-        const silentHandler = () => {};
-        if (topLeft) topLeft.addEventListener('click', silentHandler);
-        if (bottomRight) bottomRight.addEventListener('click', silentHandler);
-        if (bottomCenter) bottomCenter.addEventListener('click', silentHandler);
-        if (galleryBtns.length) galleryBtns.forEach(btn => btn.addEventListener('click', silentHandler));
+        const silent = () => {};
+        if(topLeft) topLeft.onclick = silent;
+        if(bottomRight) bottomRight.onclick = silent;
+        if(bottomCenter) bottomCenter.onclick = silent;
+        galleryBtns.forEach(btn => btn.onclick = silent);
         
-        usernameDisplaySpan.addEventListener('dblclick', () => { modal.classList.remove('hidden'); usernameInput.value = localStorage.getItem('gameUsername') || ''; usernameInput.focus(); });
+        usernameDisplaySpan.ondblclick = () => { modal.style.display = 'flex'; usernameInput.value = localStorage.getItem('gameUsername') || ''; usernameInput.focus(); };
         avatarImg.onerror = () => { avatarImg.src = "https://via.placeholder.com/80?text=Avatar"; };
-        const allImages = document.querySelectorAll('img'); allImages.forEach(img => { img.onerror = () => {}; });
         
         loadUser();
         loadCurrencies();
-        window.addEventListener('load', () => { if (localStorage.getItem('gameUsername')) modal.classList.add('hidden'); const gallery = document.getElementById('rightGallery'); if (gallery) { gallery.style.background = 'transparent'; gallery.style.backdropFilter = 'none'; gallery.style.border = 'none'; } });
+        window.onload = () => { if(localStorage.getItem('gameUsername')) modal.style.display = 'none'; const g = document.getElementById('rightGallery'); if(g) { g.style.background = 'transparent'; g.style.backdropFilter = 'none'; g.style.border = 'none'; } };
         
         window.retryConnection = function() {
-            const textDiv = document.querySelector('#mafiaDialog .dialog-text');
-            if(textDiv) textDiv.innerHTML = 'در حال بررسی اتصال اینترنت...';
+            const txt = document.querySelector('#mafiaDialog .dialog-text');
+            if(txt) txt.innerHTML = 'در حال بررسی اتصال...';
             setTimeout(() => {
-                if(navigator.onLine) { if(textDiv) textDiv.innerHTML = 'اتصال با موفقیت برقرار شد'; setTimeout(() => { document.getElementById('mafiaDialog').style.display = 'none'; }, 1200); }
-                else { if(textDiv) textDiv.innerHTML = 'اتصال برقرار نشد<br>لطفاً دوباره تلاش کنید'; }
+                if(navigator.onLine) { if(txt) txt.innerHTML = 'اتصال برقرار شد'; setTimeout(() => { document.getElementById('mafiaDialog').style.display = 'none'; }, 1200); }
+                else { if(txt) txt.innerHTML = 'اتصال برقرار نشد<br>لطفاً دوباره تلاش کنید'; }
             }, 1500);
         };
         setTimeout(() => { if(!navigator.onLine) document.getElementById('mafiaDialog').style.display = 'flex'; }, 500);
