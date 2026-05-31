@@ -6,7 +6,6 @@
     <title>بازی من - فروشگاه ویژه</title>
     <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
     <style>
-        /* ===== همه استایل‌های اصلی شما - بدون هیچ تغییری ===== */
         * {
             margin: 0;
             padding: 0;
@@ -25,6 +24,7 @@
             position: relative;
         }
 
+        /* مدال نام کاربری */
         .modal {
             position: fixed;
             top: 0;
@@ -55,6 +55,7 @@
         .modal-content input { width: 100%; padding: 12px 15px; border-radius: 50px; border: none; outline: none; font-size: 1rem; text-align: center; margin-bottom: 1rem; font-family: inherit; }
         .modal-content button { background: #ff9800; color: #1e1e2f; border: none; padding: 10px 20px; border-radius: 40px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
 
+        /* نوار بالا */
         .top-bar {
             position: fixed;
             top: 0;
@@ -75,6 +76,7 @@
         .currency-emoji { font-size: 1.8rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
         .currency-value { font-size: 1.3rem; font-weight: bold; color: #ffd966; text-shadow: 0 1px 2px black; letter-spacing: 1px; }
 
+        /* پروفایل کاربر */
         .user-panel {
             position: fixed;
             top: 85px;
@@ -94,6 +96,7 @@
         .avatar { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background-color: #2c2c3a; display: block; border: 2px solid rgba(255, 255, 255, 0.15); }
         .username-bar { background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(20px); padding: 0.9rem 1.8rem 0.9rem 2.2rem; border-radius: 0 50px 50px 0; color: white; font-size: 1.3rem; font-weight: bold; letter-spacing: 0.5px; border: 1px solid rgba(255, 255, 255, 0.25); border-left: none; margin-left: -14px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); white-space: nowrap; max-width: 250px; overflow-x: auto; scrollbar-width: thin; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); }
 
+        /* گالری راست */
         .right-vertical-gallery {
             position: fixed;
             top: 54px;
@@ -107,28 +110,27 @@
             overflow-y: auto;
             direction: ltr;
             background: transparent;
-            backdrop-filter: none;
-            border: none;
-            box-shadow: none;
-            padding: 0;
         }
         .right-vertical-gallery::-webkit-scrollbar { width: 0; background: transparent; }
         .right-vertical-gallery { scrollbar-width: none; }
-        .gallery-img-btn { cursor: pointer; transition: transform 0.2s ease; background: transparent; border: none; padding: 0; margin: 0; outline: none; display: block; line-height: 0; box-shadow: none; border-radius: 0; }
-        .gallery-img-btn img { width: 130px; height: auto; max-height: 145px; object-fit: cover; display: block; pointer-events: none; border: none; outline: none; box-shadow: none; background: transparent; border-radius: 0; }
+        .gallery-img-btn { cursor: pointer; background: transparent; border: none; padding: 0; margin: 0; outline: none; display: block; line-height: 0; }
+        .gallery-img-btn img { width: 130px; height: auto; max-height: 145px; object-fit: cover; display: block; pointer-events: none; border: none; }
         .gallery-img-btn:active { transform: scale(0.94); }
 
+        /* دکمه‌های وسط */
         .top-row { position: fixed; bottom: 170px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 60px; z-index: 200; direction: rtl; }
-        .top-btn { cursor: pointer; transition: transform 0.2s ease; background: transparent; border: none; padding: 0; margin: 0; outline: none; }
+        .top-btn { cursor: pointer; background: transparent; border: none; padding: 0; margin: 0; outline: none; }
         .top-btn img { max-width: 320px; max-height: 320px; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6)); pointer-events: none; }
         .top-btn:active { transform: scale(0.94); }
 
+        /* دکمه‌های پایین */
         .bottom-group { position: fixed; bottom: 20px; left: 0; right: 0; display: flex; justify-content: center; z-index: 200; direction: rtl; }
         .bottom-images { display: flex; justify-content: center; align-items: flex-end; gap: 0; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); border-radius: 30px; padding: 8px 12px; border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-        .bottom-btn { cursor: pointer; transition: transform 0.2s ease; background: transparent; border: none; padding: 0; margin: 0; outline: none; display: inline-block; }
+        .bottom-btn { cursor: pointer; background: transparent; border: none; padding: 0; margin: 0; outline: none; display: inline-block; }
         .bottom-btn img { max-width: 170px; max-height: 170px; object-fit: contain; display: block; pointer-events: none; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
         .bottom-btn:active { transform: scale(0.95); }
 
+        /* فروشگاه */
         .shop-page {
             position: fixed;
             top: 0;
@@ -143,11 +145,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: fadeInShop 0.4s ease;
+            animation: fadeIn 0.4s ease;
             box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.7);
         }
-        
-        @keyframes fadeInShop { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         .shop-main-content { text-align: center; background: transparent; padding: 0; color: #fff; width: 100%; max-width: 520px; }
         .shop-header h1 { font-size: 2.4rem; font-weight: 800; background: linear-gradient(135deg, #ffd89b, #ffaa66, #ff8c42); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 2px 8px rgba(0,0,0,0.5); letter-spacing: 2px; }
         .shop-header p { font-size: 0.85rem; background: rgba(0,0,0,0.55); display: inline-block; padding: 5px 18px; border-radius: 50px; backdrop-filter: blur(8px); margin-top: 8px; }
@@ -165,23 +166,240 @@
         .close-shop-btn { background: linear-gradient(145deg, #2a241e, #1a1612); color: #ffdd99; border: 1px solid rgba(255, 170, 80, 0.7); padding: 12px 32px; border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; font-family: inherit; box-shadow: 0 8px 20px rgba(0,0,0,0.4); width: 80%; max-width: 220px; backdrop-filter: blur(4px); }
         .close-shop-btn:active { transform: scale(0.96); background: #3a3228; }
         .hidden { display: none; }
-        .profile-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 1001; }
-        .profile-content { background: linear-gradient(145deg, #1e2a3a, #0f172a); padding: 2rem; border-radius: 2rem; text-align: center; color: white; width: 90%; max-width: 380px; border: 2px solid #ffaa44; box-shadow: 0 0 40px rgba(255,170,0,0.3); }
-        .profile-content h2 { margin-bottom: 1rem; color: #ffaa66; }
-        .profile-code { background: #00000088; padding: 12px; border-radius: 50px; font-family: monospace; font-size: 0.9rem; word-break: break-all; margin: 15px 0; border: 1px solid #ffaa66; direction: ltr; }
-        .profile-copy-btn { background: linear-gradient(135deg, #ffaa44, #ff6600); border: none; color: white; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .close-profile-btn { background: #2d3e5a; border: none; color: #ccc; padding: 10px 20px; border-radius: 50px; cursor: pointer; margin-top: 15px; }
+
+        /* استایل پروفایل جدید */
+        .profile-modal-full {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            animation: fadeInProfile 0.3s ease;
+        }
+
+        @keyframes fadeInProfile {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .profile-content-full {
+            background: linear-gradient(145deg, #1a1a2e, #0f0f1a);
+            border-radius: 32px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 20px;
+            border: 1px solid rgba(255, 170, 68, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 140, 0, 0.2);
+            position: relative;
+        }
+
+        .profile-content-full::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .profile-content-full::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .profile-content-full::-webkit-scrollbar-thumb {
+            background: #ffaa44;
+            border-radius: 10px;
+        }
+
+        .profile-header-full {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .profile-avatar-large {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar-large img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffaa44;
+            box-shadow: 0 0 15px rgba(255, 170, 68, 0.5);
+        }
+
+        .level-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #ffaa44, #ff6600);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 20px;
+            border: 1px solid #fff;
+        }
+
+        .profile-name-full {
+            flex: 1;
+        }
+
+        .profile-name-full h2 {
+            color: #ffaa66;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .user-id {
+            color: #aaa;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            font-family: monospace;
+        }
+
+        .close-profile-full {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .close-profile-full:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .exp-bar-container {
+            margin-bottom: 20px;
+        }
+
+        .exp-bar-label {
+            color: #ccc;
+            font-size: 0.75rem;
+            margin-bottom: 5px;
+        }
+
+        .exp-bar {
+            background: rgba(255,255,255,0.1);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .exp-bar-fill {
+            background: linear-gradient(90deg, #ffaa44, #ff6600);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.2s;
+        }
+
+        .stat-icon {
+            font-size: 1.8rem;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-value {
+            color: #ffaa66;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 0.7rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .profile-action-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 1px solid rgba(255,170,68,0.5);
+            color: #ffaa66;
+            padding: 10px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .profile-action-btn:active {
+            transform: scale(0.96);
+        }
+
+        .edit-name-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 50px;
+            border: 2px solid #ffaa44;
+            outline: none;
+            font-size: 1rem;
+            text-align: center;
+            background: #1a1a2e;
+            color: white;
+            font-family: inherit;
+        }
+
+        /* مودال‌های کمکی */
         .gift-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 1002; }
         .gift-content { background: linear-gradient(145deg, #1e2a3a, #0f172a); padding: 2rem; border-radius: 2rem; text-align: center; color: white; width: 90%; max-width: 400px; border: 2px solid #ffaa44; box-shadow: 0 0 40px rgba(255,170,0,0.3); }
         .gift-content h2 { margin-bottom: 1.5rem; color: #ffaa66; }
-        .gift-content input { width: 100%; padding: 12px 15px; border-radius: 50px; border: none; outline: none; font-size: 1rem; text-align: center; margin-bottom: 1rem; font-family: monospace; font-size: 1rem; direction: ltr; }
+        .gift-content input { width: 100%; padding: 12px 15px; border-radius: 50px; border: none; outline: none; font-size: 1rem; text-align: center; margin-bottom: 1rem; font-family: monospace; }
         .gift-content select { width: 100%; padding: 12px 15px; border-radius: 50px; border: none; outline: none; font-size: 1rem; margin-bottom: 1rem; background: #2d3e5a; color: white; font-weight: bold; text-align: center; }
         .gift-buttons { display: flex; gap: 10px; margin-top: 15px; }
         .send-gift-btn { background: linear-gradient(135deg, #ffaa44, #ff6600); border: none; color: white; flex: 1; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; }
         .cancel-gift-btn { background: #2d3e5a; border: none; color: #ccc; flex: 1; padding: 12px; border-radius: 50px; cursor: pointer; }
         .toast-msg { position: fixed; bottom: 30%; left: 50%; transform: translateX(-50%); background: #1a120ccc; backdrop-filter: blur(20px); color: #ffdd99; padding: 12px 28px; border-radius: 60px; font-weight: bold; font-size: 1rem; z-index: 9999; border: 2px solid #ffaa44; white-space: nowrap; font-family: inherit; }
-        
-        /* ===== صفحه لاوی‌ها (لیست آنلاین) ===== */
+
+        /* ===== صفحه لاوی‌ها ===== */
         .friends-page {
             position: fixed;
             top: 0;
@@ -198,6 +416,7 @@
             padding: 80px 20px 20px 20px;
             overflow-y: auto;
         }
+        @keyframes fadeInFriends { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
         .search-card {
             background: rgba(255, 255, 255, 0.95);
@@ -210,7 +429,6 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             direction: rtl;
         }
-        
         .search-card h3 { color: #003366; margin-bottom: 12px; font-size: 1.4rem; text-align: center; }
         .search-input-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
         .search-input-group input { flex: 1; padding: 12px 18px; border-radius: 50px; border: 2px solid #0057b3; outline: none; font-size: 1rem; text-align: center; font-family: inherit; min-width: 180px; }
@@ -252,9 +470,6 @@
         }
         .close-friends-btn:active { transform: scale(0.96); }
         
-        @keyframes fadeInFriends { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        
-        /* لیست لاوی‌های آنلاین */
         .lobbies-list {
             width: 100%;
             max-width: 500px;
@@ -285,11 +500,11 @@
             cursor: pointer;
         }
         .lobby-join-btn:active { transform: scale(0.95); }
-        
-        /* ===== استایل روم لاوی (مافیایی) ===== */
+
+        /* ===== اتاق لاوی ===== */
         .room-table { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
         .player-seat { width: 96px; height: 96px; position: absolute; border-radius: 50%; background: radial-gradient(circle at top, rgba(0,235,255,.96), rgba(0,90,200,1)); border: 3px solid rgba(0,225,255,.95); display: flex; justify-content: center; align-items: center; box-shadow: 0 0 28px rgba(0,200,255,.55), 0 0 65px rgba(0,120,255,.25), inset 0 0 26px rgba(255,255,255,.18); transition: .25s; }
-        .player-seat:hover { transform: scale(1.07); box-shadow: 0 0 45px rgba(0,225,255,.95), 0 0 90px rgba(0,120,255,.45); }
+        .player-seat:hover { transform: scale(1.07); }
         .player-seat::before { content: ""; position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 2px solid rgba(0,220,255,.15); animation: pulse 2.8s infinite; }
         @keyframes pulse { 0% { transform: scale(.94); opacity: .5; } 70% { transform: scale(1.08); opacity: .08; } 100% { transform: scale(1.15); opacity: 0; } }
         .empty-seat { background: radial-gradient(circle at top, rgba(40,65,105,.96), rgba(8,18,38,1)); border: 2px solid rgba(140,200,255,.20); box-shadow: inset 0 0 20px rgba(255,255,255,.03), 0 0 22px rgba(0,0,0,.45); }
@@ -298,55 +513,150 @@
         .empty-icon { font-size: 38px; color: rgba(255,255,255,.24); }
         .player-name-label { position: absolute; bottom: -35px; background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 20px; font-size: 12px; color: white; white-space: nowrap; }
         
-        /* دکمه میکروفون روی صندلی */
-        .mic-button {
+        .room-center { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; pointer-events: none; }
+        
+        /* دکمه‌های پایین لابی */
+        .lobby-bottom-buttons {
             position: absolute;
-            bottom: -12px;
-            right: -12px;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #2a3a5a, #1a2a4a);
-            border: 2px solid rgba(255,255,255,0.3);
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+        
+        .lobby-action-btn {
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            min-width: 140px;
+            font-family: inherit;
+        }
+        
+        .ready-btn {
+            background: linear-gradient(135deg, #555, #333);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .ready-btn.ready-active {
+            background: linear-gradient(135deg, #00cc66, #009944);
+            box-shadow: 0 0 15px rgba(0,255,100,0.4);
+        }
+        
+        .ready-btn.ready-inactive {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            box-shadow: 0 0 15px rgba(255,0,0,0.4);
+        }
+        
+        .mic-btn {
+            background: linear-gradient(135deg, #2a3a5a, #1a2a4a);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            z-index: 20;
-            transition: 0.2s;
-            font-size: 16px;
-        }
-        .mic-button.active {
-            background: linear-gradient(145deg, #00cc88, #009966);
-            border-color: #fff;
-            box-shadow: 0 0 12px rgba(0,255,136,0.5);
-        }
-        .mic-button.recording {
-            animation: pulseMic 1s infinite;
-        }
-        @keyframes pulseMic {
-            0% { box-shadow: 0 0 0 0 rgba(255,68,68,0.7); }
-            70% { box-shadow: 0 0 0 8px rgba(255,68,68,0); }
-            100% { box-shadow: 0 0 0 0 rgba(255,68,68,0); }
+            gap: 8px;
         }
         
-        .room-center { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; pointer-events: none; }
-        .room-bottom-bar { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; z-index: 50; }
-        .exit-room-btn, .room-ready-btn { border: none; border-radius: 20px; padding: 18px 34px; font-size: 17px; font-weight: bold; color: white; cursor: pointer; transition: .22s; }
-        .exit-room-btn { background: linear-gradient(180deg, #00d5ff, #006eff); box-shadow: 0 0 38px rgba(0,180,255,.55), inset 0 0 18px rgba(255,255,255,.14); }
-        .room-ready-btn { min-width: 170px; background: linear-gradient(180deg, #343f57, #1b2438); box-shadow: 0 0 24px rgba(0,0,0,.35), inset 0 0 12px rgba(255,255,255,.05); }
-        .room-ready-btn.active { background: linear-gradient(180deg, #00f0a8, #00a86d); box-shadow: 0 0 38px rgba(0,255,170,.55), inset 0 0 18px rgba(255,255,255,.12); }
-        .p1{ left:20px; top:5%; } .p2{ left:20px; top:21%; } .p3{ left:20px; top:37%; } .p4{ left:20px; top:53%; } .p5{ left:20px; top:69%; }
-        .p6{ right:20px; top:5%; } .p7{ right:20px; top:21%; } .p8{ right:20px; top:37%; } .p9{ right:20px; top:53%; } .p10{ right:20px; top:69%; }
+        .mic-btn.mic-active {
+            background: linear-gradient(135deg, #00cc88, #009966);
+            box-shadow: 0 0 15px rgba(0,255,136,0.4);
+        }
+        
+        .lobby-action-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* کادر بالای صفحه در اتاق لابی */
+        .lobby-top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, rgba(0, 20, 50, 0.95), rgba(0, 40, 80, 0.95));
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid rgba(0, 200, 255, 0.5);
+            padding: 15px 20px;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .lobby-info-center {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .player-count-badge {
+            background: linear-gradient(135deg, #ff8800, #ff5500);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: white;
+            text-shadow: none;
+            box-shadow: 0 0 10px rgba(255, 100, 0, 0.5);
+        }
+        
+        .lobby-creator-name {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-right: 10px;
+        }
+        
+        .exit-lobby-btn {
+            background: linear-gradient(135deg, rgba(255,80,80,0.8), rgba(200,50,50,0.9));
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .exit-lobby-btn:active {
+            transform: scale(0.95);
+        }
+
+        .p1{ left:20px; top:8%; } .p2{ left:20px; top:23%; } .p3{ left:20px; top:38%; } .p4{ left:20px; top:53%; } .p5{ left:20px; top:68%; }
+        .p6{ right:20px; top:8%; } .p7{ right:20px; top:23%; } .p8{ right:20px; top:38%; } .p9{ right:20px; top:53%; } .p10{ right:20px; top:68%; }
+        
         @media(max-width:700px){
             .player-seat{ width:78px; height:78px; } .player-seat::before{ width:98px; height:98px; }
             .player-seat img{ width:58px; height:58px; } .empty-icon{ font-size:30px; }
-            .room-bottom-bar{ width:95%; gap:10px; }
-            .exit-room-btn, .room-ready-btn{ flex:1; padding:15px 10px; font-size:15px; }
-            .mic-button { width: 26px; height: 26px; font-size: 12px; bottom: -8px; right: -8px; }
             .p1{ left:8px; top:8%; } .p2{ left:8px; top:23%; } .p3{ left:8px; top:38%; }
             .p4{ left:8px; top:53%; } .p5{ left:8px; top:68%; } .p6{ right:8px; top:8%; }
             .p7{ right:8px; top:23%; } .p8{ right:8px; top:38%; } .p9{ right:8px; top:53%; } .p10{ right:8px; top:68%; }
+            .lobby-info-center { font-size: 0.9rem; gap: 5px; }
+            .player-count-badge { font-size: 0.7rem; padding: 3px 8px; }
+            .lobby-top-bar { padding: 10px 12px; }
+            .exit-lobby-btn { width: 32px; height: 32px; font-size: 1rem; }
+            .lobby-creator-name { font-size: 0.7rem; display: none; }
+            .stats-grid { gap: 8px; }
+            .stat-card { padding: 8px; }
+            .stat-icon { font-size: 1.4rem; }
+            .stat-value { font-size: 1rem; }
+            .lobby-action-btn { padding: 8px 16px; font-size: 0.9rem; min-width: 100px; }
+            .lobby-bottom-buttons { gap: 12px; bottom: 20px; }
         }
         
         .create-lobby-modal {
@@ -410,16 +720,7 @@
         @keyframes liveMove { 0% { right: -40%; } 100% { right: 120%; } }
         @keyframes dialogShow { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
         
-        /* نشانگر صحبت کردن */
-        .speaking {
-            animation: speakGlow 0.5s ease-in-out infinite alternate;
-        }
-        @keyframes speakGlow {
-            from { box-shadow: 0 0 5px rgba(0,255,0,0.5); border-color: #00ff88; }
-            to { box-shadow: 0 0 20px rgba(0,255,0,0.9); border-color: #00ff88; }
-        }
-        
-        @media (max-width: 600px) { .packs-grid { gap: 16px; padding: 0 15px; } .pack-icon { font-size: 2.8rem; } .pack-coins { font-size: 1.4rem; } .pack-name { font-size: 0.8rem; } .shop-header h1 { font-size: 1.9rem; } .close-shop-btn { font-size: 1rem; padding: 10px 24px; } .profile-content { padding: 1.5rem; } .profile-code { font-size: 0.7rem; } .toast-msg { font-size: 0.8rem; white-space: normal; text-align: center; width: 80%; } }
+        @media (max-width: 600px) { .packs-grid { gap: 16px; padding: 0 15px; } .pack-icon { font-size: 2.8rem; } .pack-coins { font-size: 1.4rem; } .pack-name { font-size: 0.8rem; } .shop-header h1 { font-size: 1.9rem; } .close-shop-btn { font-size: 1rem; padding: 10px 24px; } .toast-msg { font-size: 0.8rem; white-space: normal; text-align: center; width: 80%; } }
         @media (max-width: 450px) { .packs-grid { gap: 12px; } .mafia-pack-card { padding: 15px 8px; } .pack-icon { font-size: 2.4rem; } .pack-coins { font-size: 1.2rem; } }
         @media (max-width: 900px) { .top-btn img { max-width: 240px; max-height: 240px; } .top-row { gap: 40px; bottom: 150px; } .currency-value { font-size: 1rem; } .instagram-story-ring-wrapper { width: 84px; height: 84px; } .avatar-container { width: 74px; height: 74px; } .avatar { width: 68px; height: 68px; } .gallery-img-btn img { width: 110px; max-height: 125px; } }
         @media (max-width: 700px) { .instagram-story-ring-wrapper { width: 78px; height: 78px; } .avatar-container { width: 68px; height: 68px; } .avatar { width: 62px; height: 62px; } .username-bar { font-size: 1rem; padding: 0.6rem 1.4rem 0.6rem 1.8rem; max-width: 180px; } .top-btn img { max-width: 190px; max-height: 190px; } .bottom-btn img { max-width: 130px; max-height: 130px; } .top-row { gap: 30px; bottom: 130px; } .gallery-img-btn img { width: 95px; max-height: 105px; } }
@@ -481,128 +782,101 @@
             return number.toString().replace(/\d/g, function(x) { return persianDigits[parseInt(x)]; });
         }
 
-        // ===== سیستم صوتی آنلاین =====
-        let localStream = null;
-        let mediaRecorder = null;
-        let audioChunks = [];
-        let isRecording = false;
-        let voiceChannel = null;
-        let ablyVoice = null;
-        
-        function initVoiceChannel(lobbyId) {
-            if(!ablyVoice) {
-                ablyVoice = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
-                ablyVoice.connection.on('connected', () => {
-                    voiceChannel = ablyVoice.channels.get('voice-' + lobbyId);
-                    voiceChannel.subscribe('voice-data', (message) => {
-                        if(message.data && message.data.senderId !== currentUserId) {
-                            const audio = new Audio(message.data.audioData);
-                            audio.play().catch(e => console.log('Audio error:', e));
-                        }
-                    });
-                });
-            }
-        }
-        
-        async function startRecording(lobbyId) {
-            if(isRecording) return;
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(localStream);
-                audioChunks = [];
-                
-                mediaRecorder.ondataavailable = (event) => {
-                    if(event.data.size > 0) {
-                        audioChunks.push(event.data);
-                        const blob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            if(voiceChannel && voiceChannel.connection && voiceChannel.connection.state === 'connected') {
-                                voiceChannel.publish('voice-data', {
-                                    senderId: currentUserId,
-                                    audioData: reader.result
-                                });
-                            }
-                        };
-                        reader.readAsDataURL(blob);
-                        audioChunks = [];
-                    }
-                };
-                
-                mediaRecorder.start(200);
-                isRecording = true;
-                showToast('🎙️ میکروفون روشن شد...', 1000);
-            } catch(e) {
-                showToast('❌ دسترسی به میکروفون امکانپذیر نیست!', 2000);
-            }
-        }
-        
-        function stopRecording() {
-            if(mediaRecorder && isRecording) {
-                mediaRecorder.stop();
-                isRecording = false;
-                if(localStream) localStream.getTracks().forEach(track => track.stop());
-                showToast('🔇 میکروفون خاموش شد', 1000);
-            }
-        }
-
-        // ===== سیستم لاوی آنلاین با Ably =====
+        // ===== سیستم لاوی پایدار =====
         let lobbies = [];
-        let ablyLobby = null;
-        let lobbyChannel = null;
+        let currentUserId = '';
+        let currentUsername = '';
+        let currentCoins = 8300;
+        let ablySync = null;
+        let syncChannel = null;
+        let refreshTimer = null;
         
-        // بارگذاری لاوی‌ها از localStorage
+        const avatarImg = document.getElementById('userAvatar');
+        const gemsSpan = document.getElementById('gemsValue');
+        const coinsSpan = document.getElementById('coinsValue');
+        
         function loadLobbies() {
             const saved = localStorage.getItem('mafiaLobbies');
             if(saved) {
-                lobbies = JSON.parse(saved);
-            } else {
-                lobbies = [];
+                try {
+                    lobbies = JSON.parse(saved);
+                } catch(e) { lobbies = []; }
             }
-            // بروزرسانی لیست
-            if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                window.currentLobbyPage.refreshList();
-            }
+            if(!lobbies) lobbies = [];
+            const oneHourAgo = Date.now() - 3600000;
+            lobbies = lobbies.filter(l => l.players.length > 0 || l.createdAt > oneHourAgo);
+            if(window.currentLobbyPage) window.currentLobbyPage.refreshList();
         }
         
-        // ذخیره لاوی‌ها در localStorage و ارسال به Ably
         function saveLobbies() {
             localStorage.setItem('mafiaLobbies', JSON.stringify(lobbies));
-            if(lobbyChannel && lobbyChannel.connection && lobbyChannel.connection.state === 'connected') {
-                lobbyChannel.publish('lobbies-sync', { lobbies: lobbies });
+            if(syncChannel && syncChannel.connection && syncChannel.connection.state === 'connected') {
+                syncChannel.publish('lobby-update', { lobbies: lobbies, sender: currentUserId });
             }
         }
         
-        // اتصال به Ably برای همگام‌سازی لاوی‌ها
-        function connectLobbySync() {
+        function connectSync() {
             if(typeof Ably === 'undefined' || !currentUserId) return;
             try {
-                ablyLobby = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
-                ablyLobby.connection.on('connected', () => {
-                    lobbyChannel = ablyLobby.channels.get('lobby-sync');
-                    lobbyChannel.subscribe('lobbies-sync', (message) => {
-                        if(message.data && message.data.lobbies) {
-                            lobbies = message.data.lobbies;
+                ablySync = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
+                ablySync.connection.on('connected', () => {
+                    syncChannel = ablySync.channels.get('mafia-sync');
+                    syncChannel.subscribe('lobby-update', (msg) => {
+                        if(msg.data && msg.data.sender !== currentUserId && msg.data.lobbies) {
+                            lobbies = msg.data.lobbies;
                             localStorage.setItem('mafiaLobbies', JSON.stringify(lobbies));
-                            if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                                window.currentLobbyPage.refreshList();
-                            }
-                            if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
-                                window.currentLobbyRoom.updateUI();
+                            if(window.currentLobbyPage) window.currentLobbyPage.refreshList();
+                            if(window.currentLobbyRoom) window.currentLobbyRoom.updateUI();
+                        }
+                    });
+                    syncChannel.subscribe('lobby-join', (msg) => {
+                        const data = msg.data;
+                        if(data && data.lobbyId && data.sender !== currentUserId) {
+                            const lobby = lobbies.find(l => l.id === data.lobbyId);
+                            if(lobby && !lobby.players.some(p => p.id === data.userId)) {
+                                lobby.players.push({ id: data.userId, name: data.userName, avatar: data.avatar });
+                                saveLobbies();
+                                showToast(`👤 ${data.userName} وارد لاوی ${lobby.name} شد`);
+                                if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
+                                    window.currentLobbyRoom.updateUI();
+                                }
                             }
                         }
                     });
-                    // بعد از اتصال، لاوی‌های خود را همگام کن
-                    lobbyChannel.publish('lobbies-sync', { lobbies: lobbies });
+                    syncChannel.subscribe('lobby-leave', (msg) => {
+                        const data = msg.data;
+                        if(data && data.lobbyId && data.sender !== currentUserId) {
+                            const lobby = lobbies.find(l => l.id === data.lobbyId);
+                            if(lobby) {
+                                const idx = lobby.players.findIndex(p => p.id === data.userId);
+                                if(idx !== -1) lobby.players.splice(idx, 1);
+                                if(lobby.players.length === 0) {
+                                    const lobbyIdx = lobbies.findIndex(l => l.id === data.lobbyId);
+                                    if(lobbyIdx !== -1) lobbies.splice(lobbyIdx, 1);
+                                }
+                                saveLobbies();
+                                if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
+                                    if(data.userId === currentUserId) {
+                                        if(window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove();
+                                        showToast('شما از لاوی خارج شدید');
+                                    } else {
+                                        window.currentLobbyRoom.updateUI();
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    setTimeout(() => {
+                        if(syncChannel) syncChannel.publish('lobby-update', { lobbies: lobbies, sender: currentUserId });
+                    }, 500);
                 });
             } catch(e) { console.error('Sync error:', e); }
         }
         
-        // ایجاد لاوی جدید
         function createLobby(name) {
             if(!currentUserId || !currentUsername) return false;
             const newLobby = {
-                id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 4),
+                id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 6),
                 name: name,
                 ownerId: currentUserId,
                 ownerName: currentUsername,
@@ -615,48 +889,125 @@
             return newLobby;
         }
         
-        // پیوستن به لاوی
         function joinLobby(lobbyId) {
             const lobby = lobbies.find(l => l.id === lobbyId);
-            if(!lobby) { showToast('❌ لاوی یافت نشد!'); return null; }
-            if(lobby.players.some(p => p.id === currentUserId)) { showToast('❌ شما قبلاً در این لاوی هستید!'); return null; }
-            if(lobby.players.length >= 10) { showToast('❌ لاوی پر است!'); return null; }
+            if(!lobby) { showToast('❌ لاوی یافت نشد'); return null; }
+            if(lobby.players.some(p => p.id === currentUserId)) return lobby;
+            if(lobby.players.length >= 10) { showToast('❌ لاوی پر است'); return null; }
             
             lobby.players.push({ id: currentUserId, name: currentUsername, avatar: avatarImg.src });
             saveLobbies();
-            showToast(`✅ شما به لاوی "${lobby.name}" پیوستید!`, 2000);
+            
+            if(syncChannel) {
+                syncChannel.publish('lobby-join', {
+                    lobbyId: lobbyId,
+                    userId: currentUserId,
+                    userName: currentUsername,
+                    avatar: avatarImg.src,
+                    sender: currentUserId
+                });
+            }
+            showToast(`✅ به لاوی ${lobby.name} پیوستید`, 1500);
             return lobby;
         }
         
-        // خروج از لاوی
         function leaveLobby(lobbyId) {
-            if(voiceChannel) stopRecording();
             const lobby = lobbies.find(l => l.id === lobbyId);
             if(lobby) {
-                const index = lobby.players.findIndex(p => p.id === currentUserId);
-                if(index !== -1) lobby.players.splice(index, 1);
+                const idx = lobby.players.findIndex(p => p.id === currentUserId);
+                if(idx !== -1) lobby.players.splice(idx, 1);
                 if(lobby.players.length === 0) {
-                    const lobbyIndex = lobbies.findIndex(l => l.id === lobbyId);
-                    if(lobbyIndex !== -1) lobbies.splice(lobbyIndex, 1);
+                    const lobbyIdx = lobbies.findIndex(l => l.id === lobbyId);
+                    if(lobbyIdx !== -1) lobbies.splice(lobbyIdx, 1);
                 } else if(lobby.ownerId === currentUserId && lobby.players.length > 0) {
                     lobby.ownerId = lobby.players[0].id;
                     lobby.ownerName = lobby.players[0].name;
                 }
                 saveLobbies();
+                if(syncChannel) {
+                    syncChannel.publish('lobby-leave', { lobbyId: lobbyId, userId: currentUserId, sender: currentUserId });
+                }
             }
-            showToast('🚪 شما لاوی را ترک کردید');
+            showToast('🚪 از لاوی خارج شدید');
         }
         
-        // نمایش صفحه لاوی (اتاق)
+        let currentRoomPage = null;
+        let voiceChannel = null;
+        let ablyVoice = null;
+        let mediaRecorder = null;
+        let audioStream = null;
+        let isMicActive = false;
+        
+        function stopMicrophone() {
+            if(mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+            if(audioStream) {
+                audioStream.getTracks().forEach(track => track.stop());
+                audioStream = null;
+            }
+            isMicActive = false;
+        }
+        
+        function startMicrophone() {
+            if(isMicActive) return;
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    audioStream = stream;
+                    mediaRecorder = new MediaRecorder(stream);
+                    const chunks = [];
+                    mediaRecorder.ondataavailable = (e) => {
+                        if(e.data.size > 0) {
+                            chunks.push(e.data);
+                            const blob = new Blob(chunks, { type: 'audio/webm' });
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                                if(voiceChannel && voiceChannel.connection && voiceChannel.connection.state === 'connected') {
+                                    voiceChannel.publish('voice', { audio: reader.result, sender: currentUserId });
+                                }
+                            };
+                            reader.readAsDataURL(blob);
+                            chunks.length = 0;
+                        }
+                    };
+                    mediaRecorder.start(200);
+                    isMicActive = true;
+                    showToast('🎙️ میکروفون روشن شد');
+                    const micBtn = document.getElementById('micActionBtn');
+                    if(micBtn) {
+                        micBtn.classList.add('mic-active');
+                        micBtn.innerHTML = '🎤 میکروفون روشن';
+                    }
+                })
+                .catch(() => {
+                    showToast('❌ دسترسی به میکروفون ندارید');
+                });
+        }
+        
+        function toggleMicrophone() {
+            if(isMicActive) {
+                stopMicrophone();
+                showToast('🔇 میکروفون خاموش شد');
+                const micBtn = document.getElementById('micActionBtn');
+                if(micBtn) {
+                    micBtn.classList.remove('mic-active');
+                    micBtn.innerHTML = '🎙️ میکروفون';
+                }
+            } else {
+                startMicrophone();
+            }
+        }
+        
         function showLobbyRoom(lobbyId) {
-            const lobby = lobbies.find(l => l.id === lobbyId);
+            let lobby = lobbies.find(l => l.id === lobbyId);
             if(!lobby) { showToast('لاوی وجود ندارد'); return; }
-            if(!lobby.players.some(p => p.id === currentUserId)) { showToast('شما عضو این لاوی نیستید'); return; }
+            if(!lobby.players.some(p => p.id === currentUserId)) {
+                lobby = joinLobby(lobbyId);
+                if(!lobby) return;
+            }
             
-            initVoiceChannel(lobbyId);
-            
-            const existingRoom = document.querySelector('.room-table');
-            if(existingRoom && existingRoom.parentNode) existingRoom.remove();
+            if(currentRoomPage) currentRoomPage.remove();
+            stopMicrophone();
             
             const roomPage = document.createElement('div');
             roomPage.style.position = 'fixed';
@@ -667,93 +1018,126 @@
             roomPage.style.zIndex = '400';
             roomPage.style.background = 'radial-gradient(circle at top, rgba(0,220,255,.20), transparent 28%), radial-gradient(circle at bottom, rgba(0,100,255,.14), transparent 40%), linear-gradient(180deg, #123c72 0%, #0a2850 22%, #071c38 46%, #051427 70%, #020914 100%)';
             
-            const seatPositions = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
-            let micActive = false;
+            const seatPos = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
+            let isReady = false;
             
             function updateRoom() {
                 const currentLobby = lobbies.find(l => l.id === lobbyId);
                 if(!currentLobby) {
-                    if(roomPage && roomPage.parentNode) roomPage.remove();
-                    showToast('لاوی بسته شده است');
+                    roomPage.remove();
+                    showToast('لاوی بسته شد');
                     return;
                 }
-                if(!currentLobby.players.some(p => p.id === currentUserId)) {
-                    if(roomPage && roomPage.parentNode) roomPage.remove();
-                    showToast('شما از لاوی خارج شده‌اید');
-                    return;
-                }
-                
                 let seatsHtml = '';
-                for(let i = 0; i < 10; i++) {
-                    const player = currentLobby.players[i];
-                    if(player) {
-                        seatsHtml += `<div class="player-seat ${seatPositions[i]}"><img src="${player.avatar}" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'"><div class="player-name-label">${player.name}</div>${player.id === currentUserId ? `<div class="mic-button ${micActive ? 'active recording' : ''}" id="micBtn">${micActive ? '🎤' : '🎙️'}</div>` : ''}</div>`;
+                for(let i=0; i<10; i++) {
+                    const p = currentLobby.players[i];
+                    if(p) {
+                        seatsHtml += `<div class="player-seat ${seatPos[i]}"><img src="${p.avatar}" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'"><div class="player-name-label">${p.name}${p.id === currentLobby.ownerId ? ' 👑' : ''}</div></div>`;
                     } else {
-                        seatsHtml += `<div class="player-seat empty-seat ${seatPositions[i]}"><div class="empty-icon">+</div><div class="player-name-label">صندلی خالی</div></div>`;
+                        seatsHtml += `<div class="player-seat empty-seat ${seatPos[i]}"><div class="empty-icon">+</div><div class="player-name-label">صندلی خالی</div></div>`;
                     }
                 }
                 
-                roomPage.innerHTML = `<div class="room-table">${seatsHtml}<div class="room-center"><div style="background:rgba(0,0,0,0.6);border-radius:50px;padding:15px 30px;color:white;font-weight:bold;text-align:center;">🎮 ${currentLobby.name} 🎮<br><span style="font-size:12px;">👥 ${currentLobby.players.length}/10 نفر</span></div></div><div class="room-bottom-bar"><button class="room-ready-btn" id="readyBtn">آماده نیستم</button><button class="exit-room-btn" id="exitBtn">🔙 خروج</button></div></div>`;
+                roomPage.innerHTML = `<div class="room-table">
+                    <div class="lobby-top-bar">
+                        <div class="lobby-info-center">
+                            🎮 ${currentLobby.name} 🎮
+                            <span class="player-count-badge">👥 ${currentLobby.players.length}/10</span>
+                            <span class="lobby-creator-name">👑 سازنده: ${currentLobby.ownerName}</span>
+                        </div>
+                        <button class="exit-lobby-btn" id="exitLobbyBtn">←</button>
+                    </div>
+                    ${seatsHtml}
+                    <div class="lobby-bottom-buttons">
+                        <button class="lobby-action-btn ready-btn" id="readyActionBtn">آماده هستم</button>
+                        <button class="lobby-action-btn mic-btn" id="micActionBtn">🎙️ میکروفون</button>
+                    </div>
+                </div>`;
                 
-                const micBtn = document.getElementById('micBtn');
-                if(micBtn) {
-                    micBtn.onclick = () => {
-                        if(micActive) {
-                            stopRecording();
-                            micActive = false;
-                            micBtn.classList.remove('active', 'recording');
-                            micBtn.innerHTML = '🎙️';
+                const readyBtn = document.getElementById('readyActionBtn');
+                if(readyBtn) {
+                    if(isReady) {
+                        readyBtn.classList.add('ready-active');
+                        readyBtn.classList.remove('ready-inactive');
+                        readyBtn.innerText = 'آماده هستم';
+                    } else {
+                        readyBtn.classList.remove('ready-active');
+                        readyBtn.classList.add('ready-inactive');
+                        readyBtn.innerText = 'آماده نیستم';
+                    }
+                    
+                    readyBtn.onclick = () => {
+                        isReady = !isReady;
+                        if(isReady) {
+                            readyBtn.classList.add('ready-active');
+                            readyBtn.classList.remove('ready-inactive');
+                            readyBtn.innerText = 'آماده هستم';
+                            showToast('✅ شما آماده شدید');
                         } else {
-                            startRecording(lobbyId);
-                            micActive = true;
-                            micBtn.classList.add('active', 'recording');
-                            micBtn.innerHTML = '🎤';
+                            readyBtn.classList.remove('ready-active');
+                            readyBtn.classList.add('ready-inactive');
+                            readyBtn.innerText = 'آماده نیستم';
+                            showToast('❌ شما آماده نیستید');
                         }
                     };
                 }
                 
-                const readyBtn = document.getElementById('readyBtn');
-                if(readyBtn) {
-                    let ready = false;
-                    readyBtn.onclick = () => {
-                        ready = !ready;
-                        if(ready) { readyBtn.classList.add('active'); readyBtn.innerText = 'آماده هستم'; showToast('✅ شما آماده شدید!', 1000); }
-                        else { readyBtn.classList.remove('active'); readyBtn.innerText = 'آماده نیستم'; }
-                    };
+                const micBtnAction = document.getElementById('micActionBtn');
+                if(micBtnAction) {
+                    if(isMicActive) {
+                        micBtnAction.classList.add('mic-active');
+                        micBtnAction.innerHTML = '🎤 میکروفون روشن';
+                    } else {
+                        micBtnAction.classList.remove('mic-active');
+                        micBtnAction.innerHTML = '🎙️ میکروفون';
+                    }
+                    micBtnAction.onclick = () => toggleMicrophone();
                 }
                 
-                const exitBtn = document.getElementById('exitBtn');
+                const exitBtn = document.getElementById('exitLobbyBtn');
                 if(exitBtn) exitBtn.onclick = () => {
-                    if(micActive) stopRecording();
+                    stopMicrophone();
                     leaveLobby(lobbyId);
-                    if(roomPage && roomPage.parentNode) roomPage.remove();
+                    roomPage.remove();
                     setTimeout(() => showFriendsPage(), 100);
                 };
             }
             
             updateRoom();
             document.body.appendChild(roomPage);
+            currentRoomPage = roomPage;
             
-            window.currentLobbyRoom = { updateUI: updateRoom };
+            if(ablyVoice) {
+                try { ablyVoice.close(); } catch(e) {}
+            }
+            ablyVoice = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
+            ablyVoice.connection.on('connected', () => {
+                voiceChannel = ablyVoice.channels.get('voice-' + lobbyId);
+                voiceChannel.subscribe('voice', (msg) => {
+                    if(msg.data && msg.data.sender !== currentUserId) {
+                        const audio = new Audio(msg.data.audio);
+                        audio.play().catch(e => {});
+                    }
+                });
+            });
+            
+            window.currentLobbyRoom = { lobbyId: lobbyId, updateUI: updateRoom, page: roomPage };
             const interval = setInterval(() => {
                 if(document.body.contains(roomPage)) {
-                    const currentLobby = lobbies.find(l => l.id === lobbyId);
-                    if(currentLobby && currentLobby.players.some(p => p.id === currentUserId)) {
-                        updateRoom();
-                    } else {
-                        clearInterval(interval);
-                        if(document.body.contains(roomPage)) roomPage.remove();
-                    }
+                    const curr = lobbies.find(l => l.id === lobbyId);
+                    if(curr && curr.players.some(p => p.id === currentUserId)) updateRoom();
+                    else { clearInterval(interval); roomPage.remove(); }
                 } else { clearInterval(interval); }
             }, 2000);
         }
         
-        // صفحه اصلی لیست لاوی‌ها
         function showFriendsPage() {
-            if(!currentUserId) { showToast('❌ ابتدا نام کاربری خود را انتخاب کنید'); return; }
+            if(!currentUserId) { showToast('ابتدا نام کاربری را انتخاب کنید'); return; }
             
-            const existingPage = document.querySelector('.friends-page');
-            if(existingPage) existingPage.remove();
+            const existing = document.querySelector('.friends-page');
+            if(existing) existing.remove();
+            if(currentRoomPage) currentRoomPage.remove();
+            stopMicrophone();
             
             const page = document.createElement('div');
             page.className = 'friends-page';
@@ -768,29 +1152,30 @@
             function refreshList() {
                 const container = document.getElementById('lobbiesList');
                 if(!container) return;
-                if(lobbies.length === 0) {
+                const activeLobbies = lobbies.filter(l => l.players && l.players.length > 0);
+                if(activeLobbies.length === 0) {
                     container.innerHTML = '<div style="text-align:center;color:white;padding:20px;">🎮 هیچ لاوی فعالی وجود ندارد</div>';
                     return;
                 }
-                container.innerHTML = lobbies.map(lobby => `
+                container.innerHTML = activeLobbies.map(lobby => `
                     <div class="lobby-item">
                         <div class="lobby-info">
                             <h4>🎭 ${lobby.name}</h4>
                             <p>👑 ${lobby.ownerName} | 👥 ${lobby.players.length}/10 نفر</p>
                         </div>
                         ${!lobby.players.some(p => p.id === currentUserId) ? 
-                            `<button class="lobby-join-btn" onclick="window.joinLobbyHandler('${lobby.id}')">➕ ورود</button>` :
-                            `<button class="lobby-join-btn" style="background:#44aa44;" onclick="window.enterLobbyHandler('${lobby.id}')">🎮 ورود</button>`
+                            `<button class="lobby-join-btn" onclick="window.joinHandler('${lobby.id}')">➕ ورود</button>` :
+                            `<button class="lobby-join-btn" style="background:#44aa44;" onclick="window.enterHandler('${lobby.id}')">🎮 ورود</button>`
                         }
                     </div>
                 `).join('');
             }
             
-            window.joinLobbyHandler = (id) => {
+            window.joinHandler = (id) => {
                 const lobby = joinLobby(id);
                 if(lobby) { refreshList(); showLobbyRoom(id); page.remove(); }
             };
-            window.enterLobbyHandler = (id) => { showLobbyRoom(id); page.remove(); };
+            window.enterHandler = (id) => { showLobbyRoom(id); page.remove(); };
             
             document.getElementById('searchBtn').onclick = () => {
                 const code = document.getElementById('searchInput').value.trim();
@@ -815,19 +1200,15 @@
             };
             
             page.querySelector('.close-friends-btn').onclick = () => page.remove();
-            
             window.currentLobbyPage = { refreshList: refreshList };
             refreshList();
         }
         
-        // ===== بخش اصلی کد =====
+        // ===== بخش اصلی =====
         const modal = document.getElementById('usernameModal');
         const usernameInput = document.getElementById('usernameInput');
         const saveBtn = document.getElementById('saveNameBtn');
         const usernameDisplaySpan = document.getElementById('usernameDisplay');
-        const avatarImg = document.getElementById('userAvatar');
-        const gemsSpan = document.getElementById('gemsValue');
-        const coinsSpan = document.getElementById('coinsValue');
         const topRight = document.getElementById('topRightBtn');
         const topLeft = document.getElementById('topLeftBtn');
         const bottomRight = document.getElementById('bottomRightImg');
@@ -835,10 +1216,6 @@
         const shopButton = document.getElementById('bottomLeftImg');
         const galleryBtns = document.querySelectorAll('.gallery-img-btn');
         const profileBtn = document.getElementById('profileBtn');
-        
-        const ABLY_KEY = 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo';
-        let ably = null, channel = null;
-        let currentUserId = '', currentCoins = 0, currentUsername = '';
         
         const DAILY_PACKS = [{ id: 0, coins: 250, name: "نقره‌ای", emoji: "🥈" },{ id: 1, coins: 500, name: "طلایی", emoji: "🌟" },{ id: 2, coins: 100, name: "الماسی", emoji: "💎" },{ id: 3, coins: 150, name: "رویایی", emoji: "✨" }];
         
@@ -852,18 +1229,187 @@
         function showToast(msg, dur = 2000) { const t = document.createElement('div'); t.className = 'toast-msg'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => t.remove(), dur); }
         
         function showProfile() {
-            if(!currentUserId) { showToast('❌ ابتدا نام کاربری را انتخاب کنید'); return; }
-            const d = document.createElement('div'); d.className = 'profile-modal';
-            d.innerHTML = `<div class="profile-content"><h2>👤 پروفایل</h2><h3 style="color:#ffaa66;">${currentUsername}</h3><div class="profile-code">${currentUserId}</div><button class="profile-copy-btn" id="copyBtn">📋 کپی</button><button class="close-profile-btn" id="closeBtn">🔙 بستن</button></div>`;
+            if(!currentUserId) { showToast('ابتدا نام کاربری را انتخاب کنید'); return; }
+            
+            let stats = localStorage.getItem('userStats');
+            if(!stats) {
+                stats = {
+                    competitiveWins: 0,
+                    friendlyWins: 0,
+                    playTime: 0,
+                    spectatorCount: 0,
+                    mafiaWins: 0,
+                    citizenWins: 0,
+                    exp: 0
+                };
+                localStorage.setItem('userStats', JSON.stringify(stats));
+            } else {
+                stats = JSON.parse(stats);
+            }
+            
+            function calculateLevel(exp) {
+                let level = 1;
+                let required = 100;
+                let totalExp = exp;
+                while(totalExp >= required && level < 100) {
+                    totalExp -= required;
+                    level++;
+                    required = Math.floor(required * 1.2);
+                }
+                return { level: level, currentExp: totalExp, requiredExp: required };
+            }
+            
+            const levelInfo = calculateLevel(stats.exp || 0);
+            const level = levelInfo.level;
+            const currentExp = levelInfo.currentExp;
+            const requiredExp = levelInfo.requiredExp;
+            const expPercent = (currentExp / requiredExp) * 100;
+            
+            const hoursPlayed = Math.floor(stats.playTime / 3600);
+            const minutesPlayed = Math.floor((stats.playTime % 3600) / 60);
+            
+            const d = document.createElement('div');
+            d.className = 'profile-modal-full';
+            d.innerHTML = `
+                <div class="profile-content-full">
+                    <div class="profile-header-full">
+                        <div class="profile-avatar-large">
+                            <img src="${avatarImg.src}" alt="Avatar" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'">
+                            <div class="level-badge">سطح ${level}</div>
+                        </div>
+                        <div class="profile-name-full">
+                            <h2>${currentUsername}</h2>
+                            <div class="user-id">🆔 ${currentUserId}</div>
+                        </div>
+                        <button class="close-profile-full" id="closeProfileBtn">✕</button>
+                    </div>
+                    
+                    <div class="exp-bar-container">
+                        <div class="exp-bar-label">تجربه تا سطح بعد: ${currentExp}/${requiredExp}</div>
+                        <div class="exp-bar">
+                            <div class="exp-bar-fill" style="width: ${expPercent}%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-info">
+                                <div class="stat-value">${toPersianNumber(stats.competitiveWins)}</div>
+                                <div class="stat-label">برد امتیازی</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎮</div>
+                            <div class="stat-info">
+                                <div class="stat-value">${toPersianNumber(stats.friendlyWins)}</div>
+                                <div class="stat-label">برد دوستانه</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-info">
+                                <div class="stat-value">${toPersianNumber(level)}</div>
+                                <div class="stat-label">سطح کاربر</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-info">
+                                <div class="stat-value">${toPersianNumber(hoursPlayed)}:${toPersianNumber(minutesPlayed)}</div>
+                                <div class="stat-label">ساعت بازی</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">👁️</div>
+                            <div class="stat-info">
+                                <div class="stat-value">${toPersianNumber(stats.spectatorCount)}</div>
+                                <div class="stat-label">تعداد نظاره‌گر</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🦹</div>
+                            <div class="stat-info">
+                                <div class="stat-value">${toPersianNumber(stats.mafiaWins)}</div>
+                                <div class="stat-label">برد مافیا</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">👮</div>
+                            <div class="stat-info">
+                                <div class="stat-value">${toPersianNumber(stats.citizenWins)}</div>
+                                <div class="stat-label">برد شهروند</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-actions">
+                        <button class="profile-action-btn" id="copyIdBtn">📋 کپی کد کاربری</button>
+                        <button class="profile-action-btn" id="editNameBtn">✏️ تغییر نام</button>
+                    </div>
+                </div>
+            `;
             document.body.appendChild(d);
-            document.getElementById('copyBtn').onclick = () => { navigator.clipboard.writeText(currentUserId); showToast('📋 کپی شد!'); };
-            document.getElementById('closeBtn').onclick = () => d.remove();
+            
+            document.getElementById('copyIdBtn').onclick = () => {
+                navigator.clipboard.writeText(currentUserId);
+                showToast('📋 کد کاربری کپی شد!');
+            };
+            
+            document.getElementById('editNameBtn').onclick = () => {
+                d.remove();
+                const modalDiv = document.createElement('div');
+                modalDiv.className = 'profile-modal-full';
+                modalDiv.innerHTML = `
+                    <div class="profile-content-full" style="max-width: 350px;">
+                        <h2 style="color:#ffaa66; margin-bottom:20px; text-align:center;">تغییر نام کاربری</h2>
+                        <input type="text" id="newNameInput" class="edit-name-input" placeholder="نام جدید..." maxlength="20" value="${currentUsername}">
+                        <div class="profile-actions" style="margin-top:20px;">
+                            <button class="profile-action-btn" id="confirmNameBtn">✅ تایید</button>
+                            <button class="profile-action-btn" id="cancelNameBtn">❌ انصراف</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modalDiv);
+                
+                document.getElementById('confirmNameBtn').onclick = () => {
+                    const newName = document.getElementById('newNameInput').value.trim();
+                    if(newName) {
+                        currentUsername = newName;
+                        localStorage.setItem('gameUsername', currentUsername);
+                        usernameDisplaySpan.innerText = currentUsername;
+                        showToast(`✅ نام به ${currentUsername} تغییر کرد`);
+                        modalDiv.remove();
+                        showProfile();
+                    } else {
+                        showToast('❌ نام نمی‌تواند خالی باشد');
+                    }
+                };
+                document.getElementById('cancelNameBtn').onclick = () => modalDiv.remove();
+            };
+            
+            document.getElementById('closeProfileBtn').onclick = () => d.remove();
         }
         
-        function connectGift() { if(typeof Ably === 'undefined' || !currentUserId) return; try { ably = new Ably.Realtime({ key: ABLY_KEY, clientId: currentUserId }); ably.connection.on('connected', () => { channel = ably.channels.get('gift-channel'); channel.subscribe('gift', (msg) => { if(msg.data && msg.data.to === currentUserId) { addCoins(msg.data.amount); showToast(`🎁 ${msg.data.from} به شما ${toPersianNumber(msg.data.amount)} سکه هدیه داد!`); } }); }); } catch(e) { console.error(e); } }
+        let ablyGift = null, giftChannel = null;
+        function connectGift() {
+            if(typeof Ably === 'undefined' || !currentUserId) return;
+            try {
+                ablyGift = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
+                ablyGift.connection.on('connected', () => {
+                    giftChannel = ablyGift.channels.get('gift-channel');
+                    giftChannel.subscribe('gift', (msg) => {
+                        if(msg.data && msg.data.to === currentUserId) {
+                            addCoins(msg.data.amount);
+                            showToast(`🎁 ${msg.data.from} به شما ${toPersianNumber(msg.data.amount)} سکه هدیه داد!`);
+                        }
+                    });
+                });
+            } catch(e) { console.error(e); }
+        }
         
         function showGift() {
-            if(!currentUserId) { showToast('❌ ابتدا نام خود را انتخاب کنید'); return; }
+            if(!currentUserId) { showToast('ابتدا نام خود را انتخاب کنید'); return; }
             if(currentCoins < 50) { showToast(`❌ حداقل ۵۰ سکه نیاز است!`); return; }
             const d = document.createElement('div'); d.className = 'gift-modal';
             d.innerHTML = `<div class="gift-content"><h2>🎁 هدیه سکه</h2><input type="text" id="targetCode" placeholder="کد کاربری دوست..."><select id="amountSelect"><option value="50">۵۰</option><option value="100">۱۰۰</option><option value="200">۲۰۰</option><option value="500">۵۰۰</option><option value="1000">۱۰۰۰</option></select><div class="gift-buttons"><button class="send-gift-btn" id="sendBtn">🎁 ارسال</button><button class="cancel-gift-btn" id="cancelBtn">❌ انصراف</button></div></div>`;
@@ -874,7 +1420,7 @@
                 if(!target) { showToast('کد را وارد کنید'); return; }
                 if(target === currentUserId) { showToast('نمی‌توانید به خودتان هدیه دهید'); return; }
                 if(currentCoins < amount) { showToast('سکه کافی ندارید'); return; }
-                if(channel) { removeCoins(amount); channel.publish('gift', { to: target, from: currentUsername, amount: amount }); showToast(`✅ ${toPersianNumber(amount)} سکه ارسال شد!`); d.remove(); }
+                if(giftChannel) { removeCoins(amount); giftChannel.publish('gift', { to: target, from: currentUsername, amount: amount }); showToast(`✅ ${toPersianNumber(amount)} سکه ارسال شد!`); d.remove(); }
                 else { showToast('❌ خطا در اتصال'); }
             };
             document.getElementById('cancelBtn').onclick = () => d.remove();
@@ -901,7 +1447,7 @@
                 if(savedId) currentUserId = savedId;
                 else { currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); localStorage.setItem('userId', currentUserId); }
                 connectGift();
-                connectLobbySync();
+                connectSync();
                 loadLobbies();
             } else { modal.style.display = 'flex'; usernameInput.focus(); }
         }
@@ -917,7 +1463,7 @@
             usernameDisplaySpan.innerText = currentUsername;
             modal.style.display = 'none';
             connectGift();
-            connectLobbySync();
+            connectSync();
             loadLobbies();
             showToast(`✅ خوش آمدی ${currentUsername}!`);
         }
@@ -935,7 +1481,7 @@
         galleryBtns.forEach(btn => btn.onclick = silent);
         
         usernameDisplaySpan.ondblclick = () => { modal.style.display = 'flex'; usernameInput.value = localStorage.getItem('gameUsername') || ''; usernameInput.focus(); };
-        avatarImg.onerror = () => { avatarImg.src = "https://via.placeholder.com/80?text=Avatar"; };
+        document.getElementById('userAvatar').onerror = () => { document.getElementById('userAvatar').src = "https://via.placeholder.com/80?text=Avatar"; };
         
         loadUser();
         loadCurrencies();
