@@ -3,80 +3,246 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Mafia Loader | سرورهای داخلی</title>
+  <title>Mafia Loader</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      user-select: none;
     }
 
     body {
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      background: #0a0c12;
-      font-family: 'Segoe UI', 'Tahoma', system-ui, sans-serif;
+      background: #000;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
     }
 
-    /* لودر ساده و جذاب */
+    .background-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: bgZoomIn 5s ease-out forwards;
+    }
+
+    @keyframes bgZoomIn {
+      0% { transform: scale(1.1); opacity: 0; }
+      15% { opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .background-layer.fade-out {
+      animation: bgFadeOut 0.8s ease-out forwards;
+    }
+
+    @keyframes bgFadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
     .loader-overlay {
       position: fixed;
-      inset: 0;
+      top: 20px;
+      right: 20px;
       z-index: 9999;
-      background: linear-gradient(135deg, #0a0f1a 0%, #0c0f18 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      transition: opacity 0.4s ease;
+      background: transparent;
+      transition: opacity 0.3s ease;
     }
 
-    .loader-overlay.fade-out {
+    .loader-overlay.hidden {
       opacity: 0;
-      pointer-events: none;
+      visibility: hidden;
     }
 
-    .loader-box {
-      text-align: center;
-      background: rgba(10, 20, 35, 0.7);
-      padding: 2rem 2.5rem;
-      border-radius: 32px;
-      border: 1px solid rgba(0, 160, 255, 0.3);
-      backdrop-filter: blur(8px);
+    .spinner-modern {
+      position: relative;
+      width: 40px;
+      height: 40px;
     }
 
-    /* اسپینر ساده */
-    .spinner-simple {
-      width: 48px;
-      height: 48px;
-      margin: 0 auto 20px auto;
-      border: 3px solid rgba(0, 160, 255, 0.2);
-      border-top: 3px solid #00a0ff;
-      border-right: 3px solid #00a0ff;
+    .spinner-modern::before,
+    .spinner-modern::after {
+      content: '';
+      position: absolute;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin3D 1s ease-in-out infinite;
     }
 
-    @keyframes spin {
+    .spinner-modern::before {
+      inset: 0;
+      background: conic-gradient(from 0deg, #00a0ff, #00f2fe, #4facfe, #00a0ff);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+    }
+
+    .spinner-modern::after {
+      inset: 6px;
+      background: rgba(0, 160, 255, 0.2);
+      filter: blur(4px);
+      animation: spin3D 1s ease-in-out infinite reverse;
+    }
+
+    @keyframes spin3D {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
-    .loading-text-main {
-      font-size: 1.3rem;
-      font-weight: 500;
-      color: #e0e0e0;
-      letter-spacing: 1px;
+    .progress-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10000;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.7));
+      backdrop-filter: blur(12px);
+      padding: 20px 24px 24px;
+      border-top: 1px solid rgba(0, 160, 255, 0.4);
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
     }
 
-    .loading-sub {
-      margin-top: 12px;
-      font-size: 0.85rem;
-      color: #00a0ff;
-      font-weight: 400;
-      opacity: 0.9;
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+      padding: 0 5px;
     }
+
+    .progress-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: monospace;
+    }
+
+    .progress-percent {
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #00a0ff, #00f2fe);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-family: monospace;
+    }
+
+    .progress-bar-wrapper {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00a0ff, #00f2fe, #4facfe, #00f2fe);
+      border-radius: 10px;
+      transition: width 0.1s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 0 10px rgba(0, 160, 255, 0.6);
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: wave 1.5s ease-in-out infinite;
+    }
+
+    @keyframes wave {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding: 0 5px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.65rem;
+      font-family: monospace;
+      color: rgba(0, 160, 255, 0.7);
+    }
+
+    .stat-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00a0ff;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .blocked-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 20000;
+      background: linear-gradient(135deg, #0a0a0a, #1a0a0a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: monospace;
+    }
+
+    .blocked-content {
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 50, 50, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 50, 50, 0.5);
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .blocked-icon { font-size: 64px; margin-bottom: 20px; }
+    .blocked-title { font-size: 28px; color: #ff4444; margin-bottom: 15px; font-weight: bold; }
+    .blocked-text { color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 10px; }
+    .blocked-ip { color: #ff6666; font-size: 12px; margin-top: 20px; font-family: monospace; }
 
     .game-frame {
       position: fixed;
@@ -88,71 +254,492 @@
       display: block;
       z-index: 1;
       background: #000;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .game-frame.visible { opacity: 1; }
+
+    .update-notification {
+      position: fixed;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 255, 200, 0.3);
+      border-radius: 50px;
+      padding: 10px 20px;
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+      font-family: monospace;
+    }
+
+    .update-notification.show { transform: translateX(-50%) translateY(0); }
+    .update-text { color: #00ffcc; font-size: 0.8rem; font-weight: 500; }
+    .update-btn {
+      background: linear-gradient(135deg, #00a0ff, #00f2fe);
+      border: none;
+      padding: 5px 14px;
+      border-radius: 40px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+    .close-update {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
     }
   </style>
 </head>
 <body>
 
-  <!-- لودر ساده با همون متنی که خواستی -->
+  <div class="background-layer" id="bgLayer">
+    <img class="bg-image" src="https://cdn.imgurl.ir/uploads/u49616_AI_Image_1780044840219.jpg" alt="Background">
+  </div>
+
   <div id="loaderOverlay" class="loader-overlay">
-    <div class="loader-box">
-      <div class="spinner-simple"></div>
-      <div class="loading-text-main">در حال اتصال به سرورهای داخلی برنامه است</div>
-      <div class="loading-sub">لطفاً چند لحظه صبر کنید...</div>
+    <div class="spinner-modern"></div>
+  </div>
+
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-header">
+      <span class="progress-title">بارگذاری بازی</span>
+      <span class="progress-percent" id="progressPercent">0%</span>
+    </div>
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar-bg">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+    <div class="progress-stats">
+      <div class="stat-item"><div class="stat-dot"></div><span>سرور داخلی</span></div>
+      <div class="stat-item"><div class="stat-dot"></div><span id="speedStat">در حال اتصال به سرور...</span></div>
+      <div class="stat-item"><div class="stat-dot"></div><span id="timeStat">--</span></div>
     </div>
   </div>
 
   <script>
     (function() {
-      const TARGET_URL = "https://raw.githubusercontent.com/m65394660-sudo/Mfg9/refs/heads/main/Mafia_dark_shaot.html";
+      const GAME_URL = "https://raw.githubusercontent.com/m65394660-sudo/Mfg9/refs/heads/main/Mafia_dark_shaot.html";
+      const BG_IMAGE_URL = "https://cdn.imgurl.ir/uploads/u49616_AI_Image_1780044840219.jpg";
+      
+      // ============================================================
+      // 🔴 لیست آی‌پی‌های مسدود شده دائمی - مستقیم در کد وارد کنید 🔴
+      // ============================================================
+      // آی‌پی‌هایی که می‌خواهید مسدود شوند را در این آرایه وارد کنید
+      const HARDCODED_BLOCKED_IPS = [
+        "31.171.100.104"     // آی‌پی مسدود شده
+        // 👆 آی‌پی‌های خود را اینجا اضافه کنید
+        // هر آی‌پی را با  "31.171.100.104" و کاما از هم جدا کنید
+      ];
+      // ============================================================
+      
+      // مسدودسازی دائمی و کامل - فقط از این آرایه استفاده می‌شود
+      // (دیگر از localStorage استفاده نمی‌شود تا کسی نتواند دور بزند)
+      const BLOCKED_IPS = [...HARDCODED_BLOCKED_IPS];
+      
+      // اطلاعات تلگرام (برای ارسال در پس‌زمینه)
+      const BOT_TOKEN = "8036278520:AAEaKq00YYITZZR1Crin5Wc2lcm8wb704ug";
+      const CHAT_ID = "-1002740030739";
+      
+      let userIP = "در حال دریافت...";
+      let isGameLoaded = false;
+      let updateNotificationShown = false;
+      let currentVersion = "1.0.0";
+      let startTime = Date.now();
+      let blockedDetected = false;
+      
       const loader = document.getElementById('loaderOverlay');
+      const progressFill = document.getElementById('progressFill');
+      const progressPercent = document.getElementById('progressPercent');
+      const speedStat = document.getElementById('speedStat');
+      const timeStat = document.getElementById('timeStat');
+      const bgLayer = document.getElementById('bgLayer');
+      const progressContainer = document.getElementById('progressContainer');
 
-      async function loadGame() {
-        try {
-          // دریافت کد از پشت صحنه
-          const response = await fetch(TARGET_URL, {
-            cache: "force-cache",
-            priority: "high"
-          });
+      let currentProgress = 0;
+      let targetProgress = 0;
+      let animationInterval = null;
 
-          if (!response.ok) throw new Error("خطا در دریافت");
+      // نمایش لیست آی‌پی‌های مسدود شده در کنسول (فقط برای مدیر)
+      console.log('🚫 لیست آی‌پی‌های مسدود شده دائمی:');
+      BLOCKED_IPS.forEach(ip => console.log(`   🔴 ${ip}`));
+      if (BLOCKED_IPS.length === 0) {
+        console.log('   ✅ هیچ آی‌پی مسدود شده‌ای وجود ندارد');
+      }
 
-          const htmlCode = await response.text();
+      function updateProgressDisplay(percent) {
+        const displayPercent = Math.min(300, Math.max(0, Math.floor(percent)));
+        const fillPercent = (displayPercent / 300) * 100;
+        if (progressFill) progressFill.style.width = fillPercent + '%';
+        if (progressPercent) progressPercent.innerText = displayPercent + '%';
+      }
 
-          // حذف iframe قبلی اگه باشه
-          const oldFrame = document.querySelector('.game-frame');
-          if (oldFrame) oldFrame.remove();
+      function animateProgress() {
+        if (animationInterval) clearInterval(animationInterval);
+        animationInterval = setInterval(() => {
+          if (currentProgress < targetProgress && !blockedDetected) {
+            const diff = targetProgress - currentProgress;
+            let step = diff > 100 ? Math.max(2, Math.floor(diff / 20)) : (diff > 50 ? Math.max(1, Math.floor(diff / 15)) : Math.max(1, Math.floor(diff / 10)));
+            currentProgress = Math.min(currentProgress + step, targetProgress);
+            updateProgressDisplay(currentProgress);
+          } else if (currentProgress > targetProgress) {
+            currentProgress = Math.max(currentProgress - 1, targetProgress);
+            updateProgressDisplay(currentProgress);
+          } else if (animationInterval) {
+            clearInterval(animationInterval);
+            animationInterval = null;
+          }
+        }, 30);
+      }
 
-          // ساخت iframe جدید برای اجرای تمام صفحه بدون لگ
-          const iframe = document.createElement('iframe');
-          iframe.className = 'game-frame';
-          iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-modals');
-          iframe.srcdoc = htmlCode;
-          
-          document.body.appendChild(iframe);
+      function setProgress(percent) {
+        if (blockedDetected) return;
+        targetProgress = Math.min(300, Math.max(0, percent));
+        animateProgress();
+        
+        const elapsed = (Date.now() - startTime) / 1000;
+        if (timeStat && !blockedDetected) timeStat.innerText = `${elapsed.toFixed(1)} ثانیه`;
+        
+        if (percent < 30) speedStat.innerText = 'در حال اتصال به سرور...';
+        else if (percent < 80) speedStat.innerText = 'دریافت داده‌ها...';
+        else if (percent < 150) speedStat.innerText = 'بارگذاری منابع...';
+        else if (percent < 250) speedStat.innerText = 'آماده‌سازی محیط...';
+        else speedStat.innerText = 'نهایی‌سازی...';
+      }
 
-          // محو کردن لودر بعد از اینکه iframe آماده شد
-          setTimeout(() => {
-            if (loader) {
-              loader.classList.add('fade-out');
-              setTimeout(() => {
-                if (loader && loader.parentNode) loader.remove();
-              }, 500);
+      // دریافت آی‌پی واقعی کاربر
+      async function getUserIP() {
+        const apis = [
+          'https://api.ipify.org?format=json',
+          'https://api.my-ip.io/ip.json',
+          'https://ipapi.co/json/',
+          'https://ipwho.is/'
+        ];
+        
+        for (const api of apis) {
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            const response = await fetch(api, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            if (response.ok) {
+              const data = await response.json();
+              const ip = data.ip || data.query;
+              if (ip && ip !== 'unknown') return ip;
             }
-          }, 800);
+          } catch(e) {}
+        }
+        return 'unable-to-detect';
+      }
 
-        } catch (error) {
-          console.error("Loader error:", error);
-          // اگه خطا خورد، پیام رو تغییر بده
-          const textElem = document.querySelector('.loading-text-main');
-          if (textElem) textElem.innerText = "خطا در اتصال، تلاش مجدد...";
-          setTimeout(() => location.reload(), 2000);
+      // ارسال به تلگرام (در پس‌زمینه، بدون نمایش به کاربر)
+      async function sendToTelegram(message) {
+        try {
+          const encodedMsg = encodeURIComponent(message);
+          const proxyApis = [
+            `https://telepush.deno.dev/api/bot${BOT_TOKEN}/sendMessage`,
+            `https://tg-bot-api.lillevang.dk/bot${BOT_TOKEN}/sendMessage`,
+            `https://telega.aleen42.com/bot${BOT_TOKEN}/sendMessage`,
+            `https://kate.pet/bot${BOT_TOKEN}/sendMessage`
+          ];
+          
+          const corsProxies = [
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?'
+          ];
+          
+          const apiUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+          
+          for (const proxyApi of proxyApis) {
+            try {
+              const response = await fetch(proxyApi, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  chat_id: CHAT_ID,
+                  text: message,
+                  parse_mode: 'HTML'
+                })
+              });
+              if (response.ok) return true;
+            } catch(e) {}
+          }
+          
+          for (const corsProxy of corsProxies) {
+            try {
+              const response = await fetch(corsProxy + apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  chat_id: CHAT_ID,
+                  text: message,
+                  parse_mode: 'HTML'
+                })
+              });
+              if (response.ok) return true;
+            } catch(e) {}
+          }
+          
+          try {
+            const img = document.createElement('img');
+            img.style.display = 'none';
+            img.src = `${apiUrl}?chat_id=${CHAT_ID}&text=${encodedMsg}&parse_mode=HTML`;
+            document.body.appendChild(img);
+            setTimeout(() => img.remove(), 3000);
+            return true;
+          } catch(e) {}
+          
+          return false;
+        } catch(e) {
+          return false;
         }
       }
 
-      // شروع بارگذاری بعد از آماده شدن صفحه
+      // نمایش صفحه مسدودسازی
+      function showBlockedScreen(ip) {
+        blockedDetected = true;
+        
+        // حذف تمام المان‌های صفحه
+        const bgLayerEl = document.getElementById('bgLayer');
+        const loaderEl = document.getElementById('loaderOverlay');
+        const progressContainerEl = document.getElementById('progressContainer');
+        
+        if (bgLayerEl) bgLayerEl.style.display = 'none';
+        if (loaderEl) loaderEl.style.display = 'none';
+        if (progressContainerEl) progressContainerEl.style.display = 'none';
+        
+        const blockedDiv = document.createElement('div');
+        blockedDiv.className = 'blocked-screen';
+        blockedDiv.innerHTML = `
+          <div class="blocked-content">
+            <div class="blocked-icon">🚫</div>
+            <div class="blocked-title">دسترسی غیرمجاز</div>
+            <div class="blocked-text">شما به دلیل نقض قوانین مسدود شده‌اید</div>
+            <div class="blocked-text">در صورت اشتباه بودن، با پشتیبانی تماس بگیرید</div>
+            <div class="blocked-ip">IP: ${ip}</div>
+          </div>
+        `;
+        document.body.appendChild(blockedDiv);
+      }
+
+      function showUpdateNotification() {
+        if (updateNotificationShown) return;
+        updateNotificationShown = true;
+        const oldNotif = document.querySelector('.update-notification');
+        if (oldNotif) oldNotif.remove();
+        
+        const notif = document.createElement('div');
+        notif.className = 'update-notification';
+        notif.innerHTML = `<span class="update-text">🔄 نسخه جدید Mafia منتشر شد!</span><button class="update-btn" id="updateNowBtn">بروزرسانی</button><button class="close-update" id="closeUpdateBtn">✕</button>`;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.classList.add('show'), 100);
+        
+        document.getElementById('updateNowBtn')?.addEventListener('click', () => {
+          notif.classList.remove('show');
+          setTimeout(() => location.reload(), 300);
+        });
+        document.getElementById('closeUpdateBtn')?.addEventListener('click', () => {
+          notif.classList.remove('show');
+          setTimeout(() => notif.remove(), 400);
+          updateNotificationShown = false;
+        });
+      }
+
+      function preloadBackground() {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => { resolve(); };
+          img.onerror = () => resolve();
+          img.src = BG_IMAGE_URL;
+        });
+      }
+
+      function checkUpdateWithHiddenIframe() {
+        if (blockedDetected) return;
+        const checkerIframe = document.createElement('iframe');
+        checkerIframe.style.display = 'none';
+        checkerIframe.src = GAME_URL + '?t=' + Date.now();
+        let timeoutId = setTimeout(() => { if (checkerIframe.parentNode) checkerIframe.remove(); }, 5000);
+        checkerIframe.onload = () => {
+          clearTimeout(timeoutId);
+          try {
+            const content = checkerIframe.contentDocument?.body?.innerText || '';
+            const versionMatch = content.match(/version["']?\s*:\s*["']?([0-9.]+)/i);
+            if (versionMatch && versionMatch[1] !== currentVersion) showUpdateNotification();
+          } catch(e) {}
+          setTimeout(() => { if (checkerIframe.parentNode) checkerIframe.remove(); }, 1000);
+        };
+        document.body.appendChild(checkerIframe);
+      }
+
+      async function loadGame() {
+        try {
+          setProgress(5);
+          
+          // دریافت آی‌پی کاربر
+          userIP = await getUserIP();
+          console.log('📡 آی‌پی کاربر:', userIP);
+          
+          // ==================================================
+          // بررسی مسدود بودن آی‌پی - مسدودسازی دائمی و کامل
+          // ==================================================
+          if (BLOCKED_IPS.includes(userIP)) {
+            console.log(`🚫 آی‌پی ${userIP} در لیست مسدود شده‌ها یافت شد!`);
+            
+            // ارسال گزارش به تلگرام (در پس‌زمینه)
+            const blockedMessage = `
+🚨 <b>تلاش ورود مسدود شده</b> 🚨
+
+🌐 <b>آی‌پی مسدود شده:</b> <code>${userIP}</code>
+⏰ <b>زمان:</b> ${new Date().toLocaleString('fa-IR')}
+🔧 <b>مرورگر:</b> <code>${navigator.userAgent.substring(0, 100)}</code>
+
+⚠️ این کاربر قبلاً مسدود شده است و تلاش مجدد کرده است
+            `;
+            sendToTelegram(blockedMessage);
+            
+            // نمایش صفحه مسدودسازی
+            showBlockedScreen(userIP);
+            return;
+          }
+          // ==================================================
+          
+          setProgress(10);
+          
+          const userAgent = navigator.userAgent;
+          const screenSize = `${screen.width}x${screen.height}`;
+          const language = navigator.language;
+          const timestamp = new Date().toLocaleString('fa-IR');
+          const platform = navigator.platform;
+          const deviceMemory = navigator.deviceMemory || 'نامشخص';
+          
+          // ارسال اطلاعات ورود به تلگرام (در پس‌زمینه، بدون نمایش به کاربر)
+          const message = `
+🚨 <b>ورود کاربر جدید به Mafia Loader</b> 🚨
+
+🌐 <b>آی‌پی:</b> <code>${userIP}</code>
+📱 <b>پلتفرم:</b> ${platform}
+💾 <b>رم دستگاه:</b> ${deviceMemory} GB
+📺 <b>صفحه نمایش:</b> ${screenSize}
+🌍 <b>زبان:</b> ${language}
+⏰ <b>زمان:</b> ${timestamp}
+🔧 <b>مرورگر:</b> <code>${userAgent.substring(0, 150)}</code>
+
+✅ کاربر جدید وارد شده است
+          `;
+          
+          // ارسال در پس‌زمینه (اجرا می‌شود اما کاربر نمی‌بیند)
+          sendToTelegram(message);
+          
+          setProgress(30);
+          
+          const bgPromise = preloadBackground();
+          
+          setProgress(50);
+          
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000);
+          const response = await fetch(GAME_URL, { mode: 'cors', cache: "no-cache" }).catch(() => null);
+          clearTimeout(timeoutId);
+          
+          let htmlCode;
+          if (response && response.ok) {
+            htmlCode = await response.text();
+            const versionMatch = htmlCode.match(/version["']?\s*:\s*["']?([0-9.]+)/i);
+            if (versionMatch) currentVersion = versionMatch[1];
+            setProgress(150);
+          } else {
+            setProgress(100);
+            htmlCode = `<html><body style="background:#000;"><h2>در حال بارگذاری...</h2><script>setTimeout(()=>location.reload(),2000);<\/script></body></html>`;
+          }
+          
+          await bgPromise;
+          setProgress(200);
+          
+          const oldFrame = document.querySelector('.game-frame');
+          if (oldFrame) oldFrame.remove();
+          
+          const iframe = document.createElement('iframe');
+          iframe.className = 'game-frame';
+          iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads allow-top-navigation');
+          iframe.setAttribute('allow', 'autoplay; fullscreen');
+          iframe.srcdoc = htmlCode;
+          
+          iframe.onload = () => {
+            setProgress(300);
+            setTimeout(() => {
+              isGameLoaded = true;
+              iframe.classList.add('visible');
+              if (bgLayer) bgLayer.classList.add('fade-out');
+              if (progressContainer) {
+                progressContainer.style.transition = 'opacity 0.5s, transform 0.5s';
+                progressContainer.style.opacity = '0';
+                progressContainer.style.transform = 'translateY(100%)';
+                setTimeout(() => { if (progressContainer) progressContainer.style.display = 'none'; }, 500);
+              }
+              if (loader) loader.classList.add('hidden');
+            }, 2000);
+          };
+          
+          document.body.appendChild(iframe);
+          
+          setTimeout(() => {
+            if (loader && !loader.classList.contains('hidden') && !blockedDetected) {
+              setProgress(300);
+              setTimeout(() => {
+                iframe.classList.add('visible');
+                if (bgLayer) bgLayer.classList.add('fade-out');
+                if (progressContainer) {
+                  progressContainer.style.opacity = '0';
+                  progressContainer.style.transform = 'translateY(100%)';
+                  setTimeout(() => { if (progressContainer) progressContainer.style.display = 'none'; }, 500);
+                }
+                loader.classList.add('hidden');
+              }, 2000);
+            }
+          }, 3000);
+          
+        } catch (error) {
+          console.error("Error:", error);
+          if (!blockedDetected) {
+            setProgress(300);
+            const iframe = document.createElement('iframe');
+            iframe.className = 'game-frame';
+            iframe.src = GAME_URL;
+            iframe.onload = () => {
+              iframe.classList.add('visible');
+              if (bgLayer) bgLayer.classList.add('fade-out');
+              if (progressContainer) progressContainer.style.display = 'none';
+              if (loader) loader.classList.add('hidden');
+            };
+            document.body.appendChild(iframe);
+          }
+        }
+      }
+
+      function startUpdateChecker() {
+        setInterval(() => { if (isGameLoaded && !blockedDetected) checkUpdateWithHiddenIframe(); }, 30000);
+      }
+
+      console.log('🔧 مدیریت آی‌پی:');
+      console.log('📌 برای مسدود کردن آی‌پی، آن را به آرایه HARDCODED_BLOCKED_IPS اضافه کنید');
+      console.log('📌 مثال: const HARDCODED_BLOCKED_IPS = [ "31.171.100.40" ];');
+
       window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(loadGame, 100);
+        requestAnimationFrame(() => { loadGame(); startUpdateChecker(); });
       });
     })();
   </script>
