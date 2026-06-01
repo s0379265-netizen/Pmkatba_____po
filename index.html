@@ -848,13 +848,12 @@
             return number.toString().replace(/\d/g, function(x) { return persianDigits[parseInt(x)]; });
         }
 
-        // ==================== سیستم اصلی لابی (اصلاح شده با Ably REAL-TIME) ====================
+        // ==================== سیستم اصلی لابی (بدون تاخیر و بدون پرت شدن) ====================
         let lobbies = [];
         let currentUserId = '';
         let currentUsername = '';
         let currentCoins = 8300;
         
-        // کانال Ably برای همگام‌سازی لابی‌ها بین تمام کاربران
         let ablyLobbySync = null;
         let lobbySyncChannel = null;
         
@@ -862,7 +861,6 @@
         const gemsSpan = document.getElementById('gemsValue');
         const coinsSpan = document.getElementById('coinsValue');
         
-        // راه‌اندازی ارتباط بین همه کاربران با Ably (حل مشکل اصلی)
         function initSyncChannel() {
             if(!currentUserId) return;
             
@@ -877,74 +875,26 @@
                 });
                 
                 ablyLobbySync.connection.on('connected', () => {
-                    console.log('✅ Lobby sync connected - REAL TIME ACTIVE');
+                    console.log('✅ Lobby sync connected');
                     lobbySyncChannel = ablyLobbySync.channels.get('lobby-sync-global');
                     
                     lobbySyncChannel.subscribe('lobby-event', (message) => {
                         if(message.data && message.data.sender !== currentUserId) {
-                            console.log('📡 Received lobby event:', message.data.type);
                             handleSyncMessage(message.data);
                         }
                     });
                     
-                    // درخواست لیست لابی‌ها هنگام اتصال
-                    setTimeout(() => {
-                        if(lobbySyncChannel) {
-                            lobbySyncChannel.publish('lobby-event', {
-                                type: 'request-lobbies',
-                                sender: currentUserId,
-                                timestamp: Date.now()
-                            });
-                        }
-                    }, 500);
-                    
-                    // هر 3 ثانیه لیست رو درخواست می‌کنیم (برای بروزرسانی لحظه‌ای)
-                    setInterval(() => {
-                        if(lobbySyncChannel && lobbySyncChannel.connection && lobbySyncChannel.connection.state === 'attached') {
-                            lobbySyncChannel.publish('lobby-event', {
-                                type: 'request-lobbies',
-                                sender: currentUserId,
-                                timestamp: Date.now()
-                            });
-                        }
-                    }, 3000);
-                });
-                
-                ablyLobbySync.connection.on('failed', (err) => {
-                    console.error('Ably connection failed:', err);
+                    // درخواست اولیه لیست لابی‌ها
+                    lobbySyncChannel.publish('lobby-event', {
+                        type: 'request-lobbies',
+                        sender: currentUserId,
+                        timestamp: Date.now()
+                    });
                 });
                 
             } catch(e) {
-                console.error('Init lobby sync error:', e);
-                initLocalSyncFallback();
+                console.error('Init error:', e);
             }
-        }
-        
-        // fallback برای مواقعی که Ably کار نکنه
-        function initLocalSyncFallback() {
-            if(window.BroadcastChannel) {
-                try {
-                    const bc = new BroadcastChannel('mafia-lobbies-fallback');
-                    bc.onmessage = (event) => {
-                        if(event.data && event.data.sender !== currentUserId) {
-                            handleSyncMessage(event.data);
-                        }
-                    };
-                    window.fallbackChannel = bc;
-                } catch(e) {}
-            }
-            
-            window.addEventListener('storage', (event) => {
-                if(event.key === 'mafiaLobbiesFallback' && event.newValue) {
-                    const newLobbies = JSON.parse(event.newValue);
-                    if(JSON.stringify(lobbies) !== JSON.stringify(newLobbies)) {
-                        lobbies = newLobbies;
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                            window.currentLobbyPage.refreshList();
-                        }
-                    }
-                }
-            });
         }
         
         function handleSyncMessage(data) {
@@ -959,7 +909,7 @@
                         if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
                             window.currentLobbyRoom.updateUI();
                         }
-                        console.log('✅ Lobbies updated via Ably, count:', lobbies.length);
+                        console.log('Lobbies count:', lobbies.length);
                     }
                     break;
                     
@@ -976,11 +926,11 @@
                     break;
                     
                 case 'lobby-join':
-                    const lobby = lobbies.find(l => l.id === data.lobbyId);
-                    if(lobby && !lobby.players.some(p => p.id === data.userId)) {
-                        lobby.players.push({ id: data.userId, name: data.userName, avatar: data.avatar });
+                    const lobbyToJoin = lobbies.find(l => l.id === data.lobbyId);
+                    if(lobbyToJoin && !lobbyToJoin.players.some(p => p.id === data.userId)) {
+                        lobbyToJoin.players.push({ id: data.userId, name: data.userName, avatar: data.avatar });
                         saveLobbiesToLocal();
-                        showToast(`👤 ${data.userName} وارد لابی ${lobby.name} شد`);
+                        showToast(`👤 ${data.userName} وارد لابی ${lobbyToJoin.name} شد`);
                         if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
                             window.currentLobbyRoom.updateUI();
                         }
@@ -995,6 +945,8 @@
                     if(leaveLobby) {
                         const idx = leaveLobby.players.findIndex(p => p.id === data.userId);
                         if(idx !== -1) leaveLobby.players.splice(idx, 1);
+                        
+                        // فقط اگه لابی کاملاً خالی شد و کاربر فعلی توش نیست حذف کن
                         if(leaveLobby.players.length === 0) {
                             const lobbyIdx = lobbies.findIndex(l => l.id === data.lobbyId);
                             if(lobbyIdx !== -1) lobbies.splice(lobbyIdx, 1);
@@ -1003,6 +955,8 @@
                             leaveLobby.ownerName = leaveLobby.players[0].name;
                         }
                         saveLobbiesToLocal();
+                        
+                        // فقط اگه کاربر خودش خارج شده صفحه رو ببند
                         if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
                             if(data.userId === currentUserId) {
                                 if(window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove();
@@ -1017,16 +971,7 @@
                     }
                     break;
                     
-                case 'lobby-update':
-                    lobbies = data.lobbies;
-                    saveLobbiesToLocal();
-                    if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                        window.currentLobbyPage.refreshList();
-                    }
-                    break;
-                    
                 case 'request-lobbies':
-                    // ارسال لیست لابی‌ها به درخواست‌کننده
                     if(lobbySyncChannel) {
                         lobbySyncChannel.publish('lobby-event', {
                             type: 'lobbies-list',
@@ -1043,37 +988,25 @@
             if(lobbySyncChannel) {
                 try {
                     lobbySyncChannel.publish('lobby-event', message);
-                } catch(e) { console.error('Ably publish error:', e); }
-            }
-            
-            // fallback
-            if(window.fallbackChannel) {
-                try {
-                    window.fallbackChannel.postMessage(message);
                 } catch(e) {}
-            }
-            
-            if(message.type === 'lobby-update' || message.type === 'lobbies-list') {
-                localStorage.setItem('mafiaLobbiesFallback', JSON.stringify(message.lobbies || lobbies));
             }
         }
         
         function loadLobbiesFromLocal() {
-            const saved = localStorage.getItem('mafiaLobbiesFallback');
+            const saved = localStorage.getItem('mafiaLobbiesFinal');
             if(saved) {
                 try {
                     lobbies = JSON.parse(saved);
                 } catch(e) { lobbies = []; }
             }
             if(!lobbies) lobbies = [];
-            lobbies = lobbies.filter(l => l.players && l.players.length > 0);
             return lobbies;
         }
         
         function saveLobbiesToLocal() {
-            localStorage.setItem('mafiaLobbiesFallback', JSON.stringify(lobbies));
+            localStorage.setItem('mafiaLobbiesFinal', JSON.stringify(lobbies));
             broadcastMessage({
-                type: 'lobby-update',
+                type: 'lobbies-list',
                 lobbies: lobbies,
                 sender: currentUserId,
                 timestamp: Date.now()
@@ -1453,22 +1386,6 @@
                 page: roomPage,
                 cleanup: () => cleanupVoiceConnection()
             };
-            
-            const interval = setInterval(() => {
-                if(document.body.contains(roomPage)) {
-                    const curr = lobbies.find(l => l.id === lobbyId);
-                    if(curr && curr.players.some(p => p.id === currentUserId)) {
-                        updateRoom();
-                    } else { 
-                        clearInterval(interval); 
-                        roomPage.remove();
-                        cleanupVoiceConnection();
-                    }
-                } else { 
-                    clearInterval(interval); 
-                    cleanupVoiceConnection();
-                }
-            }, 3000);
         }
         
         function showTeamPage() {
@@ -1546,8 +1463,6 @@
                 const container = document.getElementById('lobbiesList');
                 if(!container) return;
                 
-                loadLobbiesFromLocal();
-                
                 const validLobbies = lobbies.filter(l => l.players && l.players.length > 0);
                 
                 if(validLobbies.length === 0) {
@@ -1569,14 +1484,13 @@
                     </div>
                 `).join('');
                 
-                console.log('📋 Lobbies refreshed, count:', validLobbies.length);
+                console.log('Lobbies count:', validLobbies.length);
             }
             
             const refreshBtn = document.getElementById('refreshLobbiesBtn');
             if(refreshBtn) {
                 refreshBtn.onclick = () => {
-                    showToast('🔄 در حال بروزرسانی لیست لابی‌ها...');
-                    // درخواست لیست جدید از Ably
+                    showToast('🔄 در حال بروزرسانی...');
                     if(lobbySyncChannel) {
                         lobbySyncChannel.publish('lobby-event', {
                             type: 'request-lobbies',
@@ -1585,9 +1499,6 @@
                         });
                     }
                     refreshList();
-                    setTimeout(() => {
-                        showToast('✅ لیست لابی‌ها بروزرسانی شد');
-                    }, 500);
                 };
             }
             
