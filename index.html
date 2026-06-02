@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>بازی من - فروشگاه ویژه</title>
     <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
-    <script src="https://unpkg.com/livekit-client/dist/livekit-client.umd.js"></script>
     <style>
+        /* ========== همه استایل‌های قبلی بازی ========== */
         * {
             margin: 0;
             padding: 0;
@@ -125,6 +125,7 @@
         .bottom-btn img { max-width: 170px; max-height: 170px; object-fit: contain; display: block; pointer-events: none; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
         .bottom-btn:active { transform: scale(0.95); }
 
+        /* فروشگاه و سایر صفحات */
         .shop-page {
             position: fixed;
             top: 0;
@@ -460,26 +461,94 @@
             box-shadow: 0 0 15px rgba(255,0,0,0.4);
         }
         
+        /* استایل دکمه میکروفون شبیه همان کد قبلی */
         .mic-btn {
-            background: linear-gradient(135deg, #2a3a5a, #1a2a4a);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #2A2F42, #1E2335);
+            color: #ffb4a2;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
         
-        .mic-btn.mic-active {
-            background: linear-gradient(135deg, #00cc88, #009966);
-            box-shadow: 0 0 15px rgba(0,255,136,0.4);
-            animation: micPulse 1.5s infinite;
+        .mic-btn.mic-recording {
+            background: linear-gradient(135deg, #e34d4d, #c0392b);
+            color: white;
+            animation: micPulse 1s infinite;
         }
         
         @keyframes micPulse {
-            0% { box-shadow: 0 0 0 0 rgba(0,255,136,0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(0,255,136,0); }
-            100% { box-shadow: 0 0 0 0 rgba(0,255,136,0); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        /* پنل تاریخچه صدا در لابی */
+        .voice-history-panel {
+            position: absolute;
+            bottom: 100px;
+            right: 15px;
+            width: 280px;
+            background: rgba(10, 12, 20, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid #ffaa4455;
+            z-index: 110;
+            max-height: 250px;
+            overflow-y: auto;
+            direction: rtl;
+            font-size: 0.7rem;
+        }
+        .voice-history-header {
+            background: #1a1f2e;
+            padding: 8px 12px;
+            border-radius: 20px 20px 0 0;
+            color: #ffaa66;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+        .clear-voice-history {
+            background: #3a2a4a;
+            border: none;
+            padding: 2px 10px;
+            border-radius: 15px;
+            color: #ffaaaa;
+            font-size: 0.6rem;
+            cursor: pointer;
+        }
+        .voice-history-list {
+            padding: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .voice-history-item {
+            background: #0f121e;
+            margin: 5px 0;
+            padding: 6px 10px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-right: 2px solid #ff884a;
+        }
+        .voice-history-item.remote {
+            border-right-color: #44ff88;
+        }
+        .voice-play-btn {
+            background: #2a3f5a;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .lobby-action-btn:active {
@@ -767,6 +836,7 @@
             .stat-value { font-size: 1rem; }
             .lobby-action-btn { padding: 8px 16px; font-size: 0.9rem; min-width: 100px; }
             .lobby-bottom-buttons { gap: 12px; bottom: 20px; }
+            .voice-history-panel { width: 240px; bottom: 90px; right: 10px; max-height: 200px; }
             .team-search-container { flex-direction: column; padding: 0 10px; }
             .developer-card { padding: 20px; }
             .developer-title { font-size: 1.3rem; }
@@ -837,216 +907,312 @@
     </div>
 
     <script>
-        // ==================== تنظیمات LiveKit ====================
-        const LIVEKIT_URL = "wss://udhg-080lyqpp.livekit.cloud";
-        const LIVEKIT_API_KEY = "APIkhqGiDthF9Xd";
-        const LIVEKIT_API_SECRET = "eWsLRpVFNTqc0WX7s5JleIU0fA6EiHzYNs6CaTeUVfbB";
-        
-        let liveKitRoom = null;
-        let liveKitTrack = null;
-        let liveKitConnected = false;
-        let currentLiveKitLobbyId = null;
-        
-        async function connectLiveKit(lobbyId) {
-            if(currentLiveKitLobbyId === lobbyId && liveKitConnected && liveKitRoom) {
-                console.log("LiveKit already connected");
-                return;
-            }
-            
-            if(liveKitRoom) {
-                await disconnectLiveKit();
-            }
-            
-            currentLiveKitLobbyId = lobbyId;
-            
-            try {
-                const roomName = `lobby_${lobbyId}`;
-                const participantName = currentUsername || "کاربر";
-                
-                // ایجاد توکن با استفاده از API (ساده‌سازی شده)
-                const token = await generateLiveKitToken(roomName, participantName);
-                
-                const LiveKitClient = window.LiveKitClient;
-                if(!LiveKitClient) {
-                    console.error("LiveKit client not loaded");
-                    showToast("خطا در بارگذاری LiveKit");
-                    return;
-                }
-                
-                liveKitRoom = new LiveKitClient.Room();
-                
-                liveKitRoom.on(LiveKitClient.RoomEvent.TrackSubscribed, (track, publication, participant) => {
-                    console.log("Track subscribed:", track.kind, participant.identity);
-                    if(track.kind === "audio") {
-                        const audioElement = new Audio();
-                        const mediaStream = new MediaStream();
-                        mediaStream.addTrack(track.mediaStreamTrack);
-                        audioElement.srcObject = mediaStream;
-                        audioElement.autoplay = true;
-                        audioElement.volume = 0.9;
-                    }
-                });
-                
-                liveKitRoom.on(LiveKitClient.RoomEvent.ParticipantConnected, (participant) => {
-                    console.log("Participant joined:", participant.identity);
-                    showToast(`👤 ${participant.identity} وارد شد`);
-                    if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
-                        window.currentLobbyRoom.updateUI();
-                    }
-                });
-                
-                liveKitRoom.on(LiveKitClient.RoomEvent.ParticipantDisconnected, (participant) => {
-                    console.log("Participant left:", participant.identity);
-                    showToast(`👤 ${participant.identity} خارج شد`);
-                    if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
-                        window.currentLobbyRoom.updateUI();
-                    }
-                });
-                
-                await liveKitRoom.connect(LIVEKIT_URL, token);
-                liveKitConnected = true;
-                
-                // دریافت میکروفون
-                const micTrack = await LiveKitClient.createLocalAudioTrack();
-                liveKitTrack = micTrack;
-                await liveKitRoom.localParticipant.publishTrack(micTrack);
-                
-                console.log("✅ LiveKit connected successfully");
-                showToast("✅ میکروفون فعال شد", 2000);
-                
-                if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
-                    window.currentLobbyRoom.updateUI();
-                }
-                
-            } catch(err) {
-                console.error("LiveKit connection error:", err);
-                showToast("❌ خطا در اتصال صوتی");
-                liveKitConnected = false;
-            }
-        }
-        
-        async function disconnectLiveKit() {
-            if(liveKitTrack) {
-                liveKitTrack.stop();
-                liveKitTrack = null;
-            }
-            if(liveKitRoom) {
-                await liveKitRoom.disconnect();
-                liveKitRoom = null;
-            }
-            liveKitConnected = false;
-            currentLiveKitLobbyId = null;
-            console.log("LiveKit disconnected");
-        }
-        
-        async function generateLiveKitToken(roomName, participantName) {
-            try {
-                const response = await fetch("https://livekit-token-generator.vercel.app/api/token", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        apiKey: LIVEKIT_API_KEY,
-                        apiSecret: LIVEKIT_API_SECRET,
-                        room: roomName,
-                        identity: currentUserId,
-                        name: participantName
-                    })
-                });
-                
-                if(response.ok) {
-                    const data = await response.json();
-                    return data.token;
-                }
-            } catch(err) {
-                console.error("Token generation failed:", err);
-            }
-            
-            // Fallback: ساختن توکن ساده (برای تست)
-            const token = btoa(JSON.stringify({
-                sub: currentUserId,
-                name: participantName,
-                room: roomName,
-                exp: Math.floor(Date.now() / 1000) + 3600
-            }));
-            return token;
-        }
-        
-        function toggleLiveKitMic() {
-            if(!currentUserId) {
-                showToast("ابتدا وارد بازی شوید");
-                return;
-            }
-            
-            if(liveKitConnected && liveKitTrack) {
-                liveKitTrack.stop();
-                liveKitTrack = null;
-                liveKitConnected = false;
-                showToast("🔇 میکروفون خاموش شد");
-                const micBtn = document.getElementById("micActionBtn");
-                if(micBtn) {
-                    micBtn.classList.remove("mic-active");
-                    micBtn.innerHTML = "🎙️ میکروفون";
-                }
-            } else {
-                connectLiveKit(currentLiveKitLobbyId);
-                const micBtn = document.getElementById("micActionBtn");
-                if(micBtn) {
-                    micBtn.classList.add("mic-active");
-                    micBtn.innerHTML = "🎤 میکروفون روشن";
-                }
-            }
-        }
-
         // ==================== توابع کمکی ====================
         function toPersianNumber(number) {
             const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
             return number.toString().replace(/\d/g, function(x) { return persianDigits[parseInt(x)]; });
         }
 
+        // ==================== سیستم اصلی لابی ====================
         let lobbies = [];
         let currentUserId = '';
         let currentUsername = '';
         let currentCoins = 8300;
         
-        let ablyLobbySync = null;
-        let lobbySyncChannel = null;
+        let ablyClient = null;
+        let lobbyChannel = null;
+        
+        // ==================== سیستم صوتی (همون کدی که کار می‌کرد) ====================
+        let voiceChannel = null;
+        let mediaRecorder = null;
+        let isVoiceRecording = false;
+        let voiceAudioContext = null;
+        let voiceHistory = [];
+        let voiceNextId = 1;
+        let currentVoiceLobbyId = null;
         
         const avatarImg = document.getElementById('userAvatar');
         const gemsSpan = document.getElementById('gemsValue');
         const coinsSpan = document.getElementById('coinsValue');
         
-        function initSyncChannel() {
-            if(!currentUserId) return;
+        // توابع صوتی
+        function voiceAddLog(msg, isError = false) {
+            const time = new Date().toLocaleTimeString('fa-IR');
+            console.log(`${isError ? '❌' : '✅'} [${time}] ${msg}`);
+            // می‌تونیم تو لاگ‌های بازی هم نشون بدیم
+            const logContainer = document.getElementById('logContainer');
+            if(logContainer) {
+                const div = document.createElement('div');
+                div.textContent = `${isError ? '❌' : '✅'} [${time}] ${msg}`;
+                div.style.color = isError ? '#ff9e8f' : '#aaffcc';
+                div.style.marginBottom = '4px';
+                div.style.fontSize = '0.7rem';
+                logContainer.appendChild(div);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+        }
+        
+        function voiceFormatTime(date) {
+            return `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}:${date.getSeconds().toString().padStart(2,'0')}`;
+        }
+        
+        function voicePlayFromBase64(base64String, mimeType) {
+            if (!base64String) return;
+            try {
+                const binaryStr = atob(base64String);
+                const bytes = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+                const blob = new Blob([bytes], { type: mimeType || 'audio/webm' });
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio();
+                audio.src = audioUrl;
+                audio.play();
+                audio.onended = () => URL.revokeObjectURL(audioUrl);
+                voiceAddLog(`🔊 پخش صدای ذخیره شده`);
+            } catch(e) {
+                voiceAddLog(`خطا در پخش: ${e.message}`, true);
+            }
+        }
+        
+        function voiceAddToHistory(type, base64Data, mimeType) {
+            const id = voiceNextId++;
+            const timestamp = new Date();
+            const timeStr = voiceFormatTime(timestamp);
             
-            if(ablyLobbySync) {
-                try { ablyLobbySync.close(); } catch(e) {}
+            voiceHistory.unshift({ id, type, base64: base64Data, mime: mimeType, timeStr });
+            voiceRenderHistory();
+            
+            voiceAddLog(`${type === 'local' ? '📤 صدای ارسالی' : '📥 صدای دریافتی'} در تاریخچه ذخیره شد - ${timeStr}`);
+        }
+        
+        function voiceRenderHistory() {
+            const container = document.getElementById('voiceHistoryList');
+            if(!container) return;
+            
+            if (voiceHistory.length === 0) {
+                container.innerHTML = '<div style="text-align:center;padding:15px;color:#888;">🎤 صدایی ذخیره نشده</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            for (let item of voiceHistory) {
+                const div = document.createElement('div');
+                div.className = `voice-history-item ${item.type}`;
+                div.innerHTML = `
+                    <div style="flex:1;font-size:0.65rem;">
+                        <span style="color:#aaa;">${item.timeStr}</span>
+                        <span style="margin-right:8px;">${item.type === 'local' ? '📤 شما' : '📥 دیگران'}</span>
+                    </div>
+                    <button class="voice-play-btn" data-id="${item.id}">▶️</button>
+                `;
+                container.appendChild(div);
+            }
+            
+            document.querySelectorAll('.voice-play-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    const item = voiceHistory.find(i => i.id === id);
+                    if (item && item.base64) {
+                        voicePlayFromBase64(item.base64, item.mime);
+                    }
+                });
+            });
+        }
+        
+        function voiceClearHistory() {
+            voiceHistory = [];
+            voiceRenderHistory();
+            voiceAddLog('🗑️ تاریخچه صداها پاک شد');
+        }
+        
+        async function voicePlayReceived(base64String, mimeType) {
+            if (!base64String) return;
+            voiceAddToHistory('remote', base64String, mimeType);
+            
+            try {
+                if (!voiceAudioContext) {
+                    voiceAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    await voiceAudioContext.resume();
+                }
+                const binaryStr = atob(base64String);
+                const bytes = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+                const audioBuffer = await voiceAudioContext.decodeAudioData(bytes.buffer);
+                const source = voiceAudioContext.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(voiceAudioContext.destination);
+                source.start();
+                voiceAddLog(`🔊 پخش خودکار صدا (${Math.round(audioBuffer.duration)} ثانیه)`);
+            } catch(e) {
+                try {
+                    const binaryStr = atob(base64String);
+                    const bytes = new Uint8Array(binaryStr.length);
+                    for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+                    const blob = new Blob([bytes], { type: mimeType || 'audio/webm' });
+                    const audio = new Audio();
+                    audio.src = URL.createObjectURL(blob);
+                    audio.play();
+                } catch(e2) {
+                    voiceAddLog(`⚠️ خطا: ${e.message}`, true);
+                }
+            }
+        }
+        
+        async function voiceStartRecording() {
+            if (!voiceChannel) {
+                voiceAddLog('❌ اتصال صوتی برقرار نیست!', true);
+                return;
             }
             
             try {
-                ablyLobbySync = new Ably.Realtime({ 
+                voiceAddLog('🎤 درخواست میکروفون...');
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                voiceAddLog('✅ میکروفون فعال شد');
+                
+                let mimeType = '';
+                const formats = ['audio/webm', 'audio/mp4', 'audio/ogg'];
+                for (let f of formats) {
+                    if (MediaRecorder.isTypeSupported(f)) {
+                        mimeType = f;
+                        break;
+                    }
+                }
+                if (!mimeType) mimeType = 'audio/webm';
+                
+                let chunks = [];
+                mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType, audioBitsPerSecond: 48000 });
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data && event.data.size > 0) chunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = async () => {
+                    const fullBlob = new Blob(chunks, { type: mimeType });
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64 = reader.result.split(',')[1];
+                        if (base64 && voiceChannel) {
+                            voiceChannel.publish('voice', {
+                                data: base64,
+                                type: mimeType,
+                                sender: currentUsername,
+                                time: Date.now()
+                            }, (err) => {
+                                if (err) voiceAddLog(`ارسال ناموفق: ${err.message}`, true);
+                                else voiceAddLog(`📤 صدا ارسال شد`);
+                            });
+                            voiceAddToHistory('local', base64, mimeType);
+                        }
+                    };
+                    reader.readAsDataURL(fullBlob);
+                    
+                    stream.getTracks().forEach(t => t.stop());
+                    chunks = [];
+                    isVoiceRecording = false;
+                    const micBtn = document.getElementById('voiceMicBtn');
+                    if(micBtn) {
+                        micBtn.classList.remove('mic-recording');
+                        micBtn.innerHTML = '🎙️ میکروفون';
+                    }
+                    voiceAddLog('⏹️ ضبط متوقف شد');
+                };
+                
+                mediaRecorder.start();
+                isVoiceRecording = true;
+                const micBtn = document.getElementById('voiceMicBtn');
+                if(micBtn) {
+                    micBtn.classList.add('mic-recording');
+                    micBtn.innerHTML = '🎤 در حال صحبت...';
+                }
+                voiceAddLog('🎙️ در حال ضبط... برای پایان دوباره کلیک کنید');
+                
+            } catch(err) {
+                voiceAddLog(`❌ خطا: ${err.message}`, true);
+            }
+        }
+        
+        function voiceStopRecording() {
+            if (mediaRecorder && isVoiceRecording) {
+                mediaRecorder.stop();
+            }
+        }
+        
+        function voiceToggleRecording() {
+            if (isVoiceRecording) {
+                voiceStopRecording();
+            } else {
+                voiceStartRecording();
+            }
+        }
+        
+        function voiceInitForLobby(lobbyId) {
+            if(currentVoiceLobbyId === lobbyId) return;
+            currentVoiceLobbyId = lobbyId;
+            voiceHistory = [];
+            voiceNextId = 1;
+            
+            if(voiceChannel) {
+                try { voiceChannel.unsubscribe(); } catch(e) {}
+            }
+            
+            const voiceChanName = `voice-lobby-${lobbyId}`;
+            voiceChannel = ablyClient.channels.get(voiceChanName);
+            
+            voiceChannel.subscribe('voice', (message) => {
+                const data = message.data;
+                if(data && data.data && data.sender !== currentUsername) {
+                    voicePlayReceived(data.data, data.type || 'audio/webm');
+                }
+            });
+            
+            voiceChannel.attach((err) => {
+                if(err) voiceAddLog(`خطا در کانال صوتی: ${err.message}`, true);
+                else voiceAddLog(`📡 کانال صوتی لابی آماده است`);
+            });
+            
+            voiceRenderHistory();
+        }
+        
+        function voiceCleanup() {
+            if(mediaRecorder && isVoiceRecording) mediaRecorder.stop();
+            if(voiceChannel) {
+                try { voiceChannel.unsubscribe(); } catch(e) {}
+            }
+            voiceChannel = null;
+            currentVoiceLobbyId = null;
+            isVoiceRecording = false;
+        }
+        
+        // ==================== بقیه توابع لابی ====================
+        function initSyncChannel() {
+            if(!currentUserId) return;
+            if(ablyClient) { try { ablyClient.close(); } catch(e) {} }
+            
+            try {
+                ablyClient = new Ably.Realtime({ 
                     key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', 
                     clientId: currentUserId 
                 });
                 
-                ablyLobbySync.connection.on('connected', () => {
-                    console.log('✅ Lobby sync connected');
-                    lobbySyncChannel = ablyLobbySync.channels.get('lobby-sync-global');
+                ablyClient.connection.on('connected', () => {
+                    console.log('✅ اتصال به Ably برقرار شد');
+                    lobbyChannel = ablyClient.channels.get('lobby-sync-global');
                     
-                    lobbySyncChannel.subscribe('lobby-event', (message) => {
+                    lobbyChannel.subscribe('lobby-event', (message) => {
                         if(message.data && message.data.sender !== currentUserId) {
                             handleSyncMessage(message.data);
                         }
                     });
                     
-                    lobbySyncChannel.publish('lobby-event', {
+                    lobbyChannel.publish('lobby-event', {
                         type: 'request-lobbies',
                         sender: currentUserId,
                         timestamp: Date.now()
                     });
                     
                     setInterval(() => {
-                        if(lobbySyncChannel) {
-                            lobbySyncChannel.publish('lobby-event', {
+                        if(lobbyChannel) {
+                            lobbyChannel.publish('lobby-event', {
                                 type: 'request-lobbies',
                                 sender: currentUserId,
                                 timestamp: Date.now()
@@ -1057,7 +1223,6 @@
                 
             } catch(e) {
                 console.error('Init error:', e);
-                initLocalSyncFallback();
             }
         }
         
@@ -1073,7 +1238,6 @@
                     window.fallbackChannel = bc;
                 } catch(e) {}
             }
-            
             window.addEventListener('storage', (event) => {
                 if(event.key === 'mafiaLobbiesFallback' && event.newValue) {
                     const newLobbies = JSON.parse(event.newValue);
@@ -1093,44 +1257,28 @@
                     if(data.lobbies) {
                         lobbies = data.lobbies;
                         saveLobbiesToLocal();
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                            window.currentLobbyPage.refreshList();
-                        }
-                        if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
-                            window.currentLobbyRoom.updateUI();
-                        }
+                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
+                        if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) window.currentLobbyRoom.updateUI();
                     }
                     break;
-                    
                 case 'lobby-created':
-                    const exists = lobbies.some(l => l.id === data.lobby.id);
-                    if(!exists) {
+                    if(!lobbies.some(l => l.id === data.lobby.id)) {
                         lobbies.push(data.lobby);
                         saveLobbiesToLocal();
                         showToast(`🆕 لابی جدید "${data.lobby.name}" توسط ${data.lobby.ownerName} ساخته شد`);
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                            window.currentLobbyPage.refreshList();
-                        }
+                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
                     }
                     break;
-                    
                 case 'lobby-join':
                     const lobbyToJoin = lobbies.find(l => l.id === data.lobbyId);
                     if(lobbyToJoin && !lobbyToJoin.players.some(p => p.id === data.userId)) {
                         lobbyToJoin.players.push({ id: data.userId, name: data.userName, avatar: data.avatar });
                         saveLobbiesToLocal();
-                        if(data.userId !== currentUserId) {
-                            showToast(`👤 ${data.userName} وارد لابی ${lobbyToJoin.name} شد`);
-                        }
-                        if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
-                            window.currentLobbyRoom.updateUI();
-                        }
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                            window.currentLobbyPage.refreshList();
-                        }
+                        if(data.userId !== currentUserId) showToast(`👤 ${data.userName} وارد لابی ${lobbyToJoin.name} شد`);
+                        if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) window.currentLobbyRoom.updateUI();
+                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
                     }
                     break;
-                    
                 case 'lobby-leave':
                     const leaveLobby = lobbies.find(l => l.id === data.lobbyId);
                     if(leaveLobby) {
@@ -1148,19 +1296,17 @@
                             if(data.userId === currentUserId) {
                                 if(window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove();
                                 showToast('شما از لابی خارج شدید');
+                                voiceCleanup();
                             } else {
                                 window.currentLobbyRoom.updateUI();
                             }
                         }
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                            window.currentLobbyPage.refreshList();
-                        }
+                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
                     }
                     break;
-                    
                 case 'request-lobbies':
-                    if(lobbySyncChannel) {
-                        lobbySyncChannel.publish('lobby-event', {
+                    if(lobbyChannel) {
+                        lobbyChannel.publish('lobby-event', {
                             type: 'lobbies-list',
                             lobbies: lobbies,
                             sender: currentUserId,
@@ -1172,15 +1318,11 @@
         }
         
         function broadcastMessage(message) {
-            if(lobbySyncChannel) {
-                try {
-                    lobbySyncChannel.publish('lobby-event', message);
-                } catch(e) {}
+            if(lobbyChannel) {
+                try { lobbyChannel.publish('lobby-event', message); } catch(e) {}
             }
             if(window.fallbackChannel) {
-                try {
-                    window.fallbackChannel.postMessage(message);
-                } catch(e) {}
+                try { window.fallbackChannel.postMessage(message); } catch(e) {}
             }
             if(message.type === 'lobby-update' || message.type === 'lobbies-list') {
                 localStorage.setItem('mafiaLobbiesFallback', JSON.stringify(message.lobbies || lobbies));
@@ -1190,9 +1332,7 @@
         function loadLobbiesFromLocal() {
             const saved = localStorage.getItem('mafiaLobbiesFallback');
             if(saved) {
-                try {
-                    lobbies = JSON.parse(saved);
-                } catch(e) { lobbies = []; }
+                try { lobbies = JSON.parse(saved); } catch(e) { lobbies = []; }
             }
             if(!lobbies) lobbies = [];
             lobbies = lobbies.filter(l => l.players && l.players.length > 0);
@@ -1201,12 +1341,7 @@
         
         function saveLobbiesToLocal() {
             localStorage.setItem('mafiaLobbiesFallback', JSON.stringify(lobbies));
-            broadcastMessage({
-                type: 'lobby-update',
-                lobbies: lobbies,
-                sender: currentUserId,
-                timestamp: Date.now()
-            });
+            broadcastMessage({ type: 'lobby-update', lobbies: lobbies, sender: currentUserId, timestamp: Date.now() });
         }
         
         function createLobby(name) {
@@ -1221,14 +1356,7 @@
             };
             lobbies.push(newLobby);
             saveLobbiesToLocal();
-            
-            broadcastMessage({
-                type: 'lobby-created',
-                lobby: newLobby,
-                sender: currentUserId,
-                timestamp: Date.now()
-            });
-            
+            broadcastMessage({ type: 'lobby-created', lobby: newLobby, sender: currentUserId, timestamp: Date.now() });
             showToast(`✅ لابی "${name}" ساخته شد!`, 2000);
             return newLobby;
         }
@@ -1241,15 +1369,7 @@
             
             lobby.players.push({ id: currentUserId, name: currentUsername, avatar: avatarImg.src });
             saveLobbiesToLocal();
-            
-            broadcastMessage({
-                type: 'lobby-join',
-                lobbyId: lobbyId,
-                userId: currentUserId,
-                userName: currentUsername,
-                avatar: avatarImg.src,
-                sender: currentUserId
-            });
+            broadcastMessage({ type: 'lobby-join', lobbyId: lobbyId, userId: currentUserId, userName: currentUsername, avatar: avatarImg.src, sender: currentUserId });
             showToast(`✅ به لابی ${lobby.name} پیوستید`, 1500);
             return lobby;
         }
@@ -1267,13 +1387,9 @@
                     lobby.ownerName = lobby.players[0].name;
                 }
                 saveLobbiesToLocal();
-                broadcastMessage({
-                    type: 'lobby-leave',
-                    lobbyId: lobbyId,
-                    userId: currentUserId,
-                    sender: currentUserId
-                });
+                broadcastMessage({ type: 'lobby-leave', lobbyId: lobbyId, userId: currentUserId, sender: currentUserId });
             }
+            voiceCleanup();
             showToast('🚪 از لابی خارج شدید');
         }
         
@@ -1285,8 +1401,12 @@
                 if(!lobby) return;
             }
             
-            if(window.currentLobbyRoom && window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove();
-            if(liveKitRoom) disconnectLiveKit();
+            if(window.currentLobbyRoom && window.currentLobbyRoom.page) {
+                window.currentLobbyRoom.page.remove();
+                voiceCleanup();
+            }
+            
+            voiceInitForLobby(lobbyId);
             
             const roomPage = document.createElement('div');
             roomPage.style.position = 'fixed';
@@ -1304,10 +1424,11 @@
                 const currentLobby = lobbies.find(l => l.id === lobbyId);
                 if(!currentLobby) {
                     roomPage.remove();
-                    disconnectLiveKit();
+                    voiceCleanup();
                     showToast('لابی بسته شد');
                     return;
                 }
+                
                 let seatsHtml = '';
                 for(let i=0; i<10; i++) {
                     const p = currentLobby.players[i];
@@ -1318,65 +1439,80 @@
                     }
                 }
                 
-                roomPage.innerHTML = `<div class="room-table">
-                    <div class="lobby-top-bar">
-                        <div class="lobby-info-center">
-                            🎮 ${currentLobby.name} 🎮
-                            <span class="player-count-badge">👥 ${currentLobby.players.length}/10</span>
-                            <span class="lobby-creator-name">👑 سازنده: ${currentLobby.ownerName}</span>
+                roomPage.innerHTML = `
+                    <div class="room-table">
+                        <div class="lobby-top-bar">
+                            <div class="lobby-info-center">
+                                🎮 ${currentLobby.name} 🎮
+                                <span class="player-count-badge">👥 ${currentLobby.players.length}/10</span>
+                                <span class="lobby-creator-name">👑 سازنده: ${currentLobby.ownerName}</span>
+                            </div>
+                            <button class="exit-lobby-btn" id="exitLobbyBtn">←</button>
                         </div>
-                        <button class="exit-lobby-btn" id="exitLobbyBtn">←</button>
+                        ${seatsHtml}
+                        <div class="lobby-bottom-buttons">
+                            <button class="lobby-action-btn ready-btn" id="readyActionBtn">آماده هستم</button>
+                            <button class="lobby-action-btn mic-btn" id="voiceMicBtn">🎙️ میکروفون</button>
+                        </div>
+                        <div class="voice-history-panel" id="voiceHistoryPanel">
+                            <div class="voice-history-header">
+                                <span>📋 تاریخچه صداها</span>
+                                <button class="clear-voice-history" id="clearVoiceHistoryBtn">🗑️ پاک</button>
+                            </div>
+                            <div class="voice-history-list" id="voiceHistoryList">
+                                <div style="text-align:center;padding:15px;color:#888;">🎤 صدایی ذخیره نشده</div>
+                            </div>
+                        </div>
                     </div>
-                    ${seatsHtml}
-                    <div class="lobby-bottom-buttons">
-                        <button class="lobby-action-btn ready-btn" id="readyActionBtn">آماده هستم</button>
-                        <button class="lobby-action-btn mic-btn" id="micActionBtn">🎙️ میکروفون</button>
-                    </div>
-                </div>`;
+                `;
                 
                 const readyBtn = document.getElementById('readyActionBtn');
                 if(readyBtn) {
                     if(isReady) {
                         readyBtn.classList.add('ready-active');
                         readyBtn.classList.remove('ready-inactive');
-                        readyBtn.innerText = 'آماده هستم';
+                        readyBtn.innerText = '✅ آماده';
                     } else {
                         readyBtn.classList.remove('ready-active');
                         readyBtn.classList.add('ready-inactive');
-                        readyBtn.innerText = 'آماده نیستم';
+                        readyBtn.innerText = '❌ آماده نیستم';
                     }
-                    
                     readyBtn.onclick = () => {
                         isReady = !isReady;
                         if(isReady) {
                             readyBtn.classList.add('ready-active');
                             readyBtn.classList.remove('ready-inactive');
-                            readyBtn.innerText = 'آماده هستم';
+                            readyBtn.innerText = '✅ آماده';
                             showToast('✅ شما آماده شدید');
                         } else {
                             readyBtn.classList.remove('ready-active');
                             readyBtn.classList.add('ready-inactive');
-                            readyBtn.innerText = 'آماده نیستم';
+                            readyBtn.innerText = '❌ آماده نیستم';
                             showToast('❌ شما آماده نیستید');
                         }
                     };
                 }
                 
-                const micBtnAction = document.getElementById('micActionBtn');
-                if(micBtnAction) {
-                    if(liveKitConnected) {
-                        micBtnAction.classList.add('mic-active');
-                        micBtnAction.innerHTML = '🎤 میکروفون روشن';
+                const micBtn = document.getElementById('voiceMicBtn');
+                if(micBtn) {
+                    if(isVoiceRecording) {
+                        micBtn.classList.add('mic-recording');
+                        micBtn.innerHTML = '🎤 در حال صحبت...';
                     } else {
-                        micBtnAction.classList.remove('mic-active');
-                        micBtnAction.innerHTML = '🎙️ میکروفون';
+                        micBtn.classList.remove('mic-recording');
+                        micBtn.innerHTML = '🎙️ میکروفون';
                     }
-                    micBtnAction.onclick = () => toggleLiveKitMic();
+                    micBtn.onclick = () => voiceToggleRecording();
                 }
+                
+                const clearVoiceBtn = document.getElementById('clearVoiceHistoryBtn');
+                if(clearVoiceBtn) clearVoiceBtn.onclick = () => voiceClearHistory();
+                
+                voiceRenderHistory();
                 
                 const exitBtn = document.getElementById('exitLobbyBtn');
                 if(exitBtn) exitBtn.onclick = () => {
-                    disconnectLiveKit();
+                    voiceCleanup();
                     leaveLobby(lobbyId);
                     roomPage.remove();
                     setTimeout(() => showFriendsPage(), 100);
@@ -1385,160 +1521,20 @@
             
             updateRoom();
             document.body.appendChild(roomPage);
-            
-            window.currentLobbyRoom = { 
-                lobbyId: lobbyId, 
-                updateUI: updateRoom, 
-                page: roomPage,
-                cleanup: () => disconnectLiveKit()
-            };
-            
-            setTimeout(() => {
-                if(document.body.contains(roomPage)) {
-                    connectLiveKit(lobbyId);
-                }
-            }, 500);
+            window.currentLobbyRoom = { lobbyId: lobbyId, updateUI: updateRoom, page: roomPage };
             
             const interval = setInterval(() => {
                 if(document.body.contains(roomPage)) {
                     const curr = lobbies.find(l => l.id === lobbyId);
-                    if(curr && curr.players.some(p => p.id === currentUserId)) {
-                        updateRoom();
-                    } else { 
-                        clearInterval(interval); 
-                        roomPage.remove();
-                        disconnectLiveKit();
-                    }
-                } else { 
-                    clearInterval(interval); 
-                    disconnectLiveKit();
-                }
+                    if(curr && curr.players.some(p => p.id === currentUserId)) updateRoom();
+                    else { clearInterval(interval); roomPage.remove(); voiceCleanup(); }
+                } else { clearInterval(interval); voiceCleanup(); }
             }, 5000);
-        }
-        
-        function showFriendsPage() {
-            if(!currentUserId) { showToast('ابتدا نام کاربری را انتخاب کنید'); return; }
-            
-            const existing = document.querySelector('.friends-page');
-            if(existing) existing.remove();
-            if(window.currentLobbyRoom && window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove();
-            disconnectLiveKit();
-            
-            const page = document.createElement('div');
-            page.className = 'friends-page';
-            page.innerHTML = `
-                <div class="search-card">
-                    <h3>🔍 جستجوی دوستان</h3>
-                    <div class="search-input-group">
-                        <input type="text" id="searchInput" placeholder="کد کاربری دوست خود را وارد کنید...">
-                        <button id="searchBtn">جستجو</button>
-                    </div>
-                    <div id="searchResult" class="search-result"></div>
-                </div>
-                <button class="create-lobby-btn" id="createBtn">➕ ایجاد لابی آنلاین</button>
-                <div class="lobbies-list" id="lobbiesList"></div>
-                <button class="refresh-lobbies-btn" id="refreshLobbiesBtn">🔄 رفرش لیست لابی‌ها</button>
-                <button class="close-friends-btn">🔙 بازگشت</button>
-            `;
-            document.body.appendChild(page);
-            
-            function refreshList() {
-                const container = document.getElementById('lobbiesList');
-                if(!container) return;
-                
-                loadLobbiesFromLocal();
-                
-                const validLobbies = lobbies.filter(l => l.players && l.players.length > 0);
-                
-                if(validLobbies.length === 0) {
-                    container.innerHTML = '<div class="no-lobby-message">🎮 هیچ لابی فعالی وجود ندارد<br>اولین لابی را شما بسازید! 🎮</div>';
-                    return;
-                }
-                
-                container.innerHTML = validLobbies.map(lobby => `
-                    <div class="lobby-item">
-                        <div class="lobby-info">
-                            <h4>🎭 ${lobby.name}</h4>
-                            <p>👑 ${lobby.ownerName} | 👥 ${lobby.players.length}/10 نفر</p>
-                            <p style="font-size:0.7rem; color:#aaa;">🆔 ${lobby.id.substring(lobby.id.length - 6)}</p>
-                        </div>
-                        ${!lobby.players.some(p => p.id === currentUserId) ? 
-                            `<button class="lobby-join-btn" onclick="window.joinHandler('${lobby.id}')">➕ ورود</button>` :
-                            `<button class="lobby-join-btn" style="background:#44aa44;" onclick="window.enterHandler('${lobby.id}')">🎮 ورود</button>`
-                        }
-                    </div>
-                `).join('');
-            }
-            
-            const refreshBtn = document.getElementById('refreshLobbiesBtn');
-            if(refreshBtn) {
-                refreshBtn.onclick = () => {
-                    showToast('🔄 در حال بروزرسانی لیست لابی‌ها...');
-                    refreshList();
-                    setTimeout(() => showToast('✅ لیست لابی‌ها بروزرسانی شد'), 500);
-                };
-            }
-            
-            window.joinHandler = (id) => {
-                const lobby = joinLobby(id);
-                if(lobby) { 
-                    refreshList(); 
-                    showLobbyRoom(id); 
-                    page.remove(); 
-                }
-            };
-            window.enterHandler = (id) => { 
-                showLobbyRoom(id); 
-                page.remove(); 
-            };
-            
-            document.getElementById('searchBtn').onclick = () => {
-                const code = document.getElementById('searchInput').value.trim();
-                const resultDiv = document.getElementById('searchResult');
-                if(!code) { resultDiv.innerHTML = '⚠️ کد را وارد کنید'; return; }
-                if(code === currentUserId) { resultDiv.innerHTML = '🎭 این کد شماست!'; return; }
-                resultDiv.innerHTML = `✅ کاربر با کد ${code} پیدا شد! برای ارسال هدیه به فروشگاه بروید.`;
-            };
-            
-            document.getElementById('createBtn').onclick = () => {
-                const modalDiv = document.createElement('div');
-                modalDiv.className = 'create-lobby-modal';
-                modalDiv.innerHTML = `<div class="create-lobby-content"><h2>🎮 لابی جدید</h2><input type="text" id="lobbyName" placeholder="اسم لابی..."><div class="create-lobby-buttons"><button class="confirm-create-btn" id="confirmCreate">✨ ایجاد</button><button class="cancel-create-btn" id="cancelCreate">❌ انصراف</button></div></div>`;
-                document.body.appendChild(modalDiv);
-                
-                document.getElementById('confirmCreate').onclick = () => {
-                    const name = document.getElementById('lobbyName').value.trim();
-                    if(!name) { showToast('❌ اسم لابی را وارد کنید'); return; }
-                    const newLobby = createLobby(name);
-                    if(newLobby) { 
-                        modalDiv.remove(); 
-                        refreshList();
-                        page.remove(); 
-                        showLobbyRoom(newLobby.id); 
-                    }
-                };
-                document.getElementById('cancelCreate').onclick = () => modalDiv.remove();
-            };
-            
-            page.querySelector('.close-friends-btn').onclick = () => page.remove();
-            
-            window.currentLobbyPage = { refreshList: refreshList };
-            
-            refreshList();
-            
-            const autoRefresh = setInterval(() => {
-                if(document.body.contains(page)) {
-                    refreshList();
-                } else {
-                    clearInterval(autoRefresh);
-                }
-            }, 30000);
         }
         
         function showTeamPage() {
             const existing = document.querySelector('.team-page');
             if(existing) existing.remove();
-            
             const page = document.createElement('div');
             page.className = 'team-page';
             page.innerHTML = `
@@ -1563,60 +1559,139 @@
                 <button class="close-team-btn" id="closeTeamBtn">✕ بستن</button>
             `;
             document.body.appendChild(page);
-            
             document.getElementById('closeTeamBtn').onclick = () => page.remove();
             document.getElementById('teamSearchBtn').onclick = () => {
                 const searchText = document.getElementById('teamSearchInput').value.trim();
-                if(searchText) {
-                    showToast(`🔍 در حال جستجوی "${searchText}"...`);
-                } else {
-                    showToast('لطفاً متن مورد نظر را وارد کنید');
-                }
+                if(searchText) showToast(`🔍 در حال جستجوی "${searchText}"...`);
+                else showToast('لطفاً متن مورد نظر را وارد کنید');
             };
-            document.getElementById('teamSearchInput').onkeypress = (e) => {
-                if(e.key === 'Enter') {
-                    document.getElementById('teamSearchBtn').click();
+            document.getElementById('teamSearchInput').onkeypress = (e) => { if(e.key === 'Enter') document.getElementById('teamSearchBtn').click(); };
+        }
+        
+        function showFriendsPage() {
+            if(!currentUserId) { showToast('ابتدا نام کاربری را انتخاب کنید'); return; }
+            const existing = document.querySelector('.friends-page');
+            if(existing) existing.remove();
+            if(window.currentLobbyRoom && window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove();
+            voiceCleanup();
+            
+            const page = document.createElement('div');
+            page.className = 'friends-page';
+            page.innerHTML = `
+                <div class="search-card">
+                    <h3>🔍 جستجوی دوستان</h3>
+                    <div class="search-input-group">
+                        <input type="text" id="searchInput" placeholder="کد کاربری دوست خود را وارد کنید...">
+                        <button id="searchBtn">جستجو</button>
+                    </div>
+                    <div id="searchResult" class="search-result"></div>
+                </div>
+                <button class="create-lobby-btn" id="createBtn">➕ ایجاد لابی آنلاین</button>
+                <div class="lobbies-list" id="lobbiesList"></div>
+                <button class="refresh-lobbies-btn" id="refreshLobbiesBtn">🔄 رفرش لیست لابی‌ها</button>
+                <button class="close-friends-btn">🔙 بازگشت</button>
+                <div id="logContainer" class="log-box" style="position:relative;margin-top:20px;width:100%;max-width:500px;background:#0a0c14;border-radius:28px;padding:12px;font-size:0.7rem;color:#97a2c2;max-height:120px;overflow-y:auto;"></div>
+            `;
+            document.body.appendChild(page);
+            
+            function refreshList() {
+                const container = document.getElementById('lobbiesList');
+                if(!container) return;
+                loadLobbiesFromLocal();
+                const validLobbies = lobbies.filter(l => l.players && l.players.length > 0);
+                if(validLobbies.length === 0) {
+                    container.innerHTML = '<div class="no-lobby-message">🎮 هیچ لابی فعالی وجود ندارد<br>اولین لابی را شما بسازید! 🎮</div>';
+                    return;
                 }
+                container.innerHTML = validLobbies.map(lobby => `
+                    <div class="lobby-item">
+                        <div class="lobby-info">
+                            <h4>🎭 ${lobby.name}</h4>
+                            <p>👑 ${lobby.ownerName} | 👥 ${lobby.players.length}/10 نفر</p>
+                            <p style="font-size:0.7rem; color:#aaa;">🆔 ${lobby.id.substring(lobby.id.length - 6)}</p>
+                        </div>
+                        ${!lobby.players.some(p => p.id === currentUserId) ? 
+                            `<button class="lobby-join-btn" onclick="window.joinHandler('${lobby.id}')">➕ ورود</button>` :
+                            `<button class="lobby-join-btn" style="background:#44aa44;" onclick="window.enterHandler('${lobby.id}')">🎮 ورود</button>`
+                        }
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('refreshLobbiesBtn').onclick = () => { refreshList(); showToast('🔄 لیست بروزرسانی شد'); };
+            window.joinHandler = (id) => { const lobby = joinLobby(id); if(lobby) { refreshList(); showLobbyRoom(id); page.remove(); } };
+            window.enterHandler = (id) => { showLobbyRoom(id); page.remove(); };
+            document.getElementById('searchBtn').onclick = () => {
+                const code = document.getElementById('searchInput').value.trim();
+                const resultDiv = document.getElementById('searchResult');
+                if(!code) { resultDiv.innerHTML = '⚠️ کد را وارد کنید'; return; }
+                if(code === currentUserId) { resultDiv.innerHTML = '🎭 این کد شماست!'; return; }
+                resultDiv.innerHTML = `✅ کاربر با کد ${code} پیدا شد!`;
             };
+            document.getElementById('createBtn').onclick = () => {
+                const modalDiv = document.createElement('div');
+                modalDiv.className = 'create-lobby-modal';
+                modalDiv.innerHTML = `<div class="create-lobby-content"><h2>🎮 لابی جدید</h2><input type="text" id="lobbyName" placeholder="اسم لابی..."><div class="create-lobby-buttons"><button class="confirm-create-btn" id="confirmCreate">✨ ایجاد</button><button class="cancel-create-btn" id="cancelCreate">❌ انصراف</button></div></div>`;
+                document.body.appendChild(modalDiv);
+                document.getElementById('confirmCreate').onclick = () => {
+                    const name = document.getElementById('lobbyName').value.trim();
+                    if(!name) { showToast('❌ اسم لابی را وارد کنید'); return; }
+                    const newLobby = createLobby(name);
+                    if(newLobby) { modalDiv.remove(); refreshList(); page.remove(); showLobbyRoom(newLobby.id); }
+                };
+                document.getElementById('cancelCreate').onclick = () => modalDiv.remove();
+            };
+            page.querySelector('.close-friends-btn').onclick = () => page.remove();
+            window.currentLobbyPage = { refreshList: refreshList };
+            refreshList();
+        }
+        
+        // ==================== بخش اصلی ====================
+        const modal = document.getElementById('usernameModal');
+        const usernameInput = document.getElementById('usernameInput');
+        const saveBtn = document.getElementById('saveNameBtn');
+        const usernameDisplaySpan = document.getElementById('usernameDisplay');
+        const topRight = document.getElementById('topRightBtn');
+        const topLeft = document.getElementById('topLeftBtn');
+        const bottomRight = document.getElementById('bottomRightImg');
+        const bottomCenter = document.getElementById('bottomCenterImg');
+        const shopButton = document.getElementById('bottomLeftImg');
+        const galleryBtns = document.querySelectorAll('.gallery-img-btn');
+        const profileBtn = document.getElementById('profileBtn');
+        
+        const DAILY_PACKS = [{ id: 0, coins: 250, name: "نقره‌ای", emoji: "🥈" },{ id: 1, coins: 500, name: "طلایی", emoji: "🌟" },{ id: 2, coins: 100, name: "الماسی", emoji: "💎" },{ id: 3, coins: 150, name: "رویایی", emoji: "✨" }];
+        
+        function updateCoins() { coinsSpan.innerText = toPersianNumber(currentCoins); }
+        function loadCurrencies() { let gems = localStorage.getItem('userGems') || 1250; let coins = localStorage.getItem('userCoins') || 8300; localStorage.setItem('userGems', gems); localStorage.setItem('userCoins', coins); gemsSpan.innerText = toPersianNumber(Number(gems)); currentCoins = Number(coins); updateCoins(); }
+        function addCoins(amount) { let val = parseInt(localStorage.getItem('userCoins')) || 0; val += amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return val; }
+        function removeCoins(amount) { let val = parseInt(localStorage.getItem('userCoins')) || 0; if(val >= amount) { val -= amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return true; } return false; }
+        function getPackStatus() { let last = localStorage.getItem('dailyPackClaims'); if(!last) return {}; try { return JSON.parse(last); } catch(e) { return {}; } }
+        function updatePackStatus(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); s[id] = today; localStorage.setItem('dailyPackClaims', JSON.stringify(s)); }
+        function canClaimPack(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); return !s[id] || s[id] !== today; }
+        function showToast(msg, dur = 2500) { 
+            const t = document.createElement('div'); 
+            t.className = 'toast-msg'; 
+            t.innerText = msg; 
+            document.body.appendChild(t); 
+            setTimeout(() => { if(t && t.remove) t.remove(); }, dur); 
         }
         
         function showProfile() {
             if(!currentUserId) { showToast('ابتدا نام کاربری را انتخاب کنید'); return; }
-            
             let stats = localStorage.getItem('userStats');
             if(!stats) {
-                stats = {
-                    competitiveWins: 0,
-                    friendlyWins: 0,
-                    playTime: 0,
-                    spectatorCount: 0,
-                    mafiaWins: 0,
-                    citizenWins: 0,
-                    exp: 0
-                };
+                stats = { competitiveWins: 0, friendlyWins: 0, playTime: 0, spectatorCount: 0, mafiaWins: 0, citizenWins: 0, exp: 0 };
                 localStorage.setItem('userStats', JSON.stringify(stats));
-            } else {
-                stats = JSON.parse(stats);
-            }
+            } else { stats = JSON.parse(stats); }
             
             function calculateLevel(exp) {
-                let level = 1;
-                let required = 100;
-                let totalExp = exp;
-                while(totalExp >= required && level < 100) {
-                    totalExp -= required;
-                    level++;
-                    required = Math.floor(required * 1.2);
-                }
+                let level = 1, required = 100, totalExp = exp;
+                while(totalExp >= required && level < 100) { totalExp -= required; level++; required = Math.floor(required * 1.2); }
                 return { level: level, currentExp: totalExp, requiredExp: required };
             }
-            
             const levelInfo = calculateLevel(stats.exp || 0);
-            const level = levelInfo.level;
-            const currentExp = levelInfo.currentExp;
-            const requiredExp = levelInfo.requiredExp;
+            const level = levelInfo.level, currentExp = levelInfo.currentExp, requiredExp = levelInfo.requiredExp;
             const expPercent = (currentExp / requiredExp) * 100;
-            
             const hoursPlayed = Math.floor(stats.playTime / 3600);
             const minutesPlayed = Math.floor((stats.playTime % 3600) / 60);
             
@@ -1635,14 +1710,10 @@
                         </div>
                         <button class="close-profile-full" id="closeProfileBtn">✕</button>
                     </div>
-                    
                     <div class="exp-bar-container">
                         <div class="exp-bar-label">تجربه تا سطح بعد: ${currentExp}/${requiredExp}</div>
-                        <div class="exp-bar">
-                            <div class="exp-bar-fill" style="width: ${expPercent}%;"></div>
-                        </div>
+                        <div class="exp-bar"><div class="exp-bar-fill" style="width: ${expPercent}%;"></div></div>
                     </div>
-                    
                     <div class="stats-grid">
                         <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.competitiveWins)}</div><div class="stat-label">برد امتیازی</div></div></div>
                         <div class="stat-card"><div class="stat-icon">🎮</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.friendlyWins)}</div><div class="stat-label">برد دوستانه</div></div></div>
@@ -1652,7 +1723,6 @@
                         <div class="stat-card"><div class="stat-icon">🦹</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.mafiaWins)}</div><div class="stat-label">برد مافیا</div></div></div>
                         <div class="stat-card"><div class="stat-icon">👮</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.citizenWins)}</div><div class="stat-label">برد شهروند</div></div></div>
                     </div>
-                    
                     <div class="profile-actions">
                         <button class="profile-action-btn" id="copyIdBtn">📋 کپی کد کاربری</button>
                         <button class="profile-action-btn" id="editNameBtn">✏️ تغییر نام</button>
@@ -1660,28 +1730,13 @@
                 </div>
             `;
             document.body.appendChild(d);
-            
-            document.getElementById('copyIdBtn').onclick = () => {
-                navigator.clipboard.writeText(currentUserId);
-                showToast('📋 کد کاربری کپی شد!');
-            };
-            
+            document.getElementById('copyIdBtn').onclick = () => { navigator.clipboard.writeText(currentUserId); showToast('📋 کد کاربری کپی شد!'); };
             document.getElementById('editNameBtn').onclick = () => {
                 d.remove();
                 const modalDiv = document.createElement('div');
                 modalDiv.className = 'profile-modal-full';
-                modalDiv.innerHTML = `
-                    <div class="profile-content-full" style="max-width: 350px;">
-                        <h2 style="color:#ffaa66; margin-bottom:20px; text-align:center;">تغییر نام کاربری</h2>
-                        <input type="text" id="newNameInput" class="edit-name-input" placeholder="نام جدید..." maxlength="20" value="${currentUsername}">
-                        <div class="profile-actions" style="margin-top:20px;">
-                            <button class="profile-action-btn" id="confirmNameBtn">✅ تایید</button>
-                            <button class="profile-action-btn" id="cancelNameBtn">❌ انصراف</button>
-                        </div>
-                    </div>
-                `;
+                modalDiv.innerHTML = `<div class="profile-content-full" style="max-width: 350px;"><h2 style="color:#ffaa66; margin-bottom:20px; text-align:center;">تغییر نام کاربری</h2><input type="text" id="newNameInput" class="edit-name-input" placeholder="نام جدید..." maxlength="20" value="${currentUsername}"><div class="profile-actions" style="margin-top:20px;"><button class="profile-action-btn" id="confirmNameBtn">✅ تایید</button><button class="profile-action-btn" id="cancelNameBtn">❌ انصراف</button></div></div>`;
                 document.body.appendChild(modalDiv);
-                
                 document.getElementById('confirmNameBtn').onclick = () => {
                     const newName = document.getElementById('newNameInput').value.trim();
                     if(newName) {
@@ -1691,13 +1746,10 @@
                         showToast(`✅ نام به ${currentUsername} تغییر کرد`);
                         modalDiv.remove();
                         showProfile();
-                    } else {
-                        showToast('❌ نام نمی‌تواند خالی باشد');
-                    }
+                    } else showToast('❌ نام نمی‌تواند خالی باشد');
                 };
                 document.getElementById('cancelNameBtn').onclick = () => modalDiv.remove();
             };
-            
             document.getElementById('closeProfileBtn').onclick = () => d.remove();
         }
         
@@ -1741,26 +1793,10 @@
             const page = document.createElement('div'); page.className = 'shop-page';
             page.innerHTML = `<div class="shop-main-content"><div class="shop-header"><h1>🏪 بازار سیاه</h1><p>✨ بسته روزانه ✨</p></div><div class="packs-grid" id="packsGrid"></div><button class="shop-gift-btn" id="giftBtn">🎁 هدیه سکه</button><button class="close-shop-btn">🔙 خروج</button></div>`;
             document.body.appendChild(page);
-            function render() { const grid = document.getElementById('packsGrid'); if(!grid) return; grid.innerHTML = ''; const DAILY_PACKS = [{ id: 0, coins: 250, name: "نقره‌ای", emoji: "🥈" },{ id: 1, coins: 500, name: "طلایی", emoji: "🌟" },{ id: 2, coins: 100, name: "الماسی", emoji: "💎" },{ id: 3, coins: 150, name: "رویایی", emoji: "✨" }];
-            DAILY_PACKS.forEach(p => { const avail = canClaimPack(p.id); const card = document.createElement('div'); card.className = `mafia-pack-card ${!avail ? 'disabled-pack' : ''}`; card.innerHTML = `<div class="pack-icon">${p.emoji}</div><div class="pack-coins">+${toPersianNumber(p.coins)} <span>سکه</span></div><div class="pack-name">${p.name}</div><div class="pack-status">${avail ? '🔥 دریافت' : '✅ انجام شد'}</div>`; if(avail) { card.onclick = () => { addCoins(p.coins); updatePackStatus(p.id); showToast(`🎁 +${toPersianNumber(p.coins)} سکه`); render(); }; } grid.appendChild(card); }); }
+            function render() { const grid = document.getElementById('packsGrid'); if(!grid) return; grid.innerHTML = ''; DAILY_PACKS.forEach(p => { const avail = canClaimPack(p.id); const card = document.createElement('div'); card.className = `mafia-pack-card ${!avail ? 'disabled-pack' : ''}`; card.innerHTML = `<div class="pack-icon">${p.emoji}</div><div class="pack-coins">+${toPersianNumber(p.coins)} <span>سکه</span></div><div class="pack-name">${p.name}</div><div class="pack-status">${avail ? '🔥 دریافت' : '✅ انجام شد'}</div>`; if(avail) { card.onclick = () => { addCoins(p.coins); updatePackStatus(p.id); showToast(`🎁 +${toPersianNumber(p.coins)} سکه`); render(); }; } grid.appendChild(card); }); }
             render();
             document.getElementById('giftBtn').onclick = () => showGift();
             page.querySelector('.close-shop-btn').onclick = () => page.remove();
-        }
-        
-        function updateCoins() { coinsSpan.innerText = toPersianNumber(currentCoins); }
-        function loadCurrencies() { let gems = localStorage.getItem('userGems') || 1250; let coins = localStorage.getItem('userCoins') || 8300; localStorage.setItem('userGems', gems); localStorage.setItem('userCoins', coins); gemsSpan.innerText = toPersianNumber(Number(gems)); currentCoins = Number(coins); updateCoins(); }
-        function addCoins(amount) { let val = parseInt(localStorage.getItem('userCoins')) || 0; val += amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return val; }
-        function removeCoins(amount) { let val = parseInt(localStorage.getItem('userCoins')) || 0; if(val >= amount) { val -= amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return true; } return false; }
-        function getPackStatus() { let last = localStorage.getItem('dailyPackClaims'); if(!last) return {}; try { return JSON.parse(last); } catch(e) { return {}; } }
-        function updatePackStatus(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); s[id] = today; localStorage.setItem('dailyPackClaims', JSON.stringify(s)); }
-        function canClaimPack(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); return !s[id] || s[id] !== today; }
-        function showToast(msg, dur = 2500) { 
-            const t = document.createElement('div'); 
-            t.className = 'toast-msg'; 
-            t.innerText = msg; 
-            document.body.appendChild(t); 
-            setTimeout(() => { if(t && t.remove) t.remove(); }, dur); 
         }
         
         function loadUser() {
@@ -1793,18 +1829,6 @@
             loadLobbiesFromLocal();
             showToast(`✅ خوش آمدی ${currentUsername}!`);
         }
-        
-        const modal = document.getElementById('usernameModal');
-        const usernameInput = document.getElementById('usernameInput');
-        const saveBtn = document.getElementById('saveNameBtn');
-        const usernameDisplaySpan = document.getElementById('usernameDisplay');
-        const topRight = document.getElementById('topRightBtn');
-        const topLeft = document.getElementById('topLeftBtn');
-        const bottomRight = document.getElementById('bottomRightImg');
-        const bottomCenter = document.getElementById('bottomCenterImg');
-        const shopButton = document.getElementById('bottomLeftImg');
-        const galleryBtns = document.querySelectorAll('.gallery-img-btn');
-        const profileBtn = document.getElementById('profileBtn');
         
         saveBtn.onclick = saveUser;
         usernameInput.onkeypress = (e) => { if(e.key === 'Enter') saveUser(); };
