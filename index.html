@@ -822,8 +822,8 @@
     </div>
 
     <div class="top-row">
-        <div class="top-btn" id="topRightBtn"><img src="https://cdn.imgurl.ir/uploads/t03630_InShot__.png" alt="عکس بالایی راست"></div>
-        <div class="top-btn" id="topLeftBtn"><img src="https://cdn.imgurl.ir/uploads/u338374_InShot__.png" alt="عکس بالایی چپ"></div>
+        <div class="top-btn" id="topRightBtn"><img src="https://cdn.imgurl.ir/uploads/e04353_IMG_20260602_080652_101.jpg" alt="عکس بالایی راست"></div>
+        <div class="top-btn" id="topLeftBtn"><img src="https://cdn.imgurl.ir/uploads/b86310_IMG_20260602_080529_880.jpg" alt="عکس بالایی چپ"></div>
     </div>
 
     <div class="bottom-group">
@@ -848,7 +848,7 @@
             return number.toString().replace(/\d/g, function(x) { return persianDigits[parseInt(x)]; });
         }
 
-        // ==================== سیستم اصلی لابی (بدون تاخیر و بدون پرت شدن) ====================
+        // ==================== سیستم اصلی لابی ====================
         let lobbies = [];
         let currentUserId = '';
         let currentUsername = '';
@@ -884,17 +884,53 @@
                         }
                     });
                     
-                    // درخواست اولیه لیست لابی‌ها
                     lobbySyncChannel.publish('lobby-event', {
                         type: 'request-lobbies',
                         sender: currentUserId,
                         timestamp: Date.now()
                     });
+                    
+                    setInterval(() => {
+                        if(lobbySyncChannel) {
+                            lobbySyncChannel.publish('lobby-event', {
+                                type: 'request-lobbies',
+                                sender: currentUserId,
+                                timestamp: Date.now()
+                            });
+                        }
+                    }, 30000);
                 });
                 
             } catch(e) {
                 console.error('Init error:', e);
+                initLocalSyncFallback();
             }
+        }
+        
+        function initLocalSyncFallback() {
+            if(window.BroadcastChannel) {
+                try {
+                    const bc = new BroadcastChannel('mafia-lobbies-fallback');
+                    bc.onmessage = (event) => {
+                        if(event.data && event.data.sender !== currentUserId) {
+                            handleSyncMessage(event.data);
+                        }
+                    };
+                    window.fallbackChannel = bc;
+                } catch(e) {}
+            }
+            
+            window.addEventListener('storage', (event) => {
+                if(event.key === 'mafiaLobbiesFallback' && event.newValue) {
+                    const newLobbies = JSON.parse(event.newValue);
+                    if(JSON.stringify(lobbies) !== JSON.stringify(newLobbies)) {
+                        lobbies = newLobbies;
+                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
+                            window.currentLobbyPage.refreshList();
+                        }
+                    }
+                }
+            });
         }
         
         function handleSyncMessage(data) {
@@ -909,7 +945,7 @@
                         if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
                             window.currentLobbyRoom.updateUI();
                         }
-                        console.log('Lobbies count:', lobbies.length);
+                        console.log('Lobbies updated, count:', lobbies.length);
                     }
                     break;
                     
@@ -928,9 +964,11 @@
                 case 'lobby-join':
                     const lobbyToJoin = lobbies.find(l => l.id === data.lobbyId);
                     if(lobbyToJoin && !lobbyToJoin.players.some(p => p.id === data.userId)) {
-                        lobbyToJoin.players.push({ id: data.userId, name: data.userName, avatar: data.avatar });
+                        lobbyToJoin.players.push({ id: data.userId, name: data.userName, avatar: data.avatar, micActive: false });
                         saveLobbiesToLocal();
-                        showToast(`👤 ${data.userName} وارد لابی ${lobbyToJoin.name} شد`);
+                        if(data.userId !== currentUserId) {
+                            showToast(`👤 ${data.userName} وارد لابی ${lobbyToJoin.name} شد`);
+                        }
                         if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
                             window.currentLobbyRoom.updateUI();
                         }
@@ -945,8 +983,6 @@
                     if(leaveLobby) {
                         const idx = leaveLobby.players.findIndex(p => p.id === data.userId);
                         if(idx !== -1) leaveLobby.players.splice(idx, 1);
-                        
-                        // فقط اگه لابی کاملاً خالی شد و کاربر فعلی توش نیست حذف کن
                         if(leaveLobby.players.length === 0) {
                             const lobbyIdx = lobbies.findIndex(l => l.id === data.lobbyId);
                             if(lobbyIdx !== -1) lobbies.splice(lobbyIdx, 1);
@@ -955,8 +991,6 @@
                             leaveLobby.ownerName = leaveLobby.players[0].name;
                         }
                         saveLobbiesToLocal();
-                        
-                        // فقط اگه کاربر خودش خارج شده صفحه رو ببند
                         if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
                             if(data.userId === currentUserId) {
                                 if(window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove();
@@ -967,6 +1001,19 @@
                         }
                         if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
                             window.currentLobbyPage.refreshList();
+                        }
+                    }
+                    break;
+                    
+                case 'mic-status':
+                    const micLobby = lobbies.find(l => l.id === data.lobbyId);
+                    if(micLobby) {
+                        const player = micLobby.players.find(p => p.id === data.userId);
+                        if(player) {
+                            player.micActive = data.active;
+                            if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
+                                window.currentLobbyRoom.updateUI();
+                            }
                         }
                     }
                     break;
@@ -990,23 +1037,43 @@
                     lobbySyncChannel.publish('lobby-event', message);
                 } catch(e) {}
             }
+            if(window.fallbackChannel) {
+                try {
+                    window.fallbackChannel.postMessage(message);
+                } catch(e) {}
+            }
+            if(message.type === 'lobby-update' || message.type === 'lobbies-list') {
+                localStorage.setItem('mafiaLobbiesFallback', JSON.stringify(message.lobbies || lobbies));
+            }
+        }
+        
+        function broadcastMicStatus(lobbyId, active) {
+            broadcastMessage({
+                type: 'mic-status',
+                lobbyId: lobbyId,
+                userId: currentUserId,
+                active: active,
+                sender: currentUserId,
+                timestamp: Date.now()
+            });
         }
         
         function loadLobbiesFromLocal() {
-            const saved = localStorage.getItem('mafiaLobbiesFinal');
+            const saved = localStorage.getItem('mafiaLobbiesFallback');
             if(saved) {
                 try {
                     lobbies = JSON.parse(saved);
                 } catch(e) { lobbies = []; }
             }
             if(!lobbies) lobbies = [];
+            lobbies = lobbies.filter(l => l.players && l.players.length > 0);
             return lobbies;
         }
         
         function saveLobbiesToLocal() {
-            localStorage.setItem('mafiaLobbiesFinal', JSON.stringify(lobbies));
+            localStorage.setItem('mafiaLobbiesFallback', JSON.stringify(lobbies));
             broadcastMessage({
-                type: 'lobbies-list',
+                type: 'lobby-update',
                 lobbies: lobbies,
                 sender: currentUserId,
                 timestamp: Date.now()
@@ -1020,7 +1087,7 @@
                 name: name,
                 ownerId: currentUserId,
                 ownerName: currentUsername,
-                players: [{ id: currentUserId, name: currentUsername, avatar: avatarImg.src }],
+                players: [{ id: currentUserId, name: currentUsername, avatar: avatarImg.src, micActive: false }],
                 createdAt: Date.now()
             };
             lobbies.push(newLobby);
@@ -1043,7 +1110,7 @@
             if(lobby.players.some(p => p.id === currentUserId)) return lobby;
             if(lobby.players.length >= 10) { showToast('❌ لابی پر است'); return null; }
             
-            lobby.players.push({ id: currentUserId, name: currentUsername, avatar: avatarImg.src });
+            lobby.players.push({ id: currentUserId, name: currentUsername, avatar: avatarImg.src, micActive: false });
             saveLobbiesToLocal();
             
             broadcastMessage({
@@ -1081,43 +1148,31 @@
             showToast('🚪 از لابی خارج شدید');
         }
         
-        // ==================== سیستم صوتی ====================
+        // ==================== سیستم صوتی با WebRTC (مثل روبیکا) ====================
         let currentRoomPage = null;
-        let voiceChannel = null;
-        let ablyVoice = null;
-        let mediaRecorder = null;
-        let audioStream = null;
+        let peerConnections = new Map(); // اتصالات مستقیم به هر کاربر
+        let localStream = null;
         let isMicActive = false;
         let currentVoiceLobbyId = null;
-        let activeAudioElements = new Map();
         
-        function stopAllPlayingAudio() {
-            for (let [key, audio] of activeAudioElements) {
-                try {
-                    audio.pause();
-                    audio.src = '';
-                    audio.remove();
-                } catch(e) {}
-            }
-            activeAudioElements.clear();
-        }
+        // کانال سیگنالینگ برای برقراری اتصال WebRTC
+        let signalingChannel = null;
+        let ablySignaling = null;
         
         function stopMicrophone() {
-            if(mediaRecorder && mediaRecorder.state === 'recording') {
-                try {
-                    mediaRecorder.stop();
-                } catch(e) {}
-            }
-            if(audioStream) {
-                audioStream.getTracks().forEach(track => {
+            if(localStream) {
+                localStream.getTracks().forEach(track => {
                     if(track.readyState === 'live') {
                         track.stop();
                     }
                 });
-                audioStream = null;
+                localStream = null;
             }
             isMicActive = false;
-            mediaRecorder = null;
+            
+            if(currentVoiceLobbyId) {
+                broadcastMicStatus(currentVoiceLobbyId, false);
+            }
         }
         
         function startMicrophone() {
@@ -1127,51 +1182,39 @@
                 audio: {
                     echoCancellation: true,
                     noiseSuppression: true,
-                    autoGainControl: true,
-                    sampleRate: 24000,
-                    channelCount: 1
+                    autoGainControl: true
                 } 
             })
             .then(stream => {
-                audioStream = stream;
-                
-                let mimeType = '';
-                if(MediaRecorder.isTypeSupported('audio/webm')) {
-                    mimeType = 'audio/webm';
-                } else if(MediaRecorder.isTypeSupported('audio/mp4')) {
-                    mimeType = 'audio/mp4';
-                }
-                
-                const options = mimeType ? { mimeType: mimeType } : {};
-                mediaRecorder = new MediaRecorder(stream, options);
-                
-                mediaRecorder.ondataavailable = async (event) => {
-                    if(event.data && event.data.size > 0 && voiceChannel && voiceChannel.connection && voiceChannel.connection.state === 'attached') {
-                        try {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                                voiceChannel.publish('voice', { 
-                                    audio: reader.result, 
-                                    sender: currentUserId,
-                                    senderName: currentUsername,
-                                    timestamp: Date.now()
-                                });
-                            };
-                            reader.readAsDataURL(event.data);
-                        } catch(e) {
-                            console.error('Error sending audio:', e);
-                        }
-                    }
-                };
-                
-                mediaRecorder.start(200);
+                localStream = stream;
                 isMicActive = true;
                 
-                showToast('🎙️ میکروفون روشن شد');
+                if(currentVoiceLobbyId) {
+                    broadcastMicStatus(currentVoiceLobbyId, true);
+                    // اضافه کردن stream به همه اتصالات موجود
+                    for(let [userId, pc] of peerConnections) {
+                        if(pc && pc.signalingState !== 'closed') {
+                            const sender = pc.getSenders().find(s => s.track && s.track.kind === 'audio');
+                            if(sender) {
+                                sender.replaceTrack(stream.getAudioTracks()[0]);
+                            } else {
+                                stream.getAudioTracks().forEach(track => {
+                                    pc.addTrack(track, stream);
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                showToast('🎙️ میکروفون روشن شد - صحبت کنید');
                 const micBtn = document.getElementById('micActionBtn');
                 if(micBtn) {
                     micBtn.classList.add('mic-active');
                     micBtn.innerHTML = '🎤 میکروفون روشن';
+                }
+                
+                if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
+                    window.currentLobbyRoom.updateUI();
                 }
             })
             .catch(err => {
@@ -1180,6 +1223,7 @@
                 if(err.name === 'NotAllowedError') errorMsg = '❌ اجازه دسترسی به میکروفون داده نشد';
                 if(err.name === 'NotFoundError') errorMsg = '❌ میکروفونی یافت نشد';
                 showToast(errorMsg);
+                isMicActive = false;
             });
         }
         
@@ -1197,6 +1241,9 @@
                     micBtn.classList.remove('mic-active');
                     micBtn.innerHTML = '🎙️ میکروفون';
                 }
+                if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) {
+                    window.currentLobbyRoom.updateUI();
+                }
             } else {
                 startMicrophone();
             }
@@ -1204,25 +1251,139 @@
         
         function cleanupVoiceConnection() {
             stopMicrophone();
-            stopAllPlayingAudio();
             
-            if(voiceChannel) {
+            for(let [userId, pc] of peerConnections) {
                 try {
-                    voiceChannel.unsubscribe();
+                    pc.close();
                 } catch(e) {}
-                voiceChannel = null;
             }
-            if(ablyVoice) {
+            peerConnections.clear();
+            
+            if(signalingChannel) {
                 try {
-                    ablyVoice.close();
+                    signalingChannel.unsubscribe();
                 } catch(e) {}
-                ablyVoice = null;
+                signalingChannel = null;
+            }
+            if(ablySignaling) {
+                try {
+                    ablySignaling.close();
+                } catch(e) {}
+                ablySignaling = null;
             }
             currentVoiceLobbyId = null;
         }
         
+        // ایجاد اتصال WebRTC با یک کاربر دیگر
+        function createPeerConnection(targetUserId, targetUserName) {
+            const configuration = {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' }
+                ]
+            };
+            
+            const pc = new RTCPeerConnection(configuration);
+            peerConnections.set(targetUserId, pc);
+            
+            // اضافه کردن stream محلی
+            if(localStream && isMicActive) {
+                localStream.getTracks().forEach(track => {
+                    pc.addTrack(track, localStream);
+                });
+            }
+            
+            // دریافت stream از کاربر مقابل
+            pc.ontrack = (event) => {
+                const remoteAudio = new Audio();
+                remoteAudio.srcObject = event.streams[0];
+                remoteAudio.autoplay = true;
+                remoteAudio.volume = 0.8;
+                remoteAudio.id = 'remote_audio_' + targetUserId;
+                
+                const existingAudio = document.getElementById('remote_audio_' + targetUserId);
+                if(existingAudio) existingAudio.remove();
+                remoteAudio.play().catch(e => console.log('Auto-play prevented:', e));
+            };
+            
+            // ارسال ICE candidate از طریق سیگنالینگ
+            pc.onicecandidate = (event) => {
+                if(event.candidate && signalingChannel) {
+                    signalingChannel.publish('signal', {
+                        type: 'ice-candidate',
+                        from: currentUserId,
+                        to: targetUserId,
+                        candidate: event.candidate,
+                        lobbyId: currentVoiceLobbyId
+                    });
+                }
+            };
+            
+            return pc;
+        }
+        
+        async function startCallWithUser(targetUserId, targetUserName) {
+            if(!currentVoiceLobbyId) return;
+            if(peerConnections.has(targetUserId)) return;
+            
+            try {
+                const pc = createPeerConnection(targetUserId, targetUserName);
+                
+                // ایجاد offer
+                const offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
+                
+                if(signalingChannel) {
+                    signalingChannel.publish('signal', {
+                        type: 'offer',
+                        from: currentUserId,
+                        to: targetUserId,
+                        sdp: offer,
+                        lobbyId: currentVoiceLobbyId
+                    });
+                }
+            } catch(e) {
+                console.error('Error starting call:', e);
+            }
+        }
+        
+        async function handleSignal(data) {
+            if(data.lobbyId !== currentVoiceLobbyId) return;
+            if(data.from === currentUserId) return;
+            
+            const pc = peerConnections.get(data.from) || createPeerConnection(data.from, '');
+            
+            try {
+                if(data.type === 'offer') {
+                    await pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
+                    const answer = await pc.createAnswer();
+                    await pc.setLocalDescription(answer);
+                    
+                    if(signalingChannel) {
+                        signalingChannel.publish('signal', {
+                            type: 'answer',
+                            from: currentUserId,
+                            to: data.from,
+                            sdp: answer,
+                            lobbyId: currentVoiceLobbyId
+                        });
+                    }
+                }
+                else if(data.type === 'answer') {
+                    await pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
+                }
+                else if(data.type === 'ice-candidate') {
+                    if(data.candidate) {
+                        await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+                    }
+                }
+            } catch(e) {
+                console.error('Signal handling error:', e);
+            }
+        }
+        
         function setupVoiceConnection(lobbyId) {
-            if(currentVoiceLobbyId === lobbyId && ablyVoice && ablyVoice.connection && ablyVoice.connection.state === 'connected') {
+            if(currentVoiceLobbyId === lobbyId && ablySignaling && ablySignaling.connection.state === 'connected') {
                 return;
             }
             
@@ -1232,33 +1393,34 @@
             if(!currentUserId) return;
             
             try {
-                ablyVoice = new Ably.Realtime({ 
+                ablySignaling = new Ably.Realtime({ 
                     key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', 
                     clientId: currentUserId 
                 });
                 
-                ablyVoice.connection.on('connected', () => {
-                    console.log('✅ Voice connected to lobby:', lobbyId);
-                    voiceChannel = ablyVoice.channels.get('voice-' + lobbyId);
-                    voiceChannel.attach();
+                ablySignaling.connection.on('connected', () => {
+                    console.log('✅ Signaling connected for lobby:', lobbyId);
+                    signalingChannel = ablySignaling.channels.get('webrtc-signal-' + lobbyId);
+                    signalingChannel.attach();
                     
-                    voiceChannel.subscribe('voice', (message) => {
-                        if(message.data && message.data.sender !== currentUserId && message.data.audio) {
-                            try {
-                                const audio = new Audio(message.data.audio);
-                                audio.volume = 0.7;
-                                const audioId = Date.now() + '_' + message.data.sender;
-                                activeAudioElements.set(audioId, audio);
-                                audio.onended = () => activeAudioElements.delete(audioId);
-                                audio.play().catch(e => console.error('Audio play error:', e));
-                            } catch(e) {
-                                console.error('Audio processing error:', e);
-                            }
+                    signalingChannel.subscribe('signal', (message) => {
+                        if(message.data && message.data.from !== currentUserId) {
+                            handleSignal(message.data);
                         }
                     });
                 });
             } catch(e) {
-                console.error('Setup voice error:', e);
+                console.error('Setup signaling error:', e);
+            }
+        }
+        
+        function connectToAllPlayers(players) {
+            if(!currentVoiceLobbyId || !isMicActive) return;
+            
+            for(let player of players) {
+                if(player.id !== currentUserId && !peerConnections.has(player.id)) {
+                    startCallWithUser(player.id, player.name);
+                }
             }
         }
         
@@ -1293,12 +1455,18 @@
                     showToast('لابی بسته شد');
                     return;
                 }
+                
+                // اتصال به بازیکنان جدید (WebRTC)
+                if(isMicActive && currentVoiceLobbyId === lobbyId) {
+                    connectToAllPlayers(currentLobby.players);
+                }
+                
                 let seatsHtml = '';
                 for(let i=0; i<10; i++) {
                     const p = currentLobby.players[i];
                     if(p) {
-                        const isCurrentUserMicOn = (p.id === currentUserId && isMicActive);
-                        seatsHtml += `<div class="player-seat ${seatPos[i]}"><img src="${p.avatar}" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'"><div class="player-name-label">${p.name}${p.id === currentLobby.ownerId ? ' 👑' : ''}${isCurrentUserMicOn ? ' 🎤' : ''}</div></div>`;
+                        const isPlayerMicOn = p.micActive === true;
+                        seatsHtml += `<div class="player-seat ${seatPos[i]}"><img src="${p.avatar}" onerror="this.src='https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg'"><div class="player-name-label">${p.name}${p.id === currentLobby.ownerId ? ' 👑' : ''}${isPlayerMicOn ? ' 🎤' : ''}</div></div>`;
                     } else {
                         seatsHtml += `<div class="player-seat empty-seat ${seatPos[i]}"><div class="empty-icon">+</div><div class="player-name-label">صندلی خالی</div></div>`;
                     }
@@ -1377,6 +1545,26 @@
             setTimeout(() => {
                 if(document.body.contains(roomPage)) {
                     setupVoiceConnection(lobbyId);
+                    setTimeout(() => {
+                        if(document.body.contains(roomPage) && currentVoiceLobbyId === lobbyId) {
+                            if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                                showToast('🎤 میکروفون در حال آماده‌سازی...', 1500);
+                                setTimeout(() => {
+                                    if(!isMicActive && document.body.contains(roomPage)) {
+                                        startMicrophone();
+                                        showToast('🎙️ میکروفون فعال شد - می‌توانید صحبت کنید', 2000);
+                                        // اتصال به همه بازیکنان موجود
+                                        const currentLobby = lobbies.find(l => l.id === lobbyId);
+                                        if(currentLobby && currentLobby.players) {
+                                            setTimeout(() => {
+                                                connectToAllPlayers(currentLobby.players);
+                                            }, 500);
+                                        }
+                                    }
+                                }, 1000);
+                            }
+                        }
+                    }, 500);
                 }
             }, 500);
             
@@ -1386,6 +1574,25 @@
                 page: roomPage,
                 cleanup: () => cleanupVoiceConnection()
             };
+            
+            const interval = setInterval(() => {
+                if(document.body.contains(roomPage)) {
+                    const curr = lobbies.find(l => l.id === lobbyId);
+                    if(curr && curr.players.some(p => p.id === currentUserId)) {
+                        updateRoom();
+                        if(isMicActive && currentVoiceLobbyId === lobbyId) {
+                            connectToAllPlayers(curr.players);
+                        }
+                    } else { 
+                        clearInterval(interval); 
+                        roomPage.remove();
+                        cleanupVoiceConnection();
+                    }
+                } else { 
+                    clearInterval(interval); 
+                    cleanupVoiceConnection();
+                }
+            }, 5000);
         }
         
         function showTeamPage() {
@@ -1463,6 +1670,8 @@
                 const container = document.getElementById('lobbiesList');
                 if(!container) return;
                 
+                loadLobbiesFromLocal();
+                
                 const validLobbies = lobbies.filter(l => l.players && l.players.length > 0);
                 
                 if(validLobbies.length === 0) {
@@ -1484,21 +1693,17 @@
                     </div>
                 `).join('');
                 
-                console.log('Lobbies count:', validLobbies.length);
+                console.log('Lobbies refreshed, count:', validLobbies.length);
             }
             
             const refreshBtn = document.getElementById('refreshLobbiesBtn');
             if(refreshBtn) {
                 refreshBtn.onclick = () => {
-                    showToast('🔄 در حال بروزرسانی...');
-                    if(lobbySyncChannel) {
-                        lobbySyncChannel.publish('lobby-event', {
-                            type: 'request-lobbies',
-                            sender: currentUserId,
-                            timestamp: Date.now()
-                        });
-                    }
+                    showToast('🔄 در حال بروزرسانی لیست لابی‌ها...');
                     refreshList();
+                    setTimeout(() => {
+                        showToast('✅ لیست لابی‌ها بروزرسانی شد');
+                    }, 500);
                 };
             }
             
@@ -1548,6 +1753,14 @@
             window.currentLobbyPage = { refreshList: refreshList };
             
             refreshList();
+            
+            const autoRefresh = setInterval(() => {
+                if(document.body.contains(page)) {
+                    refreshList();
+                } else {
+                    clearInterval(autoRefresh);
+                }
+            }, 30000);
         }
         
         // ==================== بخش اصلی ====================
@@ -1644,55 +1857,13 @@
                     </div>
                     
                     <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon">🏆</div>
-                            <div class="stat-info">
-                                <div class="stat-value">${toPersianNumber(stats.competitiveWins)}</div>
-                                <div class="stat-label">برد امتیازی</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">🎮</div>
-                            <div class="stat-info">
-                                <div class="stat-value">${toPersianNumber(stats.friendlyWins)}</div>
-                                <div class="stat-label">برد دوستانه</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">⭐</div>
-                            <div class="stat-info">
-                                <div class="stat-value">${toPersianNumber(level)}</div>
-                                <div class="stat-label">سطح کاربر</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">⏱️</div>
-                            <div class="stat-info">
-                                <div class="stat-value">${toPersianNumber(hoursPlayed)}:${toPersianNumber(minutesPlayed)}</div>
-                                <div class="stat-label">ساعت بازی</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">👁️</div>
-                            <div class="stat-info">
-                                <div class="stat-value">${toPersianNumber(stats.spectatorCount)}</div>
-                                <div class="stat-label">تعداد نظاره‌گر</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">🦹</div>
-                            <div class="stat-info">
-                                <div class="stat-value">${toPersianNumber(stats.mafiaWins)}</div>
-                                <div class="stat-label">برد مافیا</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">👮</div>
-                            <div class="stat-info">
-                                <div class="stat-value">${toPersianNumber(stats.citizenWins)}</div>
-                                <div class="stat-label">برد شهروند</div>
-                            </div>
-                        </div>
+                        <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.competitiveWins)}</div><div class="stat-label">برد امتیازی</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">🎮</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.friendlyWins)}</div><div class="stat-label">برد دوستانه</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-info"><div class="stat-value">${toPersianNumber(level)}</div><div class="stat-label">سطح کاربر</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">⏱️</div><div class="stat-info"><div class="stat-value">${toPersianNumber(hoursPlayed)}:${toPersianNumber(minutesPlayed)}</div><div class="stat-label">ساعت بازی</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">👁️</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.spectatorCount)}</div><div class="stat-label">تعداد نظاره‌گر</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">🦹</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.mafiaWins)}</div><div class="stat-label">برد مافیا</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">👮</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.citizenWins)}</div><div class="stat-label">برد شهروند</div></div></div>
                     </div>
                     
                     <div class="profile-actions">
