@@ -736,72 +736,6 @@
             100% { transform: scale(1); }
         }
         
-        .voice-history-panel {
-            position: absolute;
-            bottom: 100px;
-            right: 15px;
-            width: 280px;
-            background: rgba(10, 12, 20, 0.95);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            border: 1px solid #ffaa4455;
-            z-index: 110;
-            max-height: 250px;
-            overflow-y: auto;
-            direction: rtl;
-            font-size: 0.7rem;
-        }
-        .voice-history-header {
-            background: #1a1f2e;
-            padding: 8px 12px;
-            border-radius: 20px 20px 0 0;
-            color: #ffaa66;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.75rem;
-        }
-        .clear-voice-history {
-            background: #3a2a4a;
-            border: none;
-            padding: 2px 10px;
-            border-radius: 15px;
-            color: #ffaaaa;
-            font-size: 0.6rem;
-            cursor: pointer;
-        }
-        .voice-history-list {
-            padding: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .voice-history-item {
-            background: #0f121e;
-            margin: 5px 0;
-            padding: 6px 10px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-right: 2px solid #ff884a;
-        }
-        .voice-history-item.remote {
-            border-right-color: #44ff88;
-        }
-        .voice-play-btn {
-            background: #2a3f5a;
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
         .lobby-action-btn:active {
             transform: scale(0.96);
         }
@@ -1087,7 +1021,6 @@
             .stat-value { font-size: 1rem; }
             .lobby-action-btn { padding: 8px 16px; font-size: 0.9rem; min-width: 100px; }
             .lobby-bottom-buttons { gap: 12px; bottom: 20px; }
-            .voice-history-panel { width: 240px; bottom: 90px; right: 10px; max-height: 200px; }
             .team-search-container { flex-direction: column; padding: 0 10px; }
             .developer-card { padding: 20px; }
             .developer-title { font-size: 1.3rem; }
@@ -1144,7 +1077,6 @@
         <div class="gallery-img-btn" data-img="1"><img src="https://cdn.imgurl.ir/uploads/y004260_InShot__.png" alt="تصویر 1"></div>
         <div class="gallery-img-btn" data-img="2"><img src="https://cdn.imgurl.ir/uploads/b855600_InShot__.png" alt="تصویر 2"></div>
         <div class="gallery-img-btn" data-img="3"><img src="https://cdn.imgurl.ir/uploads/58616_InShot__.png" alt="تصویر 3"></div>
-        <!-- عکس شماره چهار (از راست) حذف شد -->
         <div class="gallery-img-btn" data-img="5"><img src="https://cdn.imgurl.ir/uploads/l33891_InShot__.png" alt="تصویر 5"></div>
     </div>
 
@@ -1183,17 +1115,16 @@
         let currentUserId = '';
         let currentUsername = '';
         let currentCoins = 8300;
+        let currentGems = 1250;
         
         let ablyClient = null;
         let lobbyChannel = null;
         
-        // ==================== سیستم صوتی ====================
+        // ==================== سیستم صوتی (بدون تاریخچه) ====================
         let voiceChannel = null;
         let mediaRecorder = null;
         let isVoiceRecording = false;
         let voiceAudioContext = null;
-        let voiceHistory = [];
-        let voiceNextId = 1;
         let currentVoiceLobbyId = null;
         
         const avatarImg = document.getElementById('userAvatar');
@@ -1201,98 +1132,14 @@
         const coinsSpan = document.getElementById('coinsValue');
         const usernameDisplaySpan = document.getElementById('usernameDisplay');
         
-        // توابع صوتی (بدون تغییر)
         function voiceAddLog(msg, isError = false) {
             const time = new Date().toLocaleTimeString('fa-IR');
             console.log(`${isError ? '❌' : '✅'} [${time}] ${msg}`);
-            const logContainer = document.getElementById('logContainer');
-            if(logContainer) {
-                const div = document.createElement('div');
-                div.textContent = `${isError ? '❌' : '✅'} [${time}] ${msg}`;
-                div.style.color = isError ? '#ff9e8f' : '#aaffcc';
-                div.style.marginBottom = '4px';
-                div.style.fontSize = '0.7rem';
-                logContainer.appendChild(div);
-                logContainer.scrollTop = logContainer.scrollHeight;
-            }
         }
         
-        function voiceFormatTime(date) {
-            return `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}:${date.getSeconds().toString().padStart(2,'0')}`;
-        }
-        
-        function voicePlayFromBase64(base64String, mimeType) {
-            if (!base64String) return;
-            try {
-                const binaryStr = atob(base64String);
-                const bytes = new Uint8Array(binaryStr.length);
-                for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
-                const blob = new Blob([bytes], { type: mimeType || 'audio/webm' });
-                const audioUrl = URL.createObjectURL(blob);
-                const audio = new Audio();
-                audio.src = audioUrl;
-                audio.play();
-                audio.onended = () => URL.revokeObjectURL(audioUrl);
-                voiceAddLog(`🔊 پخش صدای ذخیره شده`);
-            } catch(e) {
-                voiceAddLog(`خطا در پخش: ${e.message}`, true);
-            }
-        }
-        
-        function voiceAddToHistory(type, base64Data, mimeType) {
-            const id = voiceNextId++;
-            const timestamp = new Date();
-            const timeStr = voiceFormatTime(timestamp);
-            
-            voiceHistory.unshift({ id, type, base64: base64Data, mime: mimeType, timeStr });
-            voiceRenderHistory();
-            
-            voiceAddLog(`${type === 'local' ? '📤 صدای ارسالی' : '📥 صدای دریافتی'} در تاریخچه ذخیره شد - ${timeStr}`);
-        }
-        
-        function voiceRenderHistory() {
-            const container = document.getElementById('voiceHistoryList');
-            if(!container) return;
-            
-            if (voiceHistory.length === 0) {
-                container.innerHTML = '<div style="text-align:center;padding:15px;color:#888;">🎤 صدایی ذخیره نشده</div>';
-                return;
-            }
-            
-            container.innerHTML = '';
-            for (let item of voiceHistory) {
-                const div = document.createElement('div');
-                div.className = `voice-history-item ${item.type}`;
-                div.innerHTML = `
-                    <div style="flex:1;font-size:0.65rem;">
-                        <span style="color:#aaa;">${item.timeStr}</span>
-                        <span style="margin-right:8px;">${item.type === 'local' ? '📤 شما' : '📥 دیگران'}</span>
-                    </div>
-                    <button class="voice-play-btn" data-id="${item.id}">▶️</button>
-                `;
-                container.appendChild(div);
-            }
-            
-            document.querySelectorAll('.voice-play-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(btn.getAttribute('data-id'));
-                    const item = voiceHistory.find(i => i.id === id);
-                    if (item && item.base64) {
-                        voicePlayFromBase64(item.base64, item.mime);
-                    }
-                });
-            });
-        }
-        
-        function voiceClearHistory() {
-            voiceHistory = [];
-            voiceRenderHistory();
-            voiceAddLog('🗑️ تاریخچه صداها پاک شد');
-        }
-        
+        // پخش صدا - هر صدا یک Audio جدا (قاطی نمی‌شه)
         async function voicePlayReceived(base64String, mimeType) {
             if (!base64String) return;
-            voiceAddToHistory('remote', base64String, mimeType);
             
             try {
                 if (!voiceAudioContext) {
@@ -1307,7 +1154,7 @@
                 source.buffer = audioBuffer;
                 source.connect(voiceAudioContext.destination);
                 source.start();
-                voiceAddLog(`🔊 پخش خودکار صدا (${Math.round(audioBuffer.duration)} ثانیه)`);
+                voiceAddLog(`🔊 پخش صدا (${Math.round(audioBuffer.duration)} ثانیه)`);
             } catch(e) {
                 try {
                     const binaryStr = atob(base64String);
@@ -1366,7 +1213,6 @@
                                 if (err) voiceAddLog(`ارسال ناموفق: ${err.message}`, true);
                                 else voiceAddLog(`📤 صدا ارسال شد`);
                             });
-                            voiceAddToHistory('local', base64, mimeType);
                         }
                     };
                     reader.readAsDataURL(fullBlob);
@@ -1413,8 +1259,6 @@
         function voiceInitForLobby(lobbyId) {
             if(currentVoiceLobbyId === lobbyId) return;
             currentVoiceLobbyId = lobbyId;
-            voiceHistory = [];
-            voiceNextId = 1;
             
             if(voiceChannel) {
                 try { voiceChannel.unsubscribe(); } catch(e) {}
@@ -1434,8 +1278,6 @@
                 if(err) voiceAddLog(`خطا در کانال صوتی: ${err.message}`, true);
                 else voiceAddLog(`📡 کانال صوتی لابی آماده است`);
             });
-            
-            voiceRenderHistory();
         }
         
         function voiceCleanup() {
@@ -1489,31 +1331,6 @@
             } catch(e) {
                 console.error('Init error:', e);
             }
-        }
-        
-        function initLocalSyncFallback() {
-            if(window.BroadcastChannel) {
-                try {
-                    const bc = new BroadcastChannel('mafia-lobbies-fallback');
-                    bc.onmessage = (event) => {
-                        if(event.data && event.data.sender !== currentUserId) {
-                            handleSyncMessage(event.data);
-                        }
-                    };
-                    window.fallbackChannel = bc;
-                } catch(e) {}
-            }
-            window.addEventListener('storage', (event) => {
-                if(event.key === 'mafiaLobbiesFallback' && event.newValue) {
-                    const newLobbies = JSON.parse(event.newValue);
-                    if(JSON.stringify(lobbies) !== JSON.stringify(newLobbies)) {
-                        lobbies = newLobbies;
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) {
-                            window.currentLobbyPage.refreshList();
-                        }
-                    }
-                }
-            });
         }
         
         function handleSyncMessage(data) {
@@ -1585,9 +1402,6 @@
         function broadcastMessage(message) {
             if(lobbyChannel) {
                 try { lobbyChannel.publish('lobby-event', message); } catch(e) {}
-            }
-            if(window.fallbackChannel) {
-                try { window.fallbackChannel.postMessage(message); } catch(e) {}
             }
             if(message.type === 'lobby-update' || message.type === 'lobbies-list') {
                 localStorage.setItem('mafiaLobbiesFallback', JSON.stringify(message.lobbies || lobbies));
@@ -1719,15 +1533,6 @@
                             <button class="lobby-action-btn ready-btn" id="readyActionBtn">آماده هستم</button>
                             <button class="lobby-action-btn mic-btn" id="voiceMicBtn">🎙️ میکروفون</button>
                         </div>
-                        <div class="voice-history-panel" id="voiceHistoryPanel">
-                            <div class="voice-history-header">
-                                <span>📋 تاریخچه صداها</span>
-                                <button class="clear-voice-history" id="clearVoiceHistoryBtn">🗑️ پاک</button>
-                            </div>
-                            <div class="voice-history-list" id="voiceHistoryList">
-                                <div style="text-align:center;padding:15px;color:#888;">🎤 صدایی ذخیره نشده</div>
-                            </div>
-                        </div>
                     </div>
                 `;
                 
@@ -1769,11 +1574,6 @@
                     }
                     micBtn.onclick = () => voiceToggleRecording();
                 }
-                
-                const clearVoiceBtn = document.getElementById('clearVoiceHistoryBtn');
-                if(clearVoiceBtn) clearVoiceBtn.onclick = () => voiceClearHistory();
-                
-                voiceRenderHistory();
                 
                 const exitBtn = document.getElementById('exitLobbyBtn');
                 if(exitBtn) exitBtn.onclick = () => {
@@ -1913,7 +1713,6 @@
         
         // ==================== توابع مربوط به دکمه جدید و مودال تار ====================
         function showBlurModal() {
-            // ایجاد مودال با پس‌زمینه تار
             const modalDiv = document.createElement('div');
             modalDiv.className = 'blur-modal';
             modalDiv.innerHTML = `
@@ -1932,34 +1731,11 @@
             `;
             document.body.appendChild(modalDiv);
             
-            // دکمه رفتن به بخش لابی‌ها (دوستانه)
-            document.getElementById('modalBtnFriends').onclick = () => {
-                modalDiv.remove();
-                showFriendsPage();
-            };
-            
-            // دکمه‌های "به زودی"
-            document.getElementById('modalBtnSoon1').onclick = () => {
-                showToast('🚧 به زودی...');
-                modalDiv.remove();
-            };
-            
-            document.getElementById('modalBtnSoon2').onclick = () => {
-                showToast('🚧 به زودی...');
-                modalDiv.remove();
-            };
-            
-            // دکمه بستن مودال
-            document.getElementById('closeModalBtn').onclick = () => {
-                modalDiv.remove();
-            };
-            
-            // بستن با کلیک روی background
-            modalDiv.addEventListener('click', (e) => {
-                if (e.target === modalDiv) {
-                    modalDiv.remove();
-                }
-            });
+            document.getElementById('modalBtnFriends').onclick = () => { modalDiv.remove(); showFriendsPage(); };
+            document.getElementById('modalBtnSoon1').onclick = () => { showToast('🚧 به زودی...'); modalDiv.remove(); };
+            document.getElementById('modalBtnSoon2').onclick = () => { showToast('🚧 به زودی...'); modalDiv.remove(); };
+            document.getElementById('closeModalBtn').onclick = () => { modalDiv.remove(); };
+            modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
         }
         
         // ==================== بخش اصلی ====================
@@ -1974,15 +1750,58 @@
         const galleryBtns = document.querySelectorAll('.gallery-img-btn');
         const profileBtn = document.getElementById('profileBtn');
         
-        const DAILY_PACKS = [{ id: 0, coins: 250, name: "نقره‌ای", emoji: "🥈" },{ id: 1, coins: 500, name: "طلایی", emoji: "🌟" },{ id: 2, coins: 100, name: "الماسی", emoji: "💎" },{ id: 3, coins: 150, name: "رویایی", emoji: "✨" }];
+        const DAILY_PACKS = [{ id: 0, coins: 250, gems: 50, name: "نقره‌ای", emoji: "🥈" },{ id: 1, coins: 500, gems: 100, name: "طلایی", emoji: "🌟" },{ id: 2, coins: 100, gems: 200, name: "الماسی", emoji: "💎" },{ id: 3, coins: 150, gems: 75, name: "رویایی", emoji: "✨" }];
         
         function updateCoins() { coinsSpan.innerText = toPersianNumber(currentCoins); }
-        function loadCurrencies() { let gems = localStorage.getItem('userGems') || 1250; let coins = localStorage.getItem('userCoins') || 8300; localStorage.setItem('userGems', gems); localStorage.setItem('userCoins', coins); gemsSpan.innerText = toPersianNumber(Number(gems)); currentCoins = Number(coins); updateCoins(); }
-        function addCoins(amount) { let val = parseInt(localStorage.getItem('userCoins')) || 0; val += amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return val; }
-        function removeCoins(amount) { let val = parseInt(localStorage.getItem('userCoins')) || 0; if(val >= amount) { val -= amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return true; } return false; }
+        function updateGems() { gemsSpan.innerText = toPersianNumber(currentGems); }
+        
+        function loadCurrencies() { 
+            let gems = localStorage.getItem('userGems'); 
+            let coins = localStorage.getItem('userCoins'); 
+            if(gems === null) gems = 1250; else gems = parseInt(gems);
+            if(coins === null) coins = 8300; else coins = parseInt(coins);
+            localStorage.setItem('userGems', gems); 
+            localStorage.setItem('userCoins', coins); 
+            currentGems = gems; 
+            currentCoins = coins; 
+            updateGems(); 
+            updateCoins(); 
+        }
+        
+        function addCoins(amount) { 
+            let val = currentCoins; 
+            val += amount; 
+            localStorage.setItem('userCoins', val); 
+            currentCoins = val; 
+            updateCoins(); 
+            return val; 
+        }
+        
+        function addGems(amount) { 
+            let val = currentGems; 
+            val += amount; 
+            localStorage.setItem('userGems', val); 
+            currentGems = val; 
+            updateGems(); 
+            return val; 
+        }
+        
+        function removeCoins(amount) { 
+            let val = currentCoins; 
+            if(val >= amount) { 
+                val -= amount; 
+                localStorage.setItem('userCoins', val); 
+                currentCoins = val; 
+                updateCoins(); 
+                return true; 
+            } 
+            return false; 
+        }
+        
         function getPackStatus() { let last = localStorage.getItem('dailyPackClaims'); if(!last) return {}; try { return JSON.parse(last); } catch(e) { return {}; } }
         function updatePackStatus(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); s[id] = today; localStorage.setItem('dailyPackClaims', JSON.stringify(s)); }
         function canClaimPack(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); return !s[id] || s[id] !== today; }
+        
         function showToast(msg, dur = 2500) { 
             const t = document.createElement('div'); 
             t.className = 'toast-msg'; 
@@ -2109,7 +1928,27 @@
             const page = document.createElement('div'); page.className = 'shop-page';
             page.innerHTML = `<div class="shop-main-content"><div class="shop-header"><h1>🏪 بازار سیاه</h1><p>✨ بسته روزانه ✨</p></div><div class="packs-grid" id="packsGrid"></div><button class="shop-gift-btn" id="giftBtn">🎁 هدیه سکه</button><button class="close-shop-btn">🔙 خروج</button></div>`;
             document.body.appendChild(page);
-            function render() { const grid = document.getElementById('packsGrid'); if(!grid) return; grid.innerHTML = ''; DAILY_PACKS.forEach(p => { const avail = canClaimPack(p.id); const card = document.createElement('div'); card.className = `mafia-pack-card ${!avail ? 'disabled-pack' : ''}`; card.innerHTML = `<div class="pack-icon">${p.emoji}</div><div class="pack-coins">+${toPersianNumber(p.coins)} <span>سکه</span></div><div class="pack-name">${p.name}</div><div class="pack-status">${avail ? '🔥 دریافت' : '✅ انجام شد'}</div>`; if(avail) { card.onclick = () => { addCoins(p.coins); updatePackStatus(p.id); showToast(`🎁 +${toPersianNumber(p.coins)} سکه`); render(); }; } grid.appendChild(card); }); }
+            function render() { 
+                const grid = document.getElementById('packsGrid'); 
+                if(!grid) return; 
+                grid.innerHTML = ''; 
+                DAILY_PACKS.forEach(p => { 
+                    const avail = canClaimPack(p.id); 
+                    const card = document.createElement('div'); 
+                    card.className = `mafia-pack-card ${!avail ? 'disabled-pack' : ''}`; 
+                    card.innerHTML = `<div class="pack-icon">${p.emoji}</div><div class="pack-coins">+${toPersianNumber(p.coins)} <span>سکه</span> &nbsp; +${toPersianNumber(p.gems)} <span style="color:#ff88ff;">💎الماس</span></div><div class="pack-name">${p.name}</div><div class="pack-status">${avail ? '🔥 دریافت' : '✅ انجام شد'}</div>`; 
+                    if(avail) { 
+                        card.onclick = () => { 
+                            addCoins(p.coins); 
+                            addGems(p.gems); 
+                            updatePackStatus(p.id); 
+                            showToast(`🎁 +${toPersianNumber(p.coins)} سکه و +${toPersianNumber(p.gems)} الماس`); 
+                            render(); 
+                        }; 
+                    } 
+                    grid.appendChild(card); 
+                }); 
+            }
             render();
             document.getElementById('giftBtn').onclick = () => showGift();
             page.querySelector('.close-shop-btn').onclick = () => page.remove();
@@ -2149,7 +1988,6 @@
         saveBtn.onclick = saveUser;
         usernameInput.onkeypress = (e) => { if(e.key === 'Enter') saveUser(); };
         
-        // اتصال رویدادها
         if(centerMainBtn) centerMainBtn.onclick = (e) => { e.stopPropagation(); showBlurModal(); };
         if(shopButton) shopButton.onclick = (e) => { e.stopPropagation(); showShop(); };
         if(profileBtn) profileBtn.onclick = (e) => { e.stopPropagation(); showProfile(); };
