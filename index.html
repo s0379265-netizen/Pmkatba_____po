@@ -16,13 +16,91 @@
 
         body {
             min-height: 100vh;
-            background: url('https://cdn.imgurl.ir/uploads/f27572_IMG_20260513_141855_181.jpg') no-repeat center center fixed;
+            background: url('https://cdn.imgurl.ir/uploads/z706998_IMG_20260603_070123_792.jpg') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Segoe UI', 'IRANSans', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+        }
+
+        /* مودال جدید با پس‌زمینه تار */
+        .blur-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1500;
+            animation: fadeInModal 0.3s ease;
+        }
+        
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-menu-container {
+            background: rgba(30, 30, 47, 0.9);
+            backdrop-filter: blur(5px);
+            border-radius: 40px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            border: 2px solid rgba(255, 215, 0, 0.7);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            width: 85%;
+            max-width: 350px;
+        }
+        
+        .modal-menu-btn {
+            width: 100%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        
+        .modal-menu-btn:active {
+            transform: scale(0.96);
+        }
+        
+        .modal-menu-btn img {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            filter: drop-shadow(0 5px 12px rgba(0,0,0,0.3));
+            border-radius: 20px;
+        }
+        
+        .close-modal-btn {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+            width: auto;
+            min-width: 120px;
+        }
+        
+        .close-modal-btn:active {
+            transform: scale(0.95);
         }
 
         .modal {
@@ -75,24 +153,116 @@
         .currency-emoji { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
         .currency-value { font-size: 1.3rem; font-weight: bold; color: #ffd966; text-shadow: 0 1px 2px black; letter-spacing: 1px; }
 
+        /* استایل پنل کاربری */
         .user-panel {
             position: fixed;
             top: 85px;
             left: 20px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             z-index: 200;
-            direction: ltr;
             cursor: pointer;
+            gap: 8px;
         }
 
-        .instagram-story-ring-wrapper { position: relative; width: 92px; height: 92px; flex-shrink: 0; }
-        .instagram-story-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(from 0deg, #ffdc80, #f09433, #e6683c, #dc2743, #cc2366, #bc1888, #cc2366, #dc2743, #e6683c, #f09433, #ffdc80); padding: 3px; animation: rotateRing 3s linear infinite; z-index: 1; filter: brightness(1.2) saturate(1.4); }
-        .instagram-story-ring::before { content: ''; position: absolute; inset: -4px; border-radius: 50%; background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.4), rgba(255, 200, 100, 0.6), rgba(255, 100, 100, 0.4), rgba(255, 255, 255, 0.3), transparent); animation: rotateRing 2s linear infinite; z-index: -1; filter: blur(6px); }
-        @keyframes rotateRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .avatar-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 82px; height: 82px; border-radius: 50%; background: #1a1a2e; display: flex; align-items: center; justify-content: center; z-index: 2; padding: 3px; }
-        .avatar { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background-color: #2c2c3a; display: block; border: 2px solid rgba(255, 255, 255, 0.15); }
-        .username-bar { background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(20px); padding: 0.9rem 1.8rem 0.9rem 2.2rem; border-radius: 0 50px 50px 0; color: white; font-size: 1.3rem; font-weight: bold; letter-spacing: 0.5px; border: 1px solid rgba(255, 255, 255, 0.25); border-left: none; margin-left: -14px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); white-space: nowrap; max-width: 250px; overflow-x: auto; scrollbar-width: thin; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); }
+        .instagram-story-ring-wrapper { 
+            position: relative; 
+            width: 92px; 
+            height: 92px; 
+            flex-shrink: 0; 
+        }
+        .instagram-story-ring { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            border-radius: 50%; 
+            background: conic-gradient(from 0deg, #ffdc80, #f09433, #e6683c, #dc2743, #cc2366, #bc1888, #cc2366, #dc2743, #e6683c, #f09433, #ffdc80); 
+            padding: 3px; 
+            animation: rotateRing 3s linear infinite; 
+            z-index: 1; 
+            filter: brightness(1.2) saturate(1.4); 
+        }
+        .instagram-story-ring::before { 
+            content: ''; 
+            position: absolute; 
+            inset: -4px; 
+            border-radius: 50%; 
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.4), rgba(255, 200, 100, 0.6), rgba(255, 100, 100, 0.4), rgba(255, 255, 255, 0.3), transparent); 
+            animation: rotateRing 2s linear infinite; 
+            z-index: -1; 
+            filter: blur(6px); 
+        }
+        @keyframes rotateRing { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        .avatar-container { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 82px; 
+            height: 82px; 
+            border-radius: 50%; 
+            background: #1a1a2e; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 2; 
+            padding: 3px; 
+        }
+        .avatar { 
+            width: 76px; 
+            height: 76px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            background-color: #2c2c3a; 
+            display: block; 
+            border: 2px solid rgba(255, 255, 255, 0.15); 
+        }
+        
+        /* قاب نام کاربری */
+        .username-frame {
+            position: relative;
+            width: 140px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        .username-bg-img {
+            width: 100%;
+            display: block;
+            border-radius: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+        .username-text-on-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1rem;
+            font-family: inherit;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            background-color: transparent;
+            border-radius: 20px;
+            text-align: center;
+            white-space: nowrap;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            letter-spacing: normal;
+            padding: 0 5px;
+        }
+        .username-text-on-image::-webkit-scrollbar {
+            height: 2px;
+        }
 
         .right-vertical-gallery {
             position: fixed;
@@ -114,16 +284,99 @@
         .gallery-img-btn img { width: 130px; height: auto; max-height: 145px; object-fit: cover; display: block; pointer-events: none; border: none; }
         .gallery-img-btn:active { transform: scale(0.94); }
 
-        .top-row { position: fixed; bottom: 170px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 60px; z-index: 200; direction: rtl; }
-        .top-btn { cursor: pointer; background: transparent; border: none; padding: 0; margin: 0; outline: none; }
-        .top-btn img { max-width: 320px; max-height: 320px; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6)); pointer-events: none; }
-        .top-btn:active { transform: scale(0.94); }
+        /* نوار بالایی جدید - فقط یک دکمه مرکزی */
+        .top-row {
+            position: fixed;
+            bottom: 170px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            direction: rtl;
+        }
+        
+        .center-main-btn {
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            transition: transform 0.2s ease;
+        }
+        
+        .center-main-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .center-main-btn img {
+            max-width: 320px;
+            max-height: 320px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
+            pointer-events: none;
+        }
 
-        .bottom-group { position: fixed; bottom: 20px; left: 0; right: 0; display: flex; justify-content: center; z-index: 200; direction: rtl; }
-        .bottom-images { display: flex; justify-content: center; align-items: flex-end; gap: 0; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); border-radius: 30px; padding: 8px 12px; border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-        .bottom-btn { cursor: pointer; background: transparent; border: none; padding: 0; margin: 0; outline: none; display: inline-block; }
-        .bottom-btn img { max-width: 170px; max-height: 170px; object-fit: contain; display: block; pointer-events: none; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
-        .bottom-btn:active { transform: scale(0.95); }
+        /* استایل برای سه عکس پایین - کادر زرد */
+        .bottom-group {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 200;
+            direction: rtl;
+            background: linear-gradient(145deg, #ffd966, #ffb347);
+            padding: 12px 0 15px 0;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+            border-top: 3px solid rgba(255,215,0,0.8);
+        }
+        
+        .bottom-images {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 15px;
+            background: transparent;
+            backdrop-filter: none;
+            border-radius: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .bottom-btn {
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        
+        .bottom-btn img {
+            max-width: 140px;
+            max-height: 140px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            border-radius: 15px;
+        }
+        
+        .bottom-btn:active {
+            transform: scale(0.95);
+        }
 
         /* فروشگاه و سایر صفحات */
         .shop-page {
@@ -461,7 +714,6 @@
             box-shadow: 0 0 15px rgba(255,0,0,0.4);
         }
         
-        /* استایل دکمه میکروفون شبیه همان کد قبلی */
         .mic-btn {
             background: linear-gradient(135deg, #2A2F42, #1E2335);
             color: #ffb4a2;
@@ -484,7 +736,6 @@
             100% { transform: scale(1); }
         }
         
-        /* پنل تاریخچه صدا در لابی */
         .voice-history-panel {
             position: absolute;
             bottom: 100px;
@@ -842,13 +1093,16 @@
             .developer-title { font-size: 1.3rem; }
             .developer-name { font-size: 1.1rem; }
             .refresh-lobbies-btn { padding: 10px 18px; font-size: 0.9rem; max-width: 200px; }
+            .username-frame { width: 110px; }
+            .username-text-on-image { font-size: 0.8rem; }
+            .center-main-btn img { max-width: 200px; max-height: 200px; }
         }
         
-        @media (max-width: 600px) { .packs-grid { gap: 16px; padding: 0 15px; } .pack-icon { font-size: 2.8rem; } .pack-coins { font-size: 1.4rem; } .pack-name { font-size: 0.8rem; } .shop-header h1 { font-size: 1.9rem; } .close-shop-btn { font-size: 1rem; padding: 10px 24px; } .toast-msg { font-size: 0.8rem; white-space: normal; text-align: center; width: 80%; } }
-        @media (max-width: 450px) { .packs-grid { gap: 12px; } .mafia-pack-card { padding: 15px 8px; } .pack-icon { font-size: 2.4rem; } .pack-coins { font-size: 1.2rem; } }
-        @media (max-width: 900px) { .top-btn img { max-width: 240px; max-height: 240px; } .top-row { gap: 40px; bottom: 150px; } .currency-value { font-size: 1rem; } .instagram-story-ring-wrapper { width: 84px; height: 84px; } .avatar-container { width: 74px; height: 74px; } .avatar { width: 68px; height: 68px; } .gallery-img-btn img { width: 110px; max-height: 125px; } }
-        @media (max-width: 700px) { .instagram-story-ring-wrapper { width: 78px; height: 78px; } .avatar-container { width: 68px; height: 68px; } .avatar { width: 62px; height: 62px; } .username-bar { font-size: 1rem; padding: 0.6rem 1.4rem 0.6rem 1.8rem; max-width: 180px; } .top-btn img { max-width: 190px; max-height: 190px; } .bottom-btn img { max-width: 130px; max-height: 130px; } .top-row { gap: 30px; bottom: 130px; } .gallery-img-btn img { width: 95px; max-height: 105px; } }
-        @media (max-width: 550px) { .top-btn img { max-width: 150px; max-height: 150px; } .bottom-btn img { max-width: 105px; max-height: 105px; } .top-row { gap: 20px; bottom: 110px; } .gallery-img-btn img { width: 80px; max-height: 90px; } }
+        @media (max-width: 600px) { .packs-grid { gap: 16px; padding: 0 15px; } .pack-icon { font-size: 2.8rem; } .pack-coins { font-size: 1.4rem; } .pack-name { font-size: 0.8rem; } .shop-header h1 { font-size: 1.9rem; } .close-shop-btn { font-size: 1rem; padding: 10px 24px; } .toast-msg { font-size: 0.8rem; white-space: normal; text-align: center; width: 80%; } .center-main-btn img { max-width: 180px; max-height: 180px; } }
+        @media (max-width: 450px) { .packs-grid { gap: 12px; } .mafia-pack-card { padding: 15px 8px; } .pack-icon { font-size: 2.4rem; } .pack-coins { font-size: 1.2rem; } .center-main-btn img { max-width: 150px; max-height: 150px; } }
+        @media (max-width: 900px) { .top-row { bottom: 150px; } .currency-value { font-size: 1rem; } .instagram-story-ring-wrapper { width: 84px; height: 84px; } .avatar-container { width: 74px; height: 74px; } .avatar { width: 68px; height: 68px; } .gallery-img-btn img { width: 110px; max-height: 125px; } .bottom-btn img { max-width: 100px; max-height: 100px; } .username-frame { width: 120px; } .center-main-btn img { max-width: 240px; max-height: 240px; } }
+        @media (max-width: 700px) { .instagram-story-ring-wrapper { width: 78px; height: 78px; } .avatar-container { width: 68px; height: 68px; } .avatar { width: 62px; height: 62px; } .username-frame { width: 110px; } .username-text-on-image { font-size: 0.75rem; } .top-row { bottom: 130px; } .bottom-btn img { max-width: 85px; max-height: 85px; } .gallery-img-btn img { width: 95px; max-height: 105px; } .center-main-btn img { max-width: 190px; max-height: 190px; } }
+        @media (max-width: 550px) { .top-row { bottom: 110px; } .bottom-btn img { max-width: 70px; max-height: 70px; } .gallery-img-btn img { width: 80px; max-height: 90px; } .username-frame { width: 95px; } .username-text-on-image { font-size: 0.65rem; } .center-main-btn img { max-width: 150px; max-height: 150px; } }
     </style>
 </head>
 <body>
@@ -856,7 +1110,7 @@
     <div id="usernameModal" class="modal">
         <div class="modal-content">
             <h2>🎮 انتخاب نام کاربری 🎮</h2>
-            <input type="text" id="usernameInput" placeholder="نام خود را وارد کنید..." maxlength="20" autocomplete="off">
+            <input type="text" id="usernameInput" placeholder="نام خود را وارد کنید..." maxlength="8" autocomplete="off">
             <button id="saveNameBtn">ورود به بازی</button>
         </div>
     </div>
@@ -872,29 +1126,40 @@
         </div>
     </div>
 
+    <!-- پنل کاربری -->
     <div class="user-panel" id="profileBtn">
-        <div class="instagram-story-ring-wrapper"><div class="instagram-story-ring"></div><div class="avatar-container"><img class="avatar" id="userAvatar" src="https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg" alt="Avatar"></div></div>
-        <div class="username-bar" id="usernameDisplay">---</div>
+        <div class="instagram-story-ring-wrapper">
+            <div class="instagram-story-ring"></div>
+            <div class="avatar-container">
+                <img class="avatar" id="userAvatar" src="https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg" alt="Avatar">
+            </div>
+        </div>
+        <div class="username-frame">
+            <img class="username-bg-img" src="https://cdn.imgurl.ir/uploads/u505475_InShot__.png" alt="Name Frame">
+            <div class="username-text-on-image" id="usernameDisplay">---</div>
+        </div>
     </div>
 
     <div class="right-vertical-gallery" id="rightGallery">
         <div class="gallery-img-btn" data-img="1"><img src="https://cdn.imgurl.ir/uploads/y004260_InShot__.png" alt="تصویر 1"></div>
         <div class="gallery-img-btn" data-img="2"><img src="https://cdn.imgurl.ir/uploads/b855600_InShot__.png" alt="تصویر 2"></div>
         <div class="gallery-img-btn" data-img="3"><img src="https://cdn.imgurl.ir/uploads/58616_InShot__.png" alt="تصویر 3"></div>
-        <div class="gallery-img-btn" data-img="4"><img src="https://cdn.imgurl.ir/uploads/m347400_InShot__.png" alt="تصویر 4"></div>
+        <!-- عکس شماره چهار (از راست) حذف شد -->
         <div class="gallery-img-btn" data-img="5"><img src="https://cdn.imgurl.ir/uploads/l33891_InShot__.png" alt="تصویر 5"></div>
     </div>
 
+    <!-- نوار بالایی جدید - فقط یک دکمه مرکزی -->
     <div class="top-row">
-        <div class="top-btn" id="topRightBtn"><img src="https://cdn.imgurl.ir/uploads/t03630_InShot__.png" alt="عکس بالایی راست"></div>
-        <div class="top-btn" id="topLeftBtn"><img src="https://cdn.imgurl.ir/uploads/u338374_InShot__.png" alt="عکس بالایی چپ"></div>
+        <div class="center-main-btn" id="centerMainBtn">
+            <img src="https://cdn.imgurl.ir/uploads/u84671_InShot__.png" alt="منوی اصلی">
+        </div>
     </div>
 
     <div class="bottom-group">
         <div class="bottom-images">
-            <div class="bottom-btn" id="bottomRightImg"><img src="https://cdn.imgurl.ir/uploads/o580196_IMG_20260511_184033_171.jpg" alt="پایین راست"></div>
-            <div class="bottom-btn" id="bottomCenterImg"><img src="https://cdn.imgurl.ir/uploads/b267514_IMG_20260511_184145_633.jpg" alt="پایین وسط"></div>
-            <div class="bottom-btn" id="bottomLeftImg"><img src="https://cdn.imgurl.ir/uploads/d8154_IMG_20260511_184138_470.jpg" alt="پایین چپ"></div>
+            <div class="bottom-btn" id="bottomRightImg"><img src="https://cdn.imgurl.ir/uploads/a754787_InShot__.png" alt="پایین راست"></div>
+            <div class="bottom-btn" id="bottomCenterImg"><img src="https://cdn.imgurl.ir/uploads/j104819_InShot__.png" alt="پایین وسط"></div>
+            <div class="bottom-btn" id="bottomLeftImg"><img src="https://cdn.imgurl.ir/uploads/l4527_InShot__.png" alt="پایین چپ"></div>
         </div>
     </div>
 
@@ -922,7 +1187,7 @@
         let ablyClient = null;
         let lobbyChannel = null;
         
-        // ==================== سیستم صوتی (همون کدی که کار می‌کرد) ====================
+        // ==================== سیستم صوتی ====================
         let voiceChannel = null;
         let mediaRecorder = null;
         let isVoiceRecording = false;
@@ -934,12 +1199,12 @@
         const avatarImg = document.getElementById('userAvatar');
         const gemsSpan = document.getElementById('gemsValue');
         const coinsSpan = document.getElementById('coinsValue');
+        const usernameDisplaySpan = document.getElementById('usernameDisplay');
         
-        // توابع صوتی
+        // توابع صوتی (بدون تغییر)
         function voiceAddLog(msg, isError = false) {
             const time = new Date().toLocaleTimeString('fa-IR');
             console.log(`${isError ? '❌' : '✅'} [${time}] ${msg}`);
-            // می‌تونیم تو لاگ‌های بازی هم نشون بدیم
             const logContainer = document.getElementById('logContainer');
             if(logContainer) {
                 const div = document.createElement('div');
@@ -1646,13 +1911,63 @@
             refreshList();
         }
         
+        // ==================== توابع مربوط به دکمه جدید و مودال تار ====================
+        function showBlurModal() {
+            // ایجاد مودال با پس‌زمینه تار
+            const modalDiv = document.createElement('div');
+            modalDiv.className = 'blur-modal';
+            modalDiv.innerHTML = `
+                <div class="modal-menu-container">
+                    <button class="modal-menu-btn" id="modalBtnFriends">
+                        <img src="https://cdn.imgurl.ir/uploads/e07616_InShot__.png" alt="دوستانه">
+                    </button>
+                    <button class="modal-menu-btn" id="modalBtnSoon1">
+                        <img src="https://cdn.imgurl.ir/uploads/y07172_InShot__.png" alt="به زودی">
+                    </button>
+                    <button class="modal-menu-btn" id="modalBtnSoon2">
+                        <img src="https://cdn.imgurl.ir/uploads/y3996_InShot__.png" alt="به زودی">
+                    </button>
+                    <button class="close-modal-btn" id="closeModalBtn">✕ بستن</button>
+                </div>
+            `;
+            document.body.appendChild(modalDiv);
+            
+            // دکمه رفتن به بخش لابی‌ها (دوستانه)
+            document.getElementById('modalBtnFriends').onclick = () => {
+                modalDiv.remove();
+                showFriendsPage();
+            };
+            
+            // دکمه‌های "به زودی"
+            document.getElementById('modalBtnSoon1').onclick = () => {
+                showToast('🚧 به زودی...');
+                modalDiv.remove();
+            };
+            
+            document.getElementById('modalBtnSoon2').onclick = () => {
+                showToast('🚧 به زودی...');
+                modalDiv.remove();
+            };
+            
+            // دکمه بستن مودال
+            document.getElementById('closeModalBtn').onclick = () => {
+                modalDiv.remove();
+            };
+            
+            // بستن با کلیک روی background
+            modalDiv.addEventListener('click', (e) => {
+                if (e.target === modalDiv) {
+                    modalDiv.remove();
+                }
+            });
+        }
+        
         // ==================== بخش اصلی ====================
         const modal = document.getElementById('usernameModal');
         const usernameInput = document.getElementById('usernameInput');
         const saveBtn = document.getElementById('saveNameBtn');
-        const usernameDisplaySpan = document.getElementById('usernameDisplay');
-        const topRight = document.getElementById('topRightBtn');
-        const topLeft = document.getElementById('topLeftBtn');
+        
+        const centerMainBtn = document.getElementById('centerMainBtn');
         const bottomRight = document.getElementById('bottomRightImg');
         const bottomCenter = document.getElementById('bottomCenterImg');
         const shopButton = document.getElementById('bottomLeftImg');
@@ -1735,11 +2050,12 @@
                 d.remove();
                 const modalDiv = document.createElement('div');
                 modalDiv.className = 'profile-modal-full';
-                modalDiv.innerHTML = `<div class="profile-content-full" style="max-width: 350px;"><h2 style="color:#ffaa66; margin-bottom:20px; text-align:center;">تغییر نام کاربری</h2><input type="text" id="newNameInput" class="edit-name-input" placeholder="نام جدید..." maxlength="20" value="${currentUsername}"><div class="profile-actions" style="margin-top:20px;"><button class="profile-action-btn" id="confirmNameBtn">✅ تایید</button><button class="profile-action-btn" id="cancelNameBtn">❌ انصراف</button></div></div>`;
+                modalDiv.innerHTML = `<div class="profile-content-full" style="max-width: 350px;"><h2 style="color:#ffaa66; margin-bottom:20px; text-align:center;">تغییر نام کاربری</h2><input type="text" id="newNameInput" class="edit-name-input" placeholder="نام جدید..." maxlength="8" value="${currentUsername}"><div class="profile-actions" style="margin-top:20px;"><button class="profile-action-btn" id="confirmNameBtn">✅ تایید</button><button class="profile-action-btn" id="cancelNameBtn">❌ انصراف</button></div></div>`;
                 document.body.appendChild(modalDiv);
                 document.getElementById('confirmNameBtn').onclick = () => {
-                    const newName = document.getElementById('newNameInput').value.trim();
+                    let newName = document.getElementById('newNameInput').value.trim();
                     if(newName) {
+                        if(newName.length > 8) newName = newName.slice(0,8);
                         currentUsername = newName;
                         localStorage.setItem('gameUsername', currentUsername);
                         usernameDisplaySpan.innerText = currentUsername;
@@ -1803,7 +2119,7 @@
             const savedName = localStorage.getItem('gameUsername');
             const savedId = localStorage.getItem('userId');
             if(savedName && savedName.trim() !== "") {
-                currentUsername = savedName;
+                currentUsername = savedName.length > 8 ? savedName.slice(0,8) : savedName;
                 usernameDisplaySpan.innerText = currentUsername;
                 modal.style.display = 'none';
                 if(savedId) currentUserId = savedId;
@@ -1817,7 +2133,7 @@
         function saveUser() {
             let name = usernameInput.value.trim();
             if(!name) { alert("لطفاً نام خود را وارد کنید!"); return; }
-            if(name.length > 20) name = name.slice(0,20);
+            if(name.length > 8) name = name.slice(0,8);
             currentUsername = name;
             currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
             localStorage.setItem('gameUsername', currentUsername);
@@ -1832,13 +2148,14 @@
         
         saveBtn.onclick = saveUser;
         usernameInput.onkeypress = (e) => { if(e.key === 'Enter') saveUser(); };
+        
+        // اتصال رویدادها
+        if(centerMainBtn) centerMainBtn.onclick = (e) => { e.stopPropagation(); showBlurModal(); };
         if(shopButton) shopButton.onclick = (e) => { e.stopPropagation(); showShop(); };
         if(profileBtn) profileBtn.onclick = (e) => { e.stopPropagation(); showProfile(); };
-        if(topRight) topRight.onclick = (e) => { e.stopPropagation(); showFriendsPage(); };
         if(bottomRight) bottomRight.onclick = (e) => { e.stopPropagation(); showTeamPage(); };
         
         const silent = () => {};
-        if(topLeft) topLeft.onclick = silent;
         if(bottomCenter) bottomCenter.onclick = silent;
         galleryBtns.forEach(btn => btn.onclick = silent);
         
