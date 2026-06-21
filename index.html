@@ -1,2 +1,619 @@
-Metallica for saleoff.com 
-Mafia best daughter hall.com on youtube.com IP Erin filter.com
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Mafia Loader | ویژه فیلترشکن</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at 25% 20%, #03061a, #000000);
+      font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+    }
+
+    /* لایه پس زمینه سینمایی */
+    .background-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: cinematicZoom 7s ease-out forwards;
+      filter: brightness(1.1) contrast(1.07) saturate(1.12);
+    }
+
+    @keyframes cinematicZoom {
+      0% { transform: scale(1.1); opacity: 0; filter: brightness(0.85); }
+      14% { opacity: 1; }
+      100% { transform: scale(1); opacity: 1; filter: brightness(1.1); }
+    }
+
+    .background-layer.fade-out {
+      animation: elegantFade 0.85s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    @keyframes elegantFade {
+      0% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    /* اسپینر لوکس */
+    .loader-overlay {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      border-radius: 60px;
+      padding: 7px;
+      transition: opacity 0.4s;
+    }
+    .loader-overlay.hidden { opacity: 0; visibility: hidden; }
+
+    .spinner-modern {
+      position: relative;
+      width: 42px;
+      height: 42px;
+    }
+    .spinner-modern::before, .spinner-modern::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      animation: spinPremium 0.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    }
+    .spinner-modern::before {
+      inset: 0;
+      background: conic-gradient(from 0deg, #00ccff, #00f2fe, #4facfe, #aa55ff, #00ccff);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px));
+    }
+    .spinner-modern::after {
+      inset: 8px;
+      background: rgba(0, 188, 255, 0.3);
+      filter: blur(8px);
+      animation: spinPremium 0.9s ease-in-out infinite reverse;
+    }
+    @keyframes spinPremium { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* نوار پیشرفت ۳۰۰ درصدی */
+    .progress-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10000;
+      background: linear-gradient(135deg, rgba(3, 10, 28, 0.94), rgba(1, 5, 18, 0.88));
+      backdrop-filter: blur(20px);
+      padding: 22px 28px 28px;
+      border-top: 1px solid rgba(0, 210, 255, 0.55);
+      box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+      padding: 0 8px;
+    }
+    .progress-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #fff, #99ddff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+    .progress-percent {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00e0ff, #2a7eff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 8px rgba(0,160,255,0.3);
+    }
+
+    .progress-bar-wrapper { width: 100%; margin-bottom: 10px; }
+    .progress-bar-bg { width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
+    .progress-fill {
+      width: 0%; height: 100%;
+      background: linear-gradient(90deg, #00ccff, #3f8eff, #b266ff);
+      border-radius: 20px;
+      transition: width 0.05s linear;
+      box-shadow: 0 0 12px rgba(0,180,255,0.7);
+      position: relative;
+    }
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      animation: waveMove 1.5s ease-in-out infinite;
+    }
+    @keyframes waveMove { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding: 0 8px;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.73rem;
+      font-family: monospace;
+      color: rgba(80, 200, 255, 0.9);
+    }
+    .stat-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #00ccff;
+      animation: glowPulse 1.2s infinite alternate;
+    }
+    @keyframes glowPulse { 0% { opacity: 0.3; } 100% { opacity: 1; box-shadow: 0 0 6px #00ccff; } }
+
+    /* مسدودسازی داخلی ایران */
+    .iran-block-dialog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.98);
+      backdrop-filter: blur(40px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 30000;
+      animation: fadeStrong 0.4s ease;
+    }
+    @keyframes fadeStrong { from { opacity: 0; } to { opacity: 1; } }
+    .iran-block-content {
+      background: radial-gradient(ellipse at center, #1f0f0f, #080103);
+      border-radius: 70px;
+      padding: 50px 35px;
+      text-align: center;
+      max-width: 460px;
+      width: 88%;
+      border: 2px solid rgba(255, 90, 90, 0.8);
+      box-shadow: 0 0 70px rgba(255, 0, 0, 0.25);
+    }
+    .iran-icon { font-size: 85px; margin-bottom: 22px; filter: drop-shadow(0 0 12px #ff5555); }
+    .iran-title { font-size: 2rem; color: #ff6666; font-weight: 800; margin-bottom: 18px; letter-spacing: -0.5px; }
+    .iran-text { color: #ffcdcd; font-size: 1rem; margin-bottom: 28px; line-height: 1.7; }
+    .vpn-btn {
+      background: linear-gradient(105deg, #ff6644, #ff2222);
+      border: none;
+      padding: 15px 36px;
+      border-radius: 100px;
+      color: white;
+      font-weight: bold;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+      box-shadow: 0 8px 28px rgba(255, 40, 0, 0.5);
+    }
+    .vpn-btn:active { transform: scale(0.96); }
+
+    /* مسدودسازی آی‌پی‌های معمولی */
+    .blocked-screen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%; z-index: 20000;
+      background: radial-gradient(circle at center, #170a0a, #010101);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .blocked-content {
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(28px);
+      border-radius: 50px;
+      padding: 45px;
+      border: 1px solid #ff5e5e;
+      text-align: center;
+    }
+    .blocked-icon { font-size: 70px; margin-bottom: 20px; }
+    .blocked-title { font-size: 32px; color: #ff5e5e; font-weight: 800; margin-bottom: 12px; }
+    .blocked-text { color: #ffd0d0; font-size: 15px; margin-bottom: 8px; }
+    .blocked-ip { background: #2a0505; border-radius: 60px; padding: 6px 20px; margin-top: 22px; display: inline-block; font-family: monospace; }
+
+    .game-frame {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 1;
+      background: #000; opacity: 0; transition: opacity 0.5s ease;
+    }
+    .game-frame.visible { opacity: 1; }
+
+    .loading-dialog {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 30000;
+      background: rgba(0,0,0,0.94); backdrop-filter: blur(22px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .loading-dialog-content {
+      background: #101018cc; border-radius: 58px; padding: 38px; text-align: center;
+      border: 1px solid #00aaff66; width: 85%; max-width: 360px;
+    }
+    .loading-spinner {
+      width: 56px; height: 56px; border: 3px solid rgba(0,170,255,0.2); border-top: 3px solid #00e0ff;
+      border-radius: 50%; animation: spinLoad 0.9s linear infinite; margin: 0 auto 25px;
+    }
+    @keyframes spinLoad { 100% { transform: rotate(360deg); } }
+    .loading-text { color: #44ddff; font-size: 1rem; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+
+<div class="background-layer" id="bgLayer">
+  <img class="bg-image" src="https://cdn.imgurl.ir/uploads/u49616_AI_Image_1780044840219.jpg" alt="Background">
+</div>
+
+<div id="loaderOverlay" class="loader-overlay"><div class="spinner-modern"></div></div>
+
+<div class="progress-container" id="progressContainer">
+  <div class="progress-header">
+    <span class="progress-title">اتصال ایمن</span>
+    <span class="progress-percent" id="progressPercent">0%</span>
+  </div>
+  <div class="progress-bar-wrapper">
+    <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+  <div class="progress-stats">
+    <div class="stat-item"><div class="stat-dot"></div><span>درگاه امن</span></div>
+    <div class="stat-item"><div class="stat-dot"></div><span id="speedStat">بررسی موقعیت</span></div>
+    <div class="stat-item"><div class="stat-dot"></div><span id="timeStat">0s</span></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ======================== منابع ========================
+    const GAME_URL = "https://raw.githubusercontent.com/m65394660-sudo/Mfg9/refs/heads/main/Mafia_dark_shaot.html";
+    const BG_IMAGE_URL = "https://cdn.imgurl.ir/uploads/u49616_AI_Image_1780044840219.jpg";
+    
+    // لیست سیاه آی‌پی‌های ایران ( کل دامنه ایران مسدود می‌شود )
+    const IRAN_BLOCK_KEYWORDS = ["IR", "Iran", "Islamic Republic of Iran"];
+    let accessApproved = false;
+    let isGameLoaded = false;
+    let blockedDetected = false;
+    let monitorInterval = null;
+    let startTimer = Date.now();
+    
+    // المنت‌ها
+    const loaderDiv = document.getElementById('loaderOverlay');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercentSpan = document.getElementById('progressPercent');
+    const speedStatSpan = document.getElementById('speedStat');
+    const timeStatSpan = document.getElementById('timeStat');
+    const bgLayer = document.getElementById('bgLayer');
+    const progressContainer = document.getElementById('progressContainer');
+    
+    let currentProgress = 0, targetProgress = 0, animInterval = null;
+    
+    // ---------- دیالوگ ایران (بدون فیلترشکن) ----------
+    function showIranBlockDialog() {
+      const existing = document.querySelector('.iran-block-dialog');
+      if(existing) existing.remove();
+      const dialog = document.createElement('div');
+      dialog.className = 'iran-block-dialog';
+      dialog.innerHTML = `
+        <div class="iran-block-content">
+          <div class="iran-icon">🚫🇮🇷</div>
+          <div class="iran-title">دسترسی از ایران ممکن نیست</div>
+          <div class="iran-text">
+            این سرویس فقط از طریق فیلترشکن یا VPN معتبر قابل دسترسی است.<br>
+            لطفاً VPN خود را روشن کرده و دوباره تلاش کنید.
+          </div>
+          <button class="vpn-btn" id="vpnRetryGlobal">🔄 بررسی مجدد</button>
+        </div>
+      `;
+      document.body.appendChild(dialog);
+      document.getElementById('vpnRetryGlobal').onclick = () => {
+        dialog.remove();
+        startFullSecureCheck();
+      };
+    }
+    
+    // نمایش دیالوگ مسدودیت عادی (در صورت لزوم)
+    function showDefaultBlockScreen(ip) {
+      blockedDetected = true;
+      const bg = document.getElementById('bgLayer');
+      const prog = document.getElementById('progressContainer');
+      const load = document.getElementById('loaderOverlay');
+      if(bg) bg.style.display = 'none';
+      if(prog) prog.style.display = 'none';
+      if(load) load.style.display = 'none';
+      const divBlock = document.createElement('div');
+      divBlock.className = 'blocked-screen';
+      divBlock.innerHTML = `
+        <div class="blocked-content">
+          <div class="blocked-icon">⛔</div>
+          <div class="blocked-title">دسترسی مسدود شد</div>
+          <div class="blocked-text">آی‌پی شما در لیست سیاه قرار دارد.</div>
+          <div class="blocked-ip">${ip}</div>
+        </div>
+      `;
+      document.body.appendChild(divBlock);
+    }
+    
+    // ---------- پیشرفت نوار ----------
+    function updateUIProgress(percentVal) {
+      let displayVal = Math.min(300, Math.max(0, Math.floor(percentVal)));
+      let fillWidth = (displayVal / 300) * 100;
+      if(progressFill) progressFill.style.width = fillWidth + '%';
+      if(progressPercentSpan) progressPercentSpan.innerText = displayVal + '%';
+    }
+    function animateProgressSmooth() {
+      if(animInterval) clearInterval(animInterval);
+      animInterval = setInterval(() => {
+        if(currentProgress < targetProgress && !blockedDetected && accessApproved) {
+          let diff = targetProgress - currentProgress;
+          let step = diff > 70 ? Math.max(4, Math.floor(diff/15)) : Math.max(2, Math.floor(diff/7));
+          currentProgress = Math.min(currentProgress + step, targetProgress);
+          updateUIProgress(currentProgress);
+        } else if(currentProgress > targetProgress) {
+          currentProgress = Math.max(currentProgress - 2, targetProgress);
+          updateUIProgress(currentProgress);
+        } else if(animInterval) {
+          clearInterval(animInterval); animInterval = null;
+        }
+      }, 22);
+    }
+    function setProgressPercent(percent) {
+      if(blockedDetected || !accessApproved) return;
+      targetProgress = Math.min(300, Math.max(0, percent));
+      animateProgressSmooth();
+      let elapsed = (Date.now() - startTimer)/1000;
+      if(timeStatSpan && !blockedDetected && accessApproved) timeStatSpan.innerText = Math.floor(elapsed) + 's';
+      if(percent < 35) speedStatSpan.innerText = 'بررسی موقعیت';
+      else if(percent < 85) speedStatSpan.innerText = 'بارگیری امن';
+      else if(percent < 170) speedStatSpan.innerText = 'آماده‌سازی سرور';
+      else speedStatSpan.innerText = 'نهایی‌سازی';
+    }
+    
+    // ---------- دریافت موقعیت و مسدودسازی کامل ایران ----------
+    async function detectAndBlockIran() {
+      try {
+        // تلاش برای دریافت اطلاعات موقعیت دقیق
+        const geoApis = [
+          'https://ipapi.co/json/',
+          'https://ipwho.is/'
+        ];
+        for(let api of geoApis) {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 6000);
+          const resp = await fetch(api, { signal: controller.signal });
+          clearTimeout(timeoutId);
+          if(resp.ok) {
+            const data = await resp.json();
+            let countryCode = data.country_code || data.country || '';
+            if(IRAN_BLOCK_KEYWORDS.some(key => countryCode.includes(key) || countryCode === 'IR')) {
+              return true; // ایران شناسایی شد
+            }
+            return false;
+          }
+        }
+        // fallback: چک کردن آی‌پی از ipify (جهت احتیاط)
+        const ipResp = await fetch('https://api.ipify.org?format=json');
+        if(ipResp.ok) {
+          const ipData = await ipResp.json();
+          const ip = ipData.ip;
+          if(ip && (ip.startsWith('164.') || ip.includes('.'))) {
+            // بررسی تقریبی (در صورتی که api موقعیت جواب نده، صرفاً می‌گذاریم از روی vpn تست کند)
+            return false;
+          }
+        }
+        return false;
+      } catch(e) {
+        return false;
+      }
+    }
+    
+    // تست اینکه آیا VPN روشن است (امکان اتصال به سرورهای خارج)
+    async function isVpnActive() {
+      try {
+        const testUrls = ['https://www.google.com', 'https://www.cloudflare.com'];
+        for(let url of testUrls) {
+          const ctrl = new AbortController();
+          const tId = setTimeout(() => ctrl.abort(), 5500);
+          const res = await fetch(url, { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal });
+          clearTimeout(tId);
+          if(res !== null) return true;
+        }
+        return false;
+      } catch(e) {
+        return false;
+      }
+    }
+    
+    // دریافت آی‌پی برای مسدودیت‌های اضافه
+    async function getUserIP() {
+      try {
+        const resp = await fetch('https://api.ipify.org?format=json');
+        if(resp.ok) { const data = await resp.json(); return data.ip; }
+      } catch(e) {}
+      return 'unknown';
+    }
+    
+    // نمایش مسدودیت ایران
+    function renderIranBlock() {
+      const bg = document.getElementById('bgLayer');
+      const prog = document.getElementById('progressContainer');
+      const load = document.getElementById('loaderOverlay');
+      if(bg) bg.style.display = 'none';
+      if(prog) prog.style.display = 'none';
+      if(load) load.style.display = 'none';
+      showIranBlockDialog();
+    }
+    
+    // ---------- فرآیند اصلی: مسدودیت کامل ایران + اجباری بودن VPN ----------
+    async function finalSecureAccess() {
+      const loadingModal = document.createElement('div');
+      loadingModal.className = 'loading-dialog';
+      loadingModal.innerHTML = `<div class="loading-dialog-content"><div class="loading-spinner"></div><div class="loading-text">تأیید موقعیت جغرافیایی</div></div>`;
+      document.body.appendChild(loadingModal);
+      
+      try {
+        // 1 - بررسی موقعیت ایران
+        const isIran = await detectAndBlockIran();
+        if(isIran) {
+          loadingModal.remove();
+          renderIranBlock();
+          return false;
+        }
+        
+        // 2 - بررسی فیلترشکن (باید حتماً روشن باشد)
+        const vpnOn = await isVpnActive();
+        if(!vpnOn) {
+          loadingModal.remove();
+          renderIranBlock();  // همان دیالوگ ایران را نمایش می‌دهد که پیام VPN بدهد
+          return false;
+        }
+        
+        // 3 - (اختیاری) چک لیست سیاه دستی
+        const currentIp = await getUserIP();
+        const hardcodedBlocked = ["31.171.100.40"];
+        if(hardcodedBlocked.includes(currentIp)) {
+          loadingModal.remove();
+          showDefaultBlockScreen(currentIp);
+          return false;
+        }
+        
+        loadingModal.remove();
+        return true;
+      } catch(e) {
+        loadingModal.remove();
+        renderIranBlock();
+        return false;
+      }
+    }
+    
+    // مانیتورینگ پیوسته VPN بعد از ورود
+    function startVpnWatchdog() {
+      if(monitorInterval) clearInterval(monitorInterval);
+      monitorInterval = setInterval(async () => {
+        if(isGameLoaded || !accessApproved) return;
+        const vpnStillActive = await isVpnActive();
+        if(!vpnStillActive) {
+          accessApproved = false;
+          if(monitorInterval) clearInterval(monitorInterval);
+          renderIranBlock();
+        }
+      }, 6000);
+    }
+    
+    // ---------- بارگذاری بازی ----------
+    async function loadMainGame() {
+      if(blockedDetected || !accessApproved) return;
+      try {
+        setProgressPercent(8);
+        const ipCheck = await getUserIP();
+        if(ipCheck === "31.171.100.40") { showDefaultBlockScreen(ipCheck); return; }
+        setProgressPercent(22);
+        const bgLoad = new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+          img.src = BG_IMAGE_URL;
+        });
+        setProgressPercent(40);
+        const abortCtrl = new AbortController();
+        const timeoutId = setTimeout(() => abortCtrl.abort(), 9500);
+        const response = await fetch(GAME_URL, { mode: 'cors', cache: "force-cache", signal: abortCtrl.signal }).catch(() => null);
+        clearTimeout(timeoutId);
+        let finalHtml = "";
+        if(response && response.ok) {
+          finalHtml = await response.text();
+          setProgressPercent(135);
+        } else {
+          setProgressPercent(95);
+          finalHtml = `<html><body style="background:#0a0a1a;"><div style="color:#fff;text-align:center;margin-top:45vh;">بارگذاری مجدد ...</div><script>setTimeout(()=>location.reload(),1800);<\/script></body></html>`;
+        }
+        await bgLoad;
+        setProgressPercent(200);
+        const oldFrame = document.querySelector('.game-frame');
+        if(oldFrame) oldFrame.remove();
+        const iframe = document.createElement('iframe');
+        iframe.className = 'game-frame';
+        iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads allow-top-navigation');
+        iframe.setAttribute('allow', 'autoplay; fullscreen');
+        iframe.srcdoc = finalHtml;
+        iframe.onload = () => {
+          setProgressPercent(300);
+          iframe.classList.add('visible');
+          if(bgLayer) bgLayer.classList.add('fade-out');
+          if(progressContainer) {
+            progressContainer.style.transition = 'opacity 0.45s';
+            progressContainer.style.opacity = '0';
+            setTimeout(() => { if(progressContainer) progressContainer.style.display = 'none'; }, 500);
+          }
+          if(loaderDiv) loaderDiv.classList.add('hidden');
+          isGameLoaded = true;
+          if(monitorInterval) clearInterval(monitorInterval);
+        };
+        document.body.appendChild(iframe);
+        setTimeout(() => {
+          if(loaderDiv && !loaderDiv.classList.contains('hidden') && !blockedDetected && accessApproved) {
+            setProgressPercent(300);
+            iframe.classList.add('visible');
+            if(bgLayer) bgLayer.classList.add('fade-out');
+            if(progressContainer) {
+              progressContainer.style.opacity = '0';
+              setTimeout(() => { if(progressContainer) progressContainer.style.display = 'none'; }, 500);
+            }
+            loaderDiv.classList.add('hidden');
+          }
+        }, 2000);
+      } catch(e) {
+        if(!blockedDetected && accessApproved) {
+          const fallbackFrame = document.createElement('iframe');
+          fallbackFrame.className = 'game-frame';
+          fallbackFrame.src = GAME_URL;
+          fallbackFrame.onload = () => {
+            fallbackFrame.classList.add('visible');
+            if(bgLayer) bgLayer.classList.add('fade-out');
+            if(progressContainer) progressContainer.style.display = 'none';
+            if(loaderDiv) loaderDiv.classList.add('hidden');
+          };
+          document.body.appendChild(fallbackFrame);
+        }
+      }
+    }
+    
+    // شروع فرآیند امنیتی
+    async function startFullSecureCheck() {
+      const isSecure = await finalSecureAccess();
+      if(isSecure) {
+        accessApproved = true;
+        startVpnWatchdog();
+        loadMainGame();
+      }
+    }
+    
+    // رویداد شروع
+    window.addEventListener('DOMContentLoaded', () => {
+      requestAnimationFrame(() => {
+        startFullSecureCheck();
+      });
+    });
+  })();
+</script>
+</body>
+</html>
