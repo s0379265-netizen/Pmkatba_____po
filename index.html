@@ -687,6 +687,7 @@
             flex-wrap: wrap;
             justify-content: center;
             padding: 0 10px;
+            align-items: center;
         }
         
         .lobby-action-btn {
@@ -717,16 +718,16 @@
             box-shadow: 0 0 15px rgba(255,0,0,0.4);
         }
         
-        /* دکمه‌های جدید لایک، دیسلایک و میکروفون در یک کادر خاکستری */
+        /* کادر سیاه برای دکمه‌های لایک، دیسلایک، میکروفون و شروع */
         .action-group {
             display: flex;
-            gap: 10px;
-            background: rgba(50, 50, 60, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 8px 15px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            gap: 12px;
+            background: rgba(20, 20, 30, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 10px 18px;
+            border-radius: 60px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
             align-items: center;
         }
         
@@ -742,15 +743,15 @@
         }
         
         .action-btn:active {
-            transform: scale(0.9);
+            transform: scale(0.85);
         }
         
         .action-btn img {
-            width: 38px;
-            height: 38px;
+            width: 44px;
+            height: 44px;
             object-fit: contain;
             display: block;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
         }
         
         .action-btn .badge {
@@ -786,26 +787,60 @@
         }
         
         .mic-btn:active {
-            transform: scale(0.9);
+            transform: scale(0.85);
         }
         
         .mic-btn img {
-            width: 38px;
-            height: 38px;
+            width: 44px;
+            height: 44px;
             object-fit: contain;
             display: block;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
         }
         
         .mic-btn.mic-recording img {
-            filter: drop-shadow(0 0 8px rgba(255, 50, 50, 0.8));
+            filter: drop-shadow(0 0 12px rgba(255, 50, 50, 0.9));
             animation: micPulse 1s infinite;
         }
         
         @keyframes micPulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.08); }
             100% { transform: scale(1); }
+        }
+
+        /* دکمه شروع بازی */
+        .start-game-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            transition: transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .start-game-btn:active {
+            transform: scale(0.85);
+        }
+        
+        .start-game-btn img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(0, 200, 255, 0.3));
+        }
+        
+        .start-game-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(0.6);
+        }
+        
+        .start-game-btn:disabled:active {
+            transform: none;
         }
         
         .lobby-action-btn:active {
@@ -1101,8 +1136,8 @@
             .username-frame { width: 110px; }
             .username-text-on-image { font-size: 0.8rem; }
             .center-main-btn img { max-width: 200px; max-height: 200px; }
-            .action-btn img, .mic-btn img { width: 30px; height: 30px; }
-            .action-group { padding: 6px 10px; gap: 8px; }
+            .action-btn img, .mic-btn img, .start-game-btn img { width: 36px; height: 36px; }
+            .action-group { padding: 8px 12px; gap: 8px; }
         }
         
         @media (max-width: 600px) { .packs-grid { gap: 16px; padding: 0 15px; } .pack-icon { font-size: 2.8rem; } .pack-coins { font-size: 1.4rem; } .pack-name { font-size: 0.8rem; } .shop-header h1 { font-size: 1.9rem; } .close-shop-btn { font-size: 1rem; padding: 10px 24px; } .toast-msg { font-size: 0.8rem; white-space: normal; text-align: center; width: 80%; } .center-main-btn img { max-width: 180px; max-height: 180px; } }
@@ -1297,7 +1332,6 @@
                     const micBtn = document.getElementById('voiceMicBtn');
                     if(micBtn) {
                         micBtn.classList.remove('mic-recording');
-                        micBtn.innerHTML = '🎙️'; // متن خالی، فقط آیکون
                     }
                     voiceAddLog('⏹️ ضبط متوقف شد');
                 };
@@ -1307,7 +1341,6 @@
                 const micBtn = document.getElementById('voiceMicBtn');
                 if(micBtn) {
                     micBtn.classList.add('mic-recording');
-                    micBtn.innerHTML = '🎤'; // متن خالی، فقط آیکون
                 }
                 voiceAddLog('🎙️ در حال ضبط... برای پایان دوباره کلیک کنید');
                 
@@ -1592,6 +1625,8 @@
                     }
                 }
                 
+                const isOwner = currentLobby.ownerId === currentUserId;
+                
                 roomPage.innerHTML = `
                     <div class="room-table">
                         <div class="lobby-top-bar">
@@ -1619,6 +1654,11 @@
                                 <div class="action-btn-wrapper">
                                     <button class="mic-btn" id="voiceMicBtn">
                                         <img src="https://cdn.imgurl.ir/uploads/u151816_BackgroundEraser__.png" alt="میکروفون">
+                                    </button>
+                                </div>
+                                <div class="action-btn-wrapper">
+                                    <button class="start-game-btn" id="startGameBtn" ${!isOwner ? 'disabled' : ''}>
+                                        <img src="https://cdn.imgurl.ir/uploads/j419473_BackgroundEraser__.png" alt="شروع بازی">
                                     </button>
                                 </div>
                             </div>
@@ -1659,7 +1699,6 @@
                     likeBtn.onclick = (e) => {
                         e.stopPropagation();
                         showToast('👍 لایک کردید!');
-                        // افکت انیمیشن
                         likeBtn.style.transform = 'scale(0.8)';
                         setTimeout(() => { likeBtn.style.transform = 'scale(1)'; }, 200);
                     };
@@ -1687,7 +1726,6 @@
                     micBtn.onclick = (e) => {
                         e.stopPropagation();
                         voiceToggleRecording();
-                        // به‌روزرسانی وضعیت دکمه
                         setTimeout(() => {
                             if(isVoiceRecording) {
                                 micBtn.classList.add('mic-recording');
@@ -1696,6 +1734,25 @@
                             }
                         }, 100);
                     };
+                }
+                
+                // دکمه شروع بازی (فقط برای مالک لابی فعال است)
+                const startBtn = document.getElementById('startGameBtn');
+                if(startBtn) {
+                    if(!isOwner) {
+                        startBtn.disabled = true;
+                    } else {
+                        startBtn.disabled = false;
+                        startBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            if(currentLobby.players.length < 2) {
+                                showToast('❌ حداقل ۲ بازیکن نیاز است!');
+                                return;
+                            }
+                            showToast('🎮 بازی شروع شد!');
+                            // اینجا می‌توانید منطق شروع بازی را اضافه کنید
+                        };
+                    }
                 }
                 
                 const exitBtn = document.getElementById('exitLobbyBtn');
