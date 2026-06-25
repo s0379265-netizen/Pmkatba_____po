@@ -1,1154 +1,576 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>بازی من - فروشگاه ویژه</title>
-    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
-    <style>
-        /* تمام استایل‌های قبلی دقیقا مثل قبل است (جهت جلوگیری از طولانی شدن کد، استایل‌ها را حذف نکردم اما اینجا کپی کنید) */
-        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
-        body { min-height: 100vh; background: url('https://up.20script.ir/file/d19c-IMG-20260622-202833-351.jpg') no-repeat center center fixed; background-size: cover; font-family: 'Segoe UI', 'IRANSans', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; position: relative; }
-        .blur-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 1500; animation: fadeInModal 0.3s ease; }
-        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
-        .modal-menu-container { background: rgba(30, 30, 47, 0.9); backdrop-filter: blur(5px); border-radius: 40px; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; gap: 25px; border: 2px solid rgba(255, 215, 0, 0.7); box-shadow: 0 20px 40px rgba(0,0,0,0.4); width: 85%; max-width: 350px; }
-        .modal-menu-btn { width: 100%; cursor: pointer; transition: transform 0.2s ease; background: transparent; border: none; padding: 0; }
-        .modal-menu-btn:active { transform: scale(0.96); }
-        .modal-menu-btn img { width: 100%; max-width: 280px; height: auto; display: block; margin: 0 auto; filter: drop-shadow(0 5px 12px rgba(0,0,0,0.3)); border-radius: 20px; }
-        .close-modal-btn { background: linear-gradient(135deg, #ff4444, #cc0000); color: white; border: none; padding: 10px 25px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; width: auto; min-width: 120px; }
-        .close-modal-btn:active { transform: scale(0.95); }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: #1e1e2f; padding: 2rem; border-radius: 2rem; text-align: center; color: white; box-shadow: 0 20px 35px rgba(0,0,0,0.5); width: 90%; max-width: 350px; border: 1px solid rgba(255,255,255,0.2); }
-        .modal-content h2 { margin-bottom: 1.5rem; font-size: 1.8rem; }
-        .modal-content input { width: 100%; padding: 12px 15px; border-radius: 50px; border: none; outline: none; font-size: 1rem; text-align: center; margin-bottom: 1rem; font-family: inherit; }
-        .modal-content button { background: #ff9800; color: #1e1e2f; border: none; padding: 10px 20px; border-radius: 40px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
-        .top-bar { position: fixed; top: 0; left: 0; right: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center; padding: 12px 25px; z-index: 200; border-bottom: 1px solid rgba(255, 255, 255, 0.2); direction: ltr; }
-        .currency-item { display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.4); padding: 6px 18px; border-radius: 50px; backdrop-filter: blur(4px); }
-        .currency-emoji { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-        .currency-value { font-size: 1.3rem; font-weight: bold; color: #ffd966; text-shadow: 0 1px 2px black; letter-spacing: 1px; }
-        .user-panel { position: fixed; top: 85px; left: 20px; display: flex; flex-direction: column; align-items: center; z-index: 200; cursor: pointer; gap: 8px; }
-        .instagram-story-ring-wrapper { position: relative; width: 92px; height: 92px; flex-shrink: 0; }
-        .instagram-story-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(from 0deg, #ffdc80, #f09433, #e6683c, #dc2743, #cc2366, #bc1888, #cc2366, #dc2743, #e6683c, #f09433, #ffdc80); padding: 3px; animation: rotateRing 3s linear infinite; z-index: 1; filter: brightness(1.2) saturate(1.4); }
-        .instagram-story-ring::before { content: ''; position: absolute; inset: -4px; border-radius: 50%; background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.4), rgba(255, 200, 100, 0.6), rgba(255, 100, 100, 0.4), rgba(255, 255, 255, 0.3), transparent); animation: rotateRing 2s linear infinite; z-index: -1; filter: blur(6px); }
-        @keyframes rotateRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .avatar-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 82px; height: 82px; border-radius: 50%; background: #1a1a2e; display: flex; align-items: center; justify-content: center; z-index: 2; padding: 3px; }
-        .avatar { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background-color: #2c2c3a; display: block; border: 2px solid rgba(255, 255, 255, 0.15); }
-        .username-frame { position: relative; width: 140px; cursor: pointer; margin-top: 5px; }
-        .username-bg-img { width: 100%; display: block; border-radius: 20px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
-        .username-text-on-image { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: bold; font-size: 1rem; font-family: inherit; text-shadow: 0 1px 2px rgba(0,0,0,0.5); background-color: transparent; border-radius: 20px; text-align: center; white-space: nowrap; overflow-x: auto; scrollbar-width: thin; letter-spacing: normal; padding: 0 5px; }
-        .username-text-on-image::-webkit-scrollbar { height: 2px; }
-        .right-vertical-gallery { position: fixed; top: 54px; right: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px; z-index: 180; max-height: calc(100vh - 80px); overflow-y: auto; direction: ltr; background: transparent; }
-        .right-vertical-gallery::-webkit-scrollbar { width: 0; background: transparent; }
-        .right-vertical-gallery { scrollbar-width: none; }
-        .gallery-img-btn { cursor: pointer; background: transparent; border: none; padding: 0; margin: 0; outline: none; display: block; line-height: 0; }
-        .gallery-img-btn img { width: 130px; height: auto; max-height: 145px; object-fit: cover; display: block; pointer-events: none; border: none; }
-        .gallery-img-btn:active { transform: scale(0.94); }
-        .top-row { position: fixed; bottom: 170px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; z-index: 200; direction: rtl; }
-        .center-main-btn { cursor: pointer; background: transparent; border: none; padding: 0; margin: 0; outline: none; transition: transform 0.2s ease; }
-        .center-main-btn:active { transform: scale(0.95); }
-        .center-main-btn img { max-width: 320px; max-height: 320px; width: auto; height: auto; object-fit: contain; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6)); pointer-events: none; }
-        .bottom-group { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; z-index: 200; direction: rtl; background: linear-gradient(145deg, #ffd966, #ffb347); padding: 12px 0 15px 0; border-radius: 30px 30px 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); border-top: 3px solid rgba(255,215,0,0.8); }
-        .bottom-images { display: flex; justify-content: center; align-items: flex-end; gap: 15px; background: transparent; backdrop-filter: none; border-radius: 0; padding: 0; border: none; box-shadow: none; }
-        .bottom-btn { cursor: pointer; background: transparent; border: none; padding: 0; margin: 0; outline: none; display: inline-block; transition: transform 0.2s ease; }
-        .bottom-btn img { max-width: 140px; max-height: 140px; width: auto; height: auto; object-fit: contain; display: block; pointer-events: none; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); border-radius: 15px; }
-        .bottom-btn:active { transform: scale(0.95); }
-        .shop-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://parsstock.ir/600/10068/1134063-%D9%BE%D8%B3-%D8%B2%D9%85%DB%8C%D9%86%D9%87-%D8%AF%DB%8C%D9%88%D8%A7%D8%B1-%D8%A2%D8%AC%D8%B1%DB%8C.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 300; display: flex; justify-content: center; align-items: center; animation: fadeIn 0.4s ease; box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.7); }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        .shop-main-content { text-align: center; background: transparent; padding: 0; color: #fff; width: 100%; max-width: 520px; }
-        .shop-header h1 { font-size: 2.4rem; font-weight: 800; background: linear-gradient(135deg, #ffd89b, #ffaa66, #ff8c42); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 2px 8px rgba(0,0,0,0.5); letter-spacing: 2px; }
-        .shop-header p { font-size: 0.85rem; background: rgba(0,0,0,0.55); display: inline-block; padding: 5px 18px; border-radius: 50px; backdrop-filter: blur(8px); margin-top: 8px; }
-        .packs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; padding: 0 20px; margin: 25px 0; }
-        .mafia-pack-card { background: linear-gradient(145deg, rgba(25, 20, 15, 0.85), rgba(15, 12, 10, 0.9)); backdrop-filter: blur(12px); border-radius: 28px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.25s ease; border: 1px solid rgba(255, 170, 80, 0.7); box-shadow: 0 18px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,200,0.15), 0 0 0 2px rgba(255,140,0,0.2); transform: translateY(-2px); }
-        .mafia-pack-card:active { transform: scale(0.96) translateY(2px); }
-        .mafia-pack-card.disabled-pack { opacity: 0.5; filter: grayscale(0.3); cursor: not-allowed; pointer-events: none; border-color: #6a6a6a; transform: none; }
-        .pack-icon { font-size: 3.6rem; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 5px rgba(255,180,0,0.4)); margin-bottom: 8px; transition: 0.2s; }
-        .pack-coins { font-size: 1.7rem; font-weight: 800; background: linear-gradient(135deg, #ffdd99, #ffaa44, #ff8800); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin: 10px 0; letter-spacing: 1px; text-shadow: 0 0 8px rgba(255,100,0,0.5); }
-        .pack-coins span { font-size: 1rem; background: none; -webkit-text-fill-color: #ffaa55; }
-        .pack-name { font-size: 0.9rem; font-weight: bold; color: #ffddbb; background: rgba(0, 0, 0, 0.55); display: inline-block; padding: 5px 16px; border-radius: 50px; margin-top: 6px; letter-spacing: 1px; backdrop-filter: blur(4px); }
-        .pack-status { margin-top: 12px; font-size: 0.7rem; background: rgba(0,0,0,0.6); display: inline-block; padding: 3px 14px; border-radius: 30px; color: #ffcc88; font-weight: 500; }
-        .shop-gift-btn { background: linear-gradient(135deg, #ffaa44, #ff6600); color: white; border: none; padding: 14px 25px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin: 15px auto 10px auto; width: 80%; max-width: 250px; display: block; transition: 0.2s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .shop-gift-btn:active { transform: scale(0.96); }
-        .close-shop-btn { background: linear-gradient(145deg, #2a241e, #1a1612); color: #ffdd99; border: 1px solid rgba(255, 170, 80, 0.7); padding: 12px 32px; border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; font-family: inherit; box-shadow: 0 8px 20px rgba(0,0,0,0.4); width: 80%; max-width: 220px; backdrop-filter: blur(4px); }
-        .close-shop-btn:active { transform: scale(0.96); background: #3a3228; }
-        .hidden { display: none; }
-        .profile-modal-full { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 1001; animation: fadeInProfile 0.3s ease; }
-        @keyframes fadeInProfile { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .profile-content-full { background: linear-gradient(145deg, #1a1a2e, #0f0f1a); border-radius: 32px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; padding: 20px; border: 1px solid rgba(255, 170, 68, 0.5); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 140, 0, 0.2); position: relative; }
-        .profile-content-full::-webkit-scrollbar { width: 5px; }
-        .profile-content-full::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        .profile-content-full::-webkit-scrollbar-thumb { background: #ffaa44; border-radius: 10px; }
-        .profile-header-full { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; position: relative; }
-        .profile-avatar-large { position: relative; width: 80px; height: 80px; flex-shrink: 0; }
-        .profile-avatar-large img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #ffaa44; box-shadow: 0 0 15px rgba(255, 170, 68, 0.5); }
-        .level-badge { position: absolute; bottom: -5px; right: -5px; background: linear-gradient(135deg, #ffaa44, #ff6600); color: white; font-size: 0.7rem; font-weight: bold; padding: 3px 8px; border-radius: 20px; border: 1px solid #fff; }
-        .profile-name-full { flex: 1; }
-        .profile-name-full h2 { color: #ffaa66; font-size: 1.4rem; margin-bottom: 5px; }
-        .user-id { color: #aaa; font-size: 0.7rem; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 20px; display: inline-block; font-family: monospace; }
-        .close-profile-full { background: rgba(255,255,255,0.1); border: none; color: white; font-size: 1.2rem; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .close-profile-full:hover { background: rgba(255,255,255,0.2); }
-        .exp-bar-container { margin-bottom: 20px; }
-        .exp-bar-label { color: #ccc; font-size: 0.75rem; margin-bottom: 5px; }
-        .exp-bar { background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px; overflow: hidden; }
-        .exp-bar-fill { background: linear-gradient(90deg, #ffaa44, #ff6600); height: 100%; border-radius: 10px; transition: width 0.3s ease; }
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
-        .stat-card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; }
-        .stat-icon { font-size: 1.8rem; }
-        .stat-info { flex: 1; }
-        .stat-value { color: #ffaa66; font-size: 1.2rem; font-weight: bold; }
-        .stat-label { color: #aaa; font-size: 0.7rem; }
-        .profile-actions { display: flex; gap: 10px; margin-top: 10px; }
-        .profile-action-btn { flex: 1; background: linear-gradient(135deg, #2a2a3e, #1a1a2e); border: 1px solid rgba(255,170,68,0.5); color: #ffaa66; padding: 10px; border-radius: 25px; font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .profile-action-btn:active { transform: scale(0.96); }
-        .edit-name-input { width: 100%; padding: 12px 15px; border-radius: 50px; border: 2px solid #ffaa44; outline: none; font-size: 1rem; text-align: center; background: #1a1a2e; color: white; font-family: inherit; }
-        .gift-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 1002; }
-        .gift-content { background: linear-gradient(145deg, #1e2a3a, #0f172a); padding: 2rem; border-radius: 2rem; text-align: center; color: white; width: 90%; max-width: 400px; border: 2px solid #ffaa44; box-shadow: 0 0 40px rgba(255,170,0,0.3); }
-        .gift-content h2 { margin-bottom: 1.5rem; color: #ffaa66; }
-        .gift-content input { width: 100%; padding: 12px 15px; border-radius: 50px; border: none; outline: none; font-size: 1rem; text-align: center; margin-bottom: 1rem; font-family: monospace; }
-        .gift-content select { width: 100%; padding: 12px 15px; border-radius: 50px; border: none; outline: none; font-size: 1rem; margin-bottom: 1rem; background: #2d3e5a; color: white; font-weight: bold; text-align: center; }
-        .gift-buttons { display: flex; gap: 10px; margin-top: 15px; }
-        .send-gift-btn { background: linear-gradient(135deg, #ffaa44, #ff6600); border: none; color: white; flex: 1; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; }
-        .cancel-gift-btn { background: #2d3e5a; border: none; color: #ccc; flex: 1; padding: 12px; border-radius: 50px; cursor: pointer; }
-        .toast-msg { position: fixed; bottom: 30%; left: 50%; transform: translateX(-50%); background: #1a120ccc; backdrop-filter: blur(20px); color: #ffdd99; padding: 12px 28px; border-radius: 60px; font-weight: bold; font-size: 1rem; z-index: 9999; border: 2px solid #ffaa44; white-space: nowrap; font-family: inherit; }
-        .friends-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0057b3; z-index: 300; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; animation: fadeInFriends 0.4s ease; padding: 80px 20px 20px 20px; overflow-y: auto; }
-        @keyframes fadeInFriends { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        .search-card { background: rgba(255, 255, 255, 0.95); border-radius: 30px; padding: 15px 20px; width: 100%; max-width: 500px; margin-top: 20px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); direction: rtl; }
-        .search-card h3 { color: #003366; margin-bottom: 12px; font-size: 1.4rem; text-align: center; }
-        .search-input-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-        .search-input-group input { flex: 1; padding: 12px 18px; border-radius: 50px; border: 2px solid #0057b3; outline: none; font-size: 1rem; text-align: center; font-family: inherit; min-width: 180px; }
-        .search-input-group button { background: linear-gradient(135deg, #003d7a, #002a55); color: white; border: none; padding: 12px 24px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .search-input-group button:active { transform: scale(0.96); }
-        .search-result { margin-top: 15px; text-align: center; font-size: 0.9rem; color: #003366; font-weight: bold; background: #e6f0ff; padding: 10px; border-radius: 30px; }
-        .create-lobby-btn { background: linear-gradient(135deg, #ff8800, #ff5500); color: white; border: none; padding: 14px 28px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin: 15px auto; width: 80%; max-width: 300px; display: block; transition: 0.2s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; }
-        .create-lobby-btn:active { transform: scale(0.96); }
-        .refresh-lobbies-btn { background: linear-gradient(135deg, #00aaff, #0088cc); color: white; border: none; padding: 12px 24px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; margin: 10px auto; width: 80%; max-width: 250px; display: block; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3); text-align: center; }
-        .refresh-lobbies-btn:active { transform: scale(0.96); }
-        .close-friends-btn { background: rgba(0, 0, 0, 0.7); color: white; border: none; padding: 12px 32px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; backdrop-filter: blur(8px); }
-        .close-friends-btn:active { transform: scale(0.96); }
-        .lobbies-list { width: 100%; max-width: 500px; margin-top: 10px; margin-bottom: 10px; }
-        .lobby-item { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 30px; padding: 15px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s ease; animation: fadeInLobby 0.3s ease; }
-        @keyframes fadeInLobby { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .lobby-item:hover { background: rgba(255,255,255,0.3); transform: scale(1.02); }
-        .lobby-info h4 { color: #fff; font-size: 1.2rem; margin-bottom: 5px; }
-        .lobby-info p { color: #ddd; font-size: 0.8rem; }
-        .lobby-join-btn { background: linear-gradient(135deg, #00cc66, #009944); border: none; padding: 8px 20px; border-radius: 50px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .lobby-join-btn:active { transform: scale(0.95); }
-        .no-lobby-message { text-align: center; color: white; padding: 30px; background: rgba(0,0,0,0.3); border-radius: 20px; margin: 20px; }
-        .online-count { text-align: center; color: #ffaa44; font-size: 0.8rem; margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 20px; display: inline-block; }
-        .room-table { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
-        .player-seat { width: 96px; height: 96px; position: absolute; border-radius: 50%; background: radial-gradient(circle at top, rgba(0,235,255,.96), rgba(0,90,200,1)); border: 3px solid rgba(0,225,255,.95); display: flex; justify-content: center; align-items: center; box-shadow: 0 0 28px rgba(0,200,255,.55), 0 0 65px rgba(0,120,255,.25), inset 0 0 26px rgba(255,255,255,.18); transition: .25s; }
-        .player-seat:hover { transform: scale(1.07); }
-        .player-seat::before { content: ""; position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 2px solid rgba(0,220,255,.15); animation: pulse 2.8s infinite; }
-        @keyframes pulse { 0% { transform: scale(.94); opacity: .5; } 70% { transform: scale(1.08); opacity: .08; } 100% { transform: scale(1.15); opacity: 0; } }
-        .empty-seat { background: radial-gradient(circle at top, rgba(40,65,105,.96), rgba(8,18,38,1)); border: 2px solid rgba(140,200,255,.20); box-shadow: inset 0 0 20px rgba(255,255,255,.03), 0 0 22px rgba(0,0,0,.45); }
-        .empty-seat::before { border: 2px solid rgba(255,255,255,.05); }
-        .player-seat img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.96); box-shadow: 0 0 18px rgba(255,255,255,.16); }
-        .empty-icon { font-size: 38px; color: rgba(255,255,255,.24); }
-        .player-name-label { position: absolute; bottom: -35px; background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 20px; font-size: 12px; color: white; white-space: nowrap; }
-        .room-center { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; pointer-events: none; }
-        .lobby-bottom-buttons { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 100; flex-wrap: wrap; justify-content: center; padding: 0 10px; align-items: center; }
-        .lobby-action-btn { padding: 12px 28px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; border: none; cursor: pointer; transition: 0.2s; min-width: 140px; font-family: inherit; }
-        .ready-btn { background: linear-gradient(135deg, #555, #333); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .ready-btn.ready-active { background: linear-gradient(135deg, #00cc66, #009944); box-shadow: 0 0 15px rgba(0,255,100,0.4); }
-        .ready-btn.ready-inactive { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 15px rgba(255,0,0,0.4); }
-        .action-group { display: flex; gap: 12px; background: rgba(20, 20, 30, 0.9); backdrop-filter: blur(12px); padding: 10px 18px; border-radius: 60px; border: 2px solid rgba(255, 255, 255, 0.15); box-shadow: 0 8px 25px rgba(0,0,0,0.5); align-items: center; }
-        .action-btn { background: transparent; border: none; cursor: pointer; padding: 4px; transition: transform 0.2s ease; display: flex; align-items: center; justify-content: center; }
-        .action-btn:active { transform: scale(0.85); }
-        .action-btn img { width: 44px; height: 44px; object-fit: contain; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
-        .action-btn .badge { position: absolute; top: -4px; right: -4px; background: #ff4444; color: white; font-size: 0.6rem; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
-        .action-btn-wrapper { position: relative; display: inline-flex; }
-        .mic-btn { background: transparent; border: none; cursor: pointer; padding: 4px; transition: transform 0.2s ease; display: flex; align-items: center; justify-content: center; }
-        .mic-btn:active { transform: scale(0.85); }
-        .mic-btn img { width: 44px; height: 44px; object-fit: contain; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
-        .mic-btn.mic-recording img { filter: drop-shadow(0 0 12px rgba(255, 50, 50, 0.9)); animation: micPulse 1s infinite; }
-        @keyframes micPulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
-        .start-game-btn-center { background: transparent; border: none; cursor: pointer; padding: 10px; transition: transform 0.2s ease; display: flex; align-items: center; justify-content: center; pointer-events: all; }
-        .start-game-btn-center:active { transform: scale(0.85); }
-        .start-game-btn-center img { width: 160px; height: 160px; object-fit: contain; display: block; filter: drop-shadow(0 8px 30px rgba(0, 200, 255, 0.7)); }
-        .start-game-btn-center:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(0.6); }
-        .start-game-btn-center:disabled:active { transform: none; }
-        .lobby-action-btn:active { transform: scale(0.96); }
-        .lobby-top-bar { position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(135deg, rgba(0, 20, 50, 0.95), rgba(0, 40, 80, 0.95)); backdrop-filter: blur(12px); border-bottom: 2px solid rgba(0, 200, 255, 0.5); padding: 15px 20px; z-index: 100; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); display: flex; align-items: center; justify-content: space-between; }
-        .lobby-info-center { font-size: 1.3rem; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 200, 255, 0.5); display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .player-count-badge { background: linear-gradient(135deg, #ff8800, #ff5500); padding: 5px 15px; border-radius: 50px; font-size: 0.9rem; color: white; text-shadow: none; box-shadow: 0 0 10px rgba(255, 100, 0, 0.5); }
-        .lobby-creator-name { font-size: 0.85rem; color: #aaa; margin-right: 10px; }
-        .exit-lobby-btn { background: linear-gradient(135deg, rgba(255,80,80,0.8), rgba(200,50,50,0.9)); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; backdrop-filter: blur(5px); }
-        .exit-lobby-btn:active { transform: scale(0.95); }
-        .team-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(145deg, #ffd700, #ffaa00); z-index: 500; display: flex; flex-direction: column; animation: fadeInTeam 0.4s ease; overflow-y: auto; }
-        @keyframes fadeInTeam { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        .team-top-bar { background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(0,0,0,0.75)); backdrop-filter: blur(12px); padding: 20px; text-align: center; border-bottom: 3px solid #ff6600; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-        .team-search-container { max-width: 500px; margin: 0 auto; display: flex; gap: 10px; }
-        .team-search-input { flex: 1; padding: 14px 20px; border-radius: 50px; border: none; outline: none; font-size: 1rem; text-align: center; font-family: inherit; background: white; color: #333; }
-        .team-search-btn { background: linear-gradient(135deg, #ff8800, #ff5500); border: none; padding: 14px 28px; border-radius: 50px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .team-search-btn:active { transform: scale(0.96); }
-        .team-content { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .developer-card { background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); border-radius: 30px; padding: 25px 35px; max-width: 500px; width: 100%; text-align: center; border: 2px solid #ffaa44; box-shadow: 0 20px 40px rgba(0,0,0,0.4); animation: slideUp 0.5s ease; }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .developer-logo { font-size: 5rem; margin-bottom: 10px; filter: drop-shadow(0 0 15px #ffaa44); }
-        .developer-title { font-size: 1.8rem; font-weight: bold; color: #ffaa44; margin-bottom: 15px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .developer-name { font-size: 1.4rem; color: white; margin-bottom: 10px; font-weight: bold; }
-        .developer-desc { color: #ddd; font-size: 0.9rem; line-height: 1.6; }
-        .close-team-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff4444, #cc0000); border: none; padding: 12px 32px; border-radius: 50px; color: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; z-index: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .close-team-btn:active { transform: translateX(-50%) scale(0.96); }
-        .p1{ left:20px; top:8%; } .p2{ left:20px; top:23%; } .p3{ left:20px; top:38%; } .p4{ left:20px; top:53%; } .p5{ left:20px; top:68%; }
-        .p6{ right:20px; top:8%; } .p7{ right:20px; top:23%; } .p8{ right:20px; top:38%; } .p9{ right:20px; top:53%; } .p10{ right:20px; top:68%; }
-        .create-lobby-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 2000; }
-        .create-lobby-content { background: linear-gradient(145deg, #1e2a3a, #0f172a); padding: 2rem; border-radius: 2rem; text-align: center; color: white; width: 90%; max-width: 400px; border: 2px solid #ffaa44; box-shadow: 0 0 40px rgba(255,170,0,0.3); }
-        .create-lobby-content h2 { margin-bottom: 1.5rem; color: #ffaa66; }
-        .create-lobby-content input { width: 100%; padding: 12px 15px; border-radius: 50px; border: none; outline: none; font-size: 1rem; text-align: center; margin-bottom: 1rem; font-family: inherit; }
-        .create-lobby-buttons { display: flex; gap: 10px; margin-top: 15px; }
-        .confirm-create-btn { background: linear-gradient(135deg, #ffaa44, #ff6600); border: none; color: white; flex: 1; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; }
-        .cancel-create-btn { background: #2d3e5a; border: none; color: #ccc; flex: 1; padding: 12px; border-radius: 50px; cursor: pointer; }
-        #mafiaDialog { position: fixed; inset: 0; display: none; justify-content: center; align-items: center; z-index: 9999; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
-        .dialog-box { width: 420px; background: linear-gradient(180deg,#01255e 0%,#00173b 100%); border-radius: 24px; border: 2px solid rgba(0,140,255,0.9); box-shadow: 0 0 40px rgba(0,120,255,0.55), inset 0 0 18px rgba(0,180,255,0.15), 0 10px 35px rgba(0,0,0,0.75); overflow: hidden; animation: dialogShow .35s ease; }
-        .dialog-header { height: 72px; display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg,#0a4eb5,#003b8f); border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .dialog-header h2 { color: white; font-size: 22px; font-weight: bold; text-shadow: 0 0 12px rgba(255,255,255,0.25), 0 0 20px rgba(0,170,255,0.55); }
-        .dialog-body { padding: 28px; text-align: center; }
-        .dialog-text { color: white; font-size: 18px; line-height: 1.9; font-weight: bold; }
-        .status-line { margin-top: 18px; height: 10px; width: 100%; border-radius: 20px; background: rgba(255,255,255,0.08); overflow: hidden; position: relative; }
-        .status-line::before { content: ''; position: absolute; top: 0; right: -40%; width: 40%; height: 100%; border-radius: 20px; background: linear-gradient(90deg,transparent,#3bc1ff,transparent); animation: liveMove 1.8s linear infinite; }
-        .dialog-footer { padding: 0 28px 28px; }
-        .retry-btn { width: 100%; height: 56px; border: none; border-radius: 18px; background: linear-gradient(180deg,#1592ff,#0060ff); color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: .2s; box-shadow: 0 0 20px rgba(0,140,255,0.45), inset 0 -4px 8px rgba(0,0,0,0.25); }
-        .retry-btn:hover { transform: scale(1.02); }
-        @keyframes liveMove { 0% { right: -40%; } 100% { right: 120%; } }
-        @keyframes dialogShow { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
-        
-        .game-table-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: #000; display: none; justify-content: center; align-items: center; flex-direction: column; }
-        .game-table-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://up.20script.ir/file/0efd-IMG-20260625-040854-904.jpg') no-repeat center center; background-size: cover; }
-        .game-ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; }
-        .game-top-bar { width: 100%; background: rgba(20, 15, 10, 0.85); backdrop-filter: blur(8px); border-radius: 30px; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border: 2px solid rgba(255, 200, 100, 0.5); direction: rtl; box-sizing: border-box;}
-        .game-top-day { color: #fff; font-weight: bold; font-size: 1.2rem; background: rgba(255,255,255,0.1); padding: 5px 20px; border-radius: 20px; }
-        .game-top-speaker { color: #ffd700; font-weight: bold; font-size: 1.2rem; text-align: center; flex: 1; text-shadow: 0 0 10px rgba(255,200,0,0.3); }
-        .game-bottom-bar { width: 100%; background: rgba(20, 15, 10, 0.85); backdrop-filter: blur(8px); border-radius: 30px; padding: 10px 25px; display: flex; justify-content: space-between; align-items: center; border: 2px solid rgba(255, 200, 100, 0.5); direction: rtl; box-sizing: border-box; z-index: 10; }
-        .game-bottom-left { display: flex; gap: 15px; }
-        .game-bottom-right { display: flex; gap: 15px; }
-        .game-btn { padding: 8px 20px; border-radius: 30px; font-size: 1rem; font-weight: bold; border: none; cursor: pointer; transition: 0.2s; font-family: inherit; }
-        .game-btn-challenge { background: #ffcc00; color: #222; box-shadow: 0 0 15px rgba(255, 200, 0, 0.4); }
-        .game-btn:active { transform: scale(0.95); }
-        .game-action-btn { background: transparent; border: none; cursor: pointer; padding: 0; transition: transform 0.2s; }
-        .game-action-btn img { width: 45px; height: 45px; object-fit: contain; }
-        .game-action-btn:active { transform: scale(0.85); }
-        .game-seat-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .game-seat { position: absolute; pointer-events: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .game-seat-ring { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(from 0deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888, #cc2366, #dc2743, #e6683c, #f09433); padding: 3px; box-shadow: 0 0 20px rgba(255, 200, 0, 0.3); }
-        .game-seat-avatar { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #fff; object-fit: cover; background: #1a1a2e; }
-        .game-seat-label { position: absolute; bottom: -5px; right: -5px; background: #000; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 15px; border: 1px solid #ffaa44; }
-        .game-seat-number { position: absolute; top: -25px; right: -25px; background: #000; color: #fff; font-size: 0.8rem; padding: 3px 8px; border-radius: 15px; border: 1px solid #ffaa44; min-width: 20px; text-align: center; }
-        .gs-1 { top: 7%; left: 50%; transform: translateX(-50%); }
-        .gs-2 { top: 20%; left: 75%; }
-        .gs-3 { top: 35%; left: 85%; }
-        .gs-4 { top: 50%; left: 85%; }
-        .gs-5 { top: 65%; left: 75%; }
-        .gs-6 { top: 78%; left: 50%; transform: translateX(-50%); }
-        .gs-7 { top: 65%; left: 22%; }
-        .gs-8 { top: 50%; left: 12%; }
-        .gs-9 { top: 35%; left: 12%; }
-        .gs-10 { top: 20%; left: 22%; }
-        @media(max-width:700px){ .player-seat{ width:78px; height:78px; } .player-seat::before{ width:98px; height:98px; } .player-seat img{ width:58px; height:58px; } .empty-icon{ font-size:30px; } .p1{ left:8px; top:8%; } .p2{ left:8px; top:23%; } .p3{ left:8px; top:38%; } .p4{ left:8px; top:53%; } .p5{ left:8px; top:68%; } .p6{ right:8px; top:8%; } .p7{ right:8px; top:23%; } .p8{ right:8px; top:38%; } .p9{ right:8px; top:53%; } .p10{ right:8px; top:68%; } .lobby-info-center { font-size: 0.9rem; gap: 5px; } .player-count-badge { font-size: 0.7rem; padding: 3px 8px; } .lobby-top-bar { padding: 10px 12px; } .exit-lobby-btn { width: 32px; height: 32px; font-size: 1rem; } .lobby-creator-name { font-size: 0.7rem; display: none; } .stats-grid { gap: 8px; } .stat-card { padding: 8px; } .stat-icon { font-size: 1.4rem; } .stat-value { font-size: 1rem; } .lobby-action-btn { padding: 8px 16px; font-size: 0.9rem; min-width: 100px; } .lobby-bottom-buttons { gap: 12px; bottom: 20px; } .team-search-container { flex-direction: column; padding: 0 10px; } .developer-card { padding: 20px; } .developer-title { font-size: 1.3rem; } .developer-name { font-size: 1.1rem; } .refresh-lobbies-btn { padding: 10px 18px; font-size: 0.9rem; max-width: 200px; } .username-frame { width: 110px; } .username-text-on-image { font-size: 0.8rem; } .center-main-btn img { max-width: 200px; max-height: 200px; } .action-btn img, .mic-btn img { width: 36px; height: 36px; } .action-group { padding: 8px 12px; gap: 8px; } .start-game-btn-center img { width: 120px; height: 120px; } .game-seat-ring { width: 60px; height: 60px; } .game-seat-avatar { width: 54px; height: 54px; } .game-seat-number { top: -15px; right: -15px; font-size: 0.6rem; min-width: 15px; padding: 2px 5px; } .game-top-bar, .game-bottom-bar { padding: 10px 15px; } .game-top-day, .game-top-speaker { font-size: 0.9rem; } .game-btn { padding: 5px 12px; font-size: 0.8rem; } .game-action-btn img { width: 35px; height: 35px; } }
-        @media (max-width: 600px) { .packs-grid { gap: 16px; padding: 0 15px; } .pack-icon { font-size: 2.8rem; } .pack-coins { font-size: 1.4rem; } .pack-name { font-size: 0.8rem; } .shop-header h1 { font-size: 1.9rem; } .close-shop-btn { font-size: 1rem; padding: 10px 24px; } .toast-msg { font-size: 0.8rem; white-space: normal; text-align: center; width: 80%; } .center-main-btn img { max-width: 180px; max-height: 180px; } }
-        @media (max-width: 450px) { .packs-grid { gap: 12px; } .mafia-pack-card { padding: 15px 8px; } .pack-icon { font-size: 2.4rem; } .pack-coins { font-size: 1.2rem; } .center-main-btn img { max-width: 150px; max-height: 150px; } }
-        @media (max-width: 900px) { .top-row { bottom: 150px; } .currency-value { font-size: 1rem; } .instagram-story-ring-wrapper { width: 84px; height: 84px; } .avatar-container { width: 74px; height: 74px; } .avatar { width: 68px; height: 68px; } .gallery-img-btn img { width: 110px; max-height: 125px; } .bottom-btn img { max-width: 100px; max-height: 100px; } .username-frame { width: 120px; } .center-main-btn img { max-width: 240px; max-height: 240px; } }
-        @media (max-width: 700px) { .instagram-story-ring-wrapper { width: 78px; height: 78px; } .avatar-container { width: 68px; height: 68px; } .avatar { width: 62px; height: 62px; } .username-frame { width: 110px; } .username-text-on-image { font-size: 0.75rem; } .top-row { bottom: 130px; } .bottom-btn img { max-width: 85px; max-height: 85px; } .gallery-img-btn img { width: 95px; max-height: 105px; } .center-main-btn img { max-width: 190px; max-height: 190px; } }
-        @media (max-width: 550px) { .top-row { bottom: 110px; } .bottom-btn img { max-width: 70px; max-height: 70px; } .gallery-img-btn img { width: 80px; max-height: 90px; } .username-frame { width: 95px; } .username-text-on-image { font-size: 0.65rem; } .center-main-btn img { max-width: 150px; max-height: 150px; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Mafia Loader | نسخه نهایی</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 30%, #05080f, #000000);
+      font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+    }
+
+    /* ========== پس‌زمینه سینمایی ========== */
+    .background-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bg-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: cinematicZoom 7s ease-out forwards;
+      filter: brightness(1.08) contrast(1.06) saturate(1.1);
+    }
+    @keyframes cinematicZoom {
+      0% { transform: scale(1.12); opacity: 0; filter: brightness(0.9); }
+      15% { opacity: 1; filter: brightness(1.05); }
+      100% { transform: scale(1); filter: brightness(1.08); opacity: 1; }
+    }
+    .background-layer.fade-out {
+      animation: smoothFadeOut 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    @keyframes smoothFadeOut {
+      0% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    /* ========== اسپینر لوکس ========== */
+    .loader-overlay {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px);
+      border-radius: 60px;
+      padding: 8px;
+      transition: opacity 0.4s ease;
+    }
+    .loader-overlay.hidden { opacity: 0; visibility: hidden; }
+    .spinner-modern {
+      position: relative;
+      width: 44px;
+      height: 44px;
+    }
+    .spinner-modern::before,
+    .spinner-modern::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      animation: spinPremium 0.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    }
+    .spinner-modern::before {
+      inset: 0;
+      background: conic-gradient(from 0deg, #00ccff, #00f2fe, #4facfe, #7a2eff, #00ccff);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px));
+    }
+    .spinner-modern::after {
+      inset: 8px;
+      background: rgba(0, 188, 255, 0.25);
+      filter: blur(8px);
+      animation: spinPremium 0.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite reverse;
+    }
+    @keyframes spinPremium {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ========== نوار پیشرفت ۳۰۰% ========== */
+    .progress-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10000;
+      background: linear-gradient(135deg, rgba(5, 10, 25, 0.92), rgba(2, 6, 18, 0.85));
+      backdrop-filter: blur(20px);
+      padding: 22px 28px 28px;
+      border-top: 1px solid rgba(0, 210, 255, 0.5);
+      box-shadow: 0 -20px 45px rgba(0, 0, 0, 0.5);
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+      padding: 0 8px;
+    }
+    .progress-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: linear-gradient(120deg, #ffffff, #88ccff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+    .progress-percent {
+      font-size: 1.35rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00e0ff, #0077ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 5px rgba(0,160,255,0.3);
+    }
+    .progress-bar-wrapper { width: 100%; margin-bottom: 10px; }
+    .progress-bar-bg { width: 100%; height: 7px; background: rgba(255, 255, 255, 0.08); border-radius: 20px; overflow: hidden; }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00ccff, #3f8eff, #aa66ff);
+      border-radius: 20px;
+      transition: width 0.05s linear;
+      box-shadow: 0 0 12px rgba(0, 180, 255, 0.7);
+      position: relative;
+    }
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: waveEffect 1.6s ease-in-out infinite;
+    }
+    @keyframes waveEffect {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding: 0 8px;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-family: monospace;
+      color: rgba(100, 200, 255, 0.85);
+    }
+    .stat-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #00ccff;
+      animation: glowDot 1.2s infinite alternate;
+    }
+    @keyframes glowDot {
+      0% { opacity: 0.3; box-shadow: 0 0 0px #00ccff; }
+      100% { opacity: 1; box-shadow: 0 0 6px #00ccff; }
+    }
+
+    .game-frame {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 1;
+      background: #000; opacity: 0; transition: opacity 0.5s ease;
+    }
+    .game-frame.visible { opacity: 1; }
+
+    /* ========== دیالوگ بارگذاری با پیش‌لود ========== */
+    .loading-dialog {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.94); backdrop-filter: blur(22px);
+      display: flex; align-items: center; justify-content: center; z-index: 30000;
+    }
+    .loading-dialog-content {
+      background: #101018cc; border-radius: 58px; padding: 38px; text-align: center;
+      border: 1px solid #00aaff66; width: 85%; max-width: 360px;
+    }
+    .loading-spinner {
+      width: 56px; height: 56px; border: 3px solid rgba(0,170,255,0.2); border-top: 3px solid #00e0ff;
+      border-radius: 50%; animation: spinLoad 0.9s linear infinite; margin: 0 auto 25px;
+    }
+    @keyframes spinLoad { 100% { transform: rotate(360deg); } }
+    .loading-text {
+      color: #44ddff;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      transition: opacity 0.3s ease;
+    }
+    .loading-sub {
+      color: #88aacc;
+      font-size: 0.8rem;
+      margin-top: 12px;
+      opacity: 0.8;
+    }
+    .loading-progress-detail {
+      margin-top: 18px;
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .loading-progress-detail-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00ccff, #aa66ff);
+      border-radius: 20px;
+      transition: width 0.2s ease;
+    }
+
+    .blocked-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 20000;
+      background: radial-gradient(circle at center, #1a0a0a, #030005);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .blocked-content {
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(28px); border-radius: 56px; padding: 45px;
+      border: 1px solid #ff5e5e; text-align: center;
+    }
+    .blocked-icon { font-size: 72px; margin-bottom: 20px; }
+    .blocked-title { font-size: 32px; color: #ff5e5e; font-weight: 800; margin-bottom: 12px; }
+    .blocked-text { color: #ffd0d0; font-size: 15px; margin-bottom: 8px; }
+    .blocked-ip { background: #2a0505; border-radius: 60px; padding: 6px 20px; margin-top: 22px; display: inline-block; }
+  </style>
 </head>
 <body>
-    <div id="usernameModal" class="modal">
-        <div class="modal-content">
-            <h2>🎮 انتخاب نام کاربری 🎮</h2>
-            <input type="text" id="usernameInput" placeholder="نام خود را وارد کنید..." maxlength="8" autocomplete="off">
-            <button id="saveNameBtn">ورود به بازی</button>
+
+<div class="background-layer" id="bgLayer">
+  <img class="bg-image" src="https://cdn.imgurl.ir/uploads/u49616_AI_Image_1780044840219.jpg" alt="Background">
+</div>
+<div id="loaderOverlay" class="loader-overlay"><div class="spinner-modern"></div></div>
+<div class="progress-container" id="progressContainer">
+  <div class="progress-header">
+    <span class="progress-title">ورود</span>
+    <span class="progress-percent" id="progressPercent">0%</span>
+  </div>
+  <div class="progress-bar-wrapper">
+    <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+  <div class="progress-stats">
+    <div class="stat-item"><div class="stat-dot"></div><span>سرور</span></div>
+    <div class="stat-item"><div class="stat-dot"></div><span id="speedStat">آماده‌سازی</span></div>
+    <div class="stat-item"><div class="stat-dot"></div><span id="timeStat">0s</span></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ========== منابع ==========
+    const GAME_URL = "https://raw.githubusercontent.com/m65394660-sudo/Mfg9/refs/heads/main/Mafia_dark_shaot.html";
+    const BG_IMAGE_URL = "https://cdn.imgurl.ir/uploads/u49616_AI_Image_1780044840219.jpg";
+    
+    // ========== لیست منابع برای پیش‌لود کامل ==========
+    const PRELOAD_RESOURCES = [
+      BG_IMAGE_URL,
+      "https://cdn.imgurl.ir/uploads/m786451_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/n146684_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/z053125_SelfComic_Ninja1775502890071.jpg",
+      "https://cdn.imgurl.ir/uploads/u505475_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/y004260_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/b855600_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/58616_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/l33891_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/u84671_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/a754787_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/j104819_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/l4527_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/e07616_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/y07172_InShot__.png",
+      "https://cdn.imgurl.ir/uploads/y3996_InShot__.png",
+      "https://parsstock.ir/600/10068/1134063-%D9%BE%D8%B3-%D8%B2%D9%85%DB%8C%D9%86%D9%87-%D8%AF%DB%8C%D9%88%D8%A7%D8%B1-%D8%A2%D8%AC%D8%B1%DB%8C.jpg"
+    ];
+    
+    let isGameLoaded = false;
+    let blockedPermanent = false;
+    let startTime = Date.now();
+    let preloadCompleted = false;
+    
+    // المان‌ها
+    const loaderDiv = document.getElementById('loaderOverlay');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercentSpan = document.getElementById('progressPercent');
+    const speedStatSpan = document.getElementById('speedStat');
+    const timeStatSpan = document.getElementById('timeStat');
+    const bgLayer = document.getElementById('bgLayer');
+    const progressContainer = document.getElementById('progressContainer');
+    
+    let currentProg = 0, targetProg = 0, animInt = null;
+    
+    // ========== دیالوگ پیش‌لود ==========
+    let loadingDialog = null;
+    let loadingTextEl = null;
+    let loadingSubEl = null;
+    let loadingDetailFill = null;
+    
+    function showLoadingDialog(mainText, subText, detailPercent) {
+      if (loadingDialog) {
+        if (loadingTextEl) loadingTextEl.textContent = mainText;
+        if (loadingSubEl) loadingSubEl.textContent = subText || '';
+        if (loadingDetailFill) loadingDetailFill.style.width = (detailPercent || 0) + '%';
+        return;
+      }
+      
+      loadingDialog = document.createElement('div');
+      loadingDialog.className = 'loading-dialog';
+      loadingDialog.innerHTML = `
+        <div class="loading-dialog-content">
+          <div class="loading-spinner"></div>
+          <div class="loading-text" id="loadingMainText">${mainText}</div>
+          <div class="loading-sub" id="loadingSubText">${subText || ''}</div>
+          <div class="loading-progress-detail">
+            <div class="loading-progress-detail-fill" id="loadingDetailFill" style="width: ${detailPercent || 0}%;"></div>
+          </div>
         </div>
-    </div>
-    <div class="top-bar">
-        <div class="currency-item">
-            <img class="currency-emoji" src="https://up.20script.ir/file/8b5f-InShot-۲۰۲۶۰۶۲۳-۱۰۳۵۱۰۵۲۹.png" alt="icon">
-            <span class="currency-value" id="gemsValue">0</span>
+      `;
+      document.body.appendChild(loadingDialog);
+      
+      loadingTextEl = document.getElementById('loadingMainText');
+      loadingSubEl = document.getElementById('loadingSubText');
+      loadingDetailFill = document.getElementById('loadingDetailFill');
+    }
+    
+    function updateLoadingDialog(mainText, subText, detailPercent) {
+      if (!loadingDialog) return;
+      if (loadingTextEl) loadingTextEl.textContent = mainText;
+      if (loadingSubEl) loadingSubEl.textContent = subText || '';
+      if (loadingDetailFill) loadingDetailFill.style.width = (detailPercent || 0) + '%';
+    }
+    
+    function hideLoadingDialog() {
+      if (loadingDialog) {
+        loadingDialog.remove();
+        loadingDialog = null;
+        loadingTextEl = null;
+        loadingSubEl = null;
+        loadingDetailFill = null;
+      }
+    }
+    
+    // ========== پیشرفت نوار ==========
+    function updateProgressBar(percent) {
+      let displayVal = Math.min(300, Math.max(0, Math.floor(percent)));
+      let widthPercent = (displayVal / 300) * 100;
+      if(progressFill) progressFill.style.width = widthPercent + '%';
+      if(progressPercentSpan) progressPercentSpan.innerText = displayVal + '%';
+    }
+    function animateProgress() {
+      if(animInt) clearInterval(animInt);
+      animInt = setInterval(() => {
+        if(currentProg < targetProg && !blockedPermanent && preloadCompleted) {
+          let diff = targetProg - currentProg;
+          let step = diff > 70 ? Math.max(4, Math.floor(diff/14)) : Math.max(2, Math.floor(diff/7));
+          currentProg = Math.min(currentProg + step, targetProg);
+          updateProgressBar(currentProg);
+        } else if(currentProg > targetProg) {
+          currentProg = Math.max(currentProg - 2, targetProg);
+          updateProgressBar(currentProg);
+        } else if(animInt) {
+          clearInterval(animInt); animInt = null;
+        }
+      }, 22);
+    }
+    function setProgress(percent) {
+      if(blockedPermanent || !preloadCompleted) return;
+      targetProg = Math.min(300, Math.max(0, percent));
+      animateProgress();
+      let elapsed = (Date.now() - startTime)/1000;
+      if(timeStatSpan && !blockedPermanent) timeStatSpan.innerText = Math.floor(elapsed) + 's';
+      if(percent < 35) speedStatSpan.innerText = 'دریافت منابع';
+      else if(percent < 85) speedStatSpan.innerText = 'بارگذاری';
+      else if(percent < 170) speedStatSpan.innerText = 'آماده‌سازی';
+      else speedStatSpan.innerText = 'نهایی‌سازی';
+    }
+    
+    // ========== مسدودیت IP (فقط لیست سیاه) ==========
+    function showGenericBlock(ip) {
+      blockedPermanent = true;
+      const bg = document.getElementById('bgLayer');
+      const prog = document.getElementById('progressContainer');
+      const load = document.getElementById('loaderOverlay');
+      if(bg) bg.style.display = 'none';
+      if(prog) prog.style.display = 'none';
+      if(load) load.style.display = 'none';
+      if(loadingDialog) loadingDialog.remove();
+      const blockDiv = document.createElement('div');
+      blockDiv.className = 'blocked-screen';
+      blockDiv.innerHTML = `
+        <div class="blocked-content">
+          <div class="blocked-icon">🚫</div>
+          <div class="blocked-title">دسترسی مسدود شد</div>
+          <div class="blocked-text">آی‌پی شما در لیست سیاه قرار دارد.</div>
+          <div class="blocked-ip">${ip}</div>
         </div>
-        <div class="currency-item">
-            <img class="currency-emoji" src="https://up.20script.ir/file/076b-InShot-۲۰۲۶۰۶۲۳-۱۰۳۴۵۹۴۷۲.png" alt="coin-icon">
-            <span class="currency-value" id="coinsValue">0</span>
-        </div>
-    </div>
-    <div class="user-panel" id="profileBtn">
-        <div class="instagram-story-ring-wrapper">
-            <div class="instagram-story-ring"></div>
-            <div class="avatar-container">
-                <img class="avatar" id="userAvatar" src="https://up.20script.ir/file/e170-InShot-۲۰۲۶۰۶۲۳-۰۱۴۶۳۵۶۷۴.jpg" alt="Avatar">
-            </div>
-        </div>
-        <div class="username-frame">
-            <img class="username-bg-img" src="https://up.20script.ir/file/f63d-InShot-۲۰۲۶۰۶۲۳-۰۳۰۴۳۳۳۱۵.png" alt="Name Frame">
-            <div class="username-text-on-image" id="usernameDisplay">---</div>
-        </div>
-    </div>
-    <div class="right-vertical-gallery" id="rightGallery">
-        <div class="gallery-img-btn" data-img="1"><img src="https://up.20script.ir/file/e502-InShot-۲۰۲۶۰۶۲۳-۰۲۴۰۵۲۰۸۳.png" alt="تصویر 1"></div>
-        <div class="gallery-img-btn" data-img="2"><img src="https://up.20script.ir/file/6328-InShot-۲۰۲۶۰۶۲۳-۰۲۴۵۲۵۴۶۸.png" alt="تصویر 2"></div>
-        <div class="gallery-img-btn" data-img="3"><img src="https://up.20script.ir/file/2723-InShot-۲۰۲۶۰۶۲۳-۰۲۴۷۵۶۷۷۱.png" alt="تصویر 3"></div>
-        <div class="gallery-img-btn" data-img="5"><img src="https://up.20script.ir/file/2723-InShot-۲۰۲۶۰۶۲۳-۰۲۵۰۲۹۸۸۳.png" alt="تصویر 5"></div>
-    </div>
-    <div class="top-row">
-        <div class="center-main-btn" id="centerMainBtn">
-            <img src="https://up.20script.ir/file/a1fa-InShot-۲۰۲۶۰۶۲۳-۰۱۴۲۳۱۶۸۶.png" alt="منوی اصلی">
-        </div>
-    </div>
-    <div class="bottom-group">
-        <div class="bottom-images">
-            <div class="bottom-btn" id="bottomRightImg"><img src="https://up.20script.ir/file/5542-InShot-۲۰۲۶۰۶۲۳-۰۱۳۳۲۶۶۵۶.png" alt="پایین راست"></div>
-            <div class="bottom-btn" id="bottomCenterImg"><img src="https://up.20script.ir/file/83ed-InShot-۲۰۲۶۰۶۲۳-۰۱۳۲۵۸۸۴۷.png" alt="پایین وسط"></div>
-            <div class="bottom-btn" id="bottomLeftImg"><img src="https://up.20script.ir/file/c59e-InShot-۲۰۲۶۰۶۲۳-۰۱۳۴۰۵۸۹۲.png" alt="پایین چپ"></div>
-        </div>
-    </div>
-    <div id="mafiaDialog">
-        <div class="dialog-box">
-            <div class="dialog-header"><h2>ارتباط با سرور</h2></div>
-            <div class="dialog-body"><div class="dialog-text">لطفاً منتظر بمونین...<br>در حال بررسی اتصال اینترنت</div><div class="status-line"></div></div>
-            <div class="dialog-footer"><button class="retry-btn" onclick="retryConnection()">تلاش مجدد</button></div>
-        </div>
-    </div>
-    <div id="gameTableContainer" class="game-table-wrapper">
-        <div class="game-table-bg"></div>
-        <div class="game-ui-layer">
-            <div class="game-top-bar">
-                <div class="game-top-day">روز ۱</div>
-                <div class="game-top-speaker" id="currentSpeakerDisplay">شماره صندلی: -</div>
-                <div style="width: 60px;"></div>
-            </div>
-            <div class="game-seat-container" id="gameSeatContainer"></div>
-            <div class="game-bottom-bar">
-                <div class="game-bottom-left">
-                    <button class="game-btn game-btn-challenge">چالش</button>
-                </div>
-                <div class="game-bottom-right">
-                    <button class="game-action-btn" id="gameLikeBtn"><img src="https://up.20script.ir/file/dce3-InShot-۲۰۲۶۰۶۲۳-۱۰۰۹۲۱۴۵۳.png" alt="لایک"></button>
-                    <button class="game-action-btn" id="gameDislikeBtn"><img src="https://up.20script.ir/file/4b77-InShot-۲۰۲۶۰۶۲۳-۱۰۱۰۰۲۷۱۰.png" alt="دیسلایک"></button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function toPersianNumber(number) {
-            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-            return number.toString().replace(/\d/g, function(x) { return persianDigits[parseInt(x)]; });
+      `;
+      document.body.appendChild(blockDiv);
+    }
+    
+    // ========== دریافت آی‌پی ==========
+    async function getUserIp() {
+      try {
+        const resp = await fetch('https://api.ipify.org?format=json');
+        if(resp.ok) { const data = await resp.json(); return data.ip; }
+      } catch(e) {}
+      return 'unknown';
+    }
+    
+    // ========== تست پینگ (بدون محدودیت) ==========
+    async function testPing() {
+      try {
+        const start = Date.now();
+        await fetch('https://www.google.com/favicon.ico', { method: 'HEAD', mode: 'no-cors', cache: 'no-store' });
+        return Date.now() - start;
+      } catch(e) {
+        return 999;
+      }
+    }
+    
+    // ========== پیش‌لود کامل همه منابع ==========
+    async function preloadAllResources() {
+      showLoadingDialog('آماده‌سازی منابع', 'در حال بارگذاری تصاویر...', 0);
+      
+      let loadedCount = 0;
+      const total = PRELOAD_RESOURCES.length;
+      
+      for (const url of PRELOAD_RESOURCES) {
+        try {
+          await new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+            img.src = url;
+          });
+          loadedCount++;
+          const percent = Math.floor((loadedCount / total) * 100);
+          updateLoadingDialog(
+            'بارگذاری منابع',
+            `${loadedCount} از ${total}`,
+            percent
+          );
+        } catch(e) {
+          console.warn('پیش‌لود ناموفق:', url);
         }
-
-        let lobbies = [];
-        let currentUserId = '';
-        let currentUsername = '';
-        let currentCoins = 8300;
-        let currentGems = 1250;
-        let ablyClient = null;
-        let lobbyChannel = null;
-        let voiceChannel = null;
-        let mediaRecorder = null;
-        let isVoiceRecording = false;
-        let voiceAudioContext = null;
-        let currentVoiceLobbyId = null;
-        const avatarImg = document.getElementById('userAvatar');
-        const gemsSpan = document.getElementById('gemsValue');
-        const coinsSpan = document.getElementById('coinsValue');
-        const usernameDisplaySpan = document.getElementById('usernameDisplay');
-        
-        function voiceAddLog(msg, isError = false) {
-            const time = new Date().toLocaleTimeString('fa-IR');
-            console.log(`${isError ? '❌' : '✅'} [${time}] ${msg}`);
-        }
-        async function voicePlayReceived(base64String, mimeType) {
-            if (!base64String) return;
-            try {
-                if (!voiceAudioContext) { voiceAudioContext = new (window.AudioContext || window.webkitAudioContext)(); await voiceAudioContext.resume(); }
-                const binaryStr = atob(base64String);
-                const bytes = new Uint8Array(binaryStr.length);
-                for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
-                const audioBuffer = await voiceAudioContext.decodeAudioData(bytes.buffer);
-                const source = voiceAudioContext.createBufferSource();
-                source.buffer = audioBuffer;
-                source.connect(voiceAudioContext.destination);
-                source.start();
-                voiceAddLog(`🔊 پخش صدا (${Math.round(audioBuffer.duration)} ثانیه)`);
-            } catch(e) {
-                try {
-                    const binaryStr = atob(base64String);
-                    const bytes = new Uint8Array(binaryStr.length);
-                    for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
-                    const blob = new Blob([bytes], { type: mimeType || 'audio/webm' });
-                    const audio = new Audio();
-                    audio.src = URL.createObjectURL(blob);
-                    audio.play();
-                } catch(e2) { voiceAddLog(`⚠️ خطا: ${e.message}`, true); }
-            }
-        }
-        async function voiceStartRecording() {
-            if (!voiceChannel) { voiceAddLog('❌ اتصال صوتی برقرار نیست!', true); return; }
-            try {
-                voiceAddLog('🎤 درخواست میکروفون...');
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                voiceAddLog('✅ میکروفون فعال شد');
-                let mimeType = '';
-                const formats = ['audio/webm', 'audio/mp4', 'audio/ogg'];
-                for (let f of formats) { if (MediaRecorder.isTypeSupported(f)) { mimeType = f; break; } }
-                if (!mimeType) mimeType = 'audio/webm';
-                let chunks = [];
-                mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType, audioBitsPerSecond: 48000 });
-                mediaRecorder.ondataavailable = (event) => { if (event.data && event.data.size > 0) chunks.push(event.data); };
-                mediaRecorder.onstop = async () => {
-                    const fullBlob = new Blob(chunks, { type: mimeType });
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        const base64 = reader.result.split(',')[1];
-                        if (base64 && voiceChannel) {
-                            voiceChannel.publish('voice', { data: base64, type: mimeType, sender: currentUsername, time: Date.now() }, (err) => {
-                                if (err) voiceAddLog(`ارسال ناموفق: ${err.message}`, true);
-                                else voiceAddLog(`📤 صدا ارسال شد`);
-                            });
-                        }
-                    };
-                    reader.readAsDataURL(fullBlob);
-                    stream.getTracks().forEach(t => t.stop());
-                    chunks = [];
-                    isVoiceRecording = false;
-                    const micBtn = document.getElementById('voiceMicBtn');
-                    if(micBtn) micBtn.classList.remove('mic-recording');
-                    voiceAddLog('⏹️ ضبط متوقف شد');
-                };
-                mediaRecorder.start();
-                isVoiceRecording = true;
-                const micBtn = document.getElementById('voiceMicBtn');
-                if(micBtn) micBtn.classList.add('mic-recording');
-                voiceAddLog('🎙️ در حال ضبط... برای پایان دوباره کلیک کنید');
-            } catch(err) { voiceAddLog(`❌ خطا: ${err.message}`, true); }
-        }
-        function voiceStopRecording() { if (mediaRecorder && isVoiceRecording) mediaRecorder.stop(); }
-        function voiceToggleRecording() { if (isVoiceRecording) voiceStopRecording(); else voiceStartRecording(); }
-        function voiceInitForLobby(lobbyId) {
-            if(currentVoiceLobbyId === lobbyId) return;
-            currentVoiceLobbyId = lobbyId;
-            if(voiceChannel) { try { voiceChannel.unsubscribe(); } catch(e) {} }
-            const voiceChanName = `voice-lobby-${lobbyId}`;
-            voiceChannel = ablyClient.channels.get(voiceChanName);
-            voiceChannel.subscribe('voice', (message) => {
-                const data = message.data;
-                if(data && data.data && data.sender !== currentUsername) {
-                    voicePlayReceived(data.data, data.type || 'audio/webm');
-                }
-            });
-            voiceChannel.attach((err) => {
-                if(err) voiceAddLog(`خطا در کانال صوتی: ${err.message}`, true);
-                else voiceAddLog(`📡 کانال صوتی لابی آماده است`);
-            });
-        }
-        function voiceCleanup() {
-            if(mediaRecorder && isVoiceRecording) mediaRecorder.stop();
-            if(voiceChannel) { try { voiceChannel.unsubscribe(); } catch(e) {} }
-            voiceChannel = null;
-            currentVoiceLobbyId = null;
-            isVoiceRecording = false;
-        }
-
-        // ================== بخش اصلاح‌شده سیستم همگام‌سازی ==================
-        function initSyncChannel() {
-            if(!currentUserId) return;
-            if(ablyClient) { try { ablyClient.close(); } catch(e) {} }
-            try {
-                ablyClient = new Ably.Realtime({ key: 'NNYzzQ.7HHPYg:NA1mSMcWdEnlWOHGZ4CaF7ZUkoXe1Iggtf0sy-nNsDM', clientId: currentUserId });
-                ablyClient.connection.on('connected', () => {
-                    console.log('✅ اتصال به Ably برقرار شد');
-                    lobbyChannel = ablyClient.channels.get('lobby-sync-global');
-                    
-                    // اشتراک برای دریافت تغییرات لحظه‌ای
-                    lobbyChannel.subscribe('lobby-event', (message) => {
-                        if(message.data && message.data.sender !== currentUserId) {
-                            handleSyncMessage(message.data);
-                        }
-                    });
-                    
-                    // درخواست لابی‌ها به صورت تاریخچه (برای کاربران جدید)
-                    loadLobbyHistory();
-                    
-                    setInterval(() => {
-                        if(lobbyChannel) { 
-                            lobbyChannel.publish('lobby-event', { type: 'request-lobbies', sender: currentUserId, timestamp: Date.now() }); 
-                        }
-                    }, 30000);
-                });
-            } catch(e) { console.error('Init error:', e); }
-        }
-
-        // تابع جدید برای خواندن تاریخچه لابی‌ها از سرور Ably
-        function loadLobbyHistory() {
-            if(!lobbyChannel) return;
-            lobbyChannel.history({ limit: 100 }, (err, page) => {
-                if(err) { console.error("خطا در خواندن تاریخچه:", err); return; }
-                
-                // پردازش تمام پیام‌های تاریخچه
-                page.items.forEach(item => {
-                    const data = item.data;
-                    if(data && data.type === 'global-snapshot' && data.lobbies) {
-                        // اگر پیام یک اسنپ‌شات کامل از لیست لابی‌ها بود
-                        lobbies = data.lobbies.filter(l => l.players && l.players.length > 0);
-                        saveLobbiesToLocal(true); // آپدیت لوکال بدون انتشار مجدد
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
-                    }
-                });
-
-                // اگر تاریخچه‌ای پیدا نشد، از لوکال استوریج لود کن
-                if(lobbies.length === 0) {
-                    loadLobbiesFromLocal();
-                }
-                
-                // ارسال یک درخواست برای بروزرسانی نهایی
-                if(lobbyChannel) {
-                    lobbyChannel.publish('lobby-event', { type: 'request-lobbies', sender: currentUserId, timestamp: Date.now() });
-                }
-            });
-        }
-
-        function handleSyncMessage(data) {
-            switch(data.type) {
-                case 'lobbies-list':
-                    // اگر شخصی لیست فعلی را فرستاد، ما آن را جایگزین می‌کنیم
-                    if(data.lobbies) {
-                        // ادغام لابی‌ها (با حفظ لابی‌های جدیدتر)
-                        let incomingLobbies = data.lobbies.filter(l => l.players && l.players.length > 0);
-                        
-                        // برای جلوگیری از حذف لابی‌های جدیدتر توسط کاربران قدیمی‌تر
-                        // چک میکنیم لابی‌های دریافتی شامل لابی‌های محلی ما هم هستند یا نه
-                        lobbies.forEach(localLobby => {
-                            if(!incomingLobbies.some(l => l.id === localLobby.id)) {
-                                incomingLobbies.push(localLobby);
-                            }
-                        });
-                        
-                        lobbies = incomingLobbies;
-                        saveLobbiesToLocal(true);
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
-                        if(window.currentLobbyRoom && window.currentLobbyRoom.updateUI) window.currentLobbyRoom.updateUI();
-                    }
-                    break;
-                case 'lobby-created':
-                    if(!lobbies.some(l => l.id === data.lobby.id)) {
-                        lobbies.push(data.lobby);
-                        saveLobbiesToLocal(false); // انتشار اسنپ‌شات جدید
-                        showToast(`🆕 لابی جدید "${data.lobby.name}" توسط ${data.lobby.ownerName} ساخته شد`);
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
-                    }
-                    break;
-                case 'lobby-join':
-                    const lobbyToJoin = lobbies.find(l => l.id === data.lobbyId);
-                    if(lobbyToJoin && !lobbyToJoin.players.some(p => p.id === data.userId)) {
-                        lobbyToJoin.players.push({ id: data.userId, name: data.userName, avatar: data.avatar });
-                        saveLobbiesToLocal(false);
-                        if(data.userId !== currentUserId) showToast(`👤 ${data.userName} وارد لابی ${lobbyToJoin.name} شد`);
-                        if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) window.currentLobbyRoom.updateUI();
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
-                    }
-                    break;
-                case 'lobby-leave':
-                    const leaveLobby = lobbies.find(l => l.id === data.lobbyId);
-                    if(leaveLobby) {
-                        const idx = leaveLobby.players.findIndex(p => p.id === data.userId);
-                        if(idx !== -1) leaveLobby.players.splice(idx, 1);
-                        if(leaveLobby.players.length === 0) { 
-                            const lobbyIdx = lobbies.findIndex(l => l.id === data.lobbyId);
-                            if(lobbyIdx !== -1) lobbies.splice(lobbyIdx, 1);
-                        } else if(leaveLobby.ownerId === data.userId && leaveLobby.players.length > 0) { 
-                            leaveLobby.ownerId = leaveLobby.players[0].id; 
-                            leaveLobby.ownerName = leaveLobby.players[0].name; 
-                        }
-                        saveLobbiesToLocal(false);
-                        if(window.currentLobbyRoom && window.currentLobbyRoom.lobbyId === data.lobbyId) {
-                            if(data.userId === currentUserId) { 
-                                if(window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove(); 
-                                showToast('شما از لابی خارج شدید'); 
-                                voiceCleanup(); 
-                            } else { 
-                                window.currentLobbyRoom.updateUI(); 
-                            }
-                        }
-                        if(window.currentLobbyPage && window.currentLobbyPage.refreshList) window.currentLobbyPage.refreshList();
-                    }
-                    break;
-                case 'request-lobbies':
-                    // اگر کسی درخواست کرد و ما لابی داریم، بهش بفرستیم
-                    if(lobbyChannel && lobbies.length > 0) {
-                        lobbyChannel.publish('lobby-event', { 
-                            type: 'lobbies-list', 
-                            lobbies: lobbies, 
-                            sender: currentUserId, 
-                            timestamp: Date.now() 
-                        });
-                    }
-                    break;
-            }
-        }
-
-        // تغییر در توابع ذخیره و بارگذاری
-        function saveLobbiesToLocal(silentMode = false) {
-            localStorage.setItem('mafiaLobbiesFallback', JSON.stringify(lobbies));
-            if(!silentMode && lobbyChannel) {
-                // اسنپ‌شات کلی را به عنوان یک پیام ماندگار (Persistent) منتشر می‌کنیم
-                // این باعث می‌شود کاربران جدید تاریخچه را ببینند
-                lobbyChannel.publish('lobby-event', { 
-                    type: 'global-snapshot', 
-                    lobbies: lobbies, 
-                    sender: currentUserId, 
-                    timestamp: Date.now() 
-                }, (err) => {
-                    if(err) console.warn("خطا در انتشار اسنپ‌شات:", err);
-                });
-                
-                // همچنین پیام تغییر وضعیت را منتشر می‌کنیم
-                lobbyChannel.publish('lobby-event', { 
-                    type: 'lobby-update', 
-                    lobbies: lobbies, 
-                    sender: currentUserId, 
-                    timestamp: Date.now() 
-                });
-            }
-        }
-
-        function loadLobbiesFromLocal() {
-            const saved = localStorage.getItem('mafiaLobbiesFallback');
-            if(saved) {
-                try { 
-                    lobbies = JSON.parse(saved); 
-                } catch(e) { 
-                    lobbies = []; 
-                }
-            }
-            if(!lobbies) lobbies = [];
-            lobbies = lobbies.filter(l => l.players && l.players.length > 0);
-            return lobbies;
-        }
-
-        function createLobby(name) {
-            if(!currentUserId || !currentUsername) return false;
-            const newLobby = {
-                id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 6),
-                name: name,
-                ownerId: currentUserId,
-                ownerName: currentUsername,
-                players: [{ id: currentUserId, name: currentUsername, avatar: avatarImg.src }],
-                createdAt: Date.now()
-            };
-            lobbies.push(newLobby);
-            saveLobbiesToLocal(false); // false یعنی انتشار پیام اسنپ‌شات
-            showToast(`✅ لابی "${name}" ساخته شد!`, 2000);
-            return newLobby;
-        }
-
-        function joinLobby(lobbyId) {
-            const lobby = lobbies.find(l => l.id === lobbyId);
-            if(!lobby) { showToast('❌ لابی یافت نشد'); return null; }
-            if(lobby.players.some(p => p.id === currentUserId)) return lobby;
-            if(lobby.players.length >= 10) { showToast('❌ لابی پر است'); return null; }
-            lobby.players.push({ id: currentUserId, name: currentUsername, avatar: avatarImg.src });
-            saveLobbiesToLocal(false);
-            showToast(`✅ به لابی ${lobby.name} پیوستید`, 1500);
-            return lobby;
-        }
-
-        function leaveLobby(lobbyId) {
-            const lobby = lobbies.find(l => l.id === lobbyId);
-            if(lobby) {
-                const idx = lobby.players.findIndex(p => p.id === currentUserId);
-                if(idx !== -1) lobby.players.splice(idx, 1);
-                if(lobby.players.length === 0) { 
-                    const lobbyIdx = lobbies.findIndex(l => l.id === lobbyId);
-                    if(lobbyIdx !== -1) lobbies.splice(lobbyIdx, 1);
-                } else if(lobby.ownerId === currentUserId && lobby.players.length > 0) { 
-                    lobby.ownerId = lobby.players[0].id; 
-                    lobby.ownerName = lobby.players[0].name; 
-                }
-                saveLobbiesToLocal(false);
-            }
-            voiceCleanup();
-            showToast('🚪 از لابی خارج شدید');
-        }
-
-        function showLobbyRoom(lobbyId) {
-            let lobby = lobbies.find(l => l.id === lobbyId);
-            if(!lobby) { showToast('لابی وجود ندارد'); return; }
-            if(!lobby.players.some(p => p.id === currentUserId)) {
-                lobby = joinLobby(lobbyId);
-                if(!lobby) return;
-            }
-            
-            if(window.currentLobbyRoom && window.currentLobbyRoom.page) { window.currentLobbyRoom.page.remove(); voiceCleanup(); }
-            voiceInitForLobby(lobbyId);
-            
-            const roomPage = document.createElement('div');
-            roomPage.style.position = 'fixed'; roomPage.style.top = '0'; roomPage.style.left = '0'; roomPage.style.width = '100%'; roomPage.style.height = '100%'; roomPage.style.zIndex = '400';
-            roomPage.style.background = 'radial-gradient(circle at top, rgba(0,220,255,.20), transparent 28%), radial-gradient(circle at bottom, rgba(0,100,255,.14), transparent 40%), linear-gradient(180deg, #123c72 0%, #0a2850 22%, #071c38 46%, #051427 70%, #020914 100%)';
-            
-            const seatPos = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
-            let isReady = false;
-            
-            function updateRoom() {
-                const currentLobby = lobbies.find(l => l.id === lobbyId);
-                if(!currentLobby) { roomPage.remove(); voiceCleanup(); showToast('لابی بسته شد'); return; }
-                
-                let seatsHtml = '';
-                for(let i=0; i<10; i++) {
-                    const p = currentLobby.players[i];
-                    if(p) { seatsHtml += `<div class="player-seat ${seatPos[i]}"><img src="${p.avatar}" onerror="this.src='https://up.20script.ir/file/e170-InShot-۲۰۲۶۰۶۲۳-۰۱۴۶۳۵۶۷۴.jpg'"><div class="player-name-label">${p.name}${p.id === currentLobby.ownerId ? ' 👑' : ''}</div></div>`; }
-                    else { seatsHtml += `<div class="player-seat empty-seat ${seatPos[i]}"><div class="empty-icon">+</div><div class="player-name-label">صندلی خالی</div></div>`; }
-                }
-                
-                const isOwner = currentLobby.ownerId === currentUserId;
-                roomPage.innerHTML = `
-                    <div class="room-table">
-                        <div class="lobby-top-bar">
-                            <div class="lobby-info-center">
-                                🎮 ${currentLobby.name} 🎮
-                                <span class="player-count-badge">👥 ${currentLobby.players.length}/10</span>
-                                <span class="lobby-creator-name">👑 سازنده: ${currentLobby.ownerName}</span>
-                            </div>
-                            <button class="exit-lobby-btn" id="exitLobbyBtn">←</button>
-                        </div>
-                        ${seatsHtml}
-                        <div class="room-center">
-                            ${isOwner ? `<button class="start-game-btn-center" id="startGameBtnCenter"><img src="https://up.20script.ir/file/c2a9-InShot-۲۰۲۶۰۶۲۲-۱۳۲۹۲۹۶۶۲.png" alt="شروع بازی"></button>` : ''}
-                        </div>
-                        <div class="lobby-bottom-buttons">
-                            <button class="lobby-action-btn ready-btn" id="readyActionBtn">آماده هستم</button>
-                            <div class="action-group">
-                                <div class="action-btn-wrapper"><button class="action-btn" id="likeBtn"><img src="https://up.20script.ir/file/dce3-InShot-۲۰۲۶۰۶۲۳-۱۰۰۹۲۱۴۵۳.png" alt="لایک"></button></div>
-                                <div class="action-btn-wrapper"><button class="action-btn" id="dislikeBtn"><img src="https://up.20script.ir/file/4b77-InShot-۲۰۲۶۰۶۲۳-۱۰۱۰۰۲۷۱۰.png" alt="دیسلایک"></button></div>
-                                <div class="action-btn-wrapper"><button class="mic-btn" id="voiceMicBtn"><img src="https://up.20script.ir/file/1e89-InShot-۲۰۲۶۰۶۲۳-۱۰۲۲۴۰۲۶۹.png" alt="میکروفون"></button></div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                const readyBtn = document.getElementById('readyActionBtn');
-                if(readyBtn) {
-                    if(isReady) { readyBtn.classList.add('ready-active'); readyBtn.classList.remove('ready-inactive'); readyBtn.innerText = '✅ آماده'; }
-                    else { readyBtn.classList.remove('ready-active'); readyBtn.classList.add('ready-inactive'); readyBtn.innerText = '❌ آماده نیستم'; }
-                    readyBtn.onclick = () => {
-                        isReady = !isReady;
-                        if(isReady) { readyBtn.classList.add('ready-active'); readyBtn.classList.remove('ready-inactive'); readyBtn.innerText = '✅ آماده'; showToast('✅ شما آماده شدید'); }
-                        else { readyBtn.classList.remove('ready-active'); readyBtn.classList.add('ready-inactive'); readyBtn.innerText = '❌ آماده نیستم'; showToast('❌ شما آماده نیستید'); }
-                    };
-                }
-                
-                const likeBtn = document.getElementById('likeBtn');
-                if(likeBtn) { likeBtn.onclick = (e) => { e.stopPropagation(); showToast('👍 لایک کردید!'); likeBtn.style.transform = 'scale(0.8)'; setTimeout(() => { likeBtn.style.transform = 'scale(1)'; }, 200); }; }
-                
-                const dislikeBtn = document.getElementById('dislikeBtn');
-                if(dislikeBtn) { dislikeBtn.onclick = (e) => { e.stopPropagation(); showToast('👎 دیسلایک کردید!'); dislikeBtn.style.transform = 'scale(0.8)'; setTimeout(() => { dislikeBtn.style.transform = 'scale(1)'; }, 200); }; }
-                
-                const micBtn = document.getElementById('voiceMicBtn');
-                if(micBtn) {
-                    if(isVoiceRecording) micBtn.classList.add('mic-recording'); else micBtn.classList.remove('mic-recording');
-                    micBtn.onclick = (e) => { e.stopPropagation(); voiceToggleRecording(); setTimeout(() => { if(isVoiceRecording) micBtn.classList.add('mic-recording'); else micBtn.classList.remove('mic-recording'); }, 100); };
-                }
-                
-                const startBtnCenter = document.getElementById('startGameBtnCenter');
-                if(startBtnCenter) {
-                    startBtnCenter.onclick = (e) => {
-                        e.stopPropagation();
-                        if(currentLobby.players.length < 2) { showToast('❌ حداقل ۲ بازیکن نیاز است!'); return; }
-                        startGameSequence(currentLobby);
-                    };
-                }
-                
-                const exitBtn = document.getElementById('exitLobbyBtn');
-                if(exitBtn) exitBtn.onclick = () => { voiceCleanup(); leaveLobby(lobbyId); roomPage.remove(); setTimeout(() => showFriendsPage(), 100); };
-            }
-            
-            updateRoom();
-            document.body.appendChild(roomPage);
-            window.currentLobbyRoom = { lobbyId: lobbyId, updateUI: updateRoom, page: roomPage };
-            
-            const interval = setInterval(() => {
-                if(document.body.contains(roomPage)) {
-                    const curr = lobbies.find(l => l.id === lobbyId);
-                    if(curr && curr.players.some(p => p.id === currentUserId)) updateRoom();
-                    else { clearInterval(interval); roomPage.remove(); voiceCleanup(); }
-                } else { clearInterval(interval); voiceCleanup(); }
-            }, 5000);
-        }
-
-        function showTeamPage() {
-            const existing = document.querySelector('.team-page');
-            if(existing) existing.remove();
-            const page = document.createElement('div');
-            page.className = 'team-page';
-            page.innerHTML = `
-                <div class="team-top-bar">
-                    <div class="team-search-container">
-                        <input type="text" class="team-search-input" id="teamSearchInput" placeholder="دنبال چی میگردی...">
-                        <button class="team-search-btn" id="teamSearchBtn">🔍 جستجو</button>
-                    </div>
-                </div>
-                <div class="team-content">
-                    <div class="developer-card">
-                        <div class="developer-logo">🃏🔥</div>
-                        <div class="developer-title">تیم توسعه دهنده</div>
-                        <div class="developer-name">مافیا بست</div>
-                        <div class="developer-desc">
-                            ما یک تیم حرفه‌ای هستیم که بهترین تجربه بازی مافیا رو برای شما فراهم کردیم.<br>
-                            با تلاش و عشق فراوان، این بازی ساخته شده تا لحظات خوشی رو براتون رقم بزنه.<br>
-                            ❤️ تقدیم به همه بازیکنای عزیز ❤️
-                        </div>
-                    </div>
-                </div>
-                <button class="close-team-btn" id="closeTeamBtn">✕ بستن</button>
-            `;
-            document.body.appendChild(page);
-            document.getElementById('closeTeamBtn').onclick = () => page.remove();
-            document.getElementById('teamSearchBtn').onclick = () => {
-                const searchText = document.getElementById('teamSearchInput').value.trim();
-                if(searchText) showToast(`🔍 در حال جستجوی "${searchText}"...`);
-                else showToast('لطفاً متن مورد نظر را وارد کنید');
-            };
-            document.getElementById('teamSearchInput').onkeypress = (e) => { if(e.key === 'Enter') document.getElementById('teamSearchBtn').click(); };
-        }
-
-        function showFriendsPage() {
-            if(!currentUserId) { showToast('ابتدا نام کاربری را انتخاب کنید'); return; }
-            const existing = document.querySelector('.friends-page');
-            if(existing) existing.remove();
-            if(window.currentLobbyRoom && window.currentLobbyRoom.page) window.currentLobbyRoom.page.remove();
-            voiceCleanup();
-            
-            const page = document.createElement('div');
-            page.className = 'friends-page';
-            page.innerHTML = `
-                <div class="search-card">
-                    <h3>🔍 جستجوی دوستان</h3>
-                    <div class="search-input-group">
-                        <input type="text" id="searchInput" placeholder="کد کاربری دوست خود را وارد کنید...">
-                        <button id="searchBtn">جستجو</button>
-                    </div>
-                    <div id="searchResult" class="search-result"></div>
-                </div>
-                <button class="create-lobby-btn" id="createBtn">➕ ایجاد لابی آنلاین</button>
-                <div class="lobbies-list" id="lobbiesList"></div>
-                <button class="refresh-lobbies-btn" id="refreshLobbiesBtn">🔄 رفرش لیست لابی‌ها</button>
-                <button class="close-friends-btn">🔙 بازگشت</button>
-                <div id="logContainer" class="log-box" style="position:relative;margin-top:20px;width:100%;max-width:500px;background:#0a0c14;border-radius:28px;padding:12px;font-size:0.7rem;color:#97a2c2;max-height:120px;overflow-y:auto;"></div>
-            `;
-            document.body.appendChild(page);
-            
-            function refreshList() {
-                const container = document.getElementById('lobbiesList');
-                if(!container) return;
-                loadLobbiesFromLocal();
-                const validLobbies = lobbies.filter(l => l.players && l.players.length > 0);
-                if(validLobbies.length === 0) { container.innerHTML = '<div class="no-lobby-message">🎮 هیچ لابی فعالی وجود ندارد<br>اولین لابی را شما بسازید! 🎮</div>'; return; }
-                container.innerHTML = validLobbies.map(lobby => `
-                    <div class="lobby-item">
-                        <div class="lobby-info">
-                            <h4>🎭 ${lobby.name}</h4>
-                            <p>👑 ${lobby.ownerName} | 👥 ${lobby.players.length}/10 نفر</p>
-                            <p style="font-size:0.7rem; color:#aaa;">🆔 ${lobby.id.substring(lobby.id.length - 6)}</p>
-                        </div>
-                        ${!lobby.players.some(p => p.id === currentUserId) ? 
-                            `<button class="lobby-join-btn" onclick="window.joinHandler('${lobby.id}')">➕ ورود</button>` :
-                            `<button class="lobby-join-btn" style="background:#44aa44;" onclick="window.enterHandler('${lobby.id}')">🎮 ورود</button>`
-                        }
-                    </div>
-                `).join('');
-            }
-            
-            document.getElementById('refreshLobbiesBtn').onclick = () => { refreshList(); showToast('🔄 لیست بروزرسانی شد'); };
-            window.joinHandler = (id) => { const lobby = joinLobby(id); if(lobby) { refreshList(); showLobbyRoom(id); page.remove(); } };
-            window.enterHandler = (id) => { showLobbyRoom(id); page.remove(); };
-            document.getElementById('searchBtn').onclick = () => {
-                const code = document.getElementById('searchInput').value.trim();
-                const resultDiv = document.getElementById('searchResult');
-                if(!code) { resultDiv.innerHTML = '⚠️ کد را وارد کنید'; return; }
-                if(code === currentUserId) { resultDiv.innerHTML = '🎭 این کد شماست!'; return; }
-                resultDiv.innerHTML = `✅ کاربر با کد ${code} پیدا شد!`;
-            };
-            document.getElementById('createBtn').onclick = () => {
-                const modalDiv = document.createElement('div');
-                modalDiv.className = 'create-lobby-modal';
-                modalDiv.innerHTML = `<div class="create-lobby-content"><h2>🎮 لابی جدید</h2><input type="text" id="lobbyName" placeholder="اسم لابی..."><div class="create-lobby-buttons"><button class="confirm-create-btn" id="confirmCreate">✨ ایجاد</button><button class="cancel-create-btn" id="cancelCreate">❌ انصراف</button></div></div>`;
-                document.body.appendChild(modalDiv);
-                document.getElementById('confirmCreate').onclick = () => {
-                    const name = document.getElementById('lobbyName').value.trim();
-                    if(!name) { showToast('❌ اسم لابی را وارد کنید'); return; }
-                    const newLobby = createLobby(name);
-                    if(newLobby) { modalDiv.remove(); refreshList(); page.remove(); showLobbyRoom(newLobby.id); }
-                };
-                document.getElementById('cancelCreate').onclick = () => modalDiv.remove();
-            };
-            page.querySelector('.close-friends-btn').onclick = () => page.remove();
-            window.currentLobbyPage = { refreshList: refreshList };
-            refreshList();
-        }
-
-        function showBlurModal() {
-            const modalDiv = document.createElement('div');
-            modalDiv.className = 'blur-modal';
-            modalDiv.innerHTML = `
-                <div class="modal-menu-container">
-                    <button class="modal-menu-btn" id="modalBtnFriends">
-                        <img src="https://cdn.imgurl.ir/uploads/e07616_InShot__.png" alt="دوستانه">
-                    </button>
-                    <button class="modal-menu-btn" id="modalBtnSoon1">
-                        <img src="https://cdn.imgurl.ir/uploads/y07172_InShot__.png" alt="به زودی">
-                    </button>
-                    <button class="modal-menu-btn" id="modalBtnSoon2">
-                        <img src="https://cdn.imgurl.ir/uploads/y3996_InShot__.png" alt="به زودی">
-                    </button>
-                    <button class="close-modal-btn" id="closeModalBtn">✕ بستن</button>
-                </div>
-            `;
-            document.body.appendChild(modalDiv);
-            document.getElementById('modalBtnFriends').onclick = () => { modalDiv.remove(); showFriendsPage(); };
-            document.getElementById('modalBtnSoon1').onclick = () => { showToast('🚧 به زودی...'); modalDiv.remove(); };
-            document.getElementById('modalBtnSoon2').onclick = () => { showToast('🚧 به زودی...'); modalDiv.remove(); };
-            document.getElementById('closeModalBtn').onclick = () => { modalDiv.remove(); };
-            modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
-        }
-
-        function startGameSequence(lobbyData) {
-            const gameContainer = document.getElementById('gameTableContainer');
-            gameContainer.style.display = 'flex';
-            gameContainer.style.background = '#000';
-            document.getElementById('gameSeatContainer').innerHTML = '';
-
-            setTimeout(() => {
-                gameContainer.style.background = '';
-                const players = lobbyData.players;
-                const container = document.getElementById('gameSeatContainer');
-                container.innerHTML = '';
-
-                players.forEach((player, index) => {
-                    if(index >= 10) return;
-                    const seatNumber = index + 1;
-                    const seatDiv = document.createElement('div');
-                    seatDiv.className = `game-seat gs-${seatNumber}`;
-                    seatDiv.innerHTML = `
-                        <div class="game-seat-ring">
-                            <img class="game-seat-avatar" src="${player.avatar}" onerror="this.src='https://up.20script.ir/file/e170-InShot-۲۰۲۶۰۶۲۳-۰۱۴۶۳۵۶۷۴.jpg'" alt="${player.name}">
-                        </div>
-                        <div class="game-seat-number">${seatNumber}</div>
-                        <div class="game-seat-label">${player.name}</div>
-                    `;
-                    container.appendChild(seatDiv);
-                });
-
-                const speakerDisplay = document.getElementById('currentSpeakerDisplay');
-                speakerDisplay.innerText = `شماره صندلی: ۱`;
-
-            }, 5000);
-
-            document.getElementById('gameLikeBtn').onclick = () => { showToast('👍 لایک کردید!'); };
-            document.getElementById('gameDislikeBtn').onclick = () => { showToast('👎 دیسلایک کردید!'); };
-        }
-
-        // ==================== بخش اصلی ====================
-        const modal = document.getElementById('usernameModal');
-        const usernameInput = document.getElementById('usernameInput');
-        const saveBtn = document.getElementById('saveNameBtn');
-        const centerMainBtn = document.getElementById('centerMainBtn');
-        const bottomRight = document.getElementById('bottomRightImg');
-        const bottomCenter = document.getElementById('bottomCenterImg');
-        const shopButton = document.getElementById('bottomLeftImg');
-        const galleryBtns = document.querySelectorAll('.gallery-img-btn');
-        const profileBtn = document.getElementById('profileBtn');
-        const DAILY_PACKS = [{ id: 0, coins: 250, gems: 50, name: "نقره‌ای", emoji: "🥈" },{ id: 1, coins: 500, gems: 100, name: "طلایی", emoji: "🌟" },{ id: 2, coins: 100, gems: 200, name: "الماسی", emoji: "💎" },{ id: 3, coins: 150, gems: 75, name: "رویایی", emoji: "✨" }];
-        
-        function updateCoins() { coinsSpan.innerText = toPersianNumber(currentCoins); }
-        function updateGems() { gemsSpan.innerText = toPersianNumber(currentGems); }
-        function loadCurrencies() { 
-            let gems = localStorage.getItem('userGems'); 
-            let coins = localStorage.getItem('userCoins'); 
-            if(gems === null) gems = 1250; else gems = parseInt(gems);
-            if(coins === null) coins = 8300; else coins = parseInt(coins);
-            localStorage.setItem('userGems', gems); localStorage.setItem('userCoins', coins); currentGems = gems; currentCoins = coins; updateGems(); updateCoins(); 
-        }
-        function addCoins(amount) { let val = currentCoins; val += amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return val; }
-        function addGems(amount) { let val = currentGems; val += amount; localStorage.setItem('userGems', val); currentGems = val; updateGems(); return val; }
-        function removeCoins(amount) { let val = currentCoins; if(val >= amount) { val -= amount; localStorage.setItem('userCoins', val); currentCoins = val; updateCoins(); return true; } return false; }
-        function getPackStatus() { let last = localStorage.getItem('dailyPackClaims'); if(!last) return {}; try { return JSON.parse(last); } catch(e) { return {}; } }
-        function updatePackStatus(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); s[id] = today; localStorage.setItem('dailyPackClaims', JSON.stringify(s)); }
-        function canClaimPack(id) { let s = getPackStatus(); const today = new Date().toLocaleDateString('en-CA'); return !s[id] || s[id] !== today; }
-        function showToast(msg, dur = 2500) { 
-            const t = document.createElement('div'); t.className = 'toast-msg'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => { if(t && t.remove) t.remove(); }, dur); 
-        }
-        function showProfile() {
-            if(!currentUserId) { showToast('ابتدا نام کاربری را انتخاب کنید'); return; }
-            let stats = localStorage.getItem('userStats');
-            if(!stats) { stats = { competitiveWins: 0, friendlyWins: 0, playTime: 0, spectatorCount: 0, mafiaWins: 0, citizenWins: 0, exp: 0 }; localStorage.setItem('userStats', JSON.stringify(stats)); }
-            else { stats = JSON.parse(stats); }
-            function calculateLevel(exp) {
-                let level = 1, required = 100, totalExp = exp;
-                while(totalExp >= required && level < 100) { totalExp -= required; level++; required = Math.floor(required * 1.2); }
-                return { level: level, currentExp: totalExp, requiredExp: required };
-            }
-            const levelInfo = calculateLevel(stats.exp || 0);
-            const level = levelInfo.level, currentExp = levelInfo.currentExp, requiredExp = levelInfo.requiredExp;
-            const expPercent = (currentExp / requiredExp) * 100;
-            const hoursPlayed = Math.floor(stats.playTime / 3600);
-            const minutesPlayed = Math.floor((stats.playTime % 3600) / 60);
-            const d = document.createElement('div');
-            d.className = 'profile-modal-full';
-            d.innerHTML = `
-                <div class="profile-content-full">
-                    <div class="profile-header-full">
-                        <div class="profile-avatar-large">
-                            <img src="${avatarImg.src}" alt="Avatar" onerror="this.src='https://up.20script.ir/file/e170-InShot-۲۰۲۶۰۶۲۳-۰۱۴۶۳۵۶۷۴.jpg'">
-                            <div class="level-badge">سطح ${level}</div>
-                        </div>
-                        <div class="profile-name-full">
-                            <h2>${currentUsername}</h2>
-                            <div class="user-id">🆔 ${currentUserId}</div>
-                        </div>
-                        <button class="close-profile-full" id="closeProfileBtn">✕</button>
-                    </div>
-                    <div class="exp-bar-container">
-                        <div class="exp-bar-label">تجربه تا سطح بعد: ${currentExp}/${requiredExp}</div>
-                        <div class="exp-bar"><div class="exp-bar-fill" style="width: ${expPercent}%;"></div></div>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.competitiveWins)}</div><div class="stat-label">برد امتیازی</div></div></div>
-                        <div class="stat-card"><div class="stat-icon">🎮</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.friendlyWins)}</div><div class="stat-label">برد دوستانه</div></div></div>
-                        <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-info"><div class="stat-value">${toPersianNumber(level)}</div><div class="stat-label">سطح کاربر</div></div></div>
-                        <div class="stat-card"><div class="stat-icon">⏱️</div><div class="stat-info"><div class="stat-value">${toPersianNumber(hoursPlayed)}:${toPersianNumber(minutesPlayed)}</div><div class="stat-label">ساعت بازی</div></div></div>
-                        <div class="stat-card"><div class="stat-icon">👁️</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.spectatorCount)}</div><div class="stat-label">تعداد نظاره‌گر</div></div></div>
-                        <div class="stat-card"><div class="stat-icon">🦹</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.mafiaWins)}</div><div class="stat-label">برد مافیا</div></div></div>
-                        <div class="stat-card"><div class="stat-icon">👮</div><div class="stat-info"><div class="stat-value">${toPersianNumber(stats.citizenWins)}</div><div class="stat-label">برد شهروند</div></div></div>
-                    </div>
-                    <div class="profile-actions">
-                        <button class="profile-action-btn" id="copyIdBtn">📋 کپی کد کاربری</button>
-                        <button class="profile-action-btn" id="editNameBtn">✏️ تغییر نام</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(d);
-            document.getElementById('copyIdBtn').onclick = () => { navigator.clipboard.writeText(currentUserId); showToast('📋 کد کاربری کپی شد!'); };
-            document.getElementById('editNameBtn').onclick = () => {
-                d.remove();
-                const modalDiv = document.createElement('div');
-                modalDiv.className = 'profile-modal-full';
-                modalDiv.innerHTML = `<div class="profile-content-full" style="max-width: 350px;"><h2 style="color:#ffaa66; margin-bottom:20px; text-align:center;">تغییر نام کاربری</h2><input type="text" id="newNameInput" class="edit-name-input" placeholder="نام جدید..." maxlength="8" value="${currentUsername}"><div class="profile-actions" style="margin-top:20px;"><button class="profile-action-btn" id="confirmNameBtn">✅ تایید</button><button class="profile-action-btn" id="cancelNameBtn">❌ انصراف</button></div></div>`;
-                document.body.appendChild(modalDiv);
-                document.getElementById('confirmNameBtn').onclick = () => {
-                    let newName = document.getElementById('newNameInput').value.trim();
-                    if(newName) { if(newName.length > 8) newName = newName.slice(0,8); currentUsername = newName; localStorage.setItem('gameUsername', currentUsername); usernameDisplaySpan.innerText = currentUsername; showToast(`✅ نام به ${currentUsername} تغییر کرد`); modalDiv.remove(); showProfile(); }
-                    else showToast('❌ نام نمی‌تواند خالی باشد');
-                };
-                document.getElementById('cancelNameBtn').onclick = () => modalDiv.remove();
-            };
-            document.getElementById('closeProfileBtn').onclick = () => d.remove();
+      }
+      
+      // پیش‌لود فایل اصلی بازی
+      try {
+        await fetch(GAME_URL, { mode: 'cors', cache: "force-cache" });
+      } catch(e) {}
+      
+      updateLoadingDialog('همه منابع آماده است', 'در حال نهایی‌سازی...', 100);
+      await new Promise(r => setTimeout(r, 400));
+      hideLoadingDialog();
+      preloadCompleted = true;
+      
+      // شروع بارگذاری بازی
+      loadGameContent();
+    }
+    
+    // ========== بارگذاری بازی ==========
+    async function loadGameContent() {
+      if(blockedPermanent || !preloadCompleted) return;
+      
+      try {
+        setProgress(8);
+        const ipNow = await getUserIp();
+        const blockedIps = ["31.171.100.40"];
+        if(blockedIps.includes(ipNow)) { 
+          showGenericBlock(ipNow); 
+          return; 
         }
         
-        let ablyGift = null, giftChannel = null;
-        function connectGift() {
-            if(typeof Ably === 'undefined' || !currentUserId) return;
-            try {
-                ablyGift = new Ably.Realtime({ key: 'NNYzzQ.dkJmdA:WRlNRokYR2oFpiCaxxDIRWStSc45mSSITckfVtwGBEo', clientId: currentUserId });
-                ablyGift.connection.on('connected', () => {
-                    giftChannel = ablyGift.channels.get('gift-channel');
-                    giftChannel.subscribe('gift', (msg) => {
-                        if(msg.data && msg.data.to === currentUserId) { addCoins(msg.data.amount); showToast(`🎁 ${msg.data.from} به شما ${toPersianNumber(msg.data.amount)} سکه هدیه داد!`); }
-                    });
-                });
-            } catch(e) { console.error(e); }
+        setProgress(22);
+        
+        // تست پینگ (بدون نمایش به کاربر، فقط برای اطلاع)
+        const ping = await testPing();
+        console.log('پینگ:', ping, 'ms');
+        
+        setProgress(40);
+        const response = await fetch(GAME_URL, { 
+          mode: 'cors', 
+          cache: "force-cache" 
+        }).catch(() => null);
+        
+        let gameHtml = '';
+        if(response && response.ok) {
+          gameHtml = await response.text();
+          setProgress(135);
+        } else {
+          setProgress(95);
+          gameHtml = `<html><body style="background:#0b0b18;"><div style="color:white;text-align:center;margin-top:45vh;">تلاش مجدد...</div><script>setTimeout(()=>location.reload(),2000);<\/script></body></html>`;
         }
         
-        function showGift() {
-            if(!currentUserId) { showToast('ابتدا نام خود را انتخاب کنید'); return; }
-            if(currentCoins < 50) { showToast(`❌ حداقل ۵۰ سکه نیاز است!`); return; }
-            const d = document.createElement('div'); d.className = 'gift-modal';
-            d.innerHTML = `<div class="gift-content"><h2>🎁 هدیه سکه</h2><input type="text" id="targetCode" placeholder="کد کاربری دوست..."><select id="amountSelect"><option value="50">۵۰</option><option value="100">۱۰۰</option><option value="200">۲۰۰</option><option value="500">۵۰۰</option><option value="1000">۱۰۰۰</option></select><div class="gift-buttons"><button class="send-gift-btn" id="sendBtn">🎁 ارسال</button><button class="cancel-gift-btn" id="cancelBtn">❌ انصراف</button></div></div>`;
-            document.body.appendChild(d);
-            document.getElementById('sendBtn').onclick = () => {
-                const target = document.getElementById('targetCode').value.trim();
-                const amount = parseInt(document.getElementById('amountSelect').value);
-                if(!target) { showToast('کد را وارد کنید'); return; }
-                if(target === currentUserId) { showToast('نمی‌توانید به خودتان هدیه دهید'); return; }
-                if(currentCoins < amount) { showToast('سکه کافی ندارید'); return; }
-                if(giftChannel) { removeCoins(amount); giftChannel.publish('gift', { to: target, from: currentUsername, amount: amount }); showToast(`✅ ${toPersianNumber(amount)} سکه ارسال شد!`); d.remove(); }
-                else { showToast('❌ خطا در اتصال'); }
-            };
-            document.getElementById('cancelBtn').onclick = () => d.remove();
-        }
+        setProgress(200);
         
-        function showShop() {
-            const existing = document.querySelector('.shop-page'); if(existing) existing.remove();
-            const page = document.createElement('div'); page.className = 'shop-page';
-            page.innerHTML = `<div class="shop-main-content"><div class="shop-header"><h1>🏪 بازار سیاه</h1><p>✨ بسته روزانه ✨</p></div><div class="packs-grid" id="packsGrid"></div><button class="shop-gift-btn" id="giftBtn">🎁 هدیه سکه</button><button class="close-shop-btn">🔙 خروج</button></div>`;
-            document.body.appendChild(page);
-            function render() { 
-                const grid = document.getElementById('packsGrid'); if(!grid) return; grid.innerHTML = ''; 
-                DAILY_PACKS.forEach(p => { 
-                    const avail = canClaimPack(p.id); 
-                    const card = document.createElement('div'); 
-                    card.className = `mafia-pack-card ${!avail ? 'disabled-pack' : ''}`; 
-                    card.innerHTML = `<div class="pack-icon">${p.emoji}</div><div class="pack-coins">+${toPersianNumber(p.coins)} <span>سکه</span> &nbsp; +${toPersianNumber(p.gems)} <span style="color:#ff88ff;">💎الماس</span></div><div class="pack-name">${p.name}</div><div class="pack-status">${avail ? '🔥 دریافت' : '✅ انجام شد'}</div>`; 
-                    if(avail) { 
-                        card.onclick = () => { addCoins(p.coins); addGems(p.gems); updatePackStatus(p.id); showToast(`🎁 +${toPersianNumber(p.coins)} سکه و +${toPersianNumber(p.gems)} الماس`); render(); }; 
-                    } 
-                    grid.appendChild(card); 
-                }); 
-            }
-            render();
-            document.getElementById('giftBtn').onclick = () => showGift();
-            page.querySelector('.close-shop-btn').onclick = () => page.remove();
-        }
+        const oldFrame = document.querySelector('.game-frame');
+        if(oldFrame) oldFrame.remove();
         
-        function loadUser() {
-            const savedName = localStorage.getItem('gameUsername');
-            const savedId = localStorage.getItem('userId');
-            if(savedName && savedName.trim() !== "") {
-                currentUsername = savedName.length > 8 ? savedName.slice(0,8) : savedName;
-                usernameDisplaySpan.innerText = currentUsername;
-                modal.style.display = 'none';
-                if(savedId) currentUserId = savedId;
-                else { currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); localStorage.setItem('userId', currentUserId); }
-                connectGift();
-                initSyncChannel();
-                loadLobbiesFromLocal();
-            } else { modal.style.display = 'flex'; usernameInput.focus(); }
-        }
+        const iframe = document.createElement('iframe');
+        iframe.className = 'game-frame';
+        iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads allow-top-navigation');
+        iframe.setAttribute('allow', 'autoplay; fullscreen');
+        iframe.srcdoc = gameHtml;
         
-        function saveUser() {
-            let name = usernameInput.value.trim();
-            if(!name) { alert("لطفاً نام خود را وارد کنید!"); return; }
-            if(name.length > 8) name = name.slice(0,8);
-            currentUsername = name;
-            currentUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
-            localStorage.setItem('gameUsername', currentUsername);
-            localStorage.setItem('userId', currentUserId);
-            usernameDisplaySpan.innerText = currentUsername;
-            modal.style.display = 'none';
-            connectGift();
-            initSyncChannel();
-            loadLobbiesFromLocal();
-            showToast(`✅ خوش آمدی ${currentUsername}!`);
-        }
-        
-        saveBtn.onclick = saveUser;
-        usernameInput.onkeypress = (e) => { if(e.key === 'Enter') saveUser(); };
-        if(centerMainBtn) centerMainBtn.onclick = (e) => { e.stopPropagation(); showBlurModal(); };
-        if(shopButton) shopButton.onclick = (e) => { e.stopPropagation(); showShop(); };
-        if(profileBtn) profileBtn.onclick = (e) => { e.stopPropagation(); showProfile(); };
-        if(bottomRight) bottomRight.onclick = (e) => { e.stopPropagation(); showTeamPage(); };
-        const silent = () => {};
-        if(bottomCenter) bottomCenter.onclick = silent;
-        galleryBtns.forEach(btn => btn.onclick = silent);
-        usernameDisplaySpan.ondblclick = () => { modal.style.display = 'flex'; usernameInput.value = localStorage.getItem('gameUsername') || ''; usernameInput.focus(); };
-        document.getElementById('userAvatar').onerror = () => { document.getElementById('userAvatar').src = "https://via.placeholder.com/80?text=Avatar"; };
-        loadUser();
-        loadCurrencies();
-        window.onload = () => { if(localStorage.getItem('gameUsername')) modal.style.display = 'none'; const g = document.getElementById('rightGallery'); if(g) { g.style.background = 'transparent'; g.style.backdropFilter = 'none'; g.style.border = 'none'; } };
-        window.retryConnection = function() {
-            const txt = document.querySelector('#mafiaDialog .dialog-text');
-            if(txt) txt.innerHTML = 'در حال بررسی اتصال...';
-            setTimeout(() => {
-                if(navigator.onLine) { if(txt) txt.innerHTML = 'اتصال برقرار شد'; setTimeout(() => { document.getElementById('mafiaDialog').style.display = 'none'; }, 1200); }
-                else { if(txt) txt.innerHTML = 'اتصال برقرار نشد<br>لطفاً دوباره تلاش کنید'; }
-            }, 1500);
+        iframe.onload = () => {
+          setProgress(300);
+          iframe.classList.add('visible');
+          if(bgLayer) bgLayer.classList.add('fade-out');
+          if(progressContainer) {
+            progressContainer.style.transition = 'opacity 0.45s';
+            progressContainer.style.opacity = '0';
+            setTimeout(() => { if(progressContainer) progressContainer.style.display = 'none'; }, 460);
+          }
+          if(loaderDiv) loaderDiv.classList.add('hidden');
+          isGameLoaded = true;
         };
-        setTimeout(() => { if(!navigator.onLine) document.getElementById('mafiaDialog').style.display = 'flex'; }, 500);
-    </script>
+        document.body.appendChild(iframe);
+        
+        setTimeout(() => {
+          if(loaderDiv && !loaderDiv.classList.contains('hidden') && !blockedPermanent && preloadCompleted) {
+            setProgress(300);
+            iframe.classList.add('visible');
+            if(bgLayer) bgLayer.classList.add('fade-out');
+            if(progressContainer) {
+              progressContainer.style.opacity = '0';
+              setTimeout(() => { if(progressContainer) progressContainer.style.display = 'none'; }, 460);
+            }
+            loaderDiv.classList.add('hidden');
+          }
+        }, 2100);
+      } catch(e) {
+        if(!blockedPermanent && preloadCompleted) {
+          const fallback = document.createElement('iframe');
+          fallback.className = 'game-frame';
+          fallback.src = GAME_URL;
+          fallback.onload = () => {
+            fallback.classList.add('visible');
+            if(bgLayer) bgLayer.classList.add('fade-out');
+            if(progressContainer) progressContainer.style.display = 'none';
+            if(loaderDiv) loaderDiv.classList.add('hidden');
+          };
+          document.body.appendChild(fallback);
+        }
+      }
+    }
+    
+    // ========== شروع برنامه ==========
+    function startApp() {
+      // ابتدا پیش‌لود کامل همه منابع
+      preloadAllResources();
+    }
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      requestAnimationFrame(() => {
+        startApp();
+      });
+    });
+  })();
+</script>
 </body>
 </html>
