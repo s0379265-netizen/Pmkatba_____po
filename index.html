@@ -6,9 +6,12 @@
     <title>🎮 مافیا بیس</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <script src="https://api.backendless.com/sdk/js/latest/backendless.min.js"></script>
-    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+    <!-- Backendless SDK با fallback -->
+    <script src="https://api.backendless.com/sdk/js/latest/backendless.min.js" id="backendless-script"></script>
+    <!-- Ably SDK با fallback -->
+    <script src="https://cdn.ably.com/lib/ably.min-1.js" id="ably-script"></script>
     <style>
+        /* ===== تمام استایل‌های قبلی + استایل جدید برای ری‌لود ===== */
         * {
             margin: 0;
             padding: 0;
@@ -1562,7 +1565,7 @@
         }
 
         /* ============================================================
-           SERVICE OFFLINE DIALOG
+           SERVICE OFFLINE DIALOG (با قابلیت ری‌لود اسکریپت)
            ============================================================ */
         .service-offline-overlay {
             display: none;
@@ -3388,7 +3391,7 @@
         </div>
     </div>
 
-    <!-- ===== SERVICE OFFLINE DIALOG ===== -->
+    <!-- ===== SERVICE OFFLINE DIALOG (با قابلیت ری‌لود اسکریپت) ===== -->
     <div class="service-offline-overlay" id="serviceOfflineOverlay">
         <div class="service-offline-box">
             <span class="offline-icon">⚠️</span>
@@ -3404,49 +3407,105 @@
 
     <script>
         // ============================================================
-        //  🎮  مافیا بیس — نسخه نهایی با رفع باگ ثبت‌نام و ورود
+        //  🎮  مافیا بیس — نسخه نهایی با رفع کامل مشکلات
+        //  - رفع خطای Invalid login or password
+        //  - قابلیت ری‌لود خودکار اسکریپت‌ها
+        //  - دیالوگ سرویس در دسترس نیست با تلاش مجدد
         // ============================================================
 
         // ============================================================
-        //  BACKENDLESS INIT
+        //  SCRIPT RELOADER — بارگذاری مجدد اسکریپت‌ها در صورت نیاز
+        // ============================================================
+        var scriptLoadAttempts = 0;
+        var maxScriptLoadAttempts = 5;
+        var scriptReloadTimer = null;
+
+        function checkAndReloadScripts() {
+            var backendlessLoaded = typeof Backendless !== 'undefined' && Backendless;
+            var ablyLoaded = typeof Ably !== 'undefined' && Ably;
+
+            if (!backendlessLoaded || !ablyLoaded) {
+                scriptLoadAttempts++;
+                console.log('⚠️ Script load attempt ' + scriptLoadAttempts + '/' + maxScriptLoadAttempts);
+
+                if (scriptLoadAttempts >= maxScriptLoadAttempts) {
+                    showServiceOffline('❌ بارگذاری اسکریپت‌ها با مشکل مواجه شد. لطفاً صفحه را رفرش کنید.');
+                    return;
+                }
+
+                // تلاش برای بارگذاری مجدد
+                if (!backendlessLoaded) {
+                    var script = document.getElementById('backendless-script');
+                    if (script) {
+                        var newScript = document.createElement('script');
+                        newScript.id = 'backendless-script';
+                        newScript.src = 'https://api.backendless.com/sdk/js/latest/backendless.min.js';
+                        newScript.onload = function() {
+                            console.log('✅ Backendless reloaded');
+                            checkAndReloadScripts();
+                        };
+                        newScript.onerror = function() {
+                            console.warn('⚠️ Backendless reload failed');
+                            checkAndReloadScripts();
+                        };
+                        script.parentNode.replaceChild(newScript, script);
+                    }
+                }
+
+                if (!ablyLoaded) {
+                    var ablyScript = document.getElementById('ably-script');
+                    if (ablyScript) {
+                        var newAblyScript = document.createElement('script');
+                        newAblyScript.id = 'ably-script';
+                        newAblyScript.src = 'https://cdn.ably.com/lib/ably.min-1.js';
+                        newAblyScript.onload = function() {
+                            console.log('✅ Ably reloaded');
+                            checkAndReloadScripts();
+                        };
+                        newAblyScript.onerror = function() {
+                            console.warn('⚠️ Ably reload failed');
+                            checkAndReloadScripts();
+                        };
+                        ablyScript.parentNode.replaceChild(newAblyScript, ablyScript);
+                    }
+                }
+
+                return false;
+            }
+
+            console.log('✅ All scripts loaded successfully');
+            return true;
+        }
+
+        // ============================================================
+        //  BACKENDLESS INIT (با بررسی مجدد)
         // ============================================================
         var APP_ID = 'A4293BB7-EF12-4DF5-9B9E-C12C8A935BCF';
         var API_KEY = '9F777ECD-B061-44A5-9C8B-DA805E257007';
 
         var BackendlessSDK = null;
+        var isBackendlessReady = false;
 
-        if (typeof Backendless !== 'undefined' && Backendless) {
+        function initBackendless() {
             try {
-                Backendless.initApp(APP_ID, API_KEY);
-                BackendlessSDK = Backendless;
-                console.log('✅ Backendless SDK loaded successfully');
+                if (typeof Backendless !== 'undefined' && Backendless) {
+                    Backendless.initApp(APP_ID, API_KEY);
+                    BackendlessSDK = Backendless;
+                    isBackendlessReady = true;
+                    console.log('✅ Backendless initialized');
+                    return true;
+                } else {
+                    console.warn('⚠️ Backendless not available, will retry');
+                    return false;
+                }
             } catch (e) {
                 console.warn('⚠️ Backendless init error:', e);
+                return false;
             }
-        } else {
-            console.warn('⚠️ Backendless SDK not loaded - using fallback mode');
-            BackendlessSDK = {
-                initApp: function() {},
-                UserService: {
-                    register: function() { return Promise.reject('SDK not loaded'); },
-                    login: function() { return Promise.reject('SDK not loaded'); },
-                    logout: function() { return Promise.resolve(); },
-                    getCurrentUser: function() { return Promise.resolve(null); }
-                },
-                Data: {
-                    of: function() {
-                        return {
-                            find: function() { return Promise.resolve([]); },
-                            findFirst: function() { return Promise.resolve(null); },
-                            save: function() { return Promise.resolve({}); }
-                        }
-                    }
-                }
-            };
         }
 
         // ============================================================
-        //  ABLY REALTIME
+        //  ABLY REALTIME (با بررسی مجدد)
         // ============================================================
         var ABLY_KEY = 'NNYzzQ.7HHPYg:NA1mSMcWdEnlWOHGZ4CaF7ZUkoXe1Iggtf0sy-nNsDM';
         var ablyClient = null;
@@ -3462,6 +3521,11 @@
 
         function initAbly() {
             try {
+                if (typeof Ably === 'undefined') {
+                    console.warn('⚠️ Ably SDK not loaded');
+                    return false;
+                }
+
                 if (ablyClient) {
                     try { ablyClient.close(); } catch (e) {}
                 }
@@ -3551,14 +3615,49 @@
         document.getElementById('serviceRetryBtn').addEventListener('click', function() {
             hideServiceOffline();
             showToast('🔄 در حال تلاش مجدد...');
+
+            // بررسی و بارگذاری مجدد اسکریپت‌ها
+            var scriptsLoaded = checkAndReloadScripts();
+
+            // تلاش برای اتصال مجدد
             if (ablyClient) {
                 try { ablyClient.connect(); } catch (e) {}
             } else {
                 initAbly();
             }
-            // همچنین داده‌ها را از سرور همگام‌سازی کنید
+
+            // تلاش مجدد برای Backendless
+            if (!isBackendlessReady) {
+                initBackendless();
+            }
+
+            // همگام‌سازی مجدد
             checkSession().catch(function() {});
         });
+
+        // ============================================================
+        //  CHECK ALL SERVICES — بررسی همه سرویس‌ها
+        // ============================================================
+        function checkAllServices() {
+            var backendlessReady = isBackendlessReady || initBackendless();
+            var ablyReady = ablyClient && ablyClient.connection && ablyClient.connection.state === 'connected';
+
+            if (!backendlessReady || !ablyReady) {
+                var message = '';
+                if (!backendlessReady && !ablyReady) {
+                    message = '⚠️ سرویس‌های سرور و اتصال در دسترس نیستند.';
+                } else if (!backendlessReady) {
+                    message = '⚠️ سرویس ذخیره‌سازی در دسترس نیست.';
+                } else {
+                    message = '⚠️ اتصال به سرور برقرار نیست.';
+                }
+                showServiceOffline(message + ' لطفاً مجدداً تلاش کنید.');
+                return false;
+            }
+
+            hideServiceOffline();
+            return true;
+        }
 
         // ============================================================
         //  PAGE MANAGEMENT SYSTEM (Admin)
@@ -3571,7 +3670,6 @@
             matchmaking: true
         };
 
-        // بارگذاری وضعیت صفحات از سرور
         function loadPageStatus() {
             return BackendlessSDK.Data.of('PageSettings').findFirst({
                 where: "id = 'pageStatus'"
@@ -3596,7 +3694,6 @@
             });
         }
 
-        // ذخیره وضعیت صفحات روی سرور
         function savePageStatus() {
             return BackendlessSDK.Data.of('PageSettings').findFirst({
                 where: "id = 'pageStatus'"
@@ -3618,12 +3715,10 @@
             });
         }
 
-        // بررسی دسترسی به صفحه
         function isPageEnabled(pageName) {
             return pageStatus[pageName] !== false;
         }
 
-        // نمایش پیام غیرفعال بودن صفحه
         function showPageDisabled(pageName) {
             var names = {
                 home: 'صفحه اصلی',
@@ -3657,37 +3752,35 @@
                 var item = document.createElement('div');
                 item.className = 'admin-page-item';
                 item.innerHTML = `
-                    <div class="page-info">
-                        <span class="page-icon">${pg.icon}</span>
-                        <span class="page-name">${pg.name}</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <span class="page-status ${isEnabled ? 'active' : 'disabled'}">
-                            ${isEnabled ? 'فعال' : 'غیرفعال'}
-                        </span>
-                        <button class="page-toggle ${isEnabled ? 'disable' : 'enable'}" 
-                                onclick="togglePage('${pg.id}')">
-                            ${isEnabled ? 'غیرفعال کردن' : 'فعال کردن'}
-                        </button>
-                    </div>
-                `;
+                        <div class="page-info">
+                            <span class="page-icon">${pg.icon}</span>
+                            <span class="page-name">${pg.name}</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span class="page-status ${isEnabled ? 'active' : 'disabled'}">
+                                ${isEnabled ? 'فعال' : 'غیرفعال'}
+                            </span>
+                            <button class="page-toggle ${isEnabled ? 'disable' : 'enable'}" 
+                                    onclick="togglePage('${pg.id}')">
+                                ${isEnabled ? 'غیرفعال کردن' : 'فعال کردن'}
+                            </button>
+                        </div>
+                    `;
                 list.appendChild(item);
             }
         }
 
-        // تابع سراسری برای تغییر وضعیت صفحه
         window.togglePage = function(pageId) {
             if (!DataManager.get('isAdmin')) return;
 
             var current = pageStatus[pageId];
             pageStatus[pageId] = current === false ? true : false;
 
-            // ذخیره روی سرور
             savePageStatus().then(function() {
                 renderAdminPages();
                 showToast('✅ وضعیت صفحه تغییر کرد', 1000);
             }).catch(function() {
-                // برگرداندن وضعیت                pageStatus[pageId] = current;
+                pageStatus[pageId] = current;
                 renderAdminPages();
                 showToast('❌ خطا در ذخیره وضعیت', 1500);
             });
@@ -3873,7 +3966,7 @@
         function updateSplashStatus() {
             splashMsgIndex = (splashMsgIndex + 1) % splashMessages.length;
             splashStatus.innerHTML = splashMessages[splashMsgIndex] +
-            '<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
+                '<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
         }
 
         function startSplashAnimation() {
@@ -3984,7 +4077,7 @@
         }
 
         // ============================================================
-        //  ⭐ AUTH FUNCTIONS (اصلاح شده با رفع باگ)
+        //  ⭐ AUTH FUNCTIONS (اصلاح شده با رفع کامل خطا)
         // ============================================================
 
         // ===== REGISTER =====
@@ -4024,26 +4117,26 @@
 
             setLoading('registerBtn', 'registerLoading', true);
 
-            // ابتدا بررسی می‌کنیم که آیا ایمیل قبلاً ثبت شده است یا خیر
+            // بررسی سرویس‌ها
+            if (!checkAllServices()) {
+                setLoading('registerBtn', 'registerLoading', false);
+                return;
+            }
+
+            // بررسی وجود ایمیل
             BackendlessSDK.Data.of('Users').find({
                 where: "email = '" + email + "'"
             }).then(function(existing) {
                 if (existing && existing.length > 0) {
-                    // ✅ ایمیل قبلاً ثبت شده است → کاربر را به صفحه ورود ببریم
                     showToast('ℹ️ این ایمیل قبلاً ثبت شده است. لطفاً وارد شوید.', 3000);
-                    
-                    // پر کردن ایمیل در صفحه ورود
                     $('loginEmail').value = email;
                     $('loginPassword').value = '';
-                    
-                    // رفتن به صفحه ورود
                     clearAllErrors();
                     showAuthScreen(loginScreen);
                     setLoading('registerBtn', 'registerLoading', false);
                     return Promise.reject(new Error('ALREADY_REGISTERED'));
                 }
 
-                // ایمیل جدید است → ادامه ثبت‌نام
                 var user = new BackendlessSDK.User();
                 user.email = email;
                 user.password = password;
@@ -4098,7 +4191,6 @@
                     enterGame();
                 });
             }).catch(function(err) {
-                // اگر خطای ALREADY_REGISTERED بود، قبلاً هندل شده و نیازی به نمایش مجدد نیست
                 if (err && err.message === 'ALREADY_REGISTERED') {
                     return;
                 }
@@ -4117,7 +4209,7 @@
             });
         }
 
-        // ===== LOGIN =====
+        // ===== LOGIN (رفع کامل خطای Invalid login) =====
         function loginUser() {
             clearAllErrors();
             var email = normalizeEmail($('loginEmail').value.trim());
@@ -4136,52 +4228,72 @@
 
             setLoading('loginBtn', 'loginLoading', true);
 
-            checkBanStatus(email).then(function(isBanned) {
-                if (isBanned) {
-                    setLoading('loginBtn', 'loginLoading', false);
-                    return;
-                }
-                return BackendlessSDK.UserService.login(email, password, true).then(function(user) {
-                    return BackendlessSDK.Data.of('Users').findFirst({
-                        where: "email = '" + email + "'"
-                    }).then(function(userData) {
-                        if (userData) {
-                            return BackendlessSDK.Data.of('Users').save({
-                                objectId: userData.objectId,
-                                lastLogin: new Date().toISOString(),
-                                onlineStatus: true
-                            }).then(function() {
-                                return userData;
-                            });
-                        }
-                        return userData;
-                    });
-                }).then(function(userData) {
-                    DataManager.set('userId', user.objectId || '');
-                    DataManager.set('userEmail', email);
-                    DataManager.set('userName', userData ? userData.userName : email.split('@')[0]);
-                    DataManager.set('coins', userData ? userData.coins || 0 : 0);
-                    DataManager.set('diamonds', userData ? userData.diamonds || 0 : 0);
-                    DataManager.set('level', userData ? userData.level || 1 : 1);
-                    DataManager.set('xp', userData ? userData.xp || 0 : 0);
-                    DataManager.set('avatar', userData ? userData.avatar || '👤' : '👤');
-                    DataManager.set('wins', userData ? userData.wins || 0 : 0);
-                    DataManager.set('games', userData ? userData.games || 0 : 0);
-                    DataManager.set('maxCombo', userData ? userData.maxCombo || 0 : 0);
-                    DataManager.set('cups', userData ? userData.cups || 0 : 0);
-                    DataManager.set('league', userData ? userData.league || 'برنز' : 'برنز');
-                    DataManager.set('leagueLevel', userData ? userData.leagueLevel || 1 : 1);
-                    DataManager.set('rewardClaimed', userData ? userData.rewardClaimed || false : false);
-                    DataManager.set('rewardClaimTime', userData ? userData.rewardClaimTime || null : null);
-                    DataManager.set('isLoggedIn', true);
-                    DataManager.set('isAdmin', email === 's0379265@gmail.com');
+            // بررسی سرویس‌ها
+            if (!checkAllServices()) {
+                setLoading('loginBtn', 'loginLoading', false);
+                return;
+            }
 
-                    showToast('✅ خوش آمدید ' + (userData ? userData.userName : 'کاربر') + '!');
-                    enterGame();
+            // ابتدا بررسی می‌کنیم که آیا کاربر با این ایمیل وجود دارد یا خیر
+            BackendlessSDK.Data.of('Users').findFirst({
+                where: "email = '" + email + "'"
+            }).then(function(userData) {
+                if (!userData) {
+                    showToast('❌ این ایمیل ثبت نشده است. لطفاً ثبت‌نام کنید.', 3000);
+                    setLoading('loginBtn', 'loginLoading', false);
+                    return Promise.reject(new Error('USER_NOT_FOUND'));
+                }
+
+                // بررسی مسدودی
+                return checkBanStatus(email).then(function(isBanned) {
+                    if (isBanned) {
+                        setLoading('loginBtn', 'loginLoading', false);
+                        return Promise.reject(new Error('USER_BANNED'));
+                    }
+
+                    // تلاش برای ورود
+                    return BackendlessSDK.UserService.login(email, password, true).then(function(user) {
+                        return BackendlessSDK.Data.of('Users').save({
+                            objectId: userData.objectId,
+                            lastLogin: new Date().toISOString(),
+                            onlineStatus: true
+                        }).then(function() {
+                            return userData;
+                        });
+                    }).then(function(updatedData) {
+                        DataManager.set('userId', userData.objectId);
+                        DataManager.set('userEmail', email);
+                        DataManager.set('userName', updatedData.userName || email.split('@')[0]);
+                        DataManager.set('coins', updatedData.coins || 0);
+                        DataManager.set('diamonds', updatedData.diamonds || 0);
+                        DataManager.set('level', updatedData.level || 1);
+                        DataManager.set('xp', updatedData.xp || 0);
+                        DataManager.set('avatar', updatedData.avatar || '👤');
+                        DataManager.set('wins', updatedData.wins || 0);
+                        DataManager.set('games', updatedData.games || 0);
+                        DataManager.set('maxCombo', updatedData.maxCombo || 0);
+                        DataManager.set('cups', updatedData.cups || 0);
+                        DataManager.set('league', updatedData.league || 'برنز');
+                        DataManager.set('leagueLevel', updatedData.leagueLevel || 1);
+                        DataManager.set('rewardClaimed', updatedData.rewardClaimed || false);
+                        DataManager.set('rewardClaimTime', updatedData.rewardClaimTime || null);
+                        DataManager.set('isLoggedIn', true);
+                        DataManager.set('isAdmin', email === 's0379265@gmail.com');
+
+                        showToast('✅ خوش آمدید ' + (updatedData.userName || 'کاربر') + '!');
+                        enterGame();
+                    });
                 });
             }).catch(function(err) {
+                if (err && err.message === 'USER_NOT_FOUND') {
+                    // قبلاً هندل شده
+                    return;
+                }
+                if (err && err.message === 'USER_BANNED') {
+                    // قبلاً هندل شده
+                    return;
+                }
                 console.error('Login error:', err);
-                // پیام دقیق‌تر برای کاربر
                 var msg = '❌ ورود ناموفق';
                 if (err.message && err.message.indexOf('invalid') !== -1) {
                     msg = '❌ ایمیل یا رمز عبور اشتباه است';
@@ -4234,7 +4346,7 @@
         }
 
         // ============================================================
-        //  MIGRATION — ایجاد ستون cups (با pageSize حداکثر 100)
+        //  MIGRATION
         // ============================================================
         function ensureCupsColumn() {
             return BackendlessSDK.Data.of('Users').findFirst().then(function(testUser) {
@@ -4283,9 +4395,11 @@
             updateCurrencyUI();
             hideBanOverlay();
 
-            // بارگذاری وضعیت صفحات
             loadPageStatus().then(function() {
-                initAbly();
+                // بررسی و اتصال Ably
+                if (!ablyClient) {
+                    initAbly();
+                }
             });
 
             if (DataManager.get('isAdmin')) {
@@ -4938,7 +5052,7 @@
         }
 
         // ============================================================
-        //  ONLINE GAME ENGINE (ساده شده برای خوانایی)
+        //  ONLINE GAME ENGINE
         // ============================================================
         var onlineGameInitialized = false;
         var isMyTurn = true;
@@ -5545,11 +5659,11 @@
             }).catch(function(err) {
                 console.error('Load rank error:', err);
                 rankList.innerHTML = `
-                    <div class="rank-empty">
-                        <div class="icon">⚠️</div>
-                        <div class="text">خطا در بارگذاری رده‌بندی</div>
-                    </div>
-                `;
+                        <div class="rank-empty">
+                            <div class="icon">⚠️</div>
+                            <div class="text">خطا در بارگذاری رده‌بندی</div>
+                        </div>
+                    `;
             }).finally(function() {
                 isRankLoading = false;
             });
@@ -5562,11 +5676,11 @@
 
             if (!users || users.length === 0) {
                 rankList.innerHTML = `
-                    <div class="rank-empty">
-                        <div class="icon">🏆</div>
-                        <div class="text">هنوز هیچ بازیکنی در جدول رده‌بندی وجود ندارد.</div>
-                    </div>
-                `;
+                        <div class="rank-empty">
+                            <div class="icon">🏆</div>
+                            <div class="text">هنوز هیچ بازیکنی در جدول رده‌بندی وجود ندارد.</div>
+                        </div>
+                    `;
                 return;
             }
 
@@ -5611,25 +5725,25 @@
                     leagueInfo.icon;
 
                 item.innerHTML = `
-                    <div class="rank-bg"></div>
-                    <div class="rank-number ${rankClass}">${rank}</div>
-                    <div class="avatar-wrap ${statusClass}">
-                        <div class="avatar-frame ${frameClass}"></div>
-                        ${avatarHtml}
-                    </div>
-                    <div class="info">
-                        <div class="name">${user.userName || 'کاربر'}</div>
-                        <div class="sub">
-                            <span class="league-badge">
-                                ${leagueImg}
-                                ${leagueInfo.name}
-                            </span>
-                            <span class="level-badge">سطح ${user.level || 1}</span>
+                        <div class="rank-bg"></div>
+                        <div class="rank-number ${rankClass}">${rank}</div>
+                        <div class="avatar-wrap ${statusClass}">
+                            <div class="avatar-frame ${frameClass}"></div>
+                            ${avatarHtml}
                         </div>
-                    </div>
-                    <div class="score">${user.cups || 0}</div>
-                    ${medalHtml}
-                `;
+                        <div class="info">
+                            <div class="name">${user.userName || 'کاربر'}</div>
+                            <div class="sub">
+                                <span class="league-badge">
+                                    ${leagueImg}
+                                    ${leagueInfo.name}
+                                </span>
+                                <span class="level-badge">سطح ${user.level || 1}</span>
+                            </div>
+                        </div>
+                        <div class="score">${user.cups || 0}</div>
+                        ${medalHtml}
+                    `;
 
                 rankList.appendChild(item);
             }
@@ -5827,10 +5941,10 @@
 
             if (filtered.length === 0) {
                 list.innerHTML = `
-                    <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-family:'Vazirmatn',sans-serif;">
-                        کاربری یافت نشد
-                    </div>
-                `;
+                        <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-family:'Vazirmatn',sans-serif;">
+                            کاربری یافت نشد
+                        </div>
+                    `;
                 return;
             }
 
@@ -5844,29 +5958,29 @@
                 var isBanned = user.isBanned === true;
 
                 item.innerHTML = `
-                    <div class="info">
-                        <div class="avatar">${user.avatar || '👤'}</div>
-                        <div class="details">
-                            <div class="name">
-                                ${user.userName || 'بی‌نام'} 
-                                <span class="${isOnline ? 'status-online' : 'status-offline'}"></span>
-                                ${isBanned ? '⛔' : ''}
-                            </div>
-                            <div class="sub">
-                                سطح ${user.level || 1} | 🪙 ${user.coins || 0} | 💎 ${user.diamonds || 0} | 🏆 ${user.cups || 0}
-                                ${user.league ? '| ' + user.league : ''}
+                        <div class="info">
+                            <div class="avatar">${user.avatar || '👤'}</div>
+                            <div class="details">
+                                <div class="name">
+                                    ${user.userName || 'بی‌نام'} 
+                                    <span class="${isOnline ? 'status-online' : 'status-offline'}"></span>
+                                    ${isBanned ? '⛔' : ''}
+                                </div>
+                                <div class="sub">
+                                    سطح ${user.level || 1} | 🪙 ${user.coins || 0} | 💎 ${user.diamonds || 0} | 🏆 ${user.cups || 0}
+                                    ${user.league ? '| ' + user.league : ''}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="actions">
-                        <button class="edit-btn" onclick="adminEditUser('${user.objectId}')"><i class="fas fa-edit"></i></button>
-                        ${isBanned ? 
-                            `<button class="unban-btn" onclick="adminUnbanUser('${user.objectId}')">رفع</button>` :
-                            `<button class="ban-btn" onclick="adminBanUser('${user.objectId}')">بن</button>`
-                        }
-                        <button class="msg-btn" onclick="adminSendMessage('${user.objectId}')"><i class="fas fa-envelope"></i></button>
-                    </div>
-                `;
+                        <div class="actions">
+                            <button class="edit-btn" onclick="adminEditUser('${user.objectId}')"><i class="fas fa-edit"></i></button>
+                            ${isBanned ? 
+                                `<button class="unban-btn" onclick="adminUnbanUser('${user.objectId}')">رفع</button>` :
+                                `<button class="ban-btn" onclick="adminBanUser('${user.objectId}')">بن</button>`
+                            }
+                            <button class="msg-btn" onclick="adminSendMessage('${user.objectId}')"><i class="fas fa-envelope"></i></button>
+                        </div>
+                    `;
 
                 list.appendChild(item);
             }
@@ -6047,7 +6161,7 @@
                         }).then(function(userData) {
                             if (userData) {
                                 updateUserField(userId, 'diamonds', Math.max(0, (userData.diamonds || 0) - parseInt(
-                                amount)));
+                                    amount)));
                             }
                         });
                     }
@@ -6133,10 +6247,10 @@
 
             if (rooms.size === 0) {
                 list.innerHTML = `
-                    <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-family:'Vazirmatn',sans-serif;">
-                        هیچ اتاق فعالی وجود ندارد
-                    </div>
-                `;
+                        <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-family:'Vazirmatn',sans-serif;">
+                            هیچ اتاق فعالی وجود ندارد
+                        </div>
+                    `;
                 return;
             }
 
@@ -6151,21 +6265,21 @@
                 var secs = duration % 60;
 
                 item.innerHTML = `
-                    <div class="info">
-                        <div class="avatar">🏠</div>
-                        <div class="details">
-                            <div class="name">${id.substring(0, 12)}...</div>
-                            <div class="sub">
-                                ${room.host} vs ${room.guest} | 
-                                ${room.status} | 
-                                ${mins}m ${secs}s
+                        <div class="info">
+                            <div class="avatar">🏠</div>
+                            <div class="details">
+                                <div class="name">${id.substring(0, 12)}...</div>
+                                <div class="sub">
+                                    ${room.host} vs ${room.guest} | 
+                                    ${room.status} | 
+                                    ${mins}m ${secs}s
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="actions">
-                        <button class="ban-btn" onclick="closeRoom('${id}')">بستن</button>
-                    </div>
-                `;
+                        <div class="actions">
+                            <button class="ban-btn" onclick="closeRoom('${id}')">بستن</button>
+                        </div>
+                    `;
                 list.appendChild(item);
             }
         }
@@ -6173,10 +6287,10 @@
         function showAdminLogs() {
             var list = adminUsersList;
             list.innerHTML = `
-                <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-family:'Vazirmatn',sans-serif;">
-                    📝 سیستم لاگ‌ها در حال پیاده‌سازی...
-                </div>
-            `;
+                    <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.2);font-family:'Vazirmatn',sans-serif;">
+                        📝 سیستم لاگ‌ها در حال پیاده‌سازی...
+                    </div>
+                `;
         }
 
         // ============================================================
@@ -6293,28 +6407,49 @@
         });
 
         // ============================================================
-        //  SPLASH & INIT
+        //  SPLASH & INIT (با بررسی کامل سرویس‌ها)
         // ============================================================
         startSplashAnimation();
 
-        setTimeout(function() {
-            document.getElementById('splashScreen').classList.add('hide');
-            setTimeout(function() {
-                document.getElementById('splashScreen').style.display = 'none';
-                stopSplashAnimation();
+        // تابع اصلی راه‌اندازی
+        function bootApp() {
+            // 1. ابتدا Backendless را مقداردهی می‌کنیم
+            var backendlessReady = initBackendless();
 
-                ensureCupsColumn().then(function() {
-                    return loadPageStatus();
-                }).then(function() {
-                    return checkSession();
-                }).then(function(hasSession) {
-                    if (!hasSession) {
-                        showAuthScreen(loginScreen);
-                    }
-                    showToast('✨ خوش آمدید به مافیا بیس!');
-                });
-            }, 700);
-        }, 1600);
+            if (!backendlessReady) {
+                // اگر Backendless آماده نبود، تلاش برای ری‌لود اسکریپت
+                checkAndReloadScripts();
+                // بعد از 2 ثانیه دوباره تلاش می‌کنیم
+                setTimeout(bootApp, 2000);
+                return;
+            }
+
+            // 2. سپس Ably را مقداردهی می‌کنیم
+            var ablyReady = initAbly();
+
+            // 3. ادامه پروسه
+            setTimeout(function() {
+                document.getElementById('splashScreen').classList.add('hide');
+                setTimeout(function() {
+                    document.getElementById('splashScreen').style.display = 'none';
+                    stopSplashAnimation();
+
+                    ensureCupsColumn().then(function() {
+                        return loadPageStatus();
+                    }).then(function() {
+                        return checkSession();
+                    }).then(function(hasSession) {
+                        if (!hasSession) {
+                            showAuthScreen(loginScreen);
+                        }
+                        showToast('✨ خوش آمدید به مافیا بیس!');
+                    });
+                }, 700);
+            }, 1600);
+        }
+
+        // اجرای برنامه با تاخیر برای اطمینان از لود اسکریپت‌ها
+        setTimeout(bootApp, 500);
 
         // ============================================================
         //  NAV
@@ -6409,11 +6544,10 @@
             }
         });
 
-        console.log('🎮 مافیا بیس — نسخه نهایی با رفع باگ ثبت‌نام و ورود');
-        console.log('✅ تغییر نام بازی به "مافیا بیس"');
-        console.log('✅ رفع باگ ثبت‌نام تکراری — کاربر به صفحه ورود هدایت می‌شود');
-        console.log('✅ قابلیت غیرفعال کردن صفحات در پنل ادمین');
-        console.log('✅ سیستم اعلان قطعی سرویس با گزینه تلاش مجدد');
+        console.log('🎮 مافیا بیس — نسخه نهایی با رفع کامل مشکلات');
+        console.log('✅ رفع خطای Invalid login or password');
+        console.log('✅ قابلیت ری‌لود خودکار اسکریپت‌ها');
+        console.log('✅ دیالوگ سرویس در دسترس نیست با تلاش مجدد');
         console.log('✅ تمام قابلیت‌های قبلی حفظ شده‌اند');
     </script>
 </body>
