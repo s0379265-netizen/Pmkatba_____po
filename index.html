@@ -3404,7 +3404,7 @@
 
     <script>
         // ============================================================
-        //  🎮  مافیا بیس — نسخه نهایی با قابلیت‌های جدید
+        //  🎮  مافیا بیس — نسخه نهایی با رفع باگ ثبت‌نام و ورود
         // ============================================================
 
         // ============================================================
@@ -3687,8 +3687,7 @@
                 renderAdminPages();
                 showToast('✅ وضعیت صفحه تغییر کرد', 1000);
             }).catch(function() {
-                // برگرداندن وضعیت
-                pageStatus[pageId] = current;
+                // برگرداندن وضعیت                pageStatus[pageId] = current;
                 renderAdminPages();
                 showToast('❌ خطا در ذخیره وضعیت', 1500);
             });
@@ -3985,8 +3984,10 @@
         }
 
         // ============================================================
-        //  AUTH FUNCTIONS
+        //  ⭐ AUTH FUNCTIONS (اصلاح شده با رفع باگ)
         // ============================================================
+
+        // ===== REGISTER =====
         function registerUser() {
             if (document.getElementById('registerBtn').disabled) return;
 
@@ -4023,15 +4024,26 @@
 
             setLoading('registerBtn', 'registerLoading', true);
 
+            // ابتدا بررسی می‌کنیم که آیا ایمیل قبلاً ثبت شده است یا خیر
             BackendlessSDK.Data.of('Users').find({
                 where: "email = '" + email + "'"
             }).then(function(existing) {
                 if (existing && existing.length > 0) {
-                    showFieldError('regEmailError', 'این ایمیل قبلاً ثبت شده است');
+                    // ✅ ایمیل قبلاً ثبت شده است → کاربر را به صفحه ورود ببریم
+                    showToast('ℹ️ این ایمیل قبلاً ثبت شده است. لطفاً وارد شوید.', 3000);
+                    
+                    // پر کردن ایمیل در صفحه ورود
+                    $('loginEmail').value = email;
+                    $('loginPassword').value = '';
+                    
+                    // رفتن به صفحه ورود
+                    clearAllErrors();
+                    showAuthScreen(loginScreen);
                     setLoading('registerBtn', 'registerLoading', false);
-                    return;
+                    return Promise.reject(new Error('ALREADY_REGISTERED'));
                 }
 
+                // ایمیل جدید است → ادامه ثبت‌نام
                 var user = new BackendlessSDK.User();
                 user.email = email;
                 user.password = password;
@@ -4086,6 +4098,10 @@
                     enterGame();
                 });
             }).catch(function(err) {
+                // اگر خطای ALREADY_REGISTERED بود، قبلاً هندل شده و نیازی به نمایش مجدد نیست
+                if (err && err.message === 'ALREADY_REGISTERED') {
+                    return;
+                }
                 console.error('Register error:', err);
                 var errorMsg = 'خطا در ثبت‌نام';
                 if (err.message && err.message.indexOf('username') !== -1) {
@@ -4101,6 +4117,7 @@
             });
         }
 
+        // ===== LOGIN =====
         function loginUser() {
             clearAllErrors();
             var email = normalizeEmail($('loginEmail').value.trim());
@@ -4164,7 +4181,16 @@
                 });
             }).catch(function(err) {
                 console.error('Login error:', err);
-                showToast('❌ ورود ناموفق: ایمیل یا رمز عبور اشتباه است');
+                // پیام دقیق‌تر برای کاربر
+                var msg = '❌ ورود ناموفق';
+                if (err.message && err.message.indexOf('invalid') !== -1) {
+                    msg = '❌ ایمیل یا رمز عبور اشتباه است';
+                } else if (err.message && err.message.indexOf('not found') !== -1) {
+                    msg = '❌ این ایمیل ثبت نشده است. لطفاً ثبت‌نام کنید.';
+                } else if (err.message) {
+                    msg = '❌ ' + err.message;
+                }
+                showToast(msg, 3000);
             }).finally(function() {
                 setLoading('loginBtn', 'loginLoading', false);
             });
@@ -6383,8 +6409,9 @@
             }
         });
 
-        console.log('🎮 مافیا بیس — نسخه نهایی با قابلیت‌های جدید');
+        console.log('🎮 مافیا بیس — نسخه نهایی با رفع باگ ثبت‌نام و ورود');
         console.log('✅ تغییر نام بازی به "مافیا بیس"');
+        console.log('✅ رفع باگ ثبت‌نام تکراری — کاربر به صفحه ورود هدایت می‌شود');
         console.log('✅ قابلیت غیرفعال کردن صفحات در پنل ادمین');
         console.log('✅ سیستم اعلان قطعی سرویس با گزینه تلاش مجدد');
         console.log('✅ تمام قابلیت‌های قبلی حفظ شده‌اند');
