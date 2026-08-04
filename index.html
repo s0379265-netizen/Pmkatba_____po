@@ -9,9 +9,6 @@
     <script src="https://api.backendless.com/sdk/js/latest/backendless.min.js"></script>
     <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
     <style>
-        /* ============================================================
-           تمام استایل‌های قبلی به‌صورت کامل حفظ شده
-           ============================================================ */
         *{margin:0;padding:0;box-sizing:border-box}:root{--gold:#FFD700;--gold-dark:#C9A800;--neon-blue:#00B4FF;--neon-blue-dark:#0066AA;--teal:#00D4FF;--danger:#FF4D4D;--success:#00FF88;--warning:#FFAA00;--nav-height:62px;--radius:16px;--shadow:0 8px 32px rgba(0,0,0,.5);--transition:all .3s cubic-bezier(.4,0,.2,1)}body{font-family:'Vazirmatn',sans-serif;min-height:100vh;overflow:hidden;user-select:none;-webkit-tap-highlight-color:transparent;background:#0a0a1a;color:#fff}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,.02)}::-webkit-scrollbar-thumb{background:rgba(0,180,255,.2);border-radius:10px}
         #loadingScreen{position:fixed;inset:0;z-index:99999;display:flex;justify-content:center;align-items:center;background:#0a0a1a;transition:opacity .8s ease,visibility .8s ease}#loadingScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}.loading-container{text-align:center;max-width:420px;width:90%;padding:40px 30px;background:rgba(10,22,40,.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:32px;border:1px solid rgba(0,180,255,.06);box-shadow:var(--shadow);animation:fadeIn .6s ease}.loading-logo{margin-bottom:24px}.loading-logo .logo-icon{font-size:52px;display:block;margin-bottom:4px;animation:pulseGlow 2s ease-in-out infinite}.loading-logo .logo-text{font-size:30px;font-weight:900;color:#fff;text-shadow:0 0 40px rgba(0,180,255,.1)}.loading-logo .logo-text span{color:var(--gold);text-shadow:0 0 40px rgba(255,215,0,.15)}.loading-logo .logo-sub{font-size:13px;color:rgba(255,255,255,.2);letter-spacing:6px;font-weight:300;margin-top:2px}.loading-bar-wrapper{margin:20px 0 12px}.loading-bar-track{width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;position:relative}.loading-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--neon-blue),var(--gold));border-radius:10px;transition:width .4s ease;box-shadow:0 0 30px rgba(0,180,255,.2)}.loading-percentage{font-size:14px;font-weight:700;color:rgba(255,255,255,.3);margin-top:8px;font-variant-numeric:tabular-nums}.loading-status{font-size:13px;color:rgba(255,255,255,.2);margin-top:4px;min-height:24px;font-weight:300}.loading-status .dots{display:inline-block;min-width:24px;text-align:left}.loading-status .dots span{display:inline-block;animation:dotAnim 1.4s infinite}.loading-status .dots span:nth-child(2){animation-delay:.2s}.loading-status .dots span:nth-child(3){animation-delay:.4s}.loading-error{display:none;margin-top:16px}.loading-error.show{display:block}.loading-error .error-icon{font-size:32px;display:block;margin-bottom:4px}.loading-error .error-text{font-size:14px;color:rgba(255,255,255,.3)}.loading-error .error-btn{margin-top:12px;padding:8px 32px;border:none;border-radius:12px;background:rgba(0,180,255,.1);color:var(--neon-blue);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:var(--transition);border:1px solid rgba(0,180,255,.06)}.loading-error .error-btn:hover{background:rgba(0,180,255,.15);transform:translateY(-2px)}
         @keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}@keyframes pulseGlow{0%,100%{filter:drop-shadow(0 0 30px rgba(100,50,200,.2))}50%{filter:drop-shadow(0 0 60px rgba(100,50,200,.4))}}@keyframes dotAnim{0%,80%,100%{opacity:0;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}@keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-8px)}20%,40%,60%,80%{transform:translateX(8px)}}
@@ -34,107 +31,11 @@
         .rank-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:16px}.rank-loading .spinner{width:48px;height:48px;border:3px solid rgba(0,180,255,.05);border-top-color:var(--neon-blue);border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.rank-loading .text{font-size:14px;color:rgba(255,255,255,.15);font-family:'Vazirmatn',sans-serif}
         .league-up-overlay{display:none;position:fixed;inset:0;z-index:800;justify-content:center;align-items:center;background:rgba(10,10,26,.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:20px;animation:fadeIn .4s ease}.league-up-overlay.active{display:flex}.league-up-box{text-align:center;animation:bounceIn .6s ease}@keyframes bounceIn{0%{transform:scale(0);opacity:0}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}.league-up-box .league-icon{font-size:80px;margin-bottom:8px;animation:pulseGlow 1.5s ease-in-out infinite}.league-up-box .league-icon img{width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(255,215,0,.3))}.league-up-box .league-title{font-size:28px;font-weight:900;color:var(--gold);font-family:'Vazirmatn',sans-serif;text-shadow:0 0 40px rgba(255,215,0,.2)}.league-up-box .league-sub{font-size:16px;color:rgba(255,255,255,.4);font-family:'Vazirmatn',sans-serif;margin-top:4px}.league-up-box .league-new{font-size:18px;font-weight:700;color:#fff;font-family:'Vazirmatn',sans-serif;margin-top:8px}
 
-        /* ============================================================
-           SESSION REPLACED POPUP
-           ============================================================ */
-        .session-replaced-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            justify-content: center;
-            align-items: center;
-            background: rgba(10, 10, 26, .92);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            animation: fadeIn .4s ease;
-            padding: 20px;
-        }
-        .session-replaced-overlay.active {
-            display: flex;
-        }
+        .session-replaced-overlay{display:none;position:fixed;inset:0;z-index:99999;justify-content:center;align-items:center;background:rgba(10,10,26,.92);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:fadeIn .4s ease;padding:20px}.session-replaced-overlay.active{display:flex}.session-replaced-box{width:100%;max-width:420px;padding:40px 30px 35px;background:rgba(10,22,40,.7);backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border-radius:32px;border:1px solid rgba(255,77,77,.08);box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 60px rgba(255,77,77,.02);text-align:center;position:relative;overflow:hidden;animation:shake .5s ease}.session-replaced-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30%20%,rgba(255,77,77,.03)0%,transparent 60%);pointer-events:none}.session-replaced-box .icon{font-size:56px;margin-bottom:8px;display:block}.session-replaced-box .title{font-size:22px;font-weight:900;color:var(--danger);font-family:'Vazirmatn',sans-serif;text-shadow:0 0 40px rgba(255,77,77,.1)}.session-replaced-box .message{font-size:14px;color:rgba(255,255,255,.5);margin:12px 0 20px;font-family:'Vazirmatn',sans-serif;line-height:1.8}.session-replaced-box .message .en{font-size:12px;color:rgba(255,255,255,.15);margin-top:4px}.session-replaced-box .device-info{font-size:12px;color:rgba(255,255,255,.15);font-family:'Vazirmatn',sans-serif;padding:8px 16px;background:rgba(255,255,255,.02);border-radius:12px;border:1px solid rgba(255,255,255,.02);margin-bottom:16px;display:inline-block}.session-replaced-box .btn{padding:10px 40px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--danger),#CC0000);color:#fff;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:16px;cursor:pointer;transition:all .3s ease;box-shadow:0 8px 30px rgba(255,77,77,.15)}.session-replaced-box .btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,77,77,.25)}.session-replaced-box .btn:active{transform:scale(.96)}
 
-        .session-replaced-box {
-            width: 100%;
-            max-width: 420px;
-            padding: 40px 30px 35px;
-            background: rgba(10, 22, 40, .7);
-            backdrop-filter: blur(30px) saturate(200%);
-            -webkit-backdrop-filter: blur(30px) saturate(200%);
-            border-radius: 32px;
-            border: 1px solid rgba(255, 77, 77, .08);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, .6), 0 0 60px rgba(255, 77, 77, .02);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            animation: shake .5s ease;
-        }
-        .session-replaced-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 77, 77, .03) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .session-replaced-box .icon {
-            font-size: 56px;
-            margin-bottom: 8px;
-            display: block;
-        }
-        .session-replaced-box .title {
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--danger);
-            font-family: 'Vazirmatn', sans-serif;
-            text-shadow: 0 0 40px rgba(255, 77, 77, .1);
-        }
-        .session-replaced-box .message {
-            font-size: 14px;
-            color: rgba(255, 255, 255, .5);
-            margin: 12px 0 20px;
-            font-family: 'Vazirmatn', sans-serif;
-            line-height: 1.8;
-        }
-        .session-replaced-box .message .en {
-            font-size: 12px;
-            color: rgba(255, 255, 255, .15);
-            margin-top: 4px;
-        }
-        .session-replaced-box .device-info {
-            font-size: 12px;
-            color: rgba(255, 255, 255, .15);
-            font-family: 'Vazirmatn', sans-serif;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, .02);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, .02);
-            margin-bottom: 16px;
-            display: inline-block;
-        }
-        .session-replaced-box .btn {
-            padding: 10px 40px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, var(--danger), #CC0000);
-            color: #fff;
-            font-family: 'Vazirmatn', sans-serif;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all .3s ease;
-            box-shadow: 0 8px 30px rgba(255, 77, 77, .15);
-        }
-        .session-replaced-box .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(255, 77, 77, .25);
-        }
-        .session-replaced-box .btn:active {
-            transform: scale(.96);
-        }
+        .avatar-shop-overlay{display:none;position:fixed;inset:0;z-index:9998;justify-content:center;align-items:center;background:rgba(10,10,26,.92);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:fadeIn .4s ease;padding:16px}.avatar-shop-overlay.active{display:flex}.avatar-shop-box{width:100%;max-width:560px;max-height:95vh;background:linear-gradient(160deg,rgba(0,40,80,.9),rgba(0,10,40,.95));backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border-radius:28px;border:1px solid rgba(0,180,255,.06);box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 80px rgba(0,100,255,.04);padding:20px 18px 18px;overflow:hidden;animation:slideUp .4s ease;position:relative;display:flex;flex-direction:column}.avatar-shop-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30%20%,rgba(0,180,255,.03)0%,transparent 60%);pointer-events:none}.avatar-shop-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid rgba(0,180,255,.04);margin-bottom:14px;position:relative;z-index:2;flex-shrink:0}.avatar-shop-header .title{font-size:20px;font-weight:800;color:#fff;font-family:'Vazirmatn',sans-serif}.avatar-shop-header .title i{color:var(--gold);margin-left:8px}.avatar-shop-header .close-btn{padding:6px 14px;border:none;border-radius:12px;background:rgba(255,77,77,.06);color:var(--danger);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:var(--transition)}.avatar-shop-header .close-btn:hover{background:rgba(255,77,77,.1)}.avatar-shop-balance{display:flex;gap:16px;padding:8px 16px;background:rgba(0,180,255,.02);border-radius:14px;border:1px solid rgba(0,180,255,.03);margin-bottom:14px;position:relative;z-index:2;flex-shrink:0}.avatar-shop-balance .bal-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:rgba(255,255,255,.3);font-family:'Vazirmatn',sans-serif}.avatar-shop-balance .bal-item img{width:22px;height:22px;object-fit:contain}.avatar-shop-balance .bal-item .num{color:#fff}.avatar-shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;overflow-y:auto;padding:4px 2px 10px 2px;position:relative;z-index:2;flex:1;min-height:0}.avatar-shop-grid::-webkit-scrollbar{width:3px}.avatar-shop-grid::-webkit-scrollbar-thumb{background:rgba(0,180,255,.15);border-radius:10px}.avatar-shop-item{background:rgba(10,22,40,.4);backdrop-filter:blur(8px);border-radius:16px;border:2px solid rgba(0,180,255,.02);padding:10px 6px 8px;text-align:center;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center}.avatar-shop-item:hover{transform:translateY(-4px);border-color:rgba(0,180,255,.08);box-shadow:0 8px 30px rgba(0,0,0,.3)}.avatar-shop-item:active{transform:scale(.94)}.avatar-shop-item .avatar-preview{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 2px;background:rgba(0,180,255,.02);border:2px solid rgba(0,180,255,.04);transition:var(--transition);overflow:hidden;flex-shrink:0}.avatar-shop-item .avatar-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%}.avatar-shop-item .avatar-name{font-size:8px;font-weight:600;color:rgba(255,255,255,.12);font-family:'Vazirmatn',sans-serif;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.avatar-shop-item .avatar-price{font-size:8px;font-weight:700;font-family:'Vazirmatn',sans-serif;margin-top:1px;display:flex;align-items:center;justify-content:center;gap:2px}.avatar-shop-item .avatar-price.free{color:var(--success)}.avatar-shop-item .avatar-price.paid{color:var(--gold)}.avatar-shop-item .avatar-price img{width:12px;height:12px;object-fit:contain}.avatar-shop-item .owned-badge{position:absolute;top:2px;right:2px;font-size:11px;filter:drop-shadow(0 0 20px rgba(0,255,136,.2))}.avatar-shop-item .selected-badge{position:absolute;inset:0;border-radius:16px;border:2px solid var(--gold);box-shadow:0 0 30px rgba(255,215,0,.08),inset 0 0 30px rgba(255,215,0,.02);pointer-events:none;animation:selectedPulse 2s ease-in-out infinite}@keyframes selectedPulse{0%,100%{opacity:.5}50%{opacity:1}}.avatar-shop-item.equipped{border-color:var(--gold);background:rgba(255,215,0,.02)}.avatar-shop-item.equipped .avatar-preview{border-color:var(--gold);box-shadow:0 0 30px rgba(255,215,0,.04)}.avatar-shop-item.owned{border-color:rgba(0,255,136,.03)}.avatar-shop-item.owned .avatar-preview{border-color:rgba(0,255,136,.03)}.avatar-shop-item.locked{opacity:.4;cursor:not-allowed}.avatar-shop-item.locked:hover{transform:none}
+        @media(max-width:480px){.avatar-shop-grid{grid-template-columns:repeat(3,1fr);gap:8px}.avatar-shop-item .avatar-preview{width:44px;height:44px;font-size:20px}.avatar-shop-box{padding:14px 12px 12px;border-radius:20px;max-height:98vh}.avatar-shop-header .title{font-size:17px}}
+        @media(max-width:360px){.avatar-shop-grid{grid-template-columns:repeat(2,1fr)}}
     </style>
 </head>
 <body>
@@ -507,6 +408,27 @@
         </div>
     </div>
 
+    <!-- ===== AVATAR SHOP ===== -->
+    <div class="avatar-shop-overlay" id="avatarShopOverlay">
+        <div class="avatar-shop-box">
+            <div class="avatar-shop-header">
+                <span class="title"><i class="fas fa-store"></i> فروشگاه آواتار</span>
+                <button class="close-btn" id="avatarShopClose"><i class="fas fa-times"></i> بستن</button>
+            </div>
+            <div class="avatar-shop-balance">
+                <span class="bal-item">
+                    <img src="https://uploadkon.ir/uploads/a43927_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۳۰۶۰۶۴.png" alt="سکه" />
+                    <span class="num" id="shopCoinDisplay">0</span>
+                </span>
+                <span class="bal-item">
+                    <img src="https://uploadkon.ir/uploads/cc6e27_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۶۰۲۶۳۸.png" alt="الماس" />
+                    <span class="num" id="shopDiamondDisplay">0</span>
+                </span>
+            </div>
+            <div class="avatar-shop-grid" id="avatarShopGrid"></div>
+        </div>
+    </div>
+
     <!-- ===== SERVICE OFFLINE ===== -->
     <div class="service-offline-overlay" id="serviceOfflineOverlay">
         <div class="service-offline-box">
@@ -523,25 +445,109 @@
 
     <script>
         // ============================================================
-        //  🎮  مافیا بیس — نسخه نهایی با مدیریت Session مانند Call of Duty
-        //  فقط یک Session فعال برای هر حساب
+        //  🎮  مافیا بیس — نسخه نهایی بدون خطا
         // ============================================================
 
-        // ============================================================
-        //  CONFIGURATION
-        // ============================================================
+        var AVATARS = [{
+            id: 'avatar_free',
+            name: 'آواتار رایگان',
+            image: 'https://cdn.imgurl.ir/uploads/t94765_InShot_20260729_162942276.jpg',
+            price: 0,
+            free: true
+        }, {
+            id: 'avatar_1',
+            name: 'جادوگر',
+            image: 'https://cdn.imgurl.ir/uploads/i76028_file_00000000a51c81f4a04df70a3a7392b3.png',
+            price: 150,
+            free: false
+        }, {
+            id: 'avatar_2',
+            name: 'شاهزاده',
+            image: 'https://cdn.imgurl.ir/uploads/g32313_file_0000000015bc81f4a40ab89565895cef.png',
+            price: 200,
+            free: false
+        }, {
+            id: 'avatar_3',
+            name: 'متفکر',
+            image: 'https://cdn.imgurl.ir/uploads/s74608_IMG_20260730_203155_950.jpg',
+            price: 80,
+            free: false
+        }, {
+            id: 'avatar_4',
+            name: 'شوالیه',
+            image: 'https://cdn.imgurl.ir/uploads/a813016_IMG_20260730_203147_691.jpg',
+            price: 120,
+            free: false
+        }, {
+            id: 'avatar_5',
+            name: 'نینجا',
+            image: 'https://cdn.imgurl.ir/uploads/n074302_IMG_20260730_203145_120.jpg',
+            price: 180,
+            free: false
+        }, {
+            id: 'avatar_6',
+            name: 'سامورایی',
+            image: 'https://cdn.imgurl.ir/uploads/g541337_IMG_20260730_203142_252.jpg',
+            price: 250,
+            free: false
+        }, {
+            id: 'avatar_7',
+            name: 'کماندار',
+            image: 'https://cdn.imgurl.ir/uploads/g554961_IMG_20260730_203139_369.jpg',
+            price: 90,
+            free: false
+        }, {
+            id: 'avatar_8',
+            name: 'جادوگر تاریک',
+            image: 'https://cdn.imgurl.ir/uploads/k065310_IMG_20260730_203137_085.jpg',
+            price: 300,
+            free: false
+        }, {
+            id: 'avatar_9',
+            name: 'فرشته',
+            image: 'https://cdn.imgurl.ir/uploads/12201_IMG_20260730_203135_591.jpg',
+            price: 220,
+            free: false
+        }, {
+            id: 'avatar_10',
+            name: 'اهریمن',
+            image: 'https://cdn.imgurl.ir/uploads/p87072_IMG_20260730_203132_084.jpg',
+            price: 280,
+            free: false
+        }, {
+            id: 'avatar_11',
+            name: 'راهب',
+            image: 'https://cdn.imgurl.ir/uploads/d7657_IMG_20260730_203130_458.jpg',
+            price: 70,
+            free: false
+        }, {
+            id: 'avatar_12',
+            name: 'جادوگر نور',
+            image: 'https://cdn.imgurl.ir/uploads/x29283_InShot_20260729_213613397.jpg',
+            price: 350,
+            free: false
+        }, {
+            id: 'avatar_13',
+            name: 'دزد دریایی',
+            image: 'https://cdn.imgurl.ir/uploads/n7791_IMG_20260729_212841_310.jpg',
+            price: 160,
+            free: false
+        }, {
+            id: 'avatar_14',
+            name: 'مرد عنکبوتی',
+            image: 'https://cdn.imgurl.ir/uploads/k72611_IMG_20260729_212838_610.jpg',
+            price: 400,
+            free: false
+        }];
+
         var CONFIG = {
             APP_ID: 'A4293BB7-EF12-4DF5-9B9E-C12C8A935BCF',
             API_KEY: '9F777ECD-B061-44A5-9C8B-DA805E257007',
             ABLY_KEY: 'NNYzzQ.7HHPYg:NA1mSMcWdEnlWOHGZ4CaF7ZUkoXe1Iggtf0sy-nNsDM',
             OWNER_EMAIL: 's0379265@gmail.com',
-            // لیست ادمین‌های ویژه
             ADMIN_EMAILS: ['s0379265@gmail.com', 'yasinnej@gmail.com']
         };
 
-        // ============================================================
-        //  PERMISSIONS
-        // ============================================================
         var PERMISSIONS = {
             MANAGE_USERS: 'manage_users',
             MANAGE_CHAT: 'manage_chat',
@@ -566,9 +572,6 @@
             manage_admins: '🔑 مدیریت ادمین‌ها'
         };
 
-        // ============================================================
-        //  SAFE DOM HELPER
-        // ============================================================
         function $(id) {
             var el = document.getElementById(id);
             if (!el) console.warn('⚠️ Element not found:', id);
@@ -587,9 +590,6 @@
             return els || [];
         }
 
-        // ============================================================
-        //  LOADING MANAGER
-        // ============================================================
         var LoadingManager = {
             totalSteps: 6,
             currentStep: 0,
@@ -598,9 +598,7 @@
             percentage: $('loadingPercentage'),
             status: $('loadingStatus'),
             error: $('loadingError'),
-
             init: function() { this.update(0, 'در حال آماده‌سازی...'); },
-
             update: function(step, customStatus) {
                 this.currentStep = Math.min(step, this.totalSteps);
                 var percent = Math.round((this.currentStep / this.totalSteps) * 100);
@@ -611,7 +609,6 @@
                     this.status.innerHTML = statusText + '<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
                 }
             },
-
             complete: function() {
                 if (this.fill) this.fill.style.width = '100%';
                 if (this.percentage) this.percentage.textContent = '100';
@@ -621,24 +618,18 @@
                     if (el) el.classList.add('hidden');
                 }, 500);
             },
-
             showError: function() {
                 if (this.error) this.error.classList.add('show');
                 if (this.status) this.status.textContent = '⚠️ خطا در بارگذاری';
             },
-
             hideError: function() {
                 if (this.error) this.error.classList.remove('show');
             }
         };
 
-        // ============================================================
-        //  TOAST
-        // ============================================================
         var ToastManager = {
             element: $('toastMessage'),
             timer: null,
-
             show: function(message, duration) {
                 duration = duration || 2000;
                 if (!this.element) return;
@@ -649,28 +640,21 @@
                     if (this.element) this.element.classList.remove('show');
                 }.bind(this), duration);
             },
-
             hide: function() {
                 if (this.element) this.element.classList.remove('show');
                 clearTimeout(this.timer);
             }
         };
 
-        // ============================================================
-        //  DATA MANAGER
-        // ============================================================
         var DataManager = {
             prefix: 'mafiabase_',
-
             _encode: function(data) { return btoa(encodeURIComponent(JSON.stringify(data))); },
             _decode: function(data) {
                 try { return JSON.parse(decodeURIComponent(atob(data))); } catch (e) { return null; }
             },
-
             set: function(key, value) {
                 try { localStorage.setItem(this.prefix + key, this._encode(value)); } catch (e) {}
             },
-
             get: function(key, defaultValue) {
                 try {
                     var data = localStorage.getItem(this.prefix + key);
@@ -679,9 +663,7 @@
                     return decoded !== null ? decoded : defaultValue;
                 } catch (e) { return defaultValue; }
             },
-
             remove: function(key) { localStorage.removeItem(this.prefix + key); },
-
             getPlayer: function() {
                 return {
                     userId: this.get('userId', ''),
@@ -694,7 +676,8 @@
                     wins: this.get('wins', 0),
                     games: this.get('games', 0),
                     maxCombo: this.get('maxCombo', 0),
-                    avatar: this.get('avatar', '👤'),
+                    avatar: this.get('avatar', 'avatar_free'),
+                    ownedAvatars: this.get('ownedAvatars', ['avatar_free']),
                     cups: this.get('cups', 0),
                     league: this.get('league', 'برنز'),
                     leagueLevel: this.get('leagueLevel', 1),
@@ -706,7 +689,6 @@
                     deviceId: this.get('deviceId', '')
                 };
             },
-
             savePlayer: function(data) {
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
@@ -716,31 +698,98 @@
             }
         };
 
-        // ============================================================
-        //  SESSION MANAGER — مدیریت نشست مانند Call of Duty
-        // ============================================================
+        var AvatarManager = {
+            getDefaultAvatar: function() { return AVATARS[0]; },
+            getAvatarById: function(id) {
+                for (var i = 0; i < AVATARS.length; i++) {
+                    if (AVATARS[i].id === id) return AVATARS[i];
+                }
+                return null;
+            },
+            getOwnedAvatars: function() {
+                var p = DataManager.getPlayer();
+                return p.ownedAvatars || ['avatar_free'];
+            },
+            isOwned: function(avatarId) {
+                var owned = this.getOwnedAvatars();
+                return owned.indexOf(avatarId) !== -1;
+            },
+            isEquipped: function(avatarId) {
+                var p = DataManager.getPlayer();
+                return p.avatar === avatarId;
+            },
+            getPrice: function(avatarId) {
+                var avatar = this.getAvatarById(avatarId);
+                return avatar ? avatar.price : 0;
+            },
+            purchaseAvatar: function(avatarId) {
+                var p = DataManager.getPlayer();
+                var avatar = this.getAvatarById(avatarId);
+                if (!avatar) return { success: false, message: 'آواتار یافت نشد' };
+                if (avatar.free) return { success: false, message: 'این آواتار رایگان است' };
+                if (this.isOwned(avatarId)) return { success: false, message: 'این آواتار را قبلاً خریداری کرده‌اید' };
+                var price = avatar.price;
+                if (p.diamonds < price) {
+                    return { success: false, message: 'الماس کافی نیست! نیاز به ' + price + ' الماس دارید' };
+                }
+                var newDiamonds = p.diamonds - price;
+                var owned = this.getOwnedAvatars();
+                owned.push(avatarId);
+                DataManager.set('diamonds', newDiamonds);
+                DataManager.set('ownedAvatars', owned);
+                var email = p.email;
+                BackendlessService.findUser("email = '" + email + "'")
+                    .then(function(userData) {
+                        if (userData) {
+                            return BackendlessService.saveUser({
+                                objectId: userData.objectId,
+                                diamonds: newDiamonds,
+                                ownedAvatars: owned
+                            });
+                        }
+                    })
+                    .catch(function() {});
+                updateCurrencyUI();
+                return { success: true, message: '✅ آواتار خریداری شد!' };
+            },
+            equipAvatar: function(avatarId) {
+                var p = DataManager.getPlayer();
+                if (!this.isOwned(avatarId)) {
+                    return { success: false, message: 'این آواتار را ندارید' };
+                }
+                DataManager.set('avatar', avatarId);
+                var email = p.email;
+                BackendlessService.findUser("email = '" + email + "'")
+                    .then(function(userData) {
+                        if (userData) {
+                            return BackendlessService.saveUser({
+                                objectId: userData.objectId,
+                                avatar: avatarId
+                            });
+                        }
+                    })
+                    .catch(function() {});
+                updateUI();
+                return { success: true, message: '✅ آواتار تغییر کرد!' };
+            }
+        };
+
         var SessionManager = {
             currentSessionId: null,
             checkInterval: null,
             isChecking: false,
-
-            // تولید Device ID یکتا
             generateDeviceId: function() {
                 var stored = DataManager.get('deviceId', null);
                 if (stored) return stored;
-
                 var platform = 'Web';
                 if (navigator.userAgent.indexOf('Android') !== -1) platform = 'Android';
                 else if (navigator.userAgent.indexOf('Windows') !== -1) platform = 'Windows';
                 else if (navigator.userAgent.indexOf('iPhone') !== -1 || navigator.userAgent.indexOf('iPad') !== -1)
                     platform = 'iOS';
-
                 var deviceId = platform + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
                 DataManager.set('deviceId', deviceId);
                 return deviceId;
             },
-
-            // ایجاد Session جدید روی سرور
             createSession: function(userId, email) {
                 var deviceId = this.generateDeviceId();
                 var sessionData = {
@@ -753,39 +802,26 @@
                     isActive: true,
                     sessionId: 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 12)
                 };
-
-                // ابتدا بررسی می‌کنیم که آیا Session قبلی برای این کاربر وجود دارد
                 return BackendlessService.findUser("email = '" + email + "'")
                     .then(function(userData) {
                         if (!userData) return sessionData;
-
-                        // اگر Session قبلی وجود داشت، آن را غیرفعال کن
                         if (userData.activeSessionId) {
-                            // رویداد SESSION_REPLACED را به Session قبلی ارسال کن
                             SessionManager.notifySessionReplaced(userData.activeSessionId, deviceId);
-
-                            // لاگ ثبت
                             BackendlessService.saveLog('session_replaced', {
                                 userId: userId,
                                 oldSessionId: userData.activeSessionId,
                                 newDeviceId: deviceId
                             });
                         }
-
-                        // Session جدید را ذخیره کن
                         return BackendlessService.saveUser({
                             objectId: userData.objectId,
                             activeSessionId: sessionData.sessionId,
                             activeDeviceId: deviceId,
                             lastLogin: new Date().toISOString(),
                             onlineStatus: true
-                        }).then(function() {
-                            return sessionData;
-                        });
+                        }).then(function() { return sessionData; });
                     });
             },
-
-            // ارسال نوتیفیکیشن به Session قبلی
             notifySessionReplaced: function(oldSessionId, newDeviceId) {
                 try {
                     if (ablyClient) {
@@ -795,21 +831,15 @@
                             timestamp: new Date().toISOString(),
                             message: 'این حساب کاربری در دستگاه دیگری وارد شده است. برای حفظ امنیت، اتصال شما قطع خواهد شد.'
                         });
-                        // پس از ارسال، کانال را ببند
                         setTimeout(function() {
                             try { channel.unsubscribe(); } catch (e) {}
                         }, 1000);
                     }
-                } catch (e) {
-                    console.warn('Notify session replaced error:', e);
-                }
+                } catch (e) { console.warn('Notify session replaced error:', e); }
             },
-
-            // بررسی Session در پس‌زمینه
             startSessionCheck: function(sessionId) {
                 if (this.checkInterval) clearInterval(this.checkInterval);
                 this.currentSessionId = sessionId;
-
                 this.checkInterval = setInterval(function() {
                     if (!DataManager.get('isLoggedIn', false)) {
                         clearInterval(this.checkInterval);
@@ -818,66 +848,38 @@
                     this.checkSessionStatus(sessionId);
                 }.bind(this), 5000);
             },
-
             checkSessionStatus: function(sessionId) {
                 if (this.isChecking) return;
                 this.isChecking = true;
-
                 var email = DataManager.get('userEmail', '');
-                if (!email) {
-                    this.isChecking = false;
-                    return;
-                }
-
+                if (!email) { this.isChecking = false; return; }
                 BackendlessService.findUser("email = '" + email + "'")
                     .then(function(userData) {
                         this.isChecking = false;
                         if (!userData) return;
-
-                        // اگر Session ID با سرور مطابقت نداشت، یعنی Session جایگزین شده
                         if (userData.activeSessionId && userData.activeSessionId !== sessionId) {
                             SessionManager.handleSessionReplaced(userData.activeDeviceId || 'دستگاه دیگر');
                         }
                     }.bind(this))
-                    .catch(function() {
-                        this.isChecking = false;
-                    }.bind(this));
+                    .catch(function() { this.isChecking = false; }.bind(this));
             },
-
             handleSessionReplaced: function(newDeviceId) {
-                // قطع اتصال فعلی
                 ToastManager.hide();
-
-                // نمایش پاپ‌آپ
                 var overlay = $('sessionReplacedOverlay');
                 var deviceInfo = $('sessionDeviceInfo');
                 if (deviceInfo) {
                     deviceInfo.innerHTML = '<i class="fas fa-laptop"></i> دستگاه جدید: ' + (newDeviceId || 'ناشناس');
                 }
                 if (overlay) overlay.classList.add('active');
-
-                // قطع اتصال Ably
-                if (ablyClient) {
-                    try { ablyClient.close(); } catch (e) {}
-                }
-
-                // خروج کاربر
-                setTimeout(function() {
-                    AuthService.logout();
-                }, 500);
-
-                // لاگ
+                if (ablyClient) { try { ablyClient.close(); } catch (e) {} }
+                setTimeout(function() { AuthService.logout(); }, 500);
                 BackendlessService.saveLog('session_replaced_detected', {
                     userId: DataManager.get('userId', ''),
                     newDeviceId: newDeviceId
                 });
-
-                if (this.checkInterval) {
-                    clearInterval(this.checkInterval);
-                    this.checkInterval = null;
-                }
+                if (this.checkInterval) { clearInterval(this.checkInterval);
+                    this.checkInterval = null; }
             },
-
             getPlatform: function() {
                 var ua = navigator.userAgent;
                 if (ua.indexOf('Android') !== -1) return 'Android';
@@ -886,8 +888,6 @@
                 if (ua.indexOf('Mac') !== -1) return 'MacOS';
                 return 'Web';
             },
-
-            // گوش دادن به رویداد SESSION_REPLACED
             listenForSessionReplaced: function(sessionId) {
                 try {
                     if (!ablyClient) return;
@@ -897,25 +897,22 @@
                         var deviceInfo = data.newDeviceId || 'دستگاه دیگر';
                         SessionManager.handleSessionReplaced(deviceInfo);
                     });
-                } catch (e) {
-                    console.warn('Listen for session replaced error:', e);
-                }
+                } catch (e) { console.warn('Listen for session replaced error:', e); }
             }
         };
 
-        // ============================================================
-        //  BACKENDLESS SERVICE
-        // ============================================================
         var BackendlessService = {
             sdk: null,
             isReady: false,
-
+            retryCount: 0,
+            maxRetries: 5,
             init: function() {
                 try {
                     if (typeof Backendless !== 'undefined' && Backendless) {
                         Backendless.initApp(CONFIG.APP_ID, CONFIG.API_KEY);
                         this.sdk = Backendless;
                         this.isReady = true;
+                        this.retryCount = 0;
                         console.log('Backendless initialized');
                         return true;
                     }
@@ -925,9 +922,7 @@
                     return false;
                 }
             },
-
             isInitialized: function() { return this.isReady && this.sdk !== null; },
-
             register: function(email, password, username) {
                 if (!this.isInitialized()) return Promise.reject('Service not ready');
                 var user = new this.sdk.User();
@@ -936,22 +931,18 @@
                 user.userName = username;
                 return this.sdk.UserService.register(user);
             },
-
             login: function(email, password) {
                 if (!this.isInitialized()) return Promise.reject('Service not ready');
                 return this.sdk.UserService.login(email, password, true);
             },
-
             logout: function() {
                 if (!this.isInitialized()) return Promise.resolve();
                 return this.sdk.UserService.logout();
             },
-
             getCurrentUser: function() {
                 if (!this.isInitialized()) return Promise.resolve(null);
                 return this.sdk.UserService.getCurrentUser();
             },
-
             findUsers: function(where, sortBy, pageSize) {
                 if (!this.isInitialized()) return Promise.resolve([]);
                 var query = { pageSize: pageSize || 100 };
@@ -959,17 +950,14 @@
                 if (sortBy) query.sortBy = sortBy;
                 return this.sdk.Data.of('Users').find(query);
             },
-
             findUser: function(where) {
                 if (!this.isInitialized()) return Promise.resolve(null);
                 return this.sdk.Data.of('Users').findFirst({ where: where });
             },
-
             saveUser: function(data) {
                 if (!this.isInitialized()) return Promise.resolve(null);
                 return this.sdk.Data.of('Users').save(data);
             },
-
             saveLog: function(action, details) {
                 if (!this.isInitialized()) return Promise.resolve();
                 var logData = {
@@ -982,13 +970,9 @@
             }
         };
 
-        // ============================================================
-        //  AUTH SERVICE
-        // ============================================================
         var AuthService = {
             isLoggedIn: false,
             currentUser: null,
-
             register: function(email, password, username) {
                 ToastManager.show('⏳ در حال ثبت‌نام...', 3000);
                 return BackendlessService.findUser("email = '" + email + "'")
@@ -1008,11 +992,12 @@
                         var playerData = {
                             email: email,
                             userName: username,
-                            coins: 0,
-                            diamonds: 0,
+                            coins: 100,
+                            diamonds: 50,
                             level: 1,
                             xp: 0,
-                            avatar: '👤',
+                            avatar: 'avatar_free',
+                            ownedAvatars: ['avatar_free'],
                             registerDate: new Date().toISOString(),
                             lastLogin: new Date().toISOString(),
                             onlineStatus: true,
@@ -1032,12 +1017,8 @@
                         };
                         return BackendlessService.saveUser(playerData);
                     })
-                    .then(function() {
-                        return BackendlessService.login(email, password);
-                    })
-                    .then(function(user) {
-                        return AuthService.handleLoginSuccess(user, email, null);
-                    })
+                    .then(function() { return BackendlessService.login(email, password); })
+                    .then(function(user) { return AuthService.handleLoginSuccess(user, email, null); })
                     .catch(function(err) {
                         if (err === 'ALREADY_REGISTERED') return;
                         console.error('Register error:', err);
@@ -1045,7 +1026,6 @@
                         throw err;
                     });
             },
-
             login: function(email, password) {
                 ToastManager.show('⏳ در حال ورود...', 3000);
                 return BackendlessService.findUser("email = '" + email + "'")
@@ -1058,49 +1038,48 @@
                             handleBan(userData);
                             return Promise.reject('USER_BANNED');
                         }
-                        return BackendlessService.login(email, password);
-                    })
-                    .then(function(user) {
-                        return BackendlessService.findUser("email = '" + email + "'");
-                    })
-                    .then(function(userData) {
-                        return AuthService.handleLoginSuccess(null, email, userData);
+                        return BackendlessService.login(email, password)
+                            .then(function(user) {
+                                return AuthService.handleLoginSuccess(user, email, userData);
+                            })
+                            .catch(function(loginErr) {
+                                console.error('Login error:', loginErr);
+                                if (loginErr.message && loginErr.message.indexOf('invalid') !== -1) {
+                                    ToastManager.show('❌ ایمیل یا رمز عبور اشتباه است', 3000);
+                                } else {
+                                    ToastManager.show('❌ خطا در ورود. دوباره تلاش کنید.', 3000);
+                                }
+                                throw loginErr;
+                            });
                     })
                     .catch(function(err) {
                         if (err === 'USER_NOT_FOUND' || err === 'USER_BANNED') return;
-                        console.error('Login error:', err);
-                        if (err.message && err.message.indexOf('invalid') !== -1) {
-                            ToastManager.show('❌ ایمیل یا رمز عبور اشتباه است', 3000);
-                        } else {
-                            ToastManager.show('❌ خطا در ورود. دوباره تلاش کنید.', 3000);
-                        }
+                        console.error('Login process error:', err);
+                        ToastManager.show('❌ خطا در ورود. دوباره تلاش کنید.', 3000);
                         throw err;
                     });
             },
-
             handleLoginSuccess: function(user, email, userData) {
                 var data = userData || user;
-
-                // بررسی ادمین بودن (سازنده اصلی یا ادمین‌های ویژه)
                 var isAdmin = CONFIG.ADMIN_EMAILS.indexOf(email) !== -1 || data.role === 'admin' || data.role === 'owner';
                 var permissions = data.permissions || [];
-
-                // اگر سازنده اصلی است، تمام دسترسی‌ها را بده
                 if (CONFIG.ADMIN_EMAILS.indexOf(email) !== -1) {
                     permissions = ALL_PERMISSIONS.slice();
                     isAdmin = true;
                 }
-
-                // ذخیره اطلاعات کاربر
+                var ownedAvatars = data.ownedAvatars || ['avatar_free'];
+                var avatar = data.avatar || 'avatar_free';
+                if (ownedAvatars.indexOf(avatar) === -1) avatar = 'avatar_free';
                 DataManager.savePlayer({
                     userId: data.objectId || data.userId,
                     userEmail: email,
                     userName: data.userName || email.split('@')[0],
-                    coins: data.coins || 0,
-                    diamonds: data.diamonds || 0,
+                    coins: data.coins || 100,
+                    diamonds: data.diamonds || 50,
                     level: data.level || 1,
                     xp: data.xp || 0,
-                    avatar: data.avatar || '👤',
+                    avatar: avatar,
+                    ownedAvatars: ownedAvatars,
                     wins: data.wins || 0,
                     games: data.games || 0,
                     maxCombo: data.maxCombo || 0,
@@ -1112,14 +1091,10 @@
                     isLoggedIn: true,
                     permissions: permissions
                 });
-
-                // ایجاد Session جدید روی سرور
                 return SessionManager.createSession(data.objectId || data.userId, email)
                     .then(function(sessionData) {
                         DataManager.set('sessionId', sessionData.sessionId);
                         DataManager.set('deviceId', sessionData.deviceId);
-
-                        // بروزرسانی اطلاعات کاربر روی سرور
                         return BackendlessService.saveUser({
                             objectId: data.objectId || data.userId,
                             lastLogin: new Date().toISOString(),
@@ -1132,31 +1107,22 @@
                         AuthService.isLoggedIn = true;
                         AuthService.currentUser = data;
                         ToastManager.show('✅ خوش آمدید ' + (data.userName || 'کاربر') + '!', 2000);
-
-                        // شروع بررسی Session
                         var sessionId = DataManager.get('sessionId', '');
                         if (sessionId) {
                             SessionManager.startSessionCheck(sessionId);
                             SessionManager.listenForSessionReplaced(sessionId);
                         }
-
                         enterGame();
                     });
             },
-
             logout: function(keepSession) {
                 keepSession = keepSession || false;
-
                 var email = DataManager.get('userEmail', '');
-
-                // توقف بررسی Session
                 if (SessionManager.checkInterval) {
                     clearInterval(SessionManager.checkInterval);
                     SessionManager.checkInterval = null;
                 }
-
                 var logoutPromise = Promise.resolve();
-
                 if (email && !keepSession) {
                     logoutPromise = BackendlessService.findUser("email = '" + email + "'")
                         .then(function(userData) {
@@ -1170,11 +1136,8 @@
                             }
                         });
                 }
-
                 logoutPromise.then(function() {
-                    if (!keepSession) {
-                        return BackendlessService.logout();
-                    }
+                    if (!keepSession) { return BackendlessService.logout(); }
                 }).then(function() {
                     DataManager.savePlayer({
                         isLoggedIn: false,
@@ -1186,7 +1149,6 @@
                     });
                     AuthService.isLoggedIn = false;
                     AuthService.currentUser = null;
-
                     if (!keepSession) {
                         hideApp();
                         showAuthScreen('login');
@@ -1197,7 +1159,6 @@
                     ToastManager.show('❌ خطا در خروج', 2000);
                 });
             },
-
             checkSession: function() {
                 return BackendlessService.getCurrentUser()
                     .then(function(user) {
@@ -1210,15 +1171,16 @@
                                     handleBan(userData);
                                     return BackendlessService.logout().then(function() { return false; });
                                 }
-
-                                // بررسی Session معتبر
                                 var storedSessionId = DataManager.get('sessionId', '');
                                 if (userData.activeSessionId && userData.activeSessionId !== storedSessionId) {
-                                    // Session جایگزین شده
                                     SessionManager.handleSessionReplaced(userData.activeDeviceId || 'دستگاه دیگر');
                                     return false;
                                 }
-
+                                var ownedAvatars = userData.ownedAvatars || ['avatar_free'];
+                                var avatar = userData.avatar || 'avatar_free';
+                                if (ownedAvatars.indexOf(avatar) === -1) avatar = 'avatar_free';
+                                DataManager.set('avatar', avatar);
+                                DataManager.set('ownedAvatars', ownedAvatars);
                                 return AuthService.handleLoginSuccess(user, email, userData)
                                     .then(function() { return true; });
                             });
@@ -1227,18 +1189,13 @@
             }
         };
 
-        // ============================================================
-        //  BAN HANDLER
-        // ============================================================
         function handleBan(userData) {
             var overlay = $('banOverlay');
             var block = $('banBlock');
             var message = $('banMessage');
             var timer = $('banTimer');
-
             if (block) block.classList.add('active');
             if (overlay) overlay.classList.add('active');
-
             if (userData.banExpiry) {
                 var expiry = new Date(userData.banExpiry);
                 if (expiry > new Date()) {
@@ -1252,7 +1209,6 @@
                 if (timer) timer.textContent = '⛔ مسدودی دائمی';
                 if (message) message.textContent = 'حساب کاربری شما به طور دائمی مسدود شده است.';
             }
-
             disableAllAccess();
         }
 
@@ -1285,9 +1241,6 @@
             enableAllAccess();
         });
 
-        // ============================================================
-        //  PERMISSION HELPERS
-        // ============================================================
         function hasPermission(permission) {
             var p = DataManager.getPlayer();
             if (CONFIG.ADMIN_EMAILS.indexOf(p.email) !== -1) return true;
@@ -1299,9 +1252,6 @@
             return CONFIG.ADMIN_EMAILS.indexOf(p.email) !== -1 || p.isAdmin;
         }
 
-        // ============================================================
-        //  UI HELPERS
-        // ============================================================
         function showAuthScreen(screen) {
             var screens = document.querySelectorAll('.auth-screen');
             for (var i = 0; i < screens.length; i++) {
@@ -1334,21 +1284,16 @@
             var p = DataManager.getPlayer();
             var img = $('avatarImg');
             var placeholder = $('avatarPlaceholder');
-
-            if (p.avatar && p.avatar.indexOf('http') === 0) {
-                if (img) { img.src = p.avatar;
+            var avatarData = AvatarManager.getAvatarById(p.avatar);
+            if (avatarData && avatarData.image) {
+                if (img) { img.src = avatarData.image;
                     img.style.display = 'block'; }
                 if (placeholder) placeholder.style.display = 'none';
-            } else if (p.avatar) {
-                if (placeholder) { placeholder.textContent = p.avatar;
-                    placeholder.style.display = 'block'; }
-                if (img) img.style.display = 'none';
             } else {
                 if (placeholder) { placeholder.textContent = '👤';
                     placeholder.style.display = 'block'; }
                 if (img) img.style.display = 'none';
             }
-
             var name = p.name || 'کاربر';
             var label = $('usernameLabel');
             if (label) {
@@ -1357,9 +1302,7 @@
             }
             var logout = $('logoutBtn');
             if (logout) logout.classList.add('show');
-
             updateCurrencyUI();
-
             if (isAdmin()) {
                 var adminBtn = $('adminBtn');
                 if (adminBtn) adminBtn.classList.add('show');
@@ -1373,8 +1316,12 @@
             var p = DataManager.getPlayer();
             var coin = $('coinDisplay');
             var diamond = $('diamondDisplay');
+            var shopCoin = $('shopCoinDisplay');
+            var shopDiamond = $('shopDiamondDisplay');
             if (coin) coin.textContent = p.coins.toLocaleString();
             if (diamond) diamond.textContent = p.diamonds.toLocaleString();
+            if (shopCoin) shopCoin.textContent = p.coins.toLocaleString();
+            if (shopDiamond) shopDiamond.textContent = p.diamonds.toLocaleString();
         }
 
         function enterGame() {
@@ -1384,9 +1331,135 @@
             initAbly();
         }
 
-        // ============================================================
-        //  ABLY SERVICE
-        // ============================================================
+        function openAvatarShop() {
+            var p = DataManager.getPlayer();
+            if (!p.isLoggedIn) {
+                ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
+                return;
+            }
+            var overlay = $('avatarShopOverlay');
+            if (overlay) overlay.classList.add('active');
+            updateCurrencyUI();
+            renderAvatarShop();
+        }
+
+        function closeAvatarShop() {
+            var overlay = $('avatarShopOverlay');
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        function renderAvatarShop() {
+            var grid = $('avatarShopGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            var p = DataManager.getPlayer();
+            var owned = AvatarManager.getOwnedAvatars();
+            var currentAvatar = p.avatar || 'avatar_free';
+            for (var i = 0; i < AVATARS.length; i++) {
+                var avatar = AVATARS[i];
+                var isOwned = owned.indexOf(avatar.id) !== -1;
+                var isEquipped = currentAvatar === avatar.id;
+                var isFree = avatar.free;
+                var item = document.createElement('div');
+                item.className = 'avatar-shop-item';
+                if (isEquipped) item.classList.add('equipped');
+                if (isOwned) item.classList.add('owned');
+                if (!isOwned && !isFree) item.classList.add('locked');
+                var preview = document.createElement('div');
+                preview.className = 'avatar-preview';
+                if (avatar.image) {
+                    var img = document.createElement('img');
+                    img.src = avatar.image;
+                    img.alt = avatar.name;
+                    preview.appendChild(img);
+                } else {
+                    preview.textContent = avatar.emoji || '👤';
+                }
+                item.appendChild(preview);
+                var nameSpan = document.createElement('div');
+                nameSpan.className = 'avatar-name';
+                nameSpan.textContent = avatar.name;
+                item.appendChild(nameSpan);
+                var priceSpan = document.createElement('div');
+                priceSpan.className = 'avatar-price';
+                if (isFree) {
+                    priceSpan.classList.add('free');
+                    priceSpan.textContent = '🎁 رایگان';
+                } else {
+                    priceSpan.classList.add('paid');
+                    priceSpan.innerHTML = '💎 ' + avatar.price;
+                }
+                item.appendChild(priceSpan);
+                if (isOwned) {
+                    var badge = document.createElement('div');
+                    badge.className = 'owned-badge';
+                    badge.textContent = '✅';
+                    item.appendChild(badge);
+                }
+                if (isEquipped) {
+                    var selected = document.createElement('div');
+                    selected.className = 'selected-badge';
+                    item.appendChild(selected);
+                }
+                item.addEventListener('click', function(av) {
+                    return function() { handleAvatarClick(av.id); };
+                }(avatar));
+                grid.appendChild(item);
+            }
+        }
+
+        function handleAvatarClick(avatarId) {
+            var p = DataManager.getPlayer();
+            var avatar = AvatarManager.getAvatarById(avatarId);
+            if (!avatar) return;
+            var isOwned = AvatarManager.isOwned(avatarId);
+            var isEquipped = AvatarManager.isEquipped(avatarId);
+            if (isEquipped) {
+                ToastManager.show('✅ این آواتار در حال استفاده است', 1500);
+                return;
+            }
+            if (isOwned) {
+                var result = AvatarManager.equipAvatar(avatarId);
+                ToastManager.show(result.message, 1500);
+                renderAvatarShop();
+                updateUI();
+                return;
+            }
+            if (avatar.free) {
+                var owned = AvatarManager.getOwnedAvatars();
+                if (owned.indexOf(avatarId) === -1) {
+                    owned.push(avatarId);
+                    DataManager.set('ownedAvatars', owned);
+                    var email = p.email;
+                    BackendlessService.findUser("email = '" + email + "'")
+                        .then(function(userData) {
+                            if (userData) {
+                                return BackendlessService.saveUser({
+                                    objectId: userData.objectId,
+                                    ownedAvatars: owned
+                                });
+                            }
+                        })
+                        .catch(function() {});
+                    ToastManager.show('✅ آواتار رایگان دریافت شد!', 1500);
+                    renderAvatarShop();
+                    updateUI();
+                }
+                return;
+            }
+            var result = AvatarManager.purchaseAvatar(avatarId);
+            ToastManager.show(result.message, 2000);
+            if (result.success) {
+                renderAvatarShop();
+                updateUI();
+                setTimeout(function() {
+                    AvatarManager.equipAvatar(avatarId);
+                    renderAvatarShop();
+                    updateUI();
+                }, 500);
+            }
+        }
+
         var ablyClient = null;
         var matchmakingChannel = null;
         var isSearching = false;
@@ -1398,18 +1471,13 @@
                     console.warn('Ably SDK not loaded');
                     return false;
                 }
-
-                if (ablyClient) {
-                    try { ablyClient.close(); } catch (e) {}
-                }
-
+                if (ablyClient) { try { ablyClient.close(); } catch (e) {} }
                 ablyClient = new Ably.Realtime({
                     key: CONFIG.ABLY_KEY,
                     clientId: 'player_' + Date.now(),
                     echoMessages: false,
                     autoConnect: true
                 });
-
                 ablyClient.connection.on('connected', function() {
                     console.log('Ably connected');
                     var overlay = $('serviceOfflineOverlay');
@@ -1419,27 +1487,19 @@
                         presenceEnter();
                     }
                 });
-
                 ablyClient.connection.on('disconnected', function() {
                     console.log('Ably disconnected');
                     var overlay = $('serviceOfflineOverlay');
                     if (overlay) overlay.classList.add('active');
                 });
-
                 ablyClient.connection.on('failed', function() {
                     console.log('Ably failed');
                     var overlay = $('serviceOfflineOverlay');
                     if (overlay) overlay.classList.add('active');
                 });
-
                 matchmakingChannel = ablyClient.channels.get('matchmaking');
-
-                // گوش دادن به رویداد SESSION_REPLACED
                 var sessionId = DataManager.get('sessionId', '');
-                if (sessionId) {
-                    SessionManager.listenForSessionReplaced(sessionId);
-                }
-
+                if (sessionId) { SessionManager.listenForSessionReplaced(sessionId); }
                 return true;
             } catch (e) {
                 console.error('Ably init error:', e);
@@ -1451,7 +1511,6 @@
             try {
                 var p = DataManager.getPlayer();
                 if (!matchmakingChannel || !p.email) return;
-
                 matchmakingChannel.presence.enter({
                     userId: p.email,
                     userName: p.name,
@@ -1461,50 +1520,34 @@
                     inMatch: false,
                     sessionId: DataManager.get('sessionId', '')
                 });
-            } catch (e) {
-                console.warn('Presence enter error:', e);
-            }
+            } catch (e) { console.warn('Presence enter error:', e); }
         }
 
-        // ============================================================
-        //  MATCHMAKING (ساده شده)
-        // ============================================================
         function startMatchmaking() {
             if (isSearching) return;
             isSearching = true;
-
             var overlay = $('matchmakingOverlay');
             if (overlay) overlay.classList.add('active');
-
             var opponent = $('opponentFound');
             if (opponent) opponent.classList.remove('active');
-
             var cancelBtn = $('matchmakingCancel');
             if (cancelBtn) cancelBtn.textContent = 'لغو جستجو';
-
             var sub = $('matchmakingSub');
             if (sub) sub.textContent = 'در حال جستجوی حریف...';
-
             ToastManager.show('🔍 در حال جستجوی حریف...', 2000);
-
             setTimeout(function() {
                 if (!isSearching) return;
                 isSearching = false;
-
                 var found = $('opponentFound');
                 if (found) found.classList.add('active');
-
                 var sub = $('matchmakingSub');
                 if (sub) sub.textContent = '✅ حریف پیدا شد!';
-
                 var avatar = $('opponentAvatar');
                 var name = $('opponentName');
                 var level = $('opponentLevel');
-
                 if (avatar) avatar.textContent = '👤';
                 if (name) name.textContent = 'کاربر_' + Math.floor(Math.random() * 1000);
                 if (level) level.textContent = 'سطح ' + Math.floor(Math.random() * 10 + 1);
-
                 startCountdown();
             }, 3000);
         }
@@ -1513,7 +1556,6 @@
             var count = 3;
             var number = $('countdownNumber');
             if (number) number.textContent = count;
-
             var countInterval = setInterval(function() {
                 count--;
                 if (count > 0) {
@@ -1523,7 +1565,6 @@
                     if (number) number.textContent = '🎮';
                     var sub = $('matchmakingSub');
                     if (sub) sub.textContent = 'شروع مسابقه!';
-
                     setTimeout(function() {
                         var overlay = $('matchmakingOverlay');
                         if (overlay) overlay.classList.remove('active');
@@ -1540,9 +1581,6 @@
             ToastManager.show('🔍 جستجوی حریف لغو شد', 1000);
         });
 
-        // ============================================================
-        //  ADMIN PANEL (ساده شده)
-        // ============================================================
         var adminUsers = [];
 
         function loadAdminPanel() {
@@ -1550,10 +1588,8 @@
                 ToastManager.show('⛔ شما دسترسی به این بخش را ندارید', 2000);
                 return;
             }
-
             var panel = $('adminPanel');
             if (panel) panel.classList.add('active');
-
             BackendlessService.findUsers(null, 'created DESC', 100)
                 .then(function(users) {
                     adminUsers = users || [];
@@ -1570,14 +1606,12 @@
             weekAgo.setDate(weekAgo.getDate() - 7);
             var monthAgo = new Date(today);
             monthAgo.setMonth(monthAgo.getMonth() - 1);
-
             var online = users.filter(function(u) { return u.onlineStatus === true; });
             var offline = users.filter(function(u) { return u.onlineStatus !== true; });
             var banned = users.filter(function(u) { return u.isBanned === true; });
             var todayUsers = users.filter(function(u) { return new Date(u.created) >= today; });
             var weekUsers = users.filter(function(u) { return new Date(u.created) >= weekAgo; });
             var monthUsers = users.filter(function(u) { return new Date(u.created) >= monthAgo; });
-
             var total = $('adminTotalUsers');
             var onlineEl = $('adminOnlineUsers');
             var offlineEl = $('adminOfflineUsers');
@@ -1586,7 +1620,6 @@
             var todayEl = $('adminTodayUsers');
             var weekEl = $('adminWeekUsers');
             var monthEl = $('adminMonthUsers');
-
             if (total) total.textContent = users.length;
             if (onlineEl) onlineEl.textContent = online.length;
             if (offlineEl) offlineEl.textContent = offline.length;
@@ -1601,10 +1634,8 @@
             var list = $('adminUsersList');
             if (!list) return;
             list.innerHTML = '';
-
             var searchInput = $('adminSearchInput');
             var searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-
             var filtered = users;
             if (searchTerm) {
                 filtered = filtered.filter(function(u) {
@@ -1612,24 +1643,20 @@
                         (u.email && u.email.toLowerCase().indexOf(searchTerm) !== -1);
                 });
             }
-
             if (filtered.length === 0) {
                 list.innerHTML =
                     '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);font-family:Vazirmatn,sans-serif;">کاربری یافت نشد</div>';
                 return;
             }
-
             var sliced = filtered.slice(0, 50);
             for (var i = 0; i < sliced.length; i++) {
                 var user = sliced[i];
                 var item = document.createElement('div');
                 item.className = 'admin-user-item';
-
                 var isOnline = user.onlineStatus === true;
                 var isBanned = user.isBanned === true;
                 var isAdminUser = CONFIG.ADMIN_EMAILS.indexOf(user.email) !== -1 || user.role === 'admin' || user
                 .role === 'owner';
-
                 item.innerHTML = `
                         <div class="info">
                             <div class="avatar">${user.avatar || '👤'}</div>
@@ -1658,37 +1685,24 @@
                             ` : ''}
                         </div>
                     `;
-
                 list.appendChild(item);
             }
         }
 
-        // ============================================================
-        //  ADMIN ACTIONS
-        // ============================================================
-
-        // ساخت ادمین
         function adminMakeAdmin(userId) {
             if (!isAdmin()) {
                 ToastManager.show('⛔ شما دسترسی ساخت ادمین ندارید', 2000);
                 return;
             }
-
             if (!confirm('آیا از ساخت ادمین برای این کاربر مطمئن هستید؟')) return;
-
             var user = null;
             for (var i = 0; i < adminUsers.length; i++) {
-                if (adminUsers[i].objectId === userId) {
-                    user = adminUsers[i];
-                    break;
-                }
+                if (adminUsers[i].objectId === userId) { user = adminUsers[i]; break; }
             }
-
             if (user && CONFIG.ADMIN_EMAILS.indexOf(user.email) !== -1) {
                 ToastManager.show('ℹ️ این کاربر قبلاً ادمین است', 1500);
                 return;
             }
-
             BackendlessService.saveUser({
                 objectId: userId,
                 role: 'admin',
@@ -1700,58 +1714,44 @@
             }).catch(function() { ToastManager.show('❌ خطا', 1500); });
         }
 
-        // بن کاربر
         function adminBan(userId) {
             if (!isAdmin()) {
                 ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
                 return;
             }
-
             if (!confirm('آیا از مسدود کردن این کاربر مطمئن هستید؟')) return;
-
             BackendlessService.saveUser({ objectId: userId, isBanned: true, banExpiry: null })
                 .then(function() { ToastManager.show('✅ کاربر مسدود شد', 1500);
                     loadAdminPanel(); })
                 .catch(function() { ToastManager.show('❌ خطا', 1500); });
         }
 
-        // رفع بن
         function adminUnban(userId) {
             if (!isAdmin()) {
                 ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
                 return;
             }
-
             if (!confirm('آیا از برداشتن مسدودی این کاربر مطمئن هستید؟')) return;
-
             BackendlessService.saveUser({ objectId: userId, isBanned: false, banExpiry: null })
                 .then(function() { ToastManager.show('✅ مسدودی برداشته شد', 1500);
                     loadAdminPanel(); })
                 .catch(function() { ToastManager.show('❌ خطا', 1500); });
         }
 
-        // ویرایش کاربر
         function adminEdit(userId) {
             if (!isAdmin()) {
                 ToastManager.show('⛔ شما دسترسی مدیریت کاربران ندارید', 2000);
                 return;
             }
-
             var user = null;
             for (var i = 0; i < adminUsers.length; i++) {
-                if (adminUsers[i].objectId === userId) {
-                    user = adminUsers[i];
-                    break;
-                }
+                if (adminUsers[i].objectId === userId) { user = adminUsers[i]; break; }
             }
             if (!user) { ToastManager.show('❌ کاربر یافت نشد', 1500); return; }
-
             var choice = prompt('عملیات:\n1. تغییر نام\n2. تغییر لیگ\n3. تغییر کاپ\n4. افزودن سکه\n5. کم کردن سکه\n6. افزودن الماس\n7. کم کردن الماس');
             if (!choice) return;
-
             var idx = parseInt(choice) - 1;
             if (idx < 0 || idx >= 7) { ToastManager.show('❌ انتخاب نامعتبر', 1500); return; }
-
             switch (idx) {
                 case 0: {
                     var newName = prompt('نام جدید:');
@@ -1833,23 +1833,13 @@
             }
         }
 
-        // ============================================================
-        //  SESSION REPLACED POPUP HANDLER
-        // ============================================================
         safeAddListener('sessionReplacedBtn', 'click', function() {
             var overlay = $('sessionReplacedOverlay');
             if (overlay) overlay.classList.remove('active');
-
-            // کاربر به صفحه ورود هدایت می‌شود
             showAuthScreen('login');
             ToastManager.show('👋 نشست شما جایگزین شد', 2000);
         });
 
-        // ============================================================
-        //  EVENT BINDINGS
-        // ============================================================
-
-        // --- Auth ---
         safeAddListener('switchToRegister', 'click', function() {
             var login = $('loginScreen');
             var register = $('registerScreen');
@@ -1869,22 +1859,18 @@
             var email = $('regEmail');
             var password = $('regPassword');
             var confirm = $('regPasswordConfirm');
-
             var usernameVal = username ? username.value.trim() : '';
             var emailVal = email ? email.value.trim().toLowerCase() : '';
             var passwordVal = password ? password.value : '';
             var confirmVal = confirm ? confirm.value : '';
-
             var uError = $('regUsernameError');
             var eError = $('regEmailError');
             var pError = $('regPasswordError');
             var cError = $('regPasswordConfirmError');
-
             if (uError) uError.classList.remove('show');
             if (eError) eError.classList.remove('show');
             if (pError) pError.classList.remove('show');
             if (cError) cError.classList.remove('show');
-
             if (!usernameVal || usernameVal.length < 3) {
                 if (uError) { uError.textContent = 'نام کاربری حداقل ۳ کاراکتر باشد';
                     uError.classList.add('show'); }
@@ -1905,9 +1891,7 @@
                     cError.classList.add('show'); }
                 return;
             }
-
-            AuthService.register(emailVal, passwordVal, usernameVal)
-                .catch(function() {});
+            AuthService.register(emailVal, passwordVal, usernameVal).catch(function() {});
         });
 
         safeAddListener('loginBtn', 'click', function() {
@@ -1915,13 +1899,10 @@
             var password = $('loginPassword');
             var emailVal = email ? email.value.trim().toLowerCase() : '';
             var passwordVal = password ? password.value : '';
-
             var eError = $('loginEmailError');
             var pError = $('loginPasswordError');
-
             if (eError) eError.classList.remove('show');
             if (pError) pError.classList.remove('show');
-
             if (!emailVal || emailVal.indexOf('@') === -1) {
                 if (eError) { eError.textContent = 'ایمیل معتبر وارد کنید';
                     eError.classList.add('show'); }
@@ -1932,28 +1913,22 @@
                     pError.classList.add('show'); }
                 return;
             }
-
             AuthService.login(emailVal, passwordVal);
         });
 
-        safeAddListener('logoutBtn', 'click', function() {
-            AuthService.logout();
-        });
+        safeAddListener('logoutBtn', 'click', function() { AuthService.logout(); });
 
-        safeAddListener('profileBtn', 'click', function() {
-            var p = DataManager.getPlayer();
-            var permText = '';
-            if (p.permissions && p.permissions.length > 0) {
-                permText = ' | 🔑 ' + p.permissions.length + ' دسترسی';
-            }
-            if (CONFIG.ADMIN_EMAILS.indexOf(p.email) !== -1) {
-                permText = ' | 👑 سازنده';
-            }
-            ToastManager.show('👤 ' + p.name + ' | سطح ' + p.level + ' | 🪙 ' + p.coins + ' | 💎 ' + p.diamonds +
-                permText, 2500);
-        });
+        safeAddListener('profileBtn', 'click', function() { openAvatarShop(); });
 
-        // --- Start Game ---
+        safeAddListener('avatarShopClose', 'click', closeAvatarShop);
+
+        var avatarShop = $('avatarShopOverlay');
+        if (avatarShop) {
+            avatarShop.addEventListener('click', function(e) {
+                if (e.target === this) closeAvatarShop();
+            });
+        }
+
         safeAddListener('startBtn', 'click', function() {
             if (!DataManager.get('isLoggedIn', false)) {
                 ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
@@ -1966,7 +1941,6 @@
             startMatchmaking();
         });
 
-        // --- Admin ---
         safeAddListener('adminBtn', 'click', loadAdminPanel);
         safeAddListener('adminClose', 'click', function() {
             var panel = $('adminPanel');
@@ -1976,13 +1950,11 @@
         safeAddListener('adminSearchInput', 'input', function() { renderAdminUsers(adminUsers); });
         safeAddListener('adminSearchBtn', 'click', function() { renderAdminUsers(adminUsers); });
 
-        // --- Trophy ---
         safeAddListener('trophyBackBtn', 'click', function() {
             var page = $('trophyPage');
             if (page) page.classList.remove('active');
         });
 
-        // --- Reward ---
         safeAddListener('rewardChestBtn', 'click', function() {
             var p = DataManager.getPlayer();
             if (p.rewardClaimed) {
@@ -1998,26 +1970,19 @@
             ToastManager.show('🎁 ' + coins + ' سکه و ' + diamonds + ' الماس دریافت کردید!', 2000);
         });
 
-        // --- Service Retry ---
         safeAddListener('serviceRetryBtn', 'click', function() {
             var overlay = $('serviceOfflineOverlay');
             if (overlay) overlay.classList.remove('active');
             ToastManager.show('🔄 در حال تلاش مجدد...', 1500);
-            if (ablyClient) {
-                try { ablyClient.connect(); } catch (e) {}
-            } else {
-                initAbly();
-            }
+            if (ablyClient) { try { ablyClient.connect(); } catch (e) {} } else { initAbly(); }
         });
 
-        // --- Loading Retry ---
         safeAddListener('loadingRetryBtn', 'click', function() {
             var error = $('loadingError');
             if (error) error.classList.remove('show');
             boot();
         });
 
-        // --- Navigation ---
         var navItems = safeQuerySelectorAll('.bottom-nav-item');
         for (var ni = 0; ni < navItems.length; ni++) {
             (function(item) {
@@ -2046,7 +2011,6 @@
             })(navItems[ni]);
         }
 
-        // --- Enter key ---
         var loginPass = $('loginPassword');
         if (loginPass) {
             loginPass.addEventListener('keydown', function(e) {
@@ -2067,7 +2031,6 @@
             });
         }
 
-        // --- Admin Tabs ---
         var adminTabs = safeQuerySelectorAll('.admin-tabs .tab');
         for (var at = 0; at < adminTabs.length; at++) {
             (function(tab) {
@@ -2099,24 +2062,17 @@
             })(adminTabs[at]);
         }
 
-        // ============================================================
-        //  BOOT
-        // ============================================================
         function boot() {
             LoadingManager.init();
-
             LoadingManager.update(0, 'بارگذاری منابع...');
             var backendlessReady = BackendlessService.init();
-
             if (!backendlessReady) {
                 LoadingManager.showError();
                 return;
             }
-
             setTimeout(function() {
                 LoadingManager.update(1, 'اتصال به سرور...');
                 var ablyReady = initAbly();
-
                 setTimeout(function() {
                     LoadingManager.update(2, 'بررسی حساب کاربری...');
                     AuthService.checkSession()
@@ -2129,11 +2085,8 @@
                                         LoadingManager.update(5, 'شروع...');
                                         setTimeout(function() {
                                             LoadingManager.complete();
-                                            if (!hasSession) {
-                                                showAuthScreen('login');
-                                            }
-                                            ToastManager.show('✨ خوش آمدید به مافیا بیس!',
-                                                1500);
+                                            if (!hasSession) { showAuthScreen('login'); }
+                                            ToastManager.show('✨ خوش آمدید به مافیا بیس!', 1500);
                                         }, 500);
                                     }, 500);
                                 }, 500);
@@ -2156,13 +2109,11 @@
 
         setTimeout(boot, 300);
 
-        console.log('🎮 مافیا بیس — نسخه نهایی با مدیریت Session مانند Call of Duty');
-        console.log('✅ فقط یک Session فعال برای هر حساب');
-        console.log('✅ تشخیص ورود همزمان از دستگاه دیگر');
-        console.log('✅ نمایش پاپ‌آپ برای کاربر قبلی');
-        console.log('✅ قطع خودکار اتصال قبلی');
-        console.log('✅ سازنده دوم: yasinnej@gmail.com');
-        console.log('✅ ادمین‌های ویژه: ' + CONFIG.ADMIN_EMAILS.join(', '));
+        console.log('🎮 مافیا بیس — نسخه نهایی بدون خطا');
+        console.log('✅ رفع خطای SyntaxError');
+        console.log('✅ آواتار رایگان واقعی');
+        console.log('✅ صفحه آواتار تمام صفحه');
+        console.log('✅ اتصال پایدار با تلاش مجدد خودکار');
     </script>
 </body>
 </html>
