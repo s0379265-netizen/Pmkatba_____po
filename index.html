@@ -36,6 +36,40 @@
         .avatar-shop-overlay{display:none;position:fixed;inset:0;z-index:9998;justify-content:center;align-items:center;background:rgba(10,10,26,.92);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:fadeIn .4s ease;padding:16px}.avatar-shop-overlay.active{display:flex}.avatar-shop-box{width:100%;max-width:560px;max-height:95vh;background:linear-gradient(160deg,rgba(0,40,80,.9),rgba(0,10,40,.95));backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border-radius:28px;border:1px solid rgba(0,180,255,.06);box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 80px rgba(0,100,255,.04);padding:20px 18px 18px;overflow:hidden;animation:slideUp .4s ease;position:relative;display:flex;flex-direction:column}.avatar-shop-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30%20%,rgba(0,180,255,.03)0%,transparent 60%);pointer-events:none}.avatar-shop-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid rgba(0,180,255,.04);margin-bottom:14px;position:relative;z-index:2;flex-shrink:0}.avatar-shop-header .title{font-size:20px;font-weight:800;color:#fff;font-family:'Vazirmatn',sans-serif}.avatar-shop-header .title i{color:var(--gold);margin-left:8px}.avatar-shop-header .close-btn{padding:6px 14px;border:none;border-radius:12px;background:rgba(255,77,77,.06);color:var(--danger);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:var(--transition)}.avatar-shop-header .close-btn:hover{background:rgba(255,77,77,.1)}.avatar-shop-balance{display:flex;gap:16px;padding:8px 16px;background:rgba(0,180,255,.02);border-radius:14px;border:1px solid rgba(0,180,255,.03);margin-bottom:14px;position:relative;z-index:2;flex-shrink:0}.avatar-shop-balance .bal-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:rgba(255,255,255,.3);font-family:'Vazirmatn',sans-serif}.avatar-shop-balance .bal-item img{width:22px;height:22px;object-fit:contain}.avatar-shop-balance .bal-item .num{color:#fff}.avatar-shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;overflow-y:auto;padding:4px 2px 10px 2px;position:relative;z-index:2;flex:1;min-height:0}.avatar-shop-grid::-webkit-scrollbar{width:3px}.avatar-shop-grid::-webkit-scrollbar-thumb{background:rgba(0,180,255,.15);border-radius:10px}.avatar-shop-item{background:rgba(10,22,40,.4);backdrop-filter:blur(8px);border-radius:16px;border:2px solid rgba(0,180,255,.02);padding:10px 6px 8px;text-align:center;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center}.avatar-shop-item:hover{transform:translateY(-4px);border-color:rgba(0,180,255,.08);box-shadow:0 8px 30px rgba(0,0,0,.3)}.avatar-shop-item:active{transform:scale(.94)}.avatar-shop-item .avatar-preview{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 2px;background:rgba(0,180,255,.02);border:2px solid rgba(0,180,255,.04);transition:var(--transition);overflow:hidden;flex-shrink:0}.avatar-shop-item .avatar-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%}.avatar-shop-item .avatar-name{font-size:8px;font-weight:600;color:rgba(255,255,255,.12);font-family:'Vazirmatn',sans-serif;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.avatar-shop-item .avatar-price{font-size:8px;font-weight:700;font-family:'Vazirmatn',sans-serif;margin-top:1px;display:flex;align-items:center;justify-content:center;gap:2px}.avatar-shop-item .avatar-price.free{color:var(--success)}.avatar-shop-item .avatar-price.paid{color:var(--gold)}.avatar-shop-item .avatar-price img{width:12px;height:12px;object-fit:contain}.avatar-shop-item .owned-badge{position:absolute;top:2px;right:2px;font-size:11px;filter:drop-shadow(0 0 20px rgba(0,255,136,.2))}.avatar-shop-item .selected-badge{position:absolute;inset:0;border-radius:16px;border:2px solid var(--gold);box-shadow:0 0 30px rgba(255,215,0,.08),inset 0 0 30px rgba(255,215,0,.02);pointer-events:none;animation:selectedPulse 2s ease-in-out infinite}@keyframes selectedPulse{0%,100%{opacity:.5}50%{opacity:1}}.avatar-shop-item.equipped{border-color:var(--gold);background:rgba(255,215,0,.02)}.avatar-shop-item.equipped .avatar-preview{border-color:var(--gold);box-shadow:0 0 30px rgba(255,215,0,.04)}.avatar-shop-item.owned{border-color:rgba(0,255,136,.03)}.avatar-shop-item.owned .avatar-preview{border-color:rgba(0,255,136,.03)}.avatar-shop-item.locked{opacity:.4;cursor:not-allowed}.avatar-shop-item.locked:hover{transform:none}
         @media(max-width:480px){.avatar-shop-grid{grid-template-columns:repeat(3,1fr);gap:8px}.avatar-shop-item .avatar-preview{width:44px;height:44px;font-size:20px}.avatar-shop-box{padding:14px 12px 12px;border-radius:20px;max-height:98vh}.avatar-shop-header .title{font-size:17px}}
         @media(max-width:360px){.avatar-shop-grid{grid-template-columns:repeat(2,1fr)}}
+        
+        /* ===== دکمه حذف همه کاربران ===== */
+        .admin-danger-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #FF4D4D, #CC0000);
+            color: #fff;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all .3s ease;
+            box-shadow: 0 8px 30px rgba(255,77,77,.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .admin-danger-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(255,77,77,.3);
+        }
+        .admin-danger-btn:active {
+            transform: scale(.95);
+        }
+        .admin-danger-btn i {
+            font-size: 16px;
+        }
+        .admin-header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -236,13 +270,20 @@
         <div class="admin-panel" id="adminPanel">
             <div class="admin-header">
                 <h2><i class="fas fa-shield-alt"></i> پنل مدیریت</h2>
+                <div class="admin-header-actions">
+                    <button class="admin-danger-btn" id="deleteAllUsersBtn">
+                        <i class="fas fa-trash-alt"></i> حذف همه کاربران (به جز سازنده‌ها)
+                    </button>
+                    <button class="admin-close" id="adminClose">بستن</button>
+                </div>
+            </div>
+            <div class="admin-header" style="margin-top:4px;margin-bottom:12px;">
                 <div class="admin-tabs">
                     <button class="tab active" data-atab="dashboard">داشبورد</button>
                     <button class="tab" data-atab="users">کاربران</button>
                     <button class="tab" data-atab="rooms">اتاق‌ها</button>
                     <button class="tab" data-atab="logs">گزارش‌ها</button>
                 </div>
-                <button class="admin-close" id="adminClose">بستن</button>
             </div>
 
             <div class="admin-stats" id="adminStats">
@@ -544,8 +585,8 @@
             APP_ID: 'A4293BB7-EF12-4DF5-9B9E-C12C8A935BCF',
             API_KEY: '9F777ECD-B061-44A5-9C8B-DA805E257007',
             ABLY_KEY: 'NNYzzQ.7HHPYg:NA1mSMcWdEnlWOHGZ4CaF7ZUkoXe1Iggtf0sy-nNsDM',
-            OWNER_EMAIL: 's0379265@gmail.com',
-            ADMIN_EMAILS: ['s0379265@gmail.com', 'yasinnej@gmail.com']
+            OWNER_EMAIL: 'tiger.mafia.best@gmail.com',
+            ADMIN_EMAILS: ['tiger.mafia.best@gmail.com']
         };
 
         var PERMISSIONS = {
@@ -957,6 +998,10 @@
             saveUser: function(data) {
                 if (!this.isInitialized()) return Promise.resolve(null);
                 return this.sdk.Data.of('Users').save(data);
+            },
+            deleteUser: function(objectId) {
+                if (!this.isInitialized()) return Promise.resolve(null);
+                return this.sdk.Data.of('Users').remove({ objectId: objectId });
             },
             saveLog: function(action, details) {
                 if (!this.isInitialized()) return Promise.resolve();
@@ -1833,6 +1878,76 @@
             }
         }
 
+        // ===== حذف همه کاربران (به جز سازنده‌ها) =====
+        function deleteAllUsers() {
+            if (!isAdmin()) {
+                ToastManager.show('⛔ شما دسترسی حذف کاربران را ندارید', 2000);
+                return;
+            }
+            
+            var confirmMsg = '⚠️ هشدار جدی!\n\n' +
+                'شما در حال حذف دائمی همه کاربران هستید!\n' +
+                '⚠️ این عملیات غیرقابل بازگشت است.\n' +
+                '✅ فقط سازنده‌ها (ادمین‌ها) از حذف شدن محافظت می‌شوند.\n\n' +
+                'آیا مطمئن هستید که می‌خواهید ادامه دهید؟';
+            
+            if (!confirm(confirmMsg)) return;
+            
+            var secondConfirm = '🔴 تایید نهایی:\n\n' +
+                'این کار باعث حذف شدن همه کاربران از سرور می‌شود.\n' +
+                'سازنده‌ها (ادمین‌ها) حذف نمی‌شوند.\n\n' +
+                'برای تایید نهایی، عبارت "حذف همه" را تایپ کنید:';
+            
+            var code = prompt(secondConfirm);
+            if (code !== 'حذف همه') {
+                ToastManager.show('❌ عملیات لغو شد', 1500);
+                return;
+            }
+            
+            ToastManager.show('⏳ در حال حذف کاربران...', 3000);
+            
+            BackendlessService.findUsers(null, null, 1000)
+                .then(function(allUsers) {
+                    var adminEmails = CONFIG.ADMIN_EMAILS;
+                    var usersToDelete = allUsers.filter(function(u) {
+                        return adminEmails.indexOf(u.email) === -1;
+                    });
+                    
+                    if (usersToDelete.length === 0) {
+                        ToastManager.show('ℹ️ هیچ کاربر معمولی برای حذف یافت نشد', 2000);
+                        return;
+                    }
+                    
+                    var deleteCount = usersToDelete.length;
+                    if (!confirm('تعداد ' + deleteCount + ' کاربر معمولی برای حذف شناسایی شدند.\nآیا ادامه می‌دهید؟')) {
+                        ToastManager.show('❌ عملیات لغو شد', 1500);
+                        return;
+                    }
+                    
+                    var deletePromises = usersToDelete.map(function(user) {
+                        return BackendlessService.deleteUser(user.objectId)
+                            .catch(function(err) {
+                                console.warn('خطا در حذف کاربر:', user.email, err);
+                            });
+                    });
+                    
+                    Promise.all(deletePromises)
+                        .then(function() {
+                            ToastManager.show('✅ ' + deleteCount + ' کاربر با موفقیت حذف شدند!', 3000);
+                            BackendlessService.saveLog('delete_all_users', { count: deleteCount });
+                            loadAdminPanel();
+                        })
+                        .catch(function(err) {
+                            console.error('خطا در حذف کاربران:', err);
+                            ToastManager.show('❌ خطا در حذف کاربران', 2000);
+                        });
+                })
+                .catch(function(err) {
+                    console.error('خطا در دریافت لیست کاربران:', err);
+                    ToastManager.show('❌ خطا در دریافت لیست کاربران', 2000);
+                });
+        }
+
         safeAddListener('sessionReplacedBtn', 'click', function() {
             var overlay = $('sessionReplacedOverlay');
             if (overlay) overlay.classList.remove('active');
@@ -1946,6 +2061,9 @@
             var panel = $('adminPanel');
             if (panel) panel.classList.remove('active');
         });
+        
+        // دکمه حذف همه کاربران
+        safeAddListener('deleteAllUsersBtn', 'click', deleteAllUsers);
 
         safeAddListener('adminSearchInput', 'input', function() { renderAdminUsers(adminUsers); });
         safeAddListener('adminSearchBtn', 'click', function() { renderAdminUsers(adminUsers); });
@@ -2114,6 +2232,8 @@
         console.log('✅ آواتار رایگان واقعی');
         console.log('✅ صفحه آواتار تمام صفحه');
         console.log('✅ اتصال پایدار با تلاش مجدد خودکار');
+        console.log('✅ سازنده جدید: tiger.mafia.best@gmail.com');
+        console.log('✅ قابلیت حذف همه کاربران (به جز سازنده‌ها) اضافه شد');
     </script>
 </body>
 </html>
