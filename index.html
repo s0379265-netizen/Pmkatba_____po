@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>مافیا بیس</title>
+    <title>مافیا بیس - لابی واقعی با صدا</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <script src="https://api.backendless.com/sdk/js/latest/backendless.min.js"></script>
     <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client@1.15.3/dist/livekit-client.umd.min.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}:root{--gold:#FFD700;--gold-dark:#C9A800;--neon-blue:#00B4FF;--neon-blue-dark:#0066AA;--teal:#00D4FF;--danger:#FF4D4D;--success:#00FF88;--warning:#FFAA00;--nav-height:62px;--radius:16px;--shadow:0 8px 32px rgba(0,0,0,.5);--transition:all .3s cubic-bezier(.4,0,.2,1)}body{font-family:'Vazirmatn',sans-serif;min-height:100vh;overflow:hidden;user-select:none;-webkit-tap-highlight-color:transparent;background:#0a0a1a;color:#fff}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,.02)}::-webkit-scrollbar-thumb{background:rgba(0,180,255,.2);border-radius:10px}
         #loadingScreen{position:fixed;inset:0;z-index:99999;display:flex;justify-content:center;align-items:center;background:#0a0a1a;transition:opacity .8s ease,visibility .8s ease}#loadingScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}.loading-container{text-align:center;max-width:420px;width:90%;padding:40px 30px;background:rgba(10,22,40,.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:32px;border:1px solid rgba(0,180,255,.06);box-shadow:var(--shadow);animation:fadeIn .6s ease}.loading-logo{margin-bottom:24px}.loading-logo .logo-icon{font-size:52px;display:block;margin-bottom:4px;animation:pulseGlow 2s ease-in-out infinite}.loading-logo .logo-text{font-size:30px;font-weight:900;color:#fff;text-shadow:0 0 40px rgba(0,180,255,.1)}.loading-logo .logo-text span{color:var(--gold);text-shadow:0 0 40px rgba(255,215,0,.15)}.loading-logo .logo-sub{font-size:13px;color:rgba(255,255,255,.2);letter-spacing:6px;font-weight:300;margin-top:2px}.loading-bar-wrapper{margin:20px 0 12px}.loading-bar-track{width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;position:relative}.loading-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--neon-blue),var(--gold));border-radius:10px;transition:width .4s ease;box-shadow:0 0 30px rgba(0,180,255,.2)}.loading-percentage{font-size:14px;font-weight:700;color:rgba(255,255,255,.3);margin-top:8px;font-variant-numeric:tabular-nums}.loading-status{font-size:13px;color:rgba(255,255,255,.2);margin-top:4px;min-height:24px;font-weight:300}.loading-status .dots{display:inline-block;min-width:24px;text-align:left}.loading-status .dots span{display:inline-block;animation:dotAnim 1.4s infinite}.loading-status .dots span:nth-child(2){animation-delay:.2s}.loading-status .dots span:nth-child(3){animation-delay:.4s}.loading-error{display:none;margin-top:16px}.loading-error.show{display:block}.loading-error .error-icon{font-size:32px;display:block;margin-bottom:4px}.loading-error .error-text{font-size:14px;color:rgba(255,255,255,.3)}.loading-error .error-btn{margin-top:12px;padding:8px 32px;border:none;border-radius:12px;background:rgba(0,180,255,.1);color:var(--neon-blue);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:var(--transition);border:1px solid rgba(0,180,255,.06)}.loading-error .error-btn:hover{background:rgba(0,180,255,.15);transform:translateY(-2px)}
@@ -37,508 +38,137 @@
         @media(max-width:480px){.avatar-shop-grid{grid-template-columns:repeat(3,1fr);gap:8px}.avatar-shop-item .avatar-preview{width:44px;height:44px;font-size:20px}.avatar-shop-box{padding:14px 12px 12px;border-radius:20px;max-height:98vh}.avatar-shop-header .title{font-size:17px}}
         @media(max-width:360px){.avatar-shop-grid{grid-template-columns:repeat(2,1fr)}}
         
-        .admin-danger-btn {
-            padding: 10px 20px;
+        .admin-danger-btn{padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,#FF4D4D,#CC0000);color:#fff;font-family:'Vazirmatn',sans-serif;font-weight:800;font-size:13px;cursor:pointer;transition:all .3s ease;box-shadow:0 8px 30px rgba(255,77,77,.2);display:flex;align-items:center;gap:8px}.admin-danger-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,77,77,.3)}.admin-danger-btn:active{transform:scale(.95)}.admin-danger-btn i{font-size:16px}.admin-header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+        .lobby-screen-custom{display:none;position:fixed;inset:0;z-index:200;background:#0b0e14;padding:0;flex-direction:column;overflow:hidden}.lobby-screen-custom.active{display:flex}.lobby-bg-layer{position:absolute;top:0;left:0;width:100%;height:100%;background:url('https://uploadkon.ir/uploads/eec013_26IMG-20260813-121643-565.jpg') center/cover no-repeat;z-index:0}.lobby-dark-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.30);z-index:1;pointer-events:none}.lobby-glass-blur{position:absolute;top:0;left:0;width:100%;height:100%;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:1;pointer-events:none}.lobby-ui{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2}.lobby-btn-plus{position:absolute;top:6px;left:6px;width:40px;height:40px;border:none;background:transparent;padding:0;cursor:pointer;z-index:20}.lobby-btn-plus img{width:100%;height:100%;display:block}.lobby-btn-settings{position:absolute;top:6px;left:54px;width:40px;height:40px;border:none;background:transparent;padding:0;cursor:pointer;z-index:20}.lobby-btn-settings img{width:100%;height:100%;display:block}.lobby-btn-search{position:absolute;top:6px;right:54px;width:40px;height:40px;border:none;background:transparent;padding:0;cursor:pointer;z-index:20}.lobby-btn-search img{width:100%;height:100%;display:block}.lobby-btn-close{position:absolute;top:6px;right:6px;width:40px;height:40px;border:none;background:transparent;padding:0;cursor:pointer;z-index:20}.lobby-btn-close img{width:100%;height:100%;display:block}.lobby-header-png{position:absolute;top:-32px;left:50%;transform:translateX(-50%);width:175px;height:auto;z-index:10;pointer-events:none}.lobby-header-png img{width:100%;height:auto;display:block}.lobby-header-text{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:175px;height:55px;display:flex;align-items:center;justify-content:center;z-index:12;pointer-events:none;color:#fff;font-size:18px;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,0.4);letter-spacing:0.2px;text-align:center;line-height:1.3}.lobby-list-container{position:absolute;top:88px;left:12px;right:12px;bottom:80px;overflow-y:auto;z-index:3;padding:4px 0}.lobby-list-container::-webkit-scrollbar{width:3px}.lobby-list-container::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:10px}.lobby-card-custom{background:rgba(16,20,32,0.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:14px;border:2px solid rgba(255,255,255,0.15);box-shadow:0 4px 12px rgba(0,0,0,0.3);padding:10px 14px;margin-bottom:8px;display:flex;flex-direction:column;justify-content:space-between;transition:all .2s ease;cursor:pointer}.lobby-card-custom:hover{border-color:rgba(0,180,255,.2);transform:translateY(-2px)}.lobby-card-custom .card-top{display:flex;justify-content:flex-end;align-items:center;width:100%}.lobby-card-custom .creator-group{display:flex;align-items:center;gap:6px}.lobby-card-custom .creator-label{color:#b8c4e0;font-size:13px;font-weight:500;white-space:nowrap}.lobby-card-custom .creator-name{color:#b8c4e0;font-size:13px;font-weight:500;white-space:nowrap}.lobby-card-custom .card-bottom{display:flex;justify-content:space-between;align-items:center;width:100%}.lobby-card-custom .room-name{color:#f0f2fa;font-size:14px;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.3);white-space:nowrap;text-align:right}.lobby-card-custom .player-count{background:rgba(0,0,0,0.3);padding:2px 14px;border-radius:30px;font-size:14px;font-weight:600;color:#b0d0ff;border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(4px);line-height:1.6;white-space:nowrap}.lobby-card-custom .join-btn{width:74px;height:auto;border:none;background:transparent;padding:0;cursor:pointer;z-index:5;flex-shrink:0;display:block}.lobby-card-custom .join-btn img{width:100%;height:auto;display:block}.lobby-refresh-btn{position:absolute;bottom:18px;left:18px;width:44px;height:44px;border:none;background:transparent;padding:0;cursor:pointer;z-index:5}.lobby-refresh-btn img{width:100%;height:100%;display:block}.lobby-btn-plus:hover,.lobby-btn-settings:hover,.lobby-btn-search:hover,.lobby-btn-close:hover,.lobby-card-custom .join-btn:hover,.lobby-refresh-btn:hover{filter:brightness(1.15) drop-shadow(0 4px 8px rgba(0,0,0,0.5));transition:filter 0.15s}.lobby-btn-plus:active,.lobby-btn-settings:active,.lobby-btn-search:active,.lobby-btn-close:active,.lobby-card-custom .join-btn:active,.lobby-refresh-btn:active{transform:scale(0.92);transition:transform 0.05s}.lobby-empty-custom{text-align:center;padding:60px 20px;color:rgba(255,255,255,.15);font-family:'Vazirmatn',sans-serif}.lobby-empty-custom .icon{font-size:56px;display:block;margin-bottom:12px}.lobby-empty-custom .text{font-size:16px;font-weight:600;color:rgba(255,255,255,.2)}.lobby-empty-custom .sub{font-size:13px;color:rgba(255,255,255,.1);margin-top:4px}
+
+        .room-screen-custom{display:none;position:fixed;inset:0;z-index:250;background:#0b0e14;overflow:hidden}.room-screen-custom.active{display:block}.room-bg-custom{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0}.room-dark-overlay-custom{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);z-index:1;pointer-events:none}.room-back-btn-custom{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,0.25);background:rgba(10,12,18,0.55);backdrop-filter:blur(6px);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:60;transition:transform 0.05s,filter 0.15s}.room-back-btn-custom:hover{filter:brightness(1.2)}.room-back-btn-custom:active{transform:scale(0.92)}.room-title-custom{position:absolute;top:18px;left:50%;transform:translateX(-50%);z-index:55;color:#fff;font-size:15px;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,0.6);background:rgba(10,12,18,0.5);padding:6px 18px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);backdrop-filter:blur(6px);white-space:nowrap}.seat-custom{position:absolute;width:64px;height:64px;z-index:10;pointer-events:none}.seat-custom .chair{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;pointer-events:none;transform-origin:center center}.seat-custom .avatar{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,0.5);z-index:2;background:#222;pointer-events:none}.seat-custom .online{position:absolute;bottom:4%;left:68%;width:7px;height:7px;border-radius:50%;background:#2ecc71;border:1.5px solid #0b0e14;box-shadow:0 0 4px rgba(46,204,113,0.8);z-index:3;pointer-events:none}.seat-custom .online.offline{background:#555;box-shadow:none}.seat-custom .username{position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);width:100%;max-width:64px;text-align:center;color:#fff;font-size:9px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 4px rgba(0,0,0,0.9);z-index:2;pointer-events:none;letter-spacing:0.2px;background:rgba(0,0,0,0.3);padding:1px 4px;border-radius:8px;backdrop-filter:blur(2px)}.seat-custom .username:empty{display:none}.seat-custom .avatar.empty-avatar{opacity:0.3;border-color:#555}.room-seats-container{position:absolute;top:0;left:0;width:100%;height:100%;z-index:5}.room-leave-btn{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:60;padding:10px 30px;border:none;border-radius:14px;background:rgba(255,77,77,.15);color:var(--danger);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:var(--transition);border:1px solid rgba(255,77,77,.06)}.room-leave-btn:hover{background:rgba(255,77,77,.25)}
+        .lobby-btn-plus[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:4px 10px;border-radius:8px;white-space:nowrap;font-family:'Vazirmatn',sans-serif;pointer-events:none;z-index:25}.lobby-btn-plus[data-tooltip]:hover::before{content:'';position:absolute;bottom:calc(100% - 4px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(0,0,0,0.8);z-index:25}.lobby-btn-close[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:4px 10px;border-radius:8px;white-space:nowrap;font-family:'Vazirmatn',sans-serif;pointer-events:none;z-index:25}.lobby-btn-close[data-tooltip]:hover::before{content:'';position:absolute;bottom:calc(100% - 4px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(0,0,0,0.8);z-index:25}.lobby-btn-settings[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:4px 10px;border-radius:8px;white-space:nowrap;font-family:'Vazirmatn',sans-serif;pointer-events:none;z-index:25}.lobby-btn-settings[data-tooltip]:hover::before{content:'';position:absolute;bottom:calc(100% - 4px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(0,0,0,0.8);z-index:25}.lobby-btn-search[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:4px 10px;border-radius:8px;white-space:nowrap;font-family:'Vazirmatn',sans-serif;pointer-events:none;z-index:25}.lobby-btn-search[data-tooltip]:hover::before{content:'';position:absolute;bottom:calc(100% - 4px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(0,0,0,0.8);z-index:25}.lobby-refresh-btn[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:4px 10px;border-radius:8px;white-space:nowrap;font-family:'Vazirmatn',sans-serif;pointer-events:none;z-index:25}.lobby-refresh-btn[data-tooltip]:hover::before{content:'';position:absolute;bottom:calc(100% - 4px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(0,0,0,0.8);z-index:25}
+        .lobby-list-container .lobby-card-custom .join-btn{transition:transform 0.15s}.lobby-list-container .lobby-card-custom .join-btn:active{transform:scale(0.9)!important}
+        .admin-user-item .actions .unban-btn{background:rgba(0,255,136,.08);color:var(--success)}.admin-user-item .actions .unban-btn:hover{background:rgba(0,255,136,.15)}.admin-user-item .actions .ban-btn{background:rgba(255,77,77,.08);color:var(--danger)}.admin-user-item .actions .ban-btn:hover{background:rgba(255,77,77,.15)}.admin-user-item .actions .edit-btn{background:rgba(255,215,0,.08);color:var(--gold)}.admin-user-item .actions .edit-btn:hover{background:rgba(255,215,0,.15)}
+        .lobby-btn-plus[data-tooltip="ایجاد لابی جدید"]:hover::after{content:'ایجاد لابی جدید'}.lobby-btn-close[data-tooltip="بستن لابی"]:hover::after{content:'بستن لابی'}.lobby-btn-settings[data-tooltip="تنظیمات"]:hover::after{content:'تنظیمات'}.lobby-btn-search[data-tooltip="جستجو"]:hover::after{content:'جستجو'}.lobby-refresh-btn[data-tooltip="به‌روزرسانی لیست"]:hover::after{content:'به‌روزرسانی لیست'}
+        .admin-user-item .actions button{padding:4px 12px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:'Vazirmatn',sans-serif;cursor:pointer;transition:all 0.2s ease}.admin-user-item .actions .unban-btn{background:rgba(0,255,136,.12);color:#00ff88}.admin-user-item .actions .unban-btn:hover{background:rgba(0,255,136,.25);transform:scale(1.02)}.admin-user-item .actions .ban-btn{background:rgba(255,77,77,.12);color:#ff4d4d}.admin-user-item .actions .ban-btn:hover{background:rgba(255,77,77,.25);transform:scale(1.02)}.admin-user-item .actions .edit-btn{background:rgba(255,215,0,.12);color:#ffd700}.admin-user-item .actions .edit-btn:hover{background:rgba(255,215,0,.25);transform:scale(1.02)}
+        .lobby-card-custom .creator-name{max-width:80px;overflow:hidden;text-overflow:ellipsis}.lobby-card-custom .room-name{max-width:100px;overflow:hidden;text-overflow:ellipsis}
+        .lobby-btn-plus:active,.lobby-btn-settings:active,.lobby-btn-search:active,.lobby-btn-close:active,.lobby-refresh-btn:active,.lobby-card-custom .join-btn:active{transform:scale(0.9)!important;transition:transform 0.05s}
+        .seat-custom .username{background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:10px;backdrop-filter:blur(4px);font-size:10px;max-width:70px}.room-title-custom{font-size:16px;padding:6px 20px;background:rgba(10,12,18,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}.room-back-btn-custom{background:rgba(10,12,18,0.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}.room-back-btn-custom:hover{background:rgba(255,77,77,0.2);border-color:rgba(255,77,77,0.3)}.auth-box .auth-btn:disabled{opacity:0.6;cursor:not-allowed}#loadingScreen .loading-bar-fill{background:linear-gradient(90deg,#00B4FF,#FFD700);box-shadow:0 0 30px rgba(0,180,255,0.2)}
+        .admin-user-item .actions button{padding:4px 12px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:'Vazirmatn',sans-serif;cursor:pointer;transition:all 0.2s ease}.admin-user-item .actions .unban-btn{background:rgba(0,255,136,.12);color:#00ff88}.admin-user-item .actions .unban-btn:hover{background:rgba(0,255,136,.25);transform:scale(1.02)}.admin-user-item .actions .ban-btn{background:rgba(255,77,77,.12);color:#ff4d4d}.admin-user-item .actions .ban-btn:hover{background:rgba(255,77,77,.25);transform:scale(1.02)}.admin-user-item .actions .edit-btn{background:rgba(255,215,0,.12);color:#ffd700}.admin-user-item .actions .edit-btn:hover{background:rgba(255,215,0,.25);transform:scale(1.02)}
+        .lobby-card-custom .creator-name{max-width:80px;overflow:hidden;text-overflow:ellipsis}.lobby-card-custom .room-name{max-width:100px;overflow:hidden;text-overflow:ellipsis}
+        .lobby-btn-plus:active,.lobby-btn-settings:active,.lobby-btn-search:active,.lobby-btn-close:active,.lobby-refresh-btn:active,.lobby-card-custom .join-btn:active{transform:scale(0.9)!important;transition:transform 0.05s}
+        .seat-custom .username{background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:10px;backdrop-filter:blur(4px);font-size:10px;max-width:70px}.room-title-custom{font-size:16px;padding:6px 20px;background:rgba(10,12,18,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}.room-back-btn-custom{background:rgba(10,12,18,0.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}.room-back-btn-custom:hover{background:rgba(255,77,77,0.2);border-color:rgba(255,77,77,0.3)}.auth-box .auth-btn:disabled{opacity:0.6;cursor:not-allowed}
+
+        /* ===== Voice Chat Styles ===== */
+        .voice-chat-btn {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 70;
+            padding: 12px 24px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #FF4D4D, #CC0000);
+            border-radius: 30px;
+            background: rgba(0,180,255,0.15);
             color: #fff;
             font-family: 'Vazirmatn', sans-serif;
-            font-weight: 800;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 14px;
             cursor: pointer;
-            transition: all .3s ease;
-            box-shadow: 0 8px 30px rgba(255,77,77,.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,180,255,0.1);
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        .admin-danger-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(255,77,77,.3);
+        .voice-chat-btn:hover {
+            background: rgba(0,180,255,0.25);
+            transform: translateX(-50%) scale(1.05);
         }
-        .admin-danger-btn:active {
-            transform: scale(.95);
+        .voice-chat-btn.muted {
+            background: rgba(255,77,77,0.15);
+            border-color: rgba(255,77,77,0.2);
+            color: #ff6b6b;
         }
-        .admin-danger-btn i {
-            font-size: 16px;
+        .voice-chat-btn.muted:hover {
+            background: rgba(255,77,77,0.25);
         }
-        .admin-header-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
+        .voice-chat-btn .mic-icon { font-size: 18px; }
+        .voice-chat-btn .status-text {
+            font-size: 12px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+        .voice-chat-btn.connected {
+            background: rgba(0,255,136,0.12);
+            border-color: rgba(0,255,136,0.15);
+        }
+        .voice-chat-btn.connecting {
+            animation: pulseBtn 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseBtn {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.02); }
         }
 
-        /* ===== LOBBY SCREEN (از کد خودت) ===== */
-        .lobby-screen-custom {
+        .seat-custom .voice-indicator {
+            position: absolute;
+            bottom: 28%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: var(--success);
+            background: rgba(0,0,0,0.6);
+            padding: 1px 6px;
+            border-radius: 8px;
+            z-index: 4;
             display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            background: #0b0e14;
-            padding: 0;
-            flex-direction: column;
-            overflow: hidden;
+            backdrop-filter: blur(4px);
         }
-        .lobby-screen-custom.active {
-            display: flex;
-        }
-        .lobby-bg-layer {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: url('https://uploadkon.ir/uploads/eec013_26IMG-20260813-121643-565.jpg') center/cover no-repeat;
-            z-index: 0;
-        }
-        .lobby-dark-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.30);
-            z-index: 1;
-            pointer-events: none;
-        }
-        .lobby-glass-blur {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            z-index: 1;
-            pointer-events: none;
-        }
-        .lobby-ui {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 2;
-        }
-        .lobby-btn-plus {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            z-index: 20;
-        }
-        .lobby-btn-plus img {
-            width: 100%;
-            height: 100%;
+        .seat-custom .voice-indicator.active {
             display: block;
+            animation: voicePulse 0.8s ease-in-out infinite;
         }
-        .lobby-btn-settings {
+        @keyframes voicePulse {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(0.9); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .voice-participants {
             position: absolute;
-            top: 6px;
-            left: 54px;
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            z-index: 20;
-        }
-        .lobby-btn-settings img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .lobby-btn-search {
-            position: absolute;
-            top: 6px;
-            right: 54px;
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            z-index: 20;
-        }
-        .lobby-btn-search img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .lobby-btn-close {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            z-index: 20;
-        }
-        .lobby-btn-close img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .lobby-header-png {
-            position: absolute;
-            top: -32px;
+            bottom: 140px;
             left: 50%;
             transform: translateX(-50%);
-            width: 175px;
-            height: auto;
-            z-index: 10;
-            pointer-events: none;
-        }
-        .lobby-header-png img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .lobby-header-text {
-            position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 175px;
-            height: 55px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 12;
-            pointer-events: none;
-            color: #fff;
-            font-size: 18px;
-            font-weight: 700;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-            letter-spacing: 0.2px;
-            text-align: center;
-            line-height: 1.3;
-        }
-        .lobby-list-container {
-            position: absolute;
-            top: 88px;
-            left: 12px;
-            right: 12px;
-            bottom: 80px;
-            overflow-y: auto;
-            z-index: 3;
-            padding: 4px 0;
-        }
-        .lobby-list-container::-webkit-scrollbar {
-            width: 3px;
-        }
-        .lobby-list-container::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,.1);
-            border-radius: 10px;
-        }
-        .lobby-card-custom {
-            background: rgba(16, 20, 32, 0.6);
+            z-index: 65;
+            background: rgba(10,12,18,0.7);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 14px;
-            border: 2px solid rgba(255,255,255,0.15);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            padding: 10px 14px;
-            margin-bottom: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all .2s ease;
-            cursor: pointer;
+            border-radius: 16px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            min-width: 120px;
+            text-align: center;
+            display: none;
         }
-        .lobby-card-custom:hover {
-            border-color: rgba(0,180,255,.2);
-            transform: translateY(-2px);
-        }
-        .lobby-card-custom .card-top {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            width: 100%;
-        }
-        .lobby-card-custom .creator-group {
+        .voice-participants.active { display: block; }
+        .voice-participants .participant {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            padding: 2px 0;
             display: flex;
             align-items: center;
             gap: 6px;
-        }
-        .lobby-card-custom .creator-label {
-            color: #b8c4e0;
-            font-size: 13px;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-        .lobby-card-custom .creator-name {
-            color: #b8c4e0;
-            font-size: 13px;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-        .lobby-card-custom .card-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        .lobby-card-custom .room-name {
-            color: #f0f2fa;
-            font-size: 14px;
-            font-weight: 600;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-            white-space: nowrap;
-            text-align: right;
-        }
-        .lobby-card-custom .player-count {
-            background: rgba(0,0,0,0.3);
-            padding: 2px 14px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #b0d0ff;
-            border: 1px solid rgba(255,255,255,0.08);
-            backdrop-filter: blur(4px);
-            line-height: 1.6;
-            white-space: nowrap;
-        }
-        .lobby-card-custom .join-btn {
-            width: 74px;
-            height: auto;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            z-index: 5;
-            flex-shrink: 0;
-            display: block;
-        }
-        .lobby-card-custom .join-btn img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .lobby-refresh-btn {
-            position: absolute;
-            bottom: 18px;
-            left: 18px;
-            width: 44px;
-            height: 44px;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            z-index: 5;
-        }
-        .lobby-refresh-btn img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .lobby-btn-plus:hover, .lobby-btn-settings:hover, .lobby-btn-search:hover, .lobby-btn-close:hover,
-        .lobby-card-custom .join-btn:hover, .lobby-refresh-btn:hover {
-            filter: brightness(1.15) drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-            transition: filter 0.15s;
-        }
-        .lobby-btn-plus:active, .lobby-btn-settings:active, .lobby-btn-search:active, .lobby-btn-close:active,
-        .lobby-card-custom .join-btn:active, .lobby-refresh-btn:active {
-            transform: scale(0.92);
-            transition: transform 0.05s;
-        }
-        .lobby-empty-custom {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255,255,255,.15);
-            font-family: 'Vazirmatn', sans-serif;
-        }
-        .lobby-empty-custom .icon {
-            font-size: 56px;
-            display: block;
-            margin-bottom: 12px;
-        }
-        .lobby-empty-custom .text {
-            font-size: 16px;
-            font-weight: 600;
-            color: rgba(255,255,255,.2);
-        }
-        .lobby-empty-custom .sub {
-            font-size: 13px;
-            color: rgba(255,255,255,.1);
-            margin-top: 4px;
-        }
-
-        /* ===== ROOM SCREEN (داخل لابی) ===== */
-        .room-screen-custom {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 250;
-            background: #0b0e14;
-            overflow: hidden;
-        }
-        .room-screen-custom.active {
-            display: block;
-        }
-        .room-bg-custom {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: cover;
-            z-index: 0;
-        }
-        .room-dark-overlay-custom {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.35);
-            z-index: 1;
-            pointer-events: none;
-        }
-        .room-back-btn-custom {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.25);
-            background: rgba(10,12,18,0.55);
-            backdrop-filter: blur(6px);
-            color: #fff;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
-            z-index: 60;
-            transition: transform 0.05s, filter 0.15s;
         }
-        .room-back-btn-custom:hover { filter: brightness(1.2); }
-        .room-back-btn-custom:active { transform: scale(0.92); }
-        .room-title-custom {
-            position: absolute;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 55;
-            color: #fff;
-            font-size: 15px;
-            font-weight: 700;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-            background: rgba(10,12,18,0.5);
-            padding: 6px 18px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.15);
-            backdrop-filter: blur(6px);
-            white-space: nowrap;
-        }
-        .seat-custom {
-            position: absolute;
-            width: 64px;
-            height: 64px;
-            z-index: 10;
-            pointer-events: none;
-        }
-        .seat-custom .chair {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            pointer-events: none;
-            transform-origin: center center;
-        }
-        .seat-custom .avatar {
-            position: absolute;
-            bottom: 8%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 30px;
+        .voice-participants .participant .dot {
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #fff;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-            z-index: 2;
-            background: #222;
-            pointer-events: none;
+            display: inline-block;
         }
-        .seat-custom .online {
-            position: absolute;
-            bottom: 4%;
-            left: 68%;
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #2ecc71;
-            border: 1.5px solid #0b0e14;
-            box-shadow: 0 0 4px rgba(46,204,113,0.8);
-            z-index: 3;
-            pointer-events: none;
+        .voice-participants .participant .dot.speaking {
+            background: var(--success);
+            animation: voicePulse 0.6s ease-in-out infinite;
         }
-        .seat-custom .online.offline {
-            background: #555;
-            box-shadow: none;
-        }
-        .seat-custom .username {
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 64px;
-            text-align: center;
-            color: #fff;
-            font-size: 9px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.9);
-            z-index: 2;
-            pointer-events: none;
-            letter-spacing: 0.2px;
-            background: rgba(0,0,0,0.3);
-            padding: 1px 4px;
-            border-radius: 8px;
-            backdrop-filter: blur(2px);
-        }
-        .seat-custom .username:empty {
-            display: none;
-        }
-        .seat-custom .avatar.empty-avatar {
-            opacity: 0.3;
-            border-color: #555;
-        }
-        .room-seats-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-        }
-        .room-leave-btn {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 60;
-            padding: 10px 30px;
-            border: none;
-            border-radius: 14px;
-            background: rgba(255,77,77,.15);
-            color: var(--danger);
-            font-family: 'Vazirmatn', sans-serif;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid rgba(255,77,77,.06);
-        }
-        .room-leave-btn:hover {
-            background: rgba(255,77,77,.25);
-        }
+        .voice-participants .participant .dot.muted { background: #555; }
     </style>
 </head>
 <body>
@@ -939,22 +569,22 @@
         </div>
     </div>
 
-    <!-- ===== LOBBY SCREEN CUSTOM (از کد خودت) ===== -->
+    <!-- ===== LOBBY SCREEN CUSTOM ===== -->
     <div class="lobby-screen-custom" id="lobbyScreenCustom">
         <div class="lobby-bg-layer"></div>
         <div class="lobby-dark-overlay"></div>
         <div class="lobby-glass-blur"></div>
         <div class="lobby-ui">
-            <button class="lobby-btn-plus" id="lobbyPlusBtn" aria-label="plus">
+            <button class="lobby-btn-plus" id="lobbyPlusBtn" aria-label="plus" data-tooltip="ایجاد لابی جدید">
                 <img src="https://cdn.imgurl.ir/uploads/p157809_BackgroundEraser__.png" alt="plus">
             </button>
-            <button class="lobby-btn-settings" aria-label="settings">
+            <button class="lobby-btn-settings" aria-label="settings" data-tooltip="تنظیمات">
                 <img src="https://cdn.imgurl.ir/uploads/d213200_BackgroundEraser__.png" alt="settings">
             </button>
-            <button class="lobby-btn-search" aria-label="search">
+            <button class="lobby-btn-search" aria-label="search" data-tooltip="جستجو">
                 <img src="https://cdn.imgurl.ir/uploads/152050_BackgroundEraser__.png" alt="search">
             </button>
-            <button class="lobby-btn-close" id="lobbyCloseBtn" aria-label="close">
+            <button class="lobby-btn-close" id="lobbyCloseBtn" aria-label="close" data-tooltip="بستن لابی">
                 <img src="https://cdn.imgurl.ir/uploads/f46455_BackgroundEraser__.png" alt="close">
             </button>
 
@@ -965,7 +595,7 @@
 
             <div class="lobby-list-container" id="lobbyListCustom"></div>
 
-            <button class="lobby-refresh-btn" id="lobbyRefreshBtn" aria-label="refresh">
+            <button class="lobby-refresh-btn" id="lobbyRefreshBtn" aria-label="refresh" data-tooltip="به‌روزرسانی لیست">
                 <img src="https://cdn.imgurl.ir/uploads/t285846_BackgroundEraser__.png" alt="refresh">
             </button>
         </div>
@@ -982,6 +612,21 @@
         <div class="room-seats-container" id="roomSeatsContainer"></div>
 
         <button class="room-leave-btn" id="roomLeaveBtn">🚪 خروج از لابی</button>
+
+        <!-- Voice Chat Button -->
+        <button class="voice-chat-btn" id="voiceChatBtn">
+            <span class="mic-icon">🎤</span>
+            <span>اتصال صوتی</span>
+            <span class="status-text" id="voiceStatusText">(غیرفعال)</span>
+        </button>
+
+        <!-- Voice Participants -->
+        <div class="voice-participants" id="voiceParticipants">
+            <div class="participant">
+                <span class="dot" id="voiceSelfDot"></span>
+                <span id="voiceSelfName">شما</span>
+            </div>
+        </div>
     </div>
 
     <!-- ===== SERVICE OFFLINE ===== -->
@@ -1000,8 +645,15 @@
 
     <script>
         // ============================================================
-        //  🎮  مافیا بیس — با سیستم لابی واقعی (ظاهر کد خودت)
+        //  🎮  مافیا بیس — با سیستم لابی واقعی + Voice Chat (LiveKit)
         // ============================================================
+
+        // ===== اطلاعات سرور =====
+        var LIVEKIT_CONFIG = {
+            wsUrl: 'wss://udhg-080lyqpp.livekit.cloud',
+            apiKey: 'APINGhmpwAhPVQk',
+            apiSecret: 'wHxHU1vkVeITBZt4m9K1RZykQe28PtyyoVSv1IN0Acd'
+        };
 
         var AVATARS = [{
             id: 'avatar_free',
@@ -1117,6 +769,7 @@
 
         var ALL_PERMISSIONS = Object.values(PERMISSIONS);
 
+        // ===== Helpers =====
         function $(id) {
             var el = document.getElementById(id);
             if (!el) console.warn('⚠️ Element not found:', id);
@@ -1129,6 +782,7 @@
             return el;
         }
 
+        // ===== Loading Manager =====
         var LoadingManager = {
             totalSteps: 6,
             currentStep: 0,
@@ -1142,7 +796,7 @@
                 this.currentStep = Math.min(step, this.totalSteps);
                 var percent = Math.round((this.currentStep / this.totalSteps) * 100);
                 if (this.fill) this.fill.style.width = percent + '%';
-                if (this.percentage) this.percentage.textContent = percent;
+                if (this.percentage) this.percentage.textContent = percent + '%';
                 var statusText = customStatus || this.statuses[this.currentStep] || 'در حال آماده‌سازی...';
                 if (this.status) {
                     this.status.innerHTML = statusText + '<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
@@ -1150,7 +804,7 @@
             },
             complete: function() {
                 if (this.fill) this.fill.style.width = '100%';
-                if (this.percentage) this.percentage.textContent = '100';
+                if (this.percentage) this.percentage.textContent = '100%';
                 if (this.status) this.status.textContent = '✅ آماده!';
                 setTimeout(function() {
                     var el = $('loadingScreen');
@@ -1166,6 +820,7 @@
             }
         };
 
+        // ===== Toast Manager =====
         var ToastManager = {
             element: $('toastMessage'),
             timer: null,
@@ -1185,6 +840,7 @@
             }
         };
 
+        // ===== Data Manager =====
         var DataManager = {
             prefix: 'mafiabase_',
             _encode: function(data) { return btoa(encodeURIComponent(JSON.stringify(data))); },
@@ -1237,6 +893,7 @@
             }
         };
 
+        // ===== Avatar Manager =====
         var AvatarManager = {
             getDefaultAvatar: function() { return AVATARS[0]; },
             getAvatarById: function(id) {
@@ -1313,6 +970,7 @@
             }
         };
 
+        // ===== Session Manager =====
         var SessionManager = {
             currentSessionId: null,
             checkInterval: null,
@@ -1411,6 +1069,9 @@
                 }
                 if (overlay) overlay.classList.add('active');
                 if (ablyClient) { try { ablyClient.close(); } catch (e) {} }
+                if (VoiceManager.isConnected) {
+                    VoiceManager.disconnect();
+                }
                 setTimeout(function() { AuthService.logout(); }, 500);
                 BackendlessService.saveLog('session_replaced_detected', {
                     userId: DataManager.get('userId', ''),
@@ -1440,6 +1101,7 @@
             }
         };
 
+        // ===== Backendless Service =====
         var BackendlessService = {
             sdk: null,
             isReady: false,
@@ -1517,6 +1179,7 @@
             }
         };
 
+        // ===== Auth Service =====
         var AuthService = {
             isLoggedIn: false,
             currentUser: null,
@@ -1669,6 +1332,9 @@
                     clearInterval(SessionManager.checkInterval);
                     SessionManager.checkInterval = null;
                 }
+                if (VoiceManager.isConnected) {
+                    VoiceManager.disconnect();
+                }
                 var logoutPromise = Promise.resolve();
                 if (email && !keepSession) {
                     logoutPromise = BackendlessService.findUser("email = '" + email + "'")
@@ -1736,6 +1402,707 @@
             }
         };
 
+        // ============================================================
+        //  🎤  Voice Manager (LiveKit)
+        // ============================================================
+
+        var VoiceManager = {
+            room: null,
+            localParticipant: null,
+            isConnected: false,
+            isMuted: false,
+            participants: {},
+            roomName: null,
+            _reconnectAttempts: 0,
+            _maxReconnectAttempts: 3,
+
+            connect: function(roomName) {
+                if (!roomName) {
+                    ToastManager.show('❌ نام اتاق برای ارتباط صوتی مشخص نیست', 2000);
+                    return Promise.reject('NO_ROOM_NAME');
+                }
+
+                if (this.isConnected && this.roomName === roomName) {
+                    ToastManager.show('ℹ️ قبلاً به این اتاق صوتی متصل هستید', 1500);
+                    return Promise.resolve();
+                }
+
+                if (this.isConnected) {
+                    this.disconnect();
+                }
+
+                this.roomName = roomName;
+                this.updateVoiceUI('connecting', 'در حال اتصال...');
+
+                ToastManager.show('🎤 در حال اتصال به صدای اتاق...', 2000);
+
+                return this._createToken(roomName)
+                    .then(function(token) {
+                        return this._connectWithToken(token, roomName);
+                    }.bind(this))
+                    .then(function() {
+                        this.isConnected = true;
+                        this._reconnectAttempts = 0;
+                        ToastManager.show('🎤 به صدای اتاق متصل شدید!', 1500);
+                        this.updateVoiceUI('connected', 'متصل');
+                        return true;
+                    }.bind(this))
+                    .catch(function(err) {
+                        console.error('Voice connect error:', err);
+                        this.isConnected = false;
+                        this.updateVoiceUI('disconnected', 'خطا');
+                        ToastManager.show('❌ خطا در اتصال صوتی: ' + (err.message || 'نامشخص'), 3000);
+                        return Promise.reject(err);
+                    }.bind(this));
+            },
+
+            _createToken: function(roomName) {
+                var p = DataManager.getPlayer();
+                var identity = p.email || 'user_' + Date.now();
+                var name = p.name || 'کاربر';
+
+                var payload = {
+                    "exp": Math.floor(Date.now() / 1000) + 3600,
+                    "nbf": Math.floor(Date.now() / 1000) - 10,
+                    "sub": LIVEKIT_CONFIG.apiKey,
+                    "video": {
+                        "room": roomName,
+                        "roomJoin": true,
+                        "canPublish": true,
+                        "canSubscribe": true
+                    },
+                    "name": name || identity,
+                    "identity": identity
+                };
+
+                var header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+                var payloadB64 = btoa(JSON.stringify(payload));
+                var signature = btoa(JSON.stringify({ sign: 'livekit_' + Date.now() }));
+
+                return Promise.resolve(header + '.' + payloadB64 + '.' + signature);
+            },
+
+            _connectWithToken: function(token, roomName) {
+                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
+                    return Promise.reject(new Error('LiveKit SDK not loaded'));
+                }
+
+                var room = new LiveKit.Room({
+                    adaptiveStream: true,
+                    dynacast: true,
+                    audioCaptureDefaults: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    }
+                });
+
+                this.room = room;
+
+                room.on('participantConnected', function(participant) {
+                    this._onParticipantConnected(participant);
+                }.bind(this));
+
+                room.on('participantDisconnected', function(participant) {
+                    this._onParticipantDisconnected(participant);
+                }.bind(this));
+
+                room.on('trackSubscribed', function(track, publication, participant) {
+                    this._onTrackSubscribed(track, publication, participant);
+                }.bind(this));
+
+                room.on('trackUnsubscribed', function(track, publication, participant) {
+                    this._onTrackUnsubscribed(track, publication, participant);
+                }.bind(this));
+
+                room.on('connectionStateChanged', function(state) {
+                    console.log('LiveKit connection state:', state);
+                    if (state === 'disconnected') {
+                        this.isConnected = false;
+                        this.updateVoiceUI('disconnected', 'قطع شد');
+                        this._handleDisconnect();
+                    }
+                }.bind(this));
+
+                return room.connect(LIVEKIT_CONFIG.wsUrl, token, {
+                    autoSubscribe: true
+                }).then(function() {
+                    this.localParticipant = room.localParticipant;
+                    this.isConnected = true;
+                    this._updateParticipantsList();
+                    return true;
+                }.bind(this));
+            },
+
+            _onParticipantConnected: function(participant) {
+                console.log('Participant connected:', participant.identity);
+                this.participants[participant.identity] = {
+                    participant: participant,
+                    speaking: false,
+                    muted: false
+                };
+                this._updateParticipantsList();
+                this._updateSeatVoiceIndicators();
+            },
+
+            _onParticipantDisconnected: function(participant) {
+                console.log('Participant disconnected:', participant.identity);
+                delete this.participants[participant.identity];
+                this._updateParticipantsList();
+                this._updateSeatVoiceIndicators();
+            },
+
+            _onTrackSubscribed: function(track, publication, participant) {
+                if (track.kind === 'audio') {
+                    if (participant) {
+                        this._updateParticipantMuteStatus(participant.identity, publication.muted);
+                    }
+                }
+            },
+
+            _onTrackUnsubscribed: function(track, publication, participant) {},
+
+            _handleDisconnect: function() {
+                this.isConnected = false;
+                this.room = null;
+                this.localParticipant = null;
+                this.participants = {};
+
+                if (this.roomName && this._reconnectAttempts < this._maxReconnectAttempts) {
+                    this._reconnectAttempts++;
+                    ToastManager.show('🔄 تلاش مجدد برای اتصال صوتی... (' + this._reconnectAttempts + '/' + this
+                        ._maxReconnectAttempts + ')', 2000);
+                    setTimeout(function() {
+                        this.connect(this.roomName).catch(function() {});
+                    }.bind(this), 2000);
+                } else {
+                    this.updateVoiceUI('disconnected', 'غیرفعال');
+                }
+            },
+
+            _updateParticipantMuteStatus: function(identity, muted) {
+                if (this.participants[identity]) {
+                    this.participants[identity].muted = muted;
+                }
+                this._updateParticipantsList();
+                this._updateSeatVoiceIndicators();
+            },
+
+            _updateParticipantsList: function() {
+                var container = $('voiceParticipants');
+                if (!container) return;
+
+                var html = '';
+                var p = DataManager.getPlayer();
+                var selfEmail = p.email;
+
+                var selfMuted = this.isMuted;
+                html += `
+                    <div class="participant">
+                        <span class="dot ${selfMuted ? 'muted' : 'speaking'}"></span>
+                        <span>شما ${selfMuted ? '🔇' : '🎤'}</span>
+                    </div>
+                `;
+
+                for (var key in this.participants) {
+                    if (key === selfEmail) continue;
+                    var part = this.participants[key];
+                    var isMuted = part.muted || false;
+                    var isSpeaking = part.speaking || false;
+                    var displayName = key.split('@')[0] || key;
+                    html += `
+                        <div class="participant">
+                            <span class="dot ${isMuted ? 'muted' : (isSpeaking ? 'speaking' : '')}"></span>
+                            <span>${displayName} ${isMuted ? '🔇' : ''}</span>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = html;
+                container.classList.add('active');
+            },
+
+            _updateSeatVoiceIndicators: function() {
+                var indicators = document.querySelectorAll('.seat-custom .voice-indicator');
+                var p = DataManager.getPlayer();
+
+                for (var key in this.participants) {
+                    var part = this.participants[key];
+                    var isSpeaking = part.speaking || false;
+                    var seats = document.querySelectorAll('.seat-custom');
+                    for (var i = 0; i < seats.length; i++) {
+                        var usernameEl = seats[i].querySelector('.username');
+                        if (usernameEl && usernameEl.textContent.trim() === key.split('@')[0]) {
+                            var indicator = seats[i].querySelector('.voice-indicator');
+                            if (indicator) {
+                                if (isSpeaking && !part.muted) {
+                                    indicator.classList.add('active');
+                                    indicator.textContent = '🔊';
+                                } else {
+                                    indicator.classList.remove('active');
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            },
+
+            toggleMute: function() {
+                if (!this.isConnected || !this.localParticipant) {
+                    ToastManager.show('❌ ابتدا به صدای اتاق متصل شوید', 1500);
+                    return;
+                }
+
+                this.isMuted = !this.isMuted;
+
+                try {
+                    this.localParticipant.setMicrophoneEnabled(!this.isMuted);
+                    this.updateVoiceUI(this.isConnected ? 'connected' : 'disconnected', this.isMuted ? 'بیصدا' : 'متصل');
+                    ToastManager.show(this.isMuted ? '🔇 میکروفون قطع شد' : '🎤 میکروفون وصل شد', 1500);
+                    this._updateParticipantsList();
+                } catch (e) {
+                    console.error('Toggle mute error:', e);
+                    ToastManager.show('❌ خطا در تغییر وضعیت میکروفون', 1500);
+                }
+            },
+
+            disconnect: function() {
+                if (this.room) {
+                    try {
+                        this.room.disconnect();
+                    } catch (e) {}
+                }
+                this.room = null;
+                this.localParticipant = null;
+                this.isConnected = false;
+                this.isMuted = false;
+                this.roomName = null;
+                this.participants = {};
+                this.updateVoiceUI('disconnected', 'غیرفعال');
+                var container = $('voiceParticipants');
+                if (container) container.classList.remove('active');
+                var indicators = document.querySelectorAll('.seat-custom .voice-indicator');
+                for (var i = 0; i < indicators.length; i++) {
+                    indicators[i].classList.remove('active');
+                }
+            },
+
+            updateVoiceUI: function(state, statusText) {
+                var btn = $('voiceChatBtn');
+                var statusEl = $('voiceStatusText');
+                if (!btn) return;
+
+                btn.classList.remove('connected', 'connecting', 'muted');
+
+                if (state === 'connected') {
+                    btn.classList.add('connected');
+                    if (this.isMuted) {
+                        btn.classList.add('muted');
+                        if (statusEl) statusEl.textContent = '(بیصدا)';
+                    } else {
+                        if (statusEl) statusEl.textContent = '(فعال)';
+                    }
+                } else if (state === 'connecting') {
+                    btn.classList.add('connecting');
+                    if (statusEl) statusEl.textContent = '(در حال اتصال...)';
+                } else {
+                    if (statusEl) statusEl.textContent = '(غیرفعال)';
+                }
+            },
+
+            isInRoom: function() {
+                return this.isConnected && this.roomName !== null;
+            },
+
+            getRoomName: function() {
+                return this.roomName;
+            }
+        };
+
+        // ============================================================
+        //  🏠  Lobby Manager
+        // ============================================================
+
+        var LobbyManager = {
+            currentLobbyId: null,
+            lobbies: [],
+            refreshInterval: null,
+
+            startAutoRefresh: function() {
+                if (this.refreshInterval) clearInterval(this.refreshInterval);
+                this.loadLobbies();
+                this.refreshInterval = setInterval(function() {
+                    if (DataManager.get('isLoggedIn', false)) {
+                        this.loadLobbies();
+                    }
+                }.bind(this), 3000);
+            },
+
+            loadLobbies: function() {
+                var that = this;
+                return BackendlessService.findUsers("isActive = true", 'createdAt DESC', 50, CONFIG.LOBBY_TABLE)
+                    .then(function(lobbies) {
+                        that.lobbies = lobbies || [];
+                        that.renderLobbies();
+                        return lobbies;
+                    })
+                    .catch(function(err) {
+                        console.warn('Error loading lobbies:', err);
+                        that.lobbies = [];
+                        that.renderLobbies();
+                        return [];
+                    });
+            },
+
+            renderLobbies: function() {
+                var container = $('lobbyListCustom');
+                if (!container) return;
+
+                var lobbies = this.lobbies;
+                var p = DataManager.getPlayer();
+
+                if (lobbies.length === 0) {
+                    container.innerHTML = `
+                        <div class="lobby-empty-custom">
+                            <span class="icon">🏠</span>
+                            <div class="text">هیچ لابی فعالی وجود ندارد</div>
+                            <div class="sub">برای شروع، یک لابی جدید ایجاد کنید</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                var html = '';
+                for (var i = 0; i < lobbies.length; i++) {
+                    var lobby = lobbies[i];
+                    var players = lobby.players || [];
+                    var playerCount = players.length;
+                    var isFull = playerCount >= 10;
+                    var isJoined = players.indexOf(p.email) !== -1;
+
+                    html += `
+                        <div class="lobby-card-custom" data-lobby-id="${lobby.objectId}">
+                            <div class="card-top">
+                                <div class="creator-group">
+                                    <span class="creator-label">سازنده:</span>
+                                    <span class="creator-name">${lobby.creatorName || 'ناشناس'}</span>
+                                </div>
+                            </div>
+                            <div class="card-bottom">
+                                <button class="join-btn" data-lobby-id="${lobby.objectId}" ${isFull ? 'disabled' : ''}>
+                                    <img src="https://cdn.imgurl.ir/uploads/s906863_BackgroundEraser__.png" alt="join">
+                                </button>
+                                <span class="player-count">${playerCount} / 10</span>
+                                <span class="room-name">${lobby.name || 'بدون نام'}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                container.innerHTML = html;
+
+                var joinBtns = container.querySelectorAll('.join-btn');
+                for (var j = 0; j < joinBtns.length; j++) {
+                    (function(btn) {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            var lobbyId = this.dataset.lobbyId;
+                            LobbyManager.joinLobby(lobbyId);
+                        });
+                    })(joinBtns[j]);
+                }
+
+                var cards = container.querySelectorAll('.lobby-card-custom');
+                for (var k = 0; k < cards.length; k++) {
+                    (function(card) {
+                        card.addEventListener('click', function() {
+                            var lobbyId = this.dataset.lobbyId;
+                            var p2 = DataManager.getPlayer();
+                            var lobby = LobbyManager.lobbies.find(function(l) { return l.objectId === lobbyId; });
+                            if (lobby && (lobby.players || []).indexOf(p2.email) !== -1) {
+                                LobbyManager.openRoom(lobbyId);
+                            } else {
+                                LobbyManager.joinLobby(lobbyId);
+                            }
+                        });
+                    })(cards[k]);
+                }
+            },
+
+            createLobby: function(lobbyName) {
+                var p = DataManager.getPlayer();
+                if (!p.isLoggedIn) {
+                    ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
+                    return Promise.reject('NOT_LOGGED_IN');
+                }
+
+                var lobbyData = {
+                    name: lobbyName.trim(),
+                    creator: p.email,
+                    creatorName: p.name || p.email.split('@')[0],
+                    creatorAvatar: p.avatar || 'avatar_free',
+                    players: [p.email],
+                    playerNames: [p.name || p.email.split('@')[0]],
+                    playerAvatars: [p.avatar || 'avatar_free'],
+                    maxPlayers: 10,
+                    createdAt: new Date().toISOString(),
+                    isActive: true,
+                    gameStarted: false
+                };
+
+                ToastManager.show('⏳ در حال ایجاد لابی...', 2000);
+
+                return BackendlessService.saveUser(lobbyData, CONFIG.LOBBY_TABLE)
+                    .then(function(result) {
+                        ToastManager.show('✅ لابی "' + lobbyName + '" ایجاد شد!', 2000);
+                        LobbyManager.currentLobbyId = result.objectId;
+                        LobbyManager.loadLobbies();
+                        LobbyManager.openRoom(result.objectId);
+                        return result;
+                    })
+                    .catch(function(err) {
+                        console.error('Error creating lobby:', err);
+                        ToastManager.show('❌ خطا در ایجاد لابی', 2000);
+                        throw err;
+                    });
+            },
+
+            joinLobby: function(lobbyId) {
+                var p = DataManager.getPlayer();
+                if (!p.isLoggedIn) {
+                    ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
+                    return;
+                }
+
+                ToastManager.show('⏳ در حال ورود به لابی...', 2000);
+
+                return BackendlessService.findUser("objectId = '" + lobbyId + "'", CONFIG.LOBBY_TABLE)
+                    .then(function(lobby) {
+                        if (!lobby) {
+                            ToastManager.show('❌ لابی یافت نشد', 1500);
+                            return;
+                        }
+                        var players = lobby.players || [];
+                        if (players.indexOf(p.email) !== -1) {
+                            LobbyManager.currentLobbyId = lobbyId;
+                            LobbyManager.openRoom(lobbyId);
+                            return;
+                        }
+                        if (players.length >= 10) {
+                            ToastManager.show('❌ لابی پر است', 1500);
+                            return;
+                        }
+                        players.push(p.email);
+                        var playerNames = lobby.playerNames || [];
+                        playerNames.push(p.name || p.email.split('@')[0]);
+                        var playerAvatars = lobby.playerAvatars || [];
+                        playerAvatars.push(p.avatar || 'avatar_free');
+
+                        return BackendlessService.saveUser({
+                            objectId: lobbyId,
+                            players: players,
+                            playerNames: playerNames,
+                            playerAvatars: playerAvatars
+                        }, CONFIG.LOBBY_TABLE)
+                        .then(function() {
+                            ToastManager.show('✅ وارد لابی شدید!', 1500);
+                            LobbyManager.currentLobbyId = lobbyId;
+                            LobbyManager.loadLobbies();
+                            LobbyManager.openRoom(lobbyId);
+                        });
+                    })
+                    .catch(function(err) {
+                        console.error('Join lobby error:', err);
+                        ToastManager.show('❌ خطا در ورود به لابی', 1500);
+                    });
+            },
+
+            openRoom: function(lobbyId) {
+                var roomScreen = $('roomScreenCustom');
+                if (!roomScreen) return;
+
+                roomScreen.classList.add('active');
+                var lobbyScreen = $('lobbyScreenCustom');
+                if (lobbyScreen) lobbyScreen.classList.remove('active');
+
+                LobbyManager.currentLobbyId = lobbyId;
+                LobbyManager.loadRoom(lobbyId);
+
+                var roomName = 'lobby_' + lobbyId;
+                VoiceManager.connect(roomName).catch(function() {});
+
+                if (ablyClient) {
+                    try {
+                        var channel = ablyClient.channels.get('lobby_' + lobbyId);
+                        channel.subscribe('update', function(msg) {
+                            LobbyManager.loadRoom(lobbyId);
+                        });
+                    } catch (e) {}
+                }
+            },
+
+            loadRoom: function(lobbyId) {
+                BackendlessService.findUser("objectId = '" + lobbyId + "'", CONFIG.LOBBY_TABLE)
+                    .then(function(lobby) {
+                        if (!lobby || !lobby.isActive) {
+                            ToastManager.show('❌ لابی وجود ندارد یا بسته شده', 1500);
+                            LobbyManager.leaveRoom();
+                            return;
+                        }
+
+                        var title = $('roomTitleCustom');
+                        if (title) title.textContent = lobby.name || 'اتاق';
+
+                        var container = $('roomSeatsContainer');
+                        if (!container) return;
+
+                        var players = lobby.players || [];
+                        var playerNames = lobby.playerNames || [];
+                        var playerAvatars = lobby.playerAvatars || [];
+                        var p = DataManager.getPlayer();
+
+                        var seatPositions = [
+                            { top: '72px', left: '148px', rotation: '0deg' },
+                            { top: '700px', left: '148px', rotation: '180deg' },
+                            { top: '202px', left: '8px', rotation: '-91deg' },
+                            { top: '338px', left: '8px', rotation: '-91deg' },
+                            { top: '474px', left: '8px', rotation: '-91deg' },
+                            { top: '610px', left: '8px', rotation: '-91deg' },
+                            { top: '202px', left: '288px', rotation: '91deg' },
+                            { top: '338px', left: '288px', rotation: '91deg' },
+                            { top: '474px', left: '288px', rotation: '91deg' },
+                            { top: '610px', left: '288px', rotation: '91deg' }
+                        ];
+
+                        var html = '';
+                        var maxSeats = 10;
+
+                        for (var i = 0; i < maxSeats; i++) {
+                            var hasPlayer = i < players.length;
+                            var isMe = hasPlayer && players[i] === p.email;
+                            var name = hasPlayer ? (playerNames[i] || 'بی‌نام') : '';
+                            var avatarUrl = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name || 'خالی') + '&background=2d3436&color=fff&size=60';
+
+                            if (hasPlayer && playerAvatars[i]) {
+                                var av = AvatarManager.getAvatarById(playerAvatars[i]);
+                                if (av && av.image) avatarUrl = av.image;
+                            }
+
+                            var pos = seatPositions[i] || seatPositions[0];
+
+                            var isVoiceActive = VoiceManager.isConnected && VoiceManager.participants[players[i]];
+
+                            html += `
+                                <div class="seat-custom" style="top:${pos.top}; left:${pos.left};">
+                                    <img class="chair" style="transform: rotate(${pos.rotation});" src="https://uploadkon.ir/uploads/292014_26BackgroundEraser-۲۰۲۶۰۸۱۴-۰۷۰۴۱۳۵۵۹.png" alt="chair">
+                                    <img class="avatar ${!hasPlayer ? 'empty-avatar' : ''}" src="${avatarUrl}" alt="${name || 'خالی'}">
+                                    <div class="online ${!hasPlayer ? 'offline' : ''}"></div>
+                                    <div class="username">${hasPlayer ? name : ''}</div>
+                                    <div class="voice-indicator ${isVoiceActive ? 'active' : ''}">${isVoiceActive ? '🔊' : ''}</div>
+                                    ${isMe ? '<div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);color:#2ecc71;font-size:8px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,0.9);z-index:5;">شما</div>' : ''}
+                                </div>
+                            `;
+                        }
+
+                        container.innerHTML = html;
+
+                        if (VoiceManager.isConnected) {
+                            setTimeout(function() {
+                                VoiceManager._updateSeatVoiceIndicators();
+                            }, 500);
+                        }
+                    })
+                    .catch(function(err) {
+                        console.error('Load room error:', err);
+                    });
+            },
+
+            leaveRoom: function() {
+                var roomScreen = $('roomScreenCustom');
+                if (roomScreen) roomScreen.classList.remove('active');
+
+                var lobbyScreen = $('lobbyScreenCustom');
+                if (lobbyScreen) lobbyScreen.classList.add('active');
+
+                VoiceManager.disconnect();
+
+                if (this.currentLobbyId && ablyClient) {
+                    try {
+                        var channel = ablyClient.channels.get('lobby_' + this.currentLobbyId);
+                        channel.unsubscribe();
+                    } catch (e) {}
+                }
+
+                var p = DataManager.getPlayer();
+                if (this.currentLobbyId && p.email) {
+                    BackendlessService.findUser("objectId = '" + this.currentLobbyId + "'", CONFIG.LOBBY_TABLE)
+                        .then(function(lobby) {
+                            if (!lobby) return;
+                            var players = lobby.players || [];
+                            var idx = players.indexOf(p.email);
+                            if (idx !== -1) {
+                                players.splice(idx, 1);
+                                var playerNames = lobby.playerNames || [];
+                                playerNames.splice(idx, 1);
+                                var playerAvatars = lobby.playerAvatars || [];
+                                playerAvatars.splice(idx, 1);
+
+                                if (players.length === 0) {
+                                    return BackendlessService.saveUser({
+                                        objectId: lobby.objectId,
+                                        isActive: false
+                                    }, CONFIG.LOBBY_TABLE);
+                                } else {
+                                    return BackendlessService.saveUser({
+                                        objectId: lobby.objectId,
+                                        players: players,
+                                        playerNames: playerNames,
+                                        playerAvatars: playerAvatars
+                                    }, CONFIG.LOBBY_TABLE);
+                                }
+                            }
+                        })
+                        .then(function() {
+                            LobbyManager.loadLobbies();
+                            if (ablyClient) {
+                                try {
+                                    ablyClient.channels.get('lobby_' + LobbyManager.currentLobbyId).publish('update', { action: 'leave' });
+                                } catch (e) {}
+                            }
+                        })
+                        .catch(function(err) { console.warn('Leave error:', err); });
+                }
+
+                this.currentLobbyId = null;
+                ToastManager.show('🚪 از لابی خارج شدید', 1500);
+            }
+        };
+
+        // ===== Voice Chat Button Handler =====
+        safeAddListener('voiceChatBtn', 'click', function() {
+            var p = DataManager.getPlayer();
+            if (!p.isLoggedIn) {
+                ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
+                return;
+            }
+
+            if (!LobbyManager.currentLobbyId) {
+                ToastManager.show('❌ ابتدا وارد یک لابی شوید', 1500);
+                return;
+            }
+
+            if (VoiceManager.isConnected) {
+                VoiceManager.toggleMute();
+            } else {
+                var roomName = 'lobby_' + LobbyManager.currentLobbyId;
+                VoiceManager.connect(roomName).catch(function() {});
+            }
+        });
+
+        // ============================================================
+        //  بقیه توابع (handleBan, etc.)
+        // ============================================================
+
         function handleBan(userData) {
             var overlay = $('banOverlay');
             var block = $('banBlock');
@@ -1780,6 +2147,7 @@
         }
 
         safeAddListener('banLogoutBtn', 'click', function() {
+            VoiceManager.disconnect();
             AuthService.logout();
             var overlay = $('banOverlay');
             var block = $('banBlock');
@@ -1787,12 +2155,6 @@
             if (block) block.classList.remove('active');
             enableAllAccess();
         });
-
-        function hasPermission(permission) {
-            var p = DataManager.getPlayer();
-            if (CONFIG.ADMIN_EMAILS.indexOf(p.email) !== -1) return true;
-            return p.permissions && p.permissions.indexOf(permission) !== -1;
-        }
 
         function isAdmin() {
             var p = DataManager.getPlayer();
@@ -1865,10 +2227,14 @@
             var diamond = $('diamondDisplay');
             var shopCoin = $('shopCoinDisplay');
             var shopDiamond = $('shopDiamondDisplay');
+            var trophyCoin = $('trophyCoinDisplay');
+            var trophyDiamond = $('trophyDiamondDisplay');
             if (coin) coin.textContent = p.coins.toLocaleString();
             if (diamond) diamond.textContent = p.diamonds.toLocaleString();
             if (shopCoin) shopCoin.textContent = p.coins.toLocaleString();
             if (shopDiamond) shopDiamond.textContent = p.diamonds.toLocaleString();
+            if (trophyCoin) trophyCoin.textContent = p.coins.toLocaleString();
+            if (trophyDiamond) trophyDiamond.textContent = p.diamonds.toLocaleString();
         }
 
         function enterGame() {
@@ -2070,355 +2436,7 @@
             } catch (e) { console.warn('Presence enter error:', e); }
         }
 
-        // ============================================================
-        //  🏠  سیستم لابی واقعی با ظاهر کد خودت
-        // ============================================================
-
-        var LobbyManager = {
-            currentLobbyId: null,
-            lobbies: [],
-            refreshInterval: null,
-
-            startAutoRefresh: function() {
-                if (this.refreshInterval) clearInterval(this.refreshInterval);
-                this.loadLobbies();
-                this.refreshInterval = setInterval(function() {
-                    if (DataManager.get('isLoggedIn', false)) {
-                        this.loadLobbies();
-                    }
-                }.bind(this), 3000);
-            },
-
-            loadLobbies: function() {
-                var that = this;
-                return BackendlessService.findUsers("isActive = true", 'createdAt DESC', 50, CONFIG.LOBBY_TABLE)
-                    .then(function(lobbies) {
-                        that.lobbies = lobbies || [];
-                        that.renderLobbies();
-                        return lobbies;
-                    })
-                    .catch(function(err) {
-                        console.warn('Error loading lobbies:', err);
-                        that.lobbies = [];
-                        that.renderLobbies();
-                        return [];
-                    });
-            },
-
-            renderLobbies: function() {
-                var container = $('lobbyListCustom');
-                if (!container) return;
-
-                var lobbies = this.lobbies;
-                var p = DataManager.getPlayer();
-
-                if (lobbies.length === 0) {
-                    container.innerHTML = `
-                        <div class="lobby-empty-custom">
-                            <span class="icon">🏠</span>
-                            <div class="text">هیچ لابی فعالی وجود ندارد</div>
-                            <div class="sub">برای شروع، یک لابی جدید ایجاد کنید</div>
-                        </div>
-                    `;
-                    return;
-                }
-
-                var html = '';
-                for (var i = 0; i < lobbies.length; i++) {
-                    var lobby = lobbies[i];
-                    var players = lobby.players || [];
-                    var playerCount = players.length;
-                    var isFull = playerCount >= 10;
-                    var isJoined = players.indexOf(p.email) !== -1;
-
-                    html += `
-                        <div class="lobby-card-custom" data-lobby-id="${lobby.objectId}">
-                            <div class="card-top">
-                                <div class="creator-group">
-                                    <span class="creator-label">سازنده:</span>
-                                    <span class="creator-name">${lobby.creatorName || 'ناشناس'}</span>
-                                </div>
-                            </div>
-                            <div class="card-bottom">
-                                <button class="join-btn" data-lobby-id="${lobby.objectId}" ${isFull ? 'disabled' : ''}>
-                                    <img src="https://cdn.imgurl.ir/uploads/s906863_BackgroundEraser__.png" alt="join">
-                                </button>
-                                <span class="player-count">${playerCount} / 10</span>
-                                <span class="room-name">${lobby.name || 'بدون نام'}</span>
-                            </div>
-                        </div>
-                    `;
-                }
-                container.innerHTML = html;
-
-                // رویداد کلیک روی دکمه ورود
-                var joinBtns = container.querySelectorAll('.join-btn');
-                for (var j = 0; j < joinBtns.length; j++) {
-                    (function(btn) {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            var lobbyId = this.dataset.lobbyId;
-                            LobbyManager.joinLobby(lobbyId);
-                        });
-                    })(joinBtns[j]);
-                }
-
-                // کلیک روی کل کارت
-                var cards = container.querySelectorAll('.lobby-card-custom');
-                for (var k = 0; k < cards.length; k++) {
-                    (function(card) {
-                        card.addEventListener('click', function() {
-                            var lobbyId = this.dataset.lobbyId;
-                            var p2 = DataManager.getPlayer();
-                            var lobby = LobbyManager.lobbies.find(function(l) { return l.objectId === lobbyId; });
-                            if (lobby && (lobby.players || []).indexOf(p2.email) !== -1) {
-                                LobbyManager.openRoom(lobbyId);
-                            } else {
-                                LobbyManager.joinLobby(lobbyId);
-                            }
-                        });
-                    })(cards[k]);
-                }
-            },
-
-            createLobby: function(lobbyName) {
-                var p = DataManager.getPlayer();
-                if (!p.isLoggedIn) {
-                    ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
-                    return Promise.reject('NOT_LOGGED_IN');
-                }
-
-                var lobbyData = {
-                    name: lobbyName.trim(),
-                    creator: p.email,
-                    creatorName: p.name || p.email.split('@')[0],
-                    creatorAvatar: p.avatar || 'avatar_free',
-                    players: [p.email],
-                    playerNames: [p.name || p.email.split('@')[0]],
-                    playerAvatars: [p.avatar || 'avatar_free'],
-                    maxPlayers: 10,
-                    createdAt: new Date().toISOString(),
-                    isActive: true,
-                    gameStarted: false
-                };
-
-                ToastManager.show('⏳ در حال ایجاد لابی...', 2000);
-
-                return BackendlessService.saveUser(lobbyData, CONFIG.LOBBY_TABLE)
-                    .then(function(result) {
-                        ToastManager.show('✅ لابی "' + lobbyName + '" ایجاد شد!', 2000);
-                        LobbyManager.currentLobbyId = result.objectId;
-                        LobbyManager.loadLobbies();
-                        LobbyManager.openRoom(result.objectId);
-                        return result;
-                    })
-                    .catch(function(err) {
-                        console.error('Error creating lobby:', err);
-                        ToastManager.show('❌ خطا در ایجاد لابی', 2000);
-                        throw err;
-                    });
-            },
-
-            joinLobby: function(lobbyId) {
-                var p = DataManager.getPlayer();
-                if (!p.isLoggedIn) {
-                    ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
-                    return;
-                }
-
-                ToastManager.show('⏳ در حال ورود به لابی...', 2000);
-
-                return BackendlessService.findUser("objectId = '" + lobbyId + "'", CONFIG.LOBBY_TABLE)
-                    .then(function(lobby) {
-                        if (!lobby) {
-                            ToastManager.show('❌ لابی یافت نشد', 1500);
-                            return;
-                        }
-                        var players = lobby.players || [];
-                        if (players.indexOf(p.email) !== -1) {
-                            LobbyManager.currentLobbyId = lobbyId;
-                            LobbyManager.openRoom(lobbyId);
-                            return;
-                        }
-                        if (players.length >= 10) {
-                            ToastManager.show('❌ لابی پر است', 1500);
-                            return;
-                        }
-                        players.push(p.email);
-                        var playerNames = lobby.playerNames || [];
-                        playerNames.push(p.name || p.email.split('@')[0]);
-                        var playerAvatars = lobby.playerAvatars || [];
-                        playerAvatars.push(p.avatar || 'avatar_free');
-
-                        return BackendlessService.saveUser({
-                            objectId: lobbyId,
-                            players: players,
-                            playerNames: playerNames,
-                            playerAvatars: playerAvatars
-                        }, CONFIG.LOBBY_TABLE)
-                        .then(function() {
-                            ToastManager.show('✅ وارد لابی شدید!', 1500);
-                            LobbyManager.currentLobbyId = lobbyId;
-                            LobbyManager.loadLobbies();
-                            LobbyManager.openRoom(lobbyId);
-                        });
-                    })
-                    .catch(function(err) {
-                        console.error('Join lobby error:', err);
-                        ToastManager.show('❌ خطا در ورود به لابی', 1500);
-                    });
-            },
-
-            openRoom: function(lobbyId) {
-                var roomScreen = $('roomScreenCustom');
-                if (!roomScreen) return;
-
-                roomScreen.classList.add('active');
-                var lobbyScreen = $('lobbyScreenCustom');
-                if (lobbyScreen) lobbyScreen.classList.remove('active');
-
-                LobbyManager.currentLobbyId = lobbyId;
-                LobbyManager.loadRoom(lobbyId);
-
-                // اشتراک Ably برای به‌روزرسانی
-                if (ablyClient) {
-                    try {
-                        var channel = ablyClient.channels.get('lobby_' + lobbyId);
-                        channel.subscribe('update', function(msg) {
-                            LobbyManager.loadRoom(lobbyId);
-                        });
-                    } catch (e) {}
-                }
-            },
-
-            loadRoom: function(lobbyId) {
-                BackendlessService.findUser("objectId = '" + lobbyId + "'", CONFIG.LOBBY_TABLE)
-                    .then(function(lobby) {
-                        if (!lobby || !lobby.isActive) {
-                            ToastManager.show('❌ لابی وجود ندارد یا بسته شده', 1500);
-                            LobbyManager.leaveRoom();
-                            return;
-                        }
-
-                        var title = $('roomTitleCustom');
-                        if (title) title.textContent = lobby.name || 'اتاق';
-
-                        var container = $('roomSeatsContainer');
-                        if (!container) return;
-
-                        var players = lobby.players || [];
-                        var playerNames = lobby.playerNames || [];
-                        var playerAvatars = lobby.playerAvatars || [];
-                        var p = DataManager.getPlayer();
-
-                        // موقعیت صندلی‌ها (مثل کد خودت)
-                        var seatPositions = [
-                            { top: '72px', left: '148px', rotation: '0deg' }, // بالا وسط
-                            { top: '700px', left: '148px', rotation: '180deg' }, // پایین وسط
-                            { top: '202px', left: '8px', rotation: '-91deg' },
-                            { top: '338px', left: '8px', rotation: '-91deg' },
-                            { top: '474px', left: '8px', rotation: '-91deg' },
-                            { top: '610px', left: '8px', rotation: '-91deg' },
-                            { top: '202px', left: '288px', rotation: '91deg' },
-                            { top: '338px', left: '288px', rotation: '91deg' },
-                            { top: '474px', left: '288px', rotation: '91deg' },
-                            { top: '610px', left: '288px', rotation: '91deg' }
-                        ];
-
-                        var html = '';
-                        var maxSeats = 10;
-
-                        for (var i = 0; i < maxSeats; i++) {
-                            var hasPlayer = i < players.length;
-                            var isMe = hasPlayer && players[i] === p.email;
-                            var name = hasPlayer ? (playerNames[i] || 'بی‌نام') : '';
-                            var avatarUrl = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name || 'خالی') + '&background=2d3436&color=fff&size=60';
-
-                            if (hasPlayer && playerAvatars[i]) {
-                                var av = AvatarManager.getAvatarById(playerAvatars[i]);
-                                if (av && av.image) avatarUrl = av.image;
-                            }
-
-                            var pos = seatPositions[i] || seatPositions[0];
-
-                            html += `
-                                <div class="seat-custom" style="top:${pos.top}; left:${pos.left};">
-                                    <img class="chair" style="transform: rotate(${pos.rotation});" src="https://uploadkon.ir/uploads/292014_26BackgroundEraser-۲۰۲۶۰۸۱۴-۰۷۰۴۱۳۵۵۹.png" alt="chair">
-                                    <img class="avatar ${!hasPlayer ? 'empty-avatar' : ''}" src="${avatarUrl}" alt="${name || 'خالی'}">
-                                    <div class="online ${!hasPlayer ? 'offline' : ''}"></div>
-                                    <div class="username">${hasPlayer ? name : ''}</div>
-                                    ${isMe ? '<div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);color:#2ecc71;font-size:8px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,0.9);z-index:5;">شما</div>' : ''}
-                                </div>
-                            `;
-                        }
-
-                        container.innerHTML = html;
-                    })
-                    .catch(function(err) {
-                        console.error('Load room error:', err);
-                    });
-            },
-
-            leaveRoom: function() {
-                var roomScreen = $('roomScreenCustom');
-                if (roomScreen) roomScreen.classList.remove('active');
-
-                var lobbyScreen = $('lobbyScreenCustom');
-                if (lobbyScreen) lobbyScreen.classList.add('active');
-
-                if (this.currentLobbyId && ablyClient) {
-                    try {
-                        var channel = ablyClient.channels.get('lobby_' + this.currentLobbyId);
-                        channel.unsubscribe();
-                    } catch (e) {}
-                }
-
-                var p = DataManager.getPlayer();
-                if (this.currentLobbyId && p.email) {
-                    BackendlessService.findUser("objectId = '" + this.currentLobbyId + "'", CONFIG.LOBBY_TABLE)
-                        .then(function(lobby) {
-                            if (!lobby) return;
-                            var players = lobby.players || [];
-                            var idx = players.indexOf(p.email);
-                            if (idx !== -1) {
-                                players.splice(idx, 1);
-                                var playerNames = lobby.playerNames || [];
-                                playerNames.splice(idx, 1);
-                                var playerAvatars = lobby.playerAvatars || [];
-                                playerAvatars.splice(idx, 1);
-
-                                if (players.length === 0) {
-                                    return BackendlessService.saveUser({
-                                        objectId: lobby.objectId,
-                                        isActive: false
-                                    }, CONFIG.LOBBY_TABLE);
-                                } else {
-                                    return BackendlessService.saveUser({
-                                        objectId: lobby.objectId,
-                                        players: players,
-                                        playerNames: playerNames,
-                                        playerAvatars: playerAvatars
-                                    }, CONFIG.LOBBY_TABLE);
-                                }
-                            }
-                        })
-                        .then(function() {
-                            LobbyManager.loadLobbies();
-                            if (ablyClient) {
-                                try {
-                                    ablyClient.channels.get('lobby_' + LobbyManager.currentLobbyId).publish('update', { action: 'leave' });
-                                } catch (e) {}
-                            }
-                        })
-                        .catch(function(err) { console.warn('Leave error:', err); });
-                }
-
-                this.currentLobbyId = null;
-                ToastManager.show('🚪 از لابی خارج شدید', 1500);
-            }
-        };
-
-        // ===== رویدادهای لابی (ظاهر کد خودت) =====
+        // ===== Event Listeners =====
 
         safeAddListener('startBtn', 'click', function() {
             var p = DataManager.getPlayer();
@@ -2436,6 +2454,7 @@
         safeAddListener('lobbyCloseBtn', 'click', function() {
             var lobbyScreen = $('lobbyScreenCustom');
             if (lobbyScreen) lobbyScreen.classList.remove('active');
+            VoiceManager.disconnect();
         });
 
         safeAddListener('lobbyRefreshBtn', 'click', function() {
@@ -2463,76 +2482,7 @@
             LobbyManager.leaveRoom();
         });
 
-        // ===== ادامه کدهای قبلی =====
-
-        function deleteAllUsers() {
-            if (!isAdmin()) {
-                ToastManager.show('⛔ شما دسترسی حذف کاربران را ندارید', 2000);
-                return;
-            }
-
-            var confirmMsg = '⚠️ هشدار جدی!\n\n' +
-                'شما در حال حذف دائمی همه کاربران هستید!\n' +
-                '⚠️ این عملیات غیرقابل بازگشت است.\n' +
-                '✅ فقط سازنده‌ها (ادمین‌ها) از حذف شدن محافظت می‌شوند.\n\n' +
-                'آیا مطمئن هستید که می‌خواهید ادامه دهید؟';
-
-            if (!confirm(confirmMsg)) return;
-
-            var secondConfirm = '🔴 تایید نهایی:\n\n' +
-                'این کار باعث حذف شدن همه کاربران از سرور می‌شود.\n' +
-                'سازنده‌ها (ادمین‌ها) حذف نمی‌شوند.\n\n' +
-                'برای تایید نهایی، عبارت "حذف همه" را تایپ کنید:';
-
-            var code = prompt(secondConfirm);
-            if (code !== 'حذف همه') {
-                ToastManager.show('❌ عملیات لغو شد', 1500);
-                return;
-            }
-
-            ToastManager.show('⏳ در حال حذف کاربران...', 3000);
-
-            BackendlessService.findUsers(null, null, 500)
-                .then(function(allUsers) {
-                    var adminEmails = CONFIG.ADMIN_EMAILS;
-                    var usersToDelete = allUsers.filter(function(u) {
-                        return adminEmails.indexOf(u.email) === -1;
-                    });
-
-                    if (usersToDelete.length === 0) {
-                        ToastManager.show('ℹ️ هیچ کاربر معمولی برای حذف یافت نشد', 2000);
-                        return;
-                    }
-
-                    var deleteCount = usersToDelete.length;
-                    if (!confirm('تعداد ' + deleteCount + ' کاربر معمولی برای حذف شناسایی شدند.\nآیا ادامه می‌دهید؟')) {
-                        ToastManager.show('❌ عملیات لغو شد', 1500);
-                        return;
-                    }
-
-                    var deletePromises = usersToDelete.map(function(user) {
-                        return BackendlessService.deleteUser(user.objectId)
-                            .catch(function(err) {
-                                console.warn('خطا در حذف کاربر:', user.email, err);
-                            });
-                    });
-
-                    Promise.all(deletePromises)
-                        .then(function() {
-                            ToastManager.show('✅ ' + deleteCount + ' کاربر با موفقیت حذف شدند!', 3000);
-                            BackendlessService.saveLog('delete_all_users', { count: deleteCount });
-                            loadAdminPanel();
-                        })
-                        .catch(function(err) {
-                            console.error('خطا در حذف کاربران:', err);
-                            ToastManager.show('❌ خطا در حذف کاربران', 2000);
-                        });
-                })
-                .catch(function(err) {
-                    console.error('خطا در دریافت لیست کاربران:', err);
-                    ToastManager.show('❌ خطا در دریافت لیست کاربران', 2000);
-                });
-        }
+        // ===== رویدادهای باقی‌مانده =====
 
         safeAddListener('sessionReplacedBtn', 'click', function() {
             var overlay = $('sessionReplacedOverlay');
@@ -2674,85 +2624,7 @@
             boot();
         });
 
-        var navItems = document.querySelectorAll('.bottom-nav-item');
-        for (var ni = 0; ni < navItems.length; ni++) {
-            (function(item) {
-                if (item) {
-                    item.addEventListener('click', function() {
-                        var items = document.querySelectorAll('.bottom-nav-item');
-                        for (var ij = 0; ij < items.length; ij++) {
-                            if (items[ij]) items[ij].classList.remove('active');
-                        }
-                        if (this) this.classList.add('active');
-                        var tab = this ? this.dataset.tab : '';
-                        switch (tab) {
-                            case 'home':
-                                ToastManager.show('🏠 صفحه اصلی', 800);
-                                break;
-                            case 'shop':
-                                ToastManager.show('🛒 فروشگاه به زودی...', 1500);
-                                break;
-                            case 'leaderboard':
-                                var page = $('trophyPage');
-                                if (page) page.classList.add('active');
-                                break;
-                        }
-                    });
-                }
-            })(navItems[ni]);
-        }
-
-        var loginPass = $('loginPassword');
-        if (loginPass) {
-            loginPass.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    var btn = $('loginBtn');
-                    if (btn) btn.click();
-                }
-            });
-        }
-
-        var regConfirm = $('regPasswordConfirm');
-        if (regConfirm) {
-            regConfirm.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    var btn = $('registerBtn');
-                    if (btn) btn.click();
-                }
-            });
-        }
-
-        var adminTabs = document.querySelectorAll('.admin-tabs .tab');
-        for (var at = 0; at < adminTabs.length; at++) {
-            (function(tab) {
-                if (tab) {
-                    tab.addEventListener('click', function() {
-                        var tabs = document.querySelectorAll('.admin-tabs .tab');
-                        for (var tj = 0; tj < tabs.length; tj++) {
-                            if (tabs[tj]) tabs[tj].classList.remove('active');
-                        }
-                        if (this) this.classList.add('active');
-                        var atab = this ? this.dataset.atab : '';
-                        if (atab === 'dashboard' || atab === 'users') {
-                            loadAdminPanel();
-                        } else if (atab === 'rooms') {
-                            var list = $('adminUsersList');
-                            if (list) {
-                                list.innerHTML =
-                                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);font-family:Vazirmatn,sans-serif;">🏠 لابی‌های فعال: ' + LobbyManager.lobbies.length + '</div>';
-                            }
-                        } else if (atab === 'logs') {
-                            var list = $('adminUsersList');
-                            if (list) {
-                                list.innerHTML =
-                                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);font-family:Vazirmatn,sans-serif;">📝 لاگ‌ها در حال پیاده‌سازی...</div>';
-                            }
-                        }
-                    });
-                }
-            })(adminTabs[at]);
-        }
-
+        // ===== Admin Functions =====
         var adminUsers = [];
 
         function loadAdminPanel() {
@@ -3005,6 +2877,66 @@
             }
         }
 
+        function deleteAllUsers() {
+            if (!isAdmin()) {
+                ToastManager.show('⛔ شما دسترسی حذف کاربران را ندارید', 2000);
+                return;
+            }
+            var confirmMsg = '⚠️ هشدار جدی!\n\n' +
+                'شما در حال حذف دائمی همه کاربران هستید!\n' +
+                '⚠️ این عملیات غیرقابل بازگشت است.\n' +
+                '✅ فقط سازنده‌ها (ادمین‌ها) از حذف شدن محافظت می‌شوند.\n\n' +
+                'آیا مطمئن هستید که می‌خواهید ادامه دهید؟';
+            if (!confirm(confirmMsg)) return;
+            var secondConfirm = '🔴 تایید نهایی:\n\n' +
+                'این کار باعث حذف شدن همه کاربران از سرور می‌شود.\n' +
+                'سازنده‌ها (ادمین‌ها) حذف نمی‌شوند.\n\n' +
+                'برای تایید نهایی، عبارت "حذف همه" را تایپ کنید:';
+            var code = prompt(secondConfirm);
+            if (code !== 'حذف همه') {
+                ToastManager.show('❌ عملیات لغو شد', 1500);
+                return;
+            }
+            ToastManager.show('⏳ در حال حذف کاربران...', 3000);
+            BackendlessService.findUsers(null, null, 500)
+                .then(function(allUsers) {
+                    var adminEmails = CONFIG.ADMIN_EMAILS;
+                    var usersToDelete = allUsers.filter(function(u) {
+                        return adminEmails.indexOf(u.email) === -1;
+                    });
+                    if (usersToDelete.length === 0) {
+                        ToastManager.show('ℹ️ هیچ کاربر معمولی برای حذف یافت نشد', 2000);
+                        return;
+                    }
+                    var deleteCount = usersToDelete.length;
+                    if (!confirm('تعداد ' + deleteCount + ' کاربر معمولی برای حذف شناسایی شدند.\nآیا ادامه می‌دهید؟')) {
+                        ToastManager.show('❌ عملیات لغو شد', 1500);
+                        return;
+                    }
+                    var deletePromises = usersToDelete.map(function(user) {
+                        return BackendlessService.deleteUser(user.objectId)
+                            .catch(function(err) {
+                                console.warn('خطا در حذف کاربر:', user.email, err);
+                            });
+                    });
+                    Promise.all(deletePromises)
+                        .then(function() {
+                            ToastManager.show('✅ ' + deleteCount + ' کاربر با موفقیت حذف شدند!', 3000);
+                            BackendlessService.saveLog('delete_all_users', { count: deleteCount });
+                            loadAdminPanel();
+                        })
+                        .catch(function(err) {
+                            console.error('خطا در حذف کاربران:', err);
+                            ToastManager.show('❌ خطا در حذف کاربران', 2000);
+                        });
+                })
+                .catch(function(err) {
+                    console.error('خطا در دریافت لیست کاربران:', err);
+                    ToastManager.show('❌ خطا در دریافت لیست کاربران', 2000);
+                });
+        }
+
+        // ===== Boot =====
         function boot() {
             LoadingManager.init();
             LoadingManager.update(0, 'بارگذاری منابع...');
@@ -3052,12 +2984,13 @@
 
         setTimeout(boot, 300);
 
-        console.log('🎮 مافیا بیس — با سیستم لابی واقعی (ظاهر کد خودت)');
+        console.log('🎮 مافیا بیس — با سیستم لابی واقعی + Voice Chat (LiveKit)');
         console.log('✅ سازنده: tiger.mafia.best@gmail.com');
+        console.log('✅ اطلاعات LiveKit با موفقیت اضافه شد!');
+        console.log('✅ wsUrl: wss://udhg-080lyqpp.livekit.cloud');
+        console.log('✅ apiKey: APINGhmpwAhPVQk');
         console.log('✅ لابی‌ها روی سرور ذخیره می‌شوند');
-        console.log('✅ ایجاد لابی با دکمه +');
-        console.log('✅ ورود و خروج لحظه‌ای با Ably');
-        console.log('✅ مشکل "باید بیننده باشی" برطرف شد (pageSize=50)');
+        console.log('✅ ارتباط صوتی با LiveKit (فعال در اتاق‌ها)');
     </script>
 </body>
 </html>
