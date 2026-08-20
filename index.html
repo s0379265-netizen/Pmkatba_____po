@@ -1,341 +1,903 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1.0,
-      maximum-scale=1.0,
-      user-scalable=no">
-
-<title>404 — Page not found</title>
-
-<style>
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html,
-body {
-    width: 100%;
-    height: 100%;
-}
-
-body {
-    background: #000;
-    color: #fff;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    overflow: hidden;
-}
-
-/* ============================
-   MAIN
-============================ */
-
-.page {
-
-    width: 100%;
-    height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #000;
-}
-
-/* ============================
-   CONTENT
-============================ */
-
-.content {
-
-    width: 90%;
-    max-width: 620px;
-
-    text-align: center;
-
-    animation:
-        appear .7s
-        cubic-bezier(.2,.8,.2,1);
-}
-
-@keyframes appear {
-
-    from {
-        opacity: 0;
-        transform:
-            translateY(16px);
-    }
-
-    to {
-        opacity: 1;
-        transform:
-            translateY(0);
-    }
-}
-
-/* ============================
-   404 NUMBER
-============================ */
-
-.code {
-
-    font-size:
-        clamp(
-            110px,
-            27vw,
-            185px
-        );
-
-    line-height: .85;
-
-    font-weight: 700;
-
-    letter-spacing: -12px;
-
-    color: #f1f3f4;
-
-    user-select: none;
-
-    margin-left: -12px;
-}
-
-/* ============================
-   DIVIDER
-============================ */
-
-.divider {
-
-    width: 38px;
-    height: 2px;
-
-    margin:
-        30px auto
-        24px;
-
-    background: #5f6368;
-
-    border-radius: 10px;
-}
-
-/* ============================
-   TITLE
-============================ */
-
-.title {
-
-    font-size: 22px;
-
-    line-height: 1.4;
-
-    font-weight: 400;
-
-    color: #e8eaed;
-}
-
-/* ============================
-   DESCRIPTION
-============================ */
-
-.description {
-
-    margin:
-        13px auto 0;
-
-    max-width: 420px;
-
-    color: #9aa0a6;
-
-    font-size: 14px;
-
-    line-height: 1.8;
-}
-
-/* ============================
-   URL
-============================ */
-
-.url {
-
-    margin-top: 24px;
-
-    font-family:
-        monospace;
-
-    font-size: 11px;
-
-    color: #5f6368;
-
-    direction: ltr;
-
-    opacity: .8;
-}
-
-/* ============================
-   STATUS
-============================ */
-
-.status {
-
-    margin-top: 24px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 8px;
-
-    color: #555;
-
-    font-size: 10px;
-
-    letter-spacing: .8px;
-}
-
-.status-dot {
-
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: #555;
-
-    animation:
-        statusPulse 2s
-        ease-in-out infinite;
-}
-
-@keyframes statusPulse {
-
-    0%,
-    100% {
-        opacity: .3;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-}
-
-/* ============================
-   MOBILE
-============================ */
-
-@media (max-width: 480px) {
-
-    .code {
-
-        font-size: 120px;
-
-        letter-spacing: -7px;
-
-        margin-left: -7px;
-    }
-
-    .title {
-        font-size: 19px;
-    }
-
-    .description {
-
-        font-size: 13px;
-
-        padding:
-            0 15px;
-    }
-
-    .url {
-        font-size: 10px;
-    }
-}
-
-/* ============================
-   SMALL HEIGHT
-============================ */
-
-@media (max-height: 600px) {
-
-    .code {
-        font-size: 100px;
-    }
-
-    .divider {
-        margin:
-            20px auto;
-    }
-
-    .status {
-        margin-top: 15px;
-    }
-}
-
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>پاداش زنده - آپارات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0e17;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+        }
+
+        /* ========== OVERLAY ========== */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: #0a0e17;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .overlay.hidden {
+            display: none;
+        }
+
+        /* ========== VIDEO WRAPPER ========== */
+        .video-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ========== TOP BAR ========== */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10001;
+            padding: 14px 20px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .top-bar>* {
+            pointer-events: auto;
+        }
+
+        .uid-box {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 6px 14px 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(8px);
+            font-size: 13px;
+            color: #aab;
+        }
+
+        .uid-box .uid-value {
+            color: #4ade80;
+            font-weight: 700;
+            font-family: monospace;
+            font-size: 14px;
+            direction: ltr;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .uid-box .uid-value:hover {
+            color: #facc15;
+        }
+
+        .uid-box .copy-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #889;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .uid-box .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .close-btn {
+            width: 42px;
+            height: 42px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 300;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* ========== INFO PANEL ========== */
+        .info-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
+            padding: 18px 16px 24px;
+            backdrop-filter: blur(4px);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .info-grid {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px 4px;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 4px 14px 4px 10px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+
+        .info-item .icon {
+            font-size: 18px;
+        }
+        .info-item .value {
+            color: #facc15;
+            font-size: 17px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: center;
+            direction: ltr;
+            font-family: monospace;
+        }
+        .info-item .label {
+            color: #8899aa;
+            font-weight: 400;
+            font-size: 12px;
+        }
+
+        /* ========== THERMOMETER ========== */
+        .thermometer-wrap {
+            max-width: 750px;
+            margin: 10px auto 4px;
+            padding: 0 4px;
+        }
+
+        .thermometer-track {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .thermometer-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #facc15, #f59e0b, #f97316, #ef4444);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 30px rgba(250, 204, 21, 0.2);
+            position: relative;
+        }
+
+        .thermometer-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -3px;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #facc15, #f59e0b);
+            border-radius: 50%;
+            box-shadow: 0 0 30px #facc15;
+        }
+
+        .thermometer-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #667;
+            margin-top: 3px;
+            padding: 0 2px;
+        }
+
+        /* ========== MESSAGE ========== */
+        .message-box {
+            text-align: center;
+            padding: 6px 12px 0;
+            font-size: 13px;
+            color: #aab;
+            line-height: 1.7;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .message-box strong {
+            color: #facc15;
+        }
+        .message-box .highlight {
+            color: #4ade80;
+            font-weight: 600;
+        }
+        .message-box .gold {
+            color: #facc15;
+        }
+
+        /* ========== SCREENSHOT BUTTON ========== */
+        .screenshot-btn {
+            position: fixed;
+            bottom: 110px;
+            right: 16px;
+            z-index: 10001;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            color: #fff;
+            padding: 8px 16px 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+            transition: 0.3s;
+            font-family: inherit;
+        }
+
+        .screenshot-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.03);
+        }
+
+        .screenshot-btn .icon {
+            font-size: 18px;
+        }
+
+        /* ========== FINISH BUTTON ========== */
+        .finish-btn {
+            position: fixed;
+            bottom: 110px;
+            left: 16px;
+            z-index: 10001;
+            background: rgba(250, 204, 21, 0.12);
+            border: 1.5px solid rgba(250, 204, 21, 0.25);
+            border-radius: 50px;
+            color: #facc15;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: 0.3s;
+            font-family: inherit;
+            display: none;
+        }
+
+        .finish-btn.show {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .finish-btn:hover {
+            background: rgba(250, 204, 21, 0.2);
+            border-color: rgba(250, 204, 21, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* ========== MOBILE ========== */
+        @media (max-width: 600px) {
+            .info-item {
+                font-size: 11px;
+                padding: 3px 10px 3px 8px;
+            }
+            .info-item .value {
+                font-size: 14px;
+                min-width: 35px;
+            }
+            .info-item .icon {
+                font-size: 14px;
+            }
+            .info-panel {
+                padding: 12px 10px 16px;
+            }
+            .message-box {
+                font-size: 11px;
+                padding: 4px 6px 0;
+            }
+            .top-bar {
+                padding: 10px 12px;
+            }
+            .uid-box {
+                font-size: 11px;
+                padding: 4px 10px 4px 8px;
+            }
+            .uid-box .uid-value {
+                font-size: 12px;
+            }
+            .close-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+            .screenshot-btn {
+                bottom: 95px;
+                right: 10px;
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+            .finish-btn {
+                bottom: 95px;
+                left: 10px;
+                font-size: 11px;
+                padding: 6px 14px;
+            }
+            .thermometer-track {
+                height: 8px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .info-panel {
+                padding: 10px 10px 14px;
+            }
+            .thermometer-track {
+                height: 7px;
+            }
+            .message-box {
+                font-size: 11px;
+                padding: 3px 6px 0;
+            }
+            .screenshot-btn {
+                bottom: 85px;
+            }
+            .finish-btn {
+                bottom: 85px;
+            }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes pulseGold {
+            0%,
+            100% {
+                text-shadow: 0 0 10px rgba(250, 204, 21, 0.2);
+            }
+            50% {
+                text-shadow: 0 0 30px rgba(250, 204, 21, 0.6);
+            }
+        }
+        .pulse-gold {
+            animation: pulseGold 2s ease-in-out infinite;
+        }
+
+        /* ========== TOAST ========== */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 99999;
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            text-align: center;
+            max-width: 90%;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+        .toast .highlight {
+            color: #4ade80;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="page">
+    <!-- ==================== TOAST ==================== -->
+    <div class="toast" id="toast"></div>
 
-    <main class="content">
+    <!-- ==================== OVERLAY ==================== -->
+    <div class="overlay" id="videoOverlay">
 
-        <!-- Error Code -->
-
-        <div class="code">
-            404
+        <!-- VIDEO -->
+        <div class="video-wrapper">
+            <iframe id="liveFrame" src="https://www.aparat.com/embed/live/Mersad_KZ" scrolling="no" allowFullScreen="true"
+            webkitallowfullscreen="true" mozallowfullscreen="true" allow="autoplay; fullscreen"></iframe>
         </div>
 
-        <!-- Divider -->
-
-        <div class="divider"></div>
-
-        <!-- Title -->
-
-        <h1 class="title">
-            Page not found
-        </h1>
-
-        <!-- Description -->
-
-        <p class="description">
-            The page you are looking for
-            doesn't exist or may have been moved.
-        </p>
-
-        <!-- Technical Information -->
-
-        <div class="url">
-            error://404/page-not-found
+        <!-- ========== TOP BAR ========== -->
+        <div class="top-bar">
+            <div class="uid-box">
+                🆔 <span style="color:#889;">UID:</span>
+                <span class="uid-value" id="uidDisplay" title="کلیک برای کپی">گرفتن...</span>
+                <button class="copy-btn" id="copyUidBtn" title="کپی UID">📋</button>
+            </div>
+            <button class="close-btn" id="closeBtn">✕</button>
         </div>
 
-        <!-- Status -->
+        <!-- ========== INFO PANEL ========== -->
+        <div class="info-panel" id="infoPanel">
 
-        <div class="status">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="icon">💎</span>
+                    <span class="label">الماس</span>
+                    <span class="value" id="diamondCount">۰</span>
+                </div>
+                <div class="info-item">
+                    <span class="icon">🪙</span>
+                    <span class="label">سکه</span>
+                    <span class="value" id="coinCount">۰</span>
+                </div>
+                <div class="info-item">
+                    <span class="icon">⏱️</span>
+                    <span class="label">زمان</span>
+                    <span class="value" id="timeDisplay" style="font-size:15px; min-width:60px;">۰۰:۰۰</span>
+                </div>
+                <div class="info-item">
+                    <span class="icon">📊</span>
+                    <span class="label">پیشرفت</span>
+                    <span class="value" id="progressDisplay" style="color:#4ade80; min-width:45px;">۰%</span>
+                </div>
+            </div>
 
-            <span class="status-dot"></span>
+            <!-- THERMOMETER -->
+            <div class="thermometer-wrap">
+                <div class="thermometer-track">
+                    <div class="thermometer-fill" id="thermometerFill"></div>
+                </div>
+                <div class="thermometer-labels">
+                    <span>۰٪</span>
+                    <span id="progressLabel">۰٪</span>
+                    <span>۱۰۰٪</span>
+                </div>
+            </div>
 
-            <span>
-                PAGE NOT FOUND
-            </span>
+            <!-- MESSAGE -->
+            <div class="message-box" id="messageBox">
+                👀 <strong>پخش زنده</strong> — هر ثانیه تماشا، <strong class="highlight">سکه + الماس</strong> افزایش می‌یابد!
+                <br>
+                <span style="font-size:12px; color:#778;">
+                    🎯 تا پایان ویدیو تماشا کن تا <strong class="gold">پاداش ویژه</strong> دریافت کنی
+                </span>
+            </div>
 
         </div>
 
-    </main>
+        <!-- ========== SCREENSHOT BUTTON ========== -->
+        <button class="screenshot-btn" id="screenshotBtn">
+            <span class="icon">📸</span> گرفتن عکس از صفحه
+        </button>
 
-</div>
+        <!-- ========== FINISH BUTTON ========== -->
+        <button class="finish-btn" id="finishBtn">
+            🏁 دریافت پاداش نهایی
+        </button>
+
+    </div>
+
+    <!-- ==================== SCRIPT ==================== -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ==========================================
+            // CONFIG
+            // ==========================================
+            const TARGET_MINUTES = 35; // 35 دقیقه هدف
+            const TARGET_SECONDS = TARGET_MINUTES * 60; // 2100 ثانیه
+
+            const MAX_DIAMONDS = 2000000; // 2 میلیون الماس
+            const MAX_COINS = 2000000; // 2 میلیون سکه
+
+            // ==========================================
+            // DOM REFS
+            // ==========================================
+            const overlay = document.getElementById('videoOverlay');
+            const closeBtn = document.getElementById('closeBtn');
+            const diamondEl = document.getElementById('diamondCount');
+            const coinEl = document.getElementById('coinCount');
+            const timeDisplay = document.getElementById('timeDisplay');
+            const progressDisplay = document.getElementById('progressDisplay');
+            const thermometerFill = document.getElementById('thermometerFill');
+            const progressLabel = document.getElementById('progressLabel');
+            const messageBox = document.getElementById('messageBox');
+            const uidDisplay = document.getElementById('uidDisplay');
+            const copyUidBtn = document.getElementById('copyUidBtn');
+            const screenshotBtn = document.getElementById('screenshotBtn');
+            const finishBtn = document.getElementById('finishBtn');
+            const toast = document.getElementById('toast');
+
+            // ==========================================
+            // STATE
+            // ==========================================
+            let watchSeconds = 0;
+            let diamonds = 0;
+            let coins = 0;
+            let isActive = true;
+            let intervalId = null;
+            let isFinished = false;
+            let userId = '';
+
+            // ==========================================
+            // GENERATE UID
+            // ==========================================
+            function generateUID() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let result = 'SON-';
+                for (let i = 0; i < 8; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                result += '-' + Date.now().toString(36).toUpperCase();
+                return result;
+            }
+
+            userId = generateUID();
+            uidDisplay.textContent = userId;
+
+            // ==========================================
+            // TOAST
+            // ==========================================
+            let toastTimeout = null;
+
+            function showToast(msg, duration = 3000) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                if (toastTimeout) clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, duration);
+            }
+
+            // ==========================================
+            // COPY UID
+            // ==========================================
+            copyUidBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(userId).then(() => {
+                    showToast('✅ UID کپی شد: ' + userId);
+                }).catch(() => {
+                    // Fallback
+                    const range = document.createRange();
+                    const selection = window.getSelection();
+                    range.selectNode(uidDisplay);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    document.execCommand('copy');
+                    showToast('✅ UID کپی شد: ' + userId);
+                });
+            });
+
+            uidDisplay.addEventListener('click', function() {
+                copyUidBtn.click();
+            });
+
+            // ==========================================
+            // FORMAT TIME
+            // ==========================================
+            function formatTime(sec) {
+                const h = Math.floor(sec / 3600);
+                const m = Math.floor((sec % 3600) / 60);
+                const s = Math.floor(sec % 60);
+                if (h > 0) {
+                    return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+                }
+                return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+            }
+
+            // ==========================================
+            // FORMAT NUMBER
+            // ==========================================
+            function formatNumber(num) {
+                return Math.floor(num).toLocaleString('fa-IR');
+            }
+
+            // ==========================================
+            // UPDATE UI
+            // ==========================================
+            function updateUI() {
+                const progress = Math.min(watchSeconds / TARGET_SECONDS, 1);
+                diamonds = Math.min(progress * MAX_DIAMONDS, MAX_DIAMONDS);
+                coins = Math.min(progress * MAX_COINS, MAX_COINS);
+
+                diamondEl.textContent = formatNumber(diamonds);
+                coinEl.textContent = formatNumber(coins);
+                timeDisplay.textContent = formatTime(watchSeconds);
+
+                const percent = Math.min(progress * 100, 100);
+                thermometerFill.style.width = percent + '%';
+                progressLabel.textContent = Math.floor(percent) + '%';
+                progressDisplay.textContent = Math.floor(percent) + '%';
+
+                // ========== MESSAGES ==========
+                if (percent >= 100 && !isFinished) {
+                    isFinished = true;
+                    messageBox.innerHTML = `
+                        🎉 <strong style="color:#4ade80;">تبریک بزرگ!</strong>
+                        شما <strong class="gold">${formatNumber(MAX_DIAMONDS)}</strong> الماس و
+                        <strong class="gold">${formatNumber(MAX_COINS)}</strong> سکه دریافت کردید!
+                        <br>
+                        <span style="font-size:13px; color:#aaa;">
+                            ✅ برای دریافت پاداش، روی دکمه <strong style="color:#facc15;">"دریافت پاداش نهایی"</strong> بزنید
+                        </span>
+                    `;
+                    finishBtn.classList.add('show');
+                    if (intervalId) {
+                        clearInterval(intervalId);
+                        intervalId = null;
+                    }
+                    showToast('🎉 پاداش کامل شد! روی دکمه پایین سمت چپ بزنید', 5000);
+                } else if (percent >= 75 && percent < 100 && !isFinished) {
+                    messageBox.innerHTML = `
+                        🔥 <strong>کم کم داری به پاداش کامل می‌رسی!</strong>
+                        ادامه بده تا پاداشت رو کامل بگیری
+                        <br>
+                        <span style="font-size:13px; color:#facc15;">
+                            ⏱️ ${Math.floor(TARGET_SECONDS - watchSeconds)} ثانیه باقی مونده
+                        </span>
+                    `;
+                } else if (percent >= 50 && percent < 75 && !isFinished) {
+                    messageBox.innerHTML = `
+                        ⚡ <strong>نصف راه رو اومدی!</strong>
+                        هر لحظه که می‌گذره، پاداشت بیشتر میشه
+                        <br>
+                        <span style="font-size:13px; color:#889;">
+                            🎯 تا پاداش کامل: ${Math.floor(TARGET_SECONDS - watchSeconds)} ثانیه
+                        </span>
+                    `;
+                } else if (percent >= 25 && percent < 50 && !isFinished) {
+                    messageBox.innerHTML = `
+                        👀 <strong>عالی!</strong>
+                        به تماشا ادامه بده تا پاداش کامل رو بگیری
+                        <br>
+                        <span style="font-size:13px; color:#889;">
+                            💪 تا الان ${formatNumber(coins)} سکه و ${formatNumber(diamonds)} الماس گرفتی
+                        </span>
+                    `;
+                } else if (percent < 25 && !isFinished) {
+                    messageBox.innerHTML = `
+                        🎬 <strong>پخش زنده</strong> — هر ثانیه تماشا، <strong class="highlight">سکه + الماس</strong> افزایش می‌یابد!
+                        <br>
+                        <span style="font-size:13px; color:#778;">
+                            ⏱️ ${Math.floor(TARGET_SECONDS - watchSeconds)} ثانیه تا پاداش کامل
+                        </span>
+                    `;
+                }
+            }
+
+            // ==========================================
+            // TICK
+            // ==========================================
+            function tick() {
+                if (!isActive) return;
+                if (isFinished) return;
+
+                watchSeconds++;
+                updateUI();
+            }
+
+            // ==========================================
+            // START
+            // ==========================================
+            function startTimer() {
+                if (intervalId) clearInterval(intervalId);
+                intervalId = setInterval(tick, 1000);
+                updateUI();
+                showToast('🎬 شروع پاداش‌دهی! هر ثانیه سکه بگیر!', 3000);
+            }
+
+            // ==========================================
+            // SCREENSHOT
+            // ==========================================
+            screenshotBtn.addEventListener('click', function() {
+                // گرفتن اسکرین‌شات از صفحه
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // اندازه صفحه
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                // رسم پس‌زمینه
+                ctx.fillStyle = '#0a0e17';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // گرفتن از ویدیو (نمادین)
+                ctx.fillStyle = '#1a1a2e';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // نوشتن اطلاعات روی تصویر
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 28px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('🎯 پاداش زنده - آپارات', canvas.width / 2, 80);
+
+                ctx.font = '20px Arial';
+                ctx.fillStyle = '#facc15';
+                ctx.fillText(`🆔 UID: ${userId}`, canvas.width / 2, 140);
+
+                ctx.font = '18px Arial';
+                ctx.fillStyle = '#4ade80';
+                ctx.fillText(`💎 الماس: ${formatNumber(diamonds)}`, canvas.width / 2 - 120, 200);
+                ctx.fillText(`🪙 سکه: ${formatNumber(coins)}`, canvas.width / 2 + 120, 200);
+
+                ctx.fillStyle = '#8899aa';
+                ctx.font = '16px Arial';
+                ctx.fillText(`⏱️ زمان: ${formatTime(watchSeconds)}  |  📊 پیشرفت: ${Math.floor(Math.min(watchSeconds / TARGET_SECONDS, 1) * 100)}%`, canvas
+                    .width / 2, 250);
+
+                ctx.fillStyle = '#667';
+                ctx.font = '14px Arial';
+                ctx.fillText(`📅 ${new Date().toLocaleDateString('fa-IR')} - ${new Date().toLocaleTimeString('fa-IR')}`, canvas
+                    .width / 2, canvas.height - 40);
+
+                ctx.fillStyle = 'rgba(255,255,255,0.05)';
+                ctx.fillRect(20, canvas.height - 80, canvas.width - 40, 1);
+
+                // تبدیل به دیتا و دانلود
+                const link = document.createElement('a');
+                link.download = `screenshot_${userId}_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                showToast('📸 عکس از صفحه گرفته شد! برای سازنده بفرست.', 4000);
+            });
+
+            // ==========================================
+            // FINISH
+            // ==========================================
+            finishBtn.addEventListener('click', function() {
+                if (!isFinished) {
+                    showToast('⏳ هنوز پاداش کامل نشده! تا آخر ویدیو ببین.', 3000);
+                    return;
+                }
+
+                // نمایش پیام نهایی
+                messageBox.innerHTML = `
+                    🏆 <strong style="color:#facc15;">تبریک بزرگ!</strong>
+                    <br>
+                    شما <strong style="color:#facc15;">${formatNumber(diamonds)}</strong> الماس و
+                    <strong style="color:#facc15;">${formatNumber(coins)}</strong> سکه دریافت کردید!
+                    <br>
+                    <span style="font-size:14px; color:#4ade80;">
+                        ✅ UID شما: <strong style="font-family:monospace;">${userId}</strong>
+                    </span>
+                    <br>
+                    <span style="font-size:13px; color:#889;">
+                        📸 لطفاً از صفحه عکس بگیرید و به سازنده ارسال کنید
+                    </span>
+                `;
+
+                finishBtn.classList.add('hidden');
+                finishBtn.style.display = 'none';
+
+                showToast('🏆 پاداش شما آماده است! عکس بگیر و بفرست.', 5000);
+
+                // غیرفعال کردن تایمر
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                }
+            });
+
+            // ==========================================
+            // CLOSE
+            // ==========================================
+            function closeVideo() {
+                isActive = false;
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                }
+                overlay.classList.add('hidden');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 400);
+            }
+
+            closeBtn.addEventListener('click', closeVideo);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
+                    closeVideo();
+                }
+            });
+
+            // ==========================================
+            // VISIBILITY
+            // ==========================================
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    // کاربر رفت بیرون
+                } else {
+                    if (!isActive) {
+                        isActive = true;
+                        if (!intervalId && !isFinished) {
+                            startTimer();
+                        }
+                    }
+                }
+            });
+
+            // ==========================================
+            // INIT
+            // ==========================================
+            console.log('🎬 پخش زنده آپارات — پاداش لحظه‌ای');
+            console.log('🆔 UID:', userId);
+            console.log('💎 هدف:', MAX_DIAMONDS, 'الماس');
+            console.log('🪙 هدف:', MAX_COINS, 'سکه');
+            console.log('⏱️ زمان هدف:', TARGET_MINUTES, 'دقیقه (', TARGET_SECONDS, 'ثانیه)');
+
+            startTimer();
+
+            // ==========================================
+            // PREVENT PAUSE
+            // ==========================================
+            // کاربر نمی‌تونه ویدیو رو متوقف کنه (از طریق iframe ممکن نیست)
+
+            console.log('✅ سیستم پاداش فعال شد');
+            console.log('📸 دکمه عکس برداری فعال است');
+            console.log('🏁 بعد از کامل شدن، دکمه دریافت پاداش ظاهر می‌شود');
+
+            // ==========================================
+            // PREVENT CONTEXT MENU (راست کلیک)
+            // ==========================================
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+
+        })();
+    </script>
 
 </body>
+
 </html>
