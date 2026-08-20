@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>ویدیو آپارات</title>
+    <title>آپارات - نمایش در کادر</title>
     <style>
         * {
             margin: 0;
@@ -12,240 +12,307 @@
         }
 
         body {
-            background: #0a0e17;
+            background: #0a0a1a;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             color: #fff;
             overflow: hidden;
             height: 100vh;
             width: 100vw;
-            user-select: none;
-        }
-
-        /* ========== VIDEO WRAPPER ========== */
-        .video-wrapper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            background: #000;
-        }
-
-        .video-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        /* ========== TOP BAR ========== */
-        .top-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 10001;
-            padding: 14px 20px;
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .top-bar>* {
-            pointer-events: auto;
-        }
-
-        .uid-box {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 6px 14px 6px 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(8px);
-            font-size: 13px;
-            color: #aab;
-        }
-
-        .uid-box .uid-value {
-            color: #4ade80;
-            font-weight: 700;
-            font-family: monospace;
-            font-size: 14px;
-            direction: ltr;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .uid-box .uid-value:hover {
-            color: #facc15;
-        }
-
-        .uid-box .copy-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            color: #889;
-            font-size: 16px;
-            cursor: pointer;
-            padding: 2px 6px;
-            border-radius: 6px;
-            transition: 0.3s;
-        }
-
-        .uid-box .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-
-        .close-btn {
-            width: 42px;
-            height: 42px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1.5px solid rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            color: #fff;
-            font-size: 22px;
-            font-weight: 300;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(8px);
-            transition: 0.3s;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
+        /* ========== کادر بنفش دور ========== */
+        .purple-frame {
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            max-height: 900px;
+            position: relative;
+            background: linear-gradient(145deg, #2a1a5e, #1a0a3e, #0d0525);
+            border-radius: 24px;
+            padding: 8px;
+            box-shadow: 
+                0 0 60px rgba(138, 43, 226, 0.35),
+                0 0 120px rgba(138, 43, 226, 0.15),
+                inset 0 0 80px rgba(138, 43, 226, 0.08);
+            border: 2px solid rgba(168, 85, 255, 0.3);
+            overflow: hidden;
+            animation: framePulse 3s ease-in-out infinite;
         }
 
-        /* ========== INFO BAR (پایین) ========== */
-        .info-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 10000;
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
-            padding: 18px 16px 24px;
-            backdrop-filter: blur(4px);
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            text-align: center;
+        @keyframes framePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 60px rgba(138, 43, 226, 0.35),
+                    0 0 120px rgba(138, 43, 226, 0.15),
+                    inset 0 0 80px rgba(138, 43, 226, 0.08);
+                border-color: rgba(168, 85, 255, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 0 80px rgba(138, 43, 226, 0.5),
+                    0 0 160px rgba(138, 43, 226, 0.25),
+                    inset 0 0 100px rgba(138, 43, 226, 0.15);
+                border-color: rgba(168, 85, 255, 0.5);
+            }
         }
 
-        .info-text {
-            font-size: 14px;
-            color: #aab;
-            line-height: 1.7;
-            max-width: 650px;
-            margin: 0 auto;
-        }
-
-        .info-text strong {
-            color: #facc15;
-        }
-
-        /* ========== TOAST ========== */
-        .toast {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 99999;
-            background: rgba(0, 0, 0, 0.85);
-            color: #fff;
-            padding: 10px 24px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            font-size: 14px;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+        /* ========== گوشه‌های تزئینی ========== */
+        .purple-frame::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 30px;
+            height: 30px;
+            border-top: 3px solid #a855ff;
+            border-left: 3px solid #a855ff;
+            border-radius: 24px 0 0 0;
+            z-index: 10;
             pointer-events: none;
-            text-align: center;
-            max-width: 90%;
         }
 
-        .toast.show {
-            opacity: 1;
+        .purple-frame::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 30px;
+            height: 30px;
+            border-bottom: 3px solid #a855ff;
+            border-right: 3px solid #a855ff;
+            border-radius: 0 0 24px 0;
+            z-index: 10;
+            pointer-events: none;
         }
 
-        /* ========== MOBILE ========== */
+        .corner-bottom-left {
+            position: absolute;
+            bottom: -2px;
+            left: -2px;
+            width: 30px;
+            height: 30px;
+            border-bottom: 3px solid #a855ff;
+            border-left: 3px solid #a855ff;
+            border-radius: 0 0 0 24px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .corner-top-right {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 30px;
+            height: 30px;
+            border-top: 3px solid #a855ff;
+            border-right: 3px solid #a855ff;
+            border-radius: 0 24px 0 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* ========== هدر کادر ========== */
+        .frame-header {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            z-index: 20;
+            background: linear-gradient(180deg, rgba(42, 26, 94, 0.95) 0%, rgba(26, 10, 62, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 16px 16px 0 0;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(168, 85, 255, 0.25);
+        }
+
+        .frame-header .title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #d4b8ff;
+        }
+
+        .frame-header .title .icon {
+            font-size: 20px;
+        }
+
+        .frame-header .badge {
+            background: rgba(168, 85, 255, 0.2);
+            border: 1px solid rgba(168, 85, 255, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 11px;
+            color: #c9a8ff;
+            font-weight: 500;
+        }
+
+        /* ========== لودینگ ========== */
+        .loading-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(168, 85, 255, 0.15);
+            border-top: 4px solid #a855ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #b89ee0;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* ========== IFRAME ========== */
+        .aparat-frame {
+            position: absolute;
+            top: 52px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border-radius: 0 0 16px 16px;
+            overflow: hidden;
+            background: #fff;
+            z-index: 5;
+        }
+
+        .aparat-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* ========== موبایل ========== */
         @media (max-width: 600px) {
-            .top-bar {
-                padding: 10px 12px;
+            .purple-frame {
+                border-radius: 16px;
+                padding: 5px;
             }
-            .uid-box {
-                font-size: 11px;
-                padding: 4px 10px 4px 8px;
+            .purple-frame::before,
+            .purple-frame::after,
+            .corner-bottom-left,
+            .corner-top-right {
+                width: 20px;
+                height: 20px;
+                border-radius: 12px 0 0 0;
             }
-            .uid-box .uid-value {
+            .corner-bottom-left {
+                border-radius: 0 0 0 12px;
+            }
+            .corner-top-right {
+                border-radius: 0 12px 0 0;
+            }
+            .purple-frame::after {
+                border-radius: 0 0 12px 0;
+            }
+            .frame-header {
+                top: 5px;
+                left: 5px;
+                right: 5px;
+                padding: 8px 12px;
+                border-radius: 11px 11px 0 0;
+            }
+            .frame-header .title {
                 font-size: 12px;
+                gap: 6px;
             }
-            .close-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
+            .frame-header .title .icon {
+                font-size: 16px;
             }
-            .info-bar {
-                padding: 12px 10px 16px;
+            .frame-header .badge {
+                font-size: 9px;
+                padding: 3px 8px;
             }
-            .info-text {
-                font-size: 12px;
+            .aparat-frame {
+                top: 42px;
+                left: 5px;
+                right: 5px;
+                bottom: 5px;
+                border-radius: 0 0 11px 11px;
             }
         }
 
-        @media (max-height: 700px) {
-            .info-bar {
-                padding: 10px 10px 14px;
+        @media (max-height: 500px) {
+            .frame-header {
+                padding: 6px 10px;
             }
-            .info-text {
-                font-size: 11px;
+            .aparat-frame {
+                top: 36px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ==================== TOAST ==================== -->
-    <div class="toast" id="toast"></div>
+    <!-- ==================== کادر بنفش ==================== -->
+    <div class="purple-frame" id="purpleFrame">
 
-    <!-- ==================== VIDEO ==================== -->
-    <div class="video-wrapper">
-        <iframe 
-            src="https://www.aparat.com/video/video/embed/videohash/2090430020347109376/vt/frame"
-            scrolling="no" 
-            allowFullScreen="true"
-            webkitallowfullscreen="true" 
-            mozallowfullscreen="true" 
-            allow="autoplay; fullscreen">
-        </iframe>
-    </div>
+        <!-- گوشه‌های تزئینی -->
+        <div class="corner-bottom-left"></div>
+        <div class="corner-top-right"></div>
 
-    <!-- ========== TOP BAR ========== -->
-    <div class="top-bar">
-        <div class="uid-box">
-            🆔 <span style="color:#889;">UID:</span>
-            <span class="uid-value" id="uidDisplay" title="کلیک برای کپی">گرفتن...</span>
-            <button class="copy-btn" id="copyUidBtn" title="کپی UID">📋</button>
+        <!-- هدر -->
+        <div class="frame-header">
+            <div class="title">
+                <span class="icon">🎬</span>
+                <span>آپارات</span>
+            </div>
+            <div class="badge">📺 آنلاین</div>
         </div>
-        <button class="close-btn" id="closeBtn">✕</button>
-    </div>
 
-    <!-- ========== INFO BAR ========== -->
-    <div class="info-bar">
-        <div class="info-text">
-            🎬 <strong>ویدیو آپارات</strong> — با کیفیت بالا پخش می‌شود
-            <br>
-            <span style="font-size:12px; color:#778;">
-                📸 برای اثبات تماشا، از صفحه عکس بگیرید
-            </span>
+        <!-- لودینگ -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">در حال بارگذاری آپارات...</div>
         </div>
+
+        <!-- فریم آپارات -->
+        <div class="aparat-frame">
+            <iframe 
+                id="aparatIframe"
+                src="https://www.aparat.com/shorts"
+                scrolling="auto"
+                allowFullScreen="true"
+                webkitallowfullscreen="true" 
+                mozallowfullscreen="true"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
+                referrerpolicy="no-referrer-when-downgrade"
+                loading="eager"
+                onload="hideLoading()"
+                onerror="showError()">
+            </iframe>
+        </div>
+
     </div>
 
     <!-- ==================== SCRIPT ==================== -->
@@ -256,78 +323,49 @@
             // ==========================================
             // DOM REFS
             // ==========================================
-            const uidDisplay = document.getElementById('uidDisplay');
-            const copyUidBtn = document.getElementById('copyUidBtn');
-            const closeBtn = document.getElementById('closeBtn');
-            const toast = document.getElementById('toast');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const iframe = document.getElementById('aparatIframe');
+            const purpleFrame = document.getElementById('purpleFrame');
 
             // ==========================================
-            // GENERATE UID
+            // HIDE LOADING
             // ==========================================
-            function generateUID() {
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                let result = 'SON-';
-                for (let i = 0; i < 8; i++) {
-                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+            window.hideLoading = function() {
+                if (loadingOverlay) {
+                    loadingOverlay.style.opacity = '0';
+                    loadingOverlay.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
                 }
-                result += '-' + Date.now().toString(36).toUpperCase();
-                return result;
-            }
-
-            const userId = generateUID();
-            uidDisplay.textContent = userId;
+            };
 
             // ==========================================
-            // TOAST
+            // SHOW ERROR
             // ==========================================
-            let toastTimeout = null;
-
-            function showToast(msg, duration = 3000) {
-                toast.textContent = msg;
-                toast.classList.add('show');
-                if (toastTimeout) clearTimeout(toastTimeout);
-                toastTimeout = setTimeout(() => {
-                    toast.classList.remove('show');
-                }, duration);
-            }
-
-            // ==========================================
-            // COPY UID
-            // ==========================================
-            copyUidBtn.addEventListener('click', function() {
-                navigator.clipboard.writeText(userId).then(() => {
-                    showToast('✅ UID کپی شد: ' + userId);
-                }).catch(() => {
-                    const range = document.createRange();
-                    const selection = window.getSelection();
-                    range.selectNode(uidDisplay);
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                    document.execCommand('copy');
-                    showToast('✅ UID کپی شد: ' + userId);
-                });
-            });
-
-            uidDisplay.addEventListener('click', function() {
-                copyUidBtn.click();
-            });
-
-            // ==========================================
-            // CLOSE
-            // ==========================================
-            closeBtn.addEventListener('click', function() {
-                document.body.style.opacity = '0';
-                document.body.style.transition = 'opacity 0.4s ease';
-                setTimeout(() => {
-                    window.close();
-                }, 400);
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeBtn.click();
+            window.showError = function() {
+                if (loadingOverlay) {
+                    loadingOverlay.innerHTML = `
+                        <div style="font-size:50px;">📡</div>
+                        <div class="loading-text" style="color:#f87171;">
+                            خطا در بارگذاری آپارات
+                        </div>
+                        <div class="loading-text" style="font-size:11px; color:#a099cc;">
+                            لطفاً اینترنت را بررسی کنید
+                        </div>
+                    `;
                 }
-            });
+            };
+
+            // ==========================================
+            // TIMEOUT - اگر لود نشد
+            // ==========================================
+            setTimeout(function() {
+                // اگه هنوز لودینگ نمایش داده می‌شه
+                if (loadingOverlay && loadingOverlay.style.display !== 'none') {
+                    // هنوز داره لود می‌کنه - صبر کن
+                }
+            }, 10000);
 
             // ==========================================
             // PREVENT CONTEXT MENU
@@ -337,12 +375,17 @@
             });
 
             // ==========================================
+            // PREVENT DRAG
+            // ==========================================
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+            });
+
+            // ==========================================
             // INIT
             // ==========================================
-            console.log('🎬 ویدیو آپارات');
-            console.log('🆔 UID:', userId);
-
-            showToast('🎬 ویدیو با کیفیت بالا پخش می‌شود', 3000);
+            console.log('🎬 آپارات - نمایش در کادر بنفش');
+            console.log('✅ فریم بارگذاری شد');
 
         })();
     </script>
