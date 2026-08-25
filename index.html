@@ -20,7 +20,10 @@
         .auth-spinner{display:none;width:48px;height:48px;margin:8px auto 16px auto;border:3px solid rgba(0,180,255,0.05);border-top-color:var(--neon-blue);border-radius:50%;animation:spin 0.8s linear infinite;box-shadow:0 0 40px rgba(0,180,255,0.05)}.auth-spinner.show{display:block}@keyframes spin{to{transform:rotate(360deg)}}
         .auth-box .auth-btn.loading{position:relative;color:transparent !important}.auth-box .auth-btn.loading::after{content:'';position:absolute;width:24px;height:24px;border:3px solid rgba(255,255,255,0.1);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite}
         #app{display:none;width:100vw;height:100vh;position:relative;z-index:1;flex-direction:column;justify-content:center;align-items:center;padding:20px 20px 0 20px}#app.active{display:flex}.menu-container{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative;z-index:2;height:100%;flex:1}
-        .top-row{position:fixed;top:16px;left:16px;right:16px;z-index:50;display:flex;align-items:center;justify-content:flex-start;gap:10px;max-width:440px;margin:0 auto}@media(max-width:480px){.top-row{top:12px;left:12px;right:12px;gap:6px}}.profile-wrapper{display:flex;align-items:center;gap:8px;cursor:pointer;transition:var(--transition);padding:2px;flex-shrink:0;position:relative}.profile-wrapper:active{transform:scale(.92)}.profile-avatar-wrap{position:relative;display:flex;align-items:center;justify-content:center}.profile-avatar-wrap .profile-glow{position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,180,255,.06)0%,transparent 70%);filter:blur(25px);opacity:0;transition:opacity .6s ease;pointer-events:none}.profile-wrapper:hover .profile-glow{opacity:1}.profile-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;background:conic-gradient(from 0deg,var(--neon-blue)0%,var(--teal)30%,var(--neon-blue-dark)60%,var(--neon-blue)100%);background-size:300%300%;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#fff calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#fff calc(100% - 2px));animation:ringSpin 4s linear infinite;opacity:.6}@keyframes ringSpin{0%{background-position:0%50%}100%{background-position:300%50%}}.profile-avatar-container{width:56px;height:56px;border-radius:50%;position:relative;z-index:2;background:linear-gradient(145deg,rgba(10,22,40,.85),rgba(0,10,30,.95));border:2px solid rgba(0,180,255,.08);box-shadow:0 0 40px rgba(0,180,255,.03),inset 0 2px 0 rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:var(--transition);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}@media(max-width:480px){.profile-avatar-container{width:44px;height:44px}.profile-ring{inset:-6px}}.profile-avatar-container .avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}.profile-avatar-container .avatar-placeholder{font-size:24px;color:var(--neon-blue);filter:drop-shadow(0 0 10px rgba(0,180,255,.1))}.status-dot{position:absolute;bottom:2px;right:2px;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--success),#00CC66);border:2.5px solid rgba(10,22,40,.9);z-index:5;box-shadow:0 0 20px rgba(0,255,136,.3);animation:statusPulse 2s ease-in-out infinite}@keyframes statusPulse{0%,100%{box-shadow:0 0 20px rgba(0,255,136,.3)}50%{box-shadow:0 0 40px rgba(0,255,136,.6)}}@media(max-width:480px){.status-dot{width:11px;height:11px;bottom:0;right:0;border-width:2px}}.username-label{font-size:13px;font-weight:700;color:#fff;text-shadow:0 0 20px rgba(0,180,255,.05);font-family:'Vazirmatn',sans-serif;white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;direction:ltr;display:none}.username-label.show{display:block}@media(max-width:480px){.username-label{font-size:11px;max-width:60px}}.logout-btn{font-size:12px;color:rgba(255,255,255,.2);cursor:pointer;transition:var(--transition);font-family:'Vazirmatn',sans-serif;padding:2px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.04);background:transparent;display:none}.logout-btn:hover{color:var(--danger);border-color:rgba(255,77,77,.1)}.logout-btn.show{display:block}
+        .top-row{position:fixed;top:16px;left:16px;right:16px;z-index:50;display:flex;align-items:center;justify-content:flex-start;gap:10px;max-width:440px;margin:0 auto}@media(max-width:480px){.top-row{top:12px;left:12px;right:12px;gap:6px}}.profile-wrapper{display:flex;align-items:center;gap:8px;cursor:pointer;transition:var(--transition);padding:2px;flex-shrink:0;position:relative}.profile-wrapper:active{transform:scale(.92)}.profile-avatar-wrap{position:relative;display:flex;align-items:center;justify-content:center}.profile-avatar-wrap .profile-glow{position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,180,255,.06)0%,transparent 70%);filter:blur(25px);opacity:0;transition:opacity .6s ease;pointer-events:none}.profile-wrapper:hover .profile-glow{opacity:1}.profile-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;background:conic-gradient(from 0deg,var(--neon-blue)0%,var(--teal)30%,var(--neon-blue-dark)60%,var(--neon-blue)100%);background-size:300%300%;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#fff calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#fff calc(100% - 2px));animation:ringSpin 4s linear infinite;opacity:.6}@keyframes ringSpin{0%{background-position:0%50%}100%{background-position:300%50%}}.profile-avatar-container{width:56px;height:56px;border-radius:50%;position:relative;z-index:2;background:linear-gradient(145deg,rgba(10,22,40,.85),rgba(0,10,30,.95));border:2px solid rgba(0,180,255,.08);box-shadow:0 0 40px rgba(0,180,255,.03),inset 0 2px 0 rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:var(--transition);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}@media(max-width:480px){.profile-avatar-container{width:44px;height:44px}.profile-ring{inset:-6px}}.profile-avatar-container .avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}.profile-avatar-container .avatar-placeholder{font-size:24px;color:var(--neon-blue);filter:drop-shadow(0 0 10px rgba(0,180,255,.1))}.status-dot{position:absolute;bottom:2px;right:2px;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--success),#00CC66);border:2.5px solid rgba(10,22,40,.9);z-index:5;box-shadow:0 0 20px rgba(0,255,136,.3);animation:statusPulse 2s ease-in-out infinite}@keyframes statusPulse{0%,100%{box-shadow:0 0 20px rgba(0,255,136,.3)}50%{box-shadow:0 0 40px rgba(0,255,136,.6)}}@media(max-width:480px){.status-dot{width:11px;height:11px;bottom:0;right:0;border-width:2px}}
+        /* ===== اسم کاربر قابل کلیک برای تغییر ===== */
+        .username-label{font-size:13px;font-weight:700;color:#fff;text-shadow:0 0 20px rgba(0,180,255,.05);font-family:'Vazirmatn',sans-serif;white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;direction:ltr;display:none;cursor:pointer;transition:var(--transition);padding:2px 6px;border-radius:8px;border:1px solid transparent}.username-label.show{display:block}.username-label:hover{background:rgba(0,180,255,.05);border-color:rgba(0,180,255,.08)}@media(max-width:480px){.username-label{font-size:11px;max-width:60px}}
+        .logout-btn{font-size:12px;color:rgba(255,255,255,.2);cursor:pointer;transition:var(--transition);font-family:'Vazirmatn',sans-serif;padding:2px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.04);background:transparent;display:none}.logout-btn:hover{color:var(--danger);border-color:rgba(255,77,77,.1)}.logout-btn.show{display:block}
         .currency-cards{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-right:6px}@media(max-width:480px){.currency-cards{gap:5px;margin-right:4px}}.currency-card{display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;background:rgba(10,22,40,.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:20px;border:1px solid rgba(0,180,255,.06);box-shadow:0 4px 30px rgba(0,0,0,.2);position:relative;transition:var(--transition);min-height:40px}.currency-card:hover{border-color:rgba(0,180,255,.1)}@media(max-width:480px){.currency-card{padding:3px 6px 3px 4px;border-radius:16px;min-height:32px;gap:4px}}.currency-card .icon-wrap{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:12px;background:rgba(0,180,255,.03)}.currency-card .icon-wrap img{width:26px;height:26px;object-fit:contain;display:block}@media(max-width:480px){.currency-card .icon-wrap{width:26px;height:26px}.currency-card .icon-wrap img{width:20px;height:20px}}.currency-card .amount{font-size:14px;font-weight:700;color:#fff;font-family:'Vazirmatn',sans-serif;white-space:nowrap;min-width:24px}@media(max-width:480px){.currency-card .amount{font-size:11px;min-width:18px}}
         .start-btn-3d.disabled{opacity:0.5 !important;cursor:not-allowed !important;pointer-events:none !important}.start-btn-3d.disabled .btn-content{color:rgba(255,255,255,0.3) !important}.start-btn-3d.disabled .btn-bg{background:linear-gradient(180deg,#555 0%,#333 40%,#222 100%) !important;box-shadow:0 12px 0 #111,0 16px 30px rgba(0,0,0,0.2) !important}.start-btn-3d .btn-content .update-icon{animation:spinUpdate 2s linear infinite;color:var(--gold)}@keyframes spinUpdate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
         .bottom-nav{position:fixed;bottom:0;left:0;right:0;width:100%;height:var(--nav-height);background:rgba(10,22,40,.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(0,180,255,.04);box-shadow:0 -8px 40px rgba(0,0,0,.4);display:flex;justify-content:center;align-items:center;z-index:100;padding:0 8px}.bottom-nav-inner{width:100%;max-width:340px;height:100%;display:flex;justify-content:space-between;align-items:center;padding:0 4px}.bottom-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:4px 6px;border-radius:14px;cursor:pointer;transition:var(--transition);position:relative;min-width:56px;height:100%;background:transparent;border:none;font-family:'Vazirmatn',sans-serif;flex:1}.bottom-nav-item:hover{background:rgba(0,180,255,.03)}.bottom-nav-item:active{transform:scale(.9)}.bottom-nav-item .icon-wrap{display:flex;align-items:center;justify-content:center;border-radius:10px;transition:var(--transition);width:38px;height:38px}.bottom-nav-item .icon-wrap img{width:30px;height:30px;object-fit:contain;filter:grayscale(1) brightness(.4);transition:var(--transition);display:block}.bottom-nav-item .label{font-size:8px;font-weight:600;color:rgba(150,180,210,.2);transition:var(--transition);letter-spacing:.5px;line-height:1}.bottom-nav-item.center-home .icon-wrap{width:50px;height:50px;margin-top:-8px;background:rgba(0,180,255,.03);border:1px solid rgba(0,180,255,.04);border-radius:14px}.bottom-nav-item.center-home .icon-wrap img{width:38px;height:38px}.bottom-nav-item.active .icon-wrap{background:rgba(0,180,255,.04);box-shadow:0 0 30px rgba(0,180,255,.03)}.bottom-nav-item.active .icon-wrap img{filter:grayscale(0) brightness(1) drop-shadow(0 0 12px rgba(0,180,255,.2))}.bottom-nav-item.active .label{color:rgba(0,180,255,.6)}.bottom-nav-item.active::after{content:'';position:absolute;bottom:2px;left:25%;right:25%;height:2px;border-radius:4px;background:linear-gradient(90deg,transparent,var(--neon-blue),transparent);box-shadow:0 0 20px rgba(0,180,255,.2);animation:activePulse 2s ease-in-out infinite}@keyframes activePulse{0%,100%{opacity:.5}50%{opacity:1}}
@@ -153,12 +156,16 @@
         .voice-participants .participant .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
         .voice-participants .participant .dot.speaking{background:var(--success);animation:voicePulse 0.6s ease-in-out infinite}
         .voice-participants .participant .dot.muted{background:#555}
+
+        /* ===== دیالوگ تغییر اسم ===== */
+        .rename-dialog{display:none;position:fixed;inset:0;z-index:99997;justify-content:center;align-items:center;background:rgba(10,10,26,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);animation:fadeIn .3s ease;padding:20px}.rename-dialog.active{display:flex}.rename-box{width:100%;max-width:400px;background:rgba(10,22,40,.7);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-radius:28px;padding:32px 28px;border:1px solid rgba(0,180,255,.06);box-shadow:var(--shadow);text-align:center;animation:slideUp .4s ease}.rename-box h3{font-size:20px;font-weight:800;color:#fff;font-family:'Vazirmatn',sans-serif;margin-bottom:4px}.rename-box .sub{font-size:13px;color:rgba(255,255,255,.2);font-family:'Vazirmatn',sans-serif;margin-bottom:16px}.rename-box .cost-info{font-size:14px;color:var(--gold);font-family:'Vazirmatn',sans-serif;font-weight:700;margin-bottom:12px;padding:8px 16px;background:rgba(255,215,0,.04);border-radius:12px;border:1px solid rgba(255,215,0,.04)}.rename-box input{width:100%;padding:12px 16px;border-radius:14px;border:1px solid rgba(0,180,255,.06);background:rgba(255,255,255,.02);color:#fff;font-size:16px;font-family:'Vazirmatn',sans-serif;text-align:center;outline:none;transition:var(--transition);direction:rtl}.rename-box input:focus{border-color:rgba(0,180,255,.15);background:rgba(255,255,255,.04)}.rename-box .actions{display:flex;gap:10px;margin-top:16px}.rename-box .actions button{flex:1;padding:10px;border:none;border-radius:14px;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:var(--transition)}.rename-box .actions .confirm{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#2D2000;box-shadow:0 8px 30px rgba(255,215,0,.15)}.rename-box .actions .confirm:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,215,0,.25)}.rename-box .actions .cancel{background:rgba(255,255,255,.02);color:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.04)}.rename-box .actions .cancel:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.4)}
+        @media(max-width:480px){.rename-box{padding:24px 18px}.rename-box h3{font-size:17px}.rename-box input{font-size:14px}}
     </style>
 </head>
 <body>
 
     <!-- ===== تمام HTML ===== -->
-    <!-- (همون HTML که قبلاً بود، فقط برای خوانایی حذف نشده) -->
+    <!-- (همون HTML که قبلاً بود با کمی تغییرات) -->
 
     <div class="bg-image"></div>
 
@@ -652,6 +659,20 @@
         </div>
     </div>
 
+    <!-- ===== RENAME DIALOG ===== -->
+    <div class="rename-dialog" id="renameDialog">
+        <div class="rename-box">
+            <h3>✏️ تغییر نام کاربری</h3>
+            <div class="sub">نام جدید خود را وارد کنید</div>
+            <div class="cost-info" id="renameCostInfo">💰 هزینه: ۵۰ سکه</div>
+            <input type="text" id="renameInput" placeholder="نام جدید..." maxlength="20" />
+            <div class="actions">
+                <button class="cancel" id="renameCancel">لغو</button>
+                <button class="confirm" id="renameConfirm">تایید</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ============================================================
         //  🔧  LoadingManager — مدیریت صفحه بارگذاری
@@ -663,7 +684,6 @@
             isComplete: false,
 
             init: function() {
-                // نمایش صفحه لود
                 var screen = document.getElementById('loadingScreen');
                 if (screen) screen.classList.remove('hidden');
             },
@@ -704,7 +724,6 @@
                     }
                 }
 
-                // مخفی کردن خطا در حین بروزرسانی
                 var error = document.getElementById('loadingError');
                 if (error) error.classList.remove('show');
             },
@@ -722,7 +741,6 @@
                 if (screen) {
                     setTimeout(function() {
                         screen.classList.add('hidden');
-                        // بعد از محو شدن، نمایش اپ
                         var app = document.getElementById('app');
                         if (app) app.classList.add('active');
                     }, 600);
@@ -730,7 +748,7 @@
             }
         };
 
-        // ===== تعریف ToastManager =====
+        // ===== ToastManager =====
         var ToastManager = {
             timeout: null,
 
@@ -747,8 +765,18 @@
             }
         };
 
-        // ===== بقیه کدهای قبلی =====
-        // (همون کدهایی که قبلاً بود، فقط LoadingManager اضافه شد)
+        // ===== Helper =====
+        function $(id) {
+            var el = document.getElementById(id);
+            if (!el) console.warn('⚠️ Element not found:', id);
+            return el;
+        }
+
+        function safeAddListener(id, event, handler) {
+            var el = $(id);
+            if (el) el.addEventListener(event, handler);
+            return el;
+        }
 
         // ============================================================
         //  🎮  مافیا بیس — نسخه نهایی با توکن‌های جدید
@@ -762,7 +790,9 @@
             ABLY_KEY: 'NNYzzQ.7HHPYg:NA1mSMcWdEnlWOHGZ4CaF7ZUkoXe1Iggtf0sy-nNsDM',
             OWNER_EMAIL: 'tiger.mafia.best@gmail.com',
             ADMIN_EMAILS: ['tiger.mafia.best@gmail.com', 'mohammadjavad1160yt@gmail.com'],
-            LOBBY_TABLE: 'Lobbies'
+            LOBBY_TABLE: 'Lobbies',
+            RENAME_COST: 50,
+            FIRST_RENAME_FREE: true
         };
 
         var LIVEKIT_CONFIG = {
@@ -891,21 +921,8 @@
 
         var ALL_PERMISSIONS = Object.values(PERMISSIONS);
 
-        // ===== Helpers =====
-        function $(id) {
-            var el = document.getElementById(id);
-            if (!el) console.warn('⚠️ Element not found:', id);
-            return el;
-        }
-
-        function safeAddListener(id, event, handler) {
-            var el = $(id);
-            if (el) el.addEventListener(event, handler);
-            return el;
-        }
-
         // ============================================================
-        //  📦  DataManager با کش و محدودیت درخواست
+        //  📦  DataManager
         // ============================================================
 
         var DataManager = {
@@ -948,27 +965,9 @@
                     this._cacheTime[key] = Date.now();
                     return value;
                 } catch (error) {
-                    try {
-                        var oldRaw = localStorage.getItem(this.prefix + key);
-                        if (oldRaw) {
-                            var decoded = this._decodeBase64(oldRaw);
-                            if (decoded !== null) {
-                                this.set(key, decoded);
-                                return decoded;
-                            }
-                        }
-                    } catch (e) {}
                     console.error('Storage get error:', error);
                     return defaultValue;
                 }
-            },
-
-            _decodeBase64: function(data) {
-                try {
-                    var binary = atob(data);
-                    var utf8 = decodeURIComponent(escape(binary));
-                    return JSON.parse(utf8);
-                } catch (e) { return null; }
             },
 
             remove: function(key) {
@@ -1000,7 +999,8 @@
                     permissions: this.get('permissions', []),
                     sessionId: this.get('sessionId', ''),
                     deviceId: this.get('deviceId', ''),
-                    role: this.get('role', 'user')
+                    role: this.get('role', 'user'),
+                    renameCount: this.get('renameCount', 0)
                 };
             },
 
@@ -1025,7 +1025,6 @@
         var BackendlessService = {
             sdk: null,
             isReady: false,
-            _pendingRequests: {},
 
             init: function() {
                 try {
@@ -1034,28 +1033,12 @@
                         this.sdk = Backendless;
                         this.isReady = true;
                         console.log('✅ Backendless initialized');
-                        console.log('🔑 APP_ID:', CONFIG.APP_ID);
-                        console.log('🔑 API_KEY:', CONFIG.API_KEY);
-
-                        this._ensureLobbyTable();
                         return true;
                     }
                     return false;
                 } catch (e) {
                     console.warn('Backendless init error:', e);
                     return false;
-                }
-            },
-
-            _ensureLobbyTable: function() {
-                try {
-                    this.sdk.Data.of(CONFIG.LOBBY_TABLE).find({ pageSize: 1 })
-                        .then(function() { console.log('✅ Lobbies table exists'); })
-                        .catch(function() {
-                            console.log('ℹ️ Lobbies table not found, creating...');
-                        });
-                } catch (e) {
-                    console.warn('Table check error:', e);
                 }
             },
 
@@ -1135,7 +1118,7 @@
         };
 
         // ============================================================
-        //  🔐  Auth Service با Retry
+        //  🔐  Auth Service
         // ============================================================
 
         var AuthService = {
@@ -1196,7 +1179,8 @@
                             role: role,
                             permissions: permissions,
                             activeSessionId: null,
-                            activeDeviceId: null
+                            activeDeviceId: null,
+                            renameCount: 0
                         };
                         return BackendlessService.saveUser(playerData);
                     })
@@ -1328,7 +1312,8 @@
                     isAdmin: isAdmin,
                     isLoggedIn: true,
                     permissions: permissions,
-                    role: role
+                    role: role,
+                    renameCount: data.renameCount || 0
                 });
 
                 return SessionManager.createSession(data.objectId || data.userId, email)
@@ -1346,7 +1331,6 @@
                     .then(function() {
                         AuthService.isLoggedIn = true;
                         AuthService.currentUser = data;
-                        var roleText = role === 'owner' ? ' (سازنده اصلی)' : role === 'admin' ? ' (مدیر)' : '';
                         var sessionId = DataManager.get('sessionId', '');
                         if (sessionId) {
                             SessionManager.startSessionCheck(sessionId);
@@ -2174,18 +2158,20 @@
         };
 
         // ============================================================
-        //  📡  Live View
+        //  📡  Live View — استریم زنده واقعی
         // ============================================================
 
         var liveViewInterval = null;
         var liveUsers = [];
         var userActions = {};
+        var ablyClient = null;
+        var matchmakingChannel = null;
 
         function startLiveView() {
             if (liveViewInterval) clearInterval(liveViewInterval);
             liveViewInterval = setInterval(function() {
                 updateLiveUsers();
-            }, 5000);
+            }, 3000); // هر ۳ ثانیه به‌روزرسانی
             updateLiveUsers();
         }
 
@@ -2244,34 +2230,36 @@
             container.innerHTML = html;
         }
 
-        var userActionMessages = [
-            'در حال مرور صفحه اصلی',
-            'در حال مشاهده لابی‌ها',
-            'در حال چت با کاربران',
-            'در حال تنظیم پروفایل',
-            'در حال بازی مافیا',
-            'در حال گوش دادن به صدا',
-            'در حال مرور فروشگاه',
-            'در حال مشاهده کاپ‌ها',
-            'در حال ایجاد لابی جدید',
-            'در حال ورود به لابی'
-        ];
+        // ===== دریافت فعالیت‌های واقعی از Backendless =====
+        function fetchUserActivities() {
+            var p = DataManager.getPlayer();
+            if (!p.isLoggedIn) return;
 
+            // گرفتن لاگ‌های اخیر کاربران
+            BackendlessService.findUsers(null, 'lastActivity DESC', 20, 'Logs')
+                .then(function(logs) {
+                    if (!logs) return;
+                    var now = Date.now();
+                    for (var i = 0; i < logs.length; i++) {
+                        var log = logs[i];
+                        var userId = log.userId;
+                        if (userId && userId !== p.userId) {
+                            var time = new Date(log.timestamp);
+                            if ((now - time.getTime()) < 60000) { // کمتر از ۱ دقیقه
+                                userActions[userId] = log.action || 'در حال فعالیت';
+                            }
+                        }
+                    }
+                })
+                .catch(function() {});
+        }
+
+        // هر ۵ ثانیه فعالیت‌های واقعی رو میگیریم
         setInterval(function() {
-            var onlineUsers = liveUsers.filter(function(u) { return u.onlineStatus === true; });
-            for (var i = 0; i < onlineUsers.length; i++) {
-                var randomIndex = Math.floor(Math.random() * userActionMessages.length);
-                userActions[onlineUsers[i].email] = userActionMessages[randomIndex];
-            }
+            fetchUserActivities();
         }, 5000);
 
-        // ============================================================
-        //  🎯  Event Listeners
-        // ============================================================
-
-        var ablyClient = null;
-        var matchmakingChannel = null;
-
+        // ===== Ably =====
         function initAbly() {
             try {
                 if (typeof Ably === 'undefined') {
@@ -2292,6 +2280,24 @@
                     if (!matchmakingChannel) {
                         matchmakingChannel = ablyClient.channels.get('matchmaking');
                         presenceEnter();
+                        // گوش دادن به تغییرات حضور
+                        matchmakingChannel.presence.subscribe(function(msg) {
+                            if (msg.action === 'enter' || msg.action === 'update') {
+                                var data = msg.data || {};
+                                if (data.userId && data.userId !== DataManager.get('userId', '')) {
+                                    var action = data.action || 'آنلاین';
+                                    userActions[data.userId] = action;
+                                    updateLiveUsers();
+                                }
+                            }
+                            if (msg.action === 'leave') {
+                                var data = msg.data || {};
+                                if (data.userId) {
+                                    delete userActions[data.userId];
+                                    updateLiveUsers();
+                                }
+                            }
+                        });
                     }
                 });
                 ablyClient.connection.on('disconnected', function() {
@@ -2319,16 +2325,483 @@
                 var p = DataManager.getPlayer();
                 if (!matchmakingChannel || !p.email) return;
                 matchmakingChannel.presence.enter({
-                    userId: p.email,
+                    userId: p.userId,
+                    email: p.email,
                     userName: p.name,
                     level: p.level,
                     avatar: p.avatar,
                     status: 'online',
-                    inMatch: false,
+                    action: 'آنلاین',
                     sessionId: DataManager.get('sessionId', '')
                 });
             } catch (e) { console.warn('Presence enter error:', e); }
         }
+
+        // ============================================================
+        //  ✏️  Rename System
+        // ============================================================
+
+        var RenameManager = {
+            isOpen: false,
+
+            open: function() {
+                var p = DataManager.getPlayer();
+                if (!p.isLoggedIn) {
+                    ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
+                    return;
+                }
+
+                var cost = this.getCost();
+                var costInfo = $('renameCostInfo');
+                var input = $('renameInput');
+                var dialog = $('renameDialog');
+
+                if (cost === 0) {
+                    if (costInfo) costInfo.textContent = '🎁 بار اول رایگان!';
+                } else {
+                    if (costInfo) costInfo.textContent = '💰 هزینه: ' + cost + ' سکه';
+                }
+
+                if (input) {
+                    input.value = p.name || '';
+                    input.focus();
+                    input.select();
+                }
+
+                if (dialog) dialog.classList.add('active');
+                this.isOpen = true;
+            },
+
+            close: function() {
+                var dialog = $('renameDialog');
+                if (dialog) dialog.classList.remove('active');
+                this.isOpen = false;
+            },
+
+            getCost: function() {
+                var p = DataManager.getPlayer();
+                var renameCount = p.renameCount || 0;
+                if (CONFIG.FIRST_RENAME_FREE && renameCount === 0) {
+                    return 0;
+                }
+                return CONFIG.RENAME_COST;
+            },
+
+            confirm: function() {
+                var input = $('renameInput');
+                if (!input) return;
+
+                var newName = input.value.trim();
+                if (!newName || newName.length < 2 || newName.length > 20) {
+                    ToastManager.show('❌ نام باید بین ۲ تا ۲۰ کاراکتر باشد', 2000);
+                    return;
+                }
+
+                var p = DataManager.getPlayer();
+                var cost = this.getCost();
+
+                if (cost > 0 && p.coins < cost) {
+                    ToastManager.show('❌ سکه کافی نیست! نیاز به ' + cost + ' سکه دارید', 2000);
+                    return;
+                }
+
+                // ثبت تغییر
+                var newCoins = p.coins - cost;
+                var newRenameCount = (p.renameCount || 0) + 1;
+
+                DataManager.set('userName', newName);
+                DataManager.set('coins', newCoins);
+                DataManager.set('renameCount', newRenameCount);
+
+                // ذخیره در سرور
+                var email = p.email;
+                BackendlessService.findUser("email = '" + email + "'")
+                    .then(function(userData) {
+                        if (userData) {
+                            return BackendlessService.saveUser({
+                                objectId: userData.objectId,
+                                userName: newName,
+                                coins: newCoins,
+                                renameCount: newRenameCount
+                            });
+                        }
+                    })
+                    .then(function() {
+                        ToastManager.show('✅ نام شما با موفقیت تغییر کرد!', 1500);
+                        updateUI();
+                        this.close();
+                        // به‌روزرسانی حضور
+                        if (matchmakingChannel) {
+                            matchmakingChannel.presence.update({
+                                userName: newName
+                            });
+                        }
+                    }.bind(this))
+                    .catch(function(err) {
+                        console.error('Rename error:', err);
+                        ToastManager.show('❌ خطا در تغییر نام', 2000);
+                    });
+            }
+        };
+
+        // ============================================================
+        //  👑  Admin Functions
+        // ============================================================
+
+        var adminUsers = [];
+
+        function loadAdminPanel() {
+            var p = DataManager.getPlayer();
+            if (!p.isAdmin && p.role !== 'owner') {
+                ToastManager.show('⛔ شما دسترسی به این بخش را ندارید', 2000);
+                return;
+            }
+            var panel = $('adminPanel');
+            if (panel) panel.classList.add('active');
+
+            var badge = $('adminRoleBadge');
+            if (badge) {
+                if (p.role === 'owner') {
+                    badge.className = 'badge-owner';
+                    badge.textContent = '👑 سازنده اصلی';
+                } else if (p.isAdmin || p.role === 'admin') {
+                    badge.className = 'badge-admin';
+                    badge.textContent = '🛡️ مدیر';
+                } else {
+                    badge.className = 'badge-admin';
+                    badge.textContent = '👤 کاربر';
+                }
+            }
+
+            BackendlessService.findUsers(null, 'created DESC', 50)
+                .then(function(users) {
+                    adminUsers = users || [];
+                    updateAdminStats(users);
+                    renderAdminUsers(users);
+                })
+                .catch(function() {});
+        }
+
+        function updateAdminStats(users) {
+            var now = new Date();
+            var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            var weekAgo = new Date(today);
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            var monthAgo = new Date(today);
+            monthAgo.setMonth(monthAgo.getMonth() - 1);
+            var online = users.filter(function(u) { return u.onlineStatus === true; });
+            var offline = users.filter(function(u) { return u.onlineStatus !== true; });
+            var banned = users.filter(function(u) { return u.isBanned === true; });
+            var todayUsers = users.filter(function(u) { return new Date(u.created) >= today; });
+            var weekUsers = users.filter(function(u) { return new Date(u.created) >= weekAgo; });
+            var monthUsers = users.filter(function(u) { return new Date(u.created) >= monthAgo; });
+            var total = $('adminTotalUsers');
+            var onlineEl = $('adminOnlineUsers');
+            var offlineEl = $('adminOfflineUsers');
+            var bannedEl = $('adminBannedUsers');
+            var roomsEl = $('adminActiveRooms');
+            var todayEl = $('adminTodayUsers');
+            var weekEl = $('adminWeekUsers');
+            var monthEl = $('adminMonthUsers');
+            if (total) total.textContent = users.length;
+            if (onlineEl) onlineEl.textContent = online.length;
+            if (offlineEl) offlineEl.textContent = offline.length;
+            if (bannedEl) bannedEl.textContent = banned.length;
+            if (roomsEl) roomsEl.textContent = LobbyManager.lobbies.length;
+            if (todayEl) todayEl.textContent = todayUsers.length;
+            if (weekEl) weekEl.textContent = weekUsers.length;
+            if (monthEl) monthEl.textContent = monthUsers.length;
+
+            var roomsStatus = $('roomsStatus');
+            if (roomsStatus) {
+                if (LobbyManager.isShutdown) {
+                    roomsStatus.textContent = '🚫 لابی‌ها بسته شده‌اند';
+                    roomsStatus.style.color = 'var(--danger)';
+                } else {
+                    roomsStatus.textContent = '⏳ لابی‌ها در حال بروزرسانی هستند';
+                    roomsStatus.style.color = 'var(--warning)';
+                }
+            }
+        }
+
+        function renderAdminUsers(users) {
+            var list = $('adminUsersList');
+            if (!list) return;
+            list.innerHTML = '';
+            var searchInput = $('adminSearchInput');
+            var searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            var filtered = users;
+            if (searchTerm) {
+                filtered = filtered.filter(function(u) {
+                    return (u.userName && u.userName.toLowerCase().indexOf(searchTerm) !== -1) ||
+                        (u.email && u.email.toLowerCase().indexOf(searchTerm) !== -1);
+                });
+            }
+            if (filtered.length === 0) {
+                list.innerHTML =
+                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);font-family:Vazirmatn,sans-serif;">کاربری یافت نشد</div>';
+                return;
+            }
+            var sliced = filtered.slice(0, 50);
+            var p = DataManager.getPlayer();
+            for (var i = 0; i < sliced.length; i++) {
+                var user = sliced[i];
+                var item = document.createElement('div');
+                item.className = 'admin-user-item';
+                var isOnline = user.onlineStatus === true;
+                var isBanned = user.isBanned === true;
+                var isAdminUser = CONFIG.ADMIN_EMAILS.indexOf(user.email) !== -1 || user.role === 'admin' || user
+                .role === 'owner';
+                var isOwnerUser = user.role === 'owner' || user.email === CONFIG.OWNER_EMAIL;
+                var userRole = user.role || 'user';
+                var isCurrentUser = user.email === p.email;
+
+                var roleBadge = '';
+                if (isOwnerUser) {
+                    roleBadge = '<span class="role-badge owner">👑 سازنده</span>';
+                } else if (isAdminUser) {
+                    roleBadge = '<span class="role-badge admin">🛡️ مدیر</span>';
+                } else {
+                    roleBadge = '<span class="role-badge user">👤 کاربر</span>';
+                }
+
+                // مخفی کردن ایمیل سازنده
+                var displayEmail = user.email;
+                if (user.email === CONFIG.OWNER_EMAIL) {
+                    displayEmail = '••••••••';
+                }
+
+                item.innerHTML = `
+                        <div class="info">
+                            <div class="avatar">${user.avatar || '👤'}</div>
+                            <div class="details">
+                                <div class="name">
+                                    ${user.userName || 'بی‌نام'} 
+                                    <span class="${isOnline ? 'status-online' : 'status-offline'}"></span>
+                                    ${isBanned ? '⛔' : ''}
+                                    ${roleBadge}
+                                    ${isCurrentUser ? '<span style="font-size:9px;color:var(--gold);">(شما)</span>' : ''}
+                                </div>
+                                <div class="sub">
+                                    ${displayEmail} • سطح ${user.level || 1} • 🪙 ${user.coins || 0} • 💎 ${user.diamonds || 0} • 🏆 ${user.cups || 0}
+                                    ${user.renameCount > 0 ? '• ✏️ ' + user.renameCount : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            ${!isOwnerUser && !isCurrentUser ? `
+                                ${isBanned ? 
+                                    `<button class="unban-btn" onclick="adminUnban('${user.objectId}')">رفع بن</button>` :
+                                    `<button class="ban-btn" onclick="adminBan('${user.objectId}')">بن</button>`
+                                }
+                                <button class="edit-btn" onclick="adminEdit('${user.objectId}')"><i class="fas fa-edit"></i></button>
+                                ${(p.role === 'owner' || p.permissions.includes('manage_admins')) && !isAdminUser ? `
+                                    <button class="make-admin-btn" onclick="adminMakeAdmin('${user.objectId}')">ساخت ادمین</button>
+                                ` : ''}
+                                ${(p.role === 'owner') && isAdminUser ? `
+                                    <button class="remove-admin-btn" onclick="adminRemoveAdmin('${user.objectId}')">برداشتن ادمین</button>
+                                ` : ''}
+                            ` : ''}
+                        </div>
+                    `;
+                list.appendChild(item);
+            }
+        }
+
+        function adminMakeAdmin(userId) {
+            var p = DataManager.getPlayer();
+            if (p.role !== 'owner' && !p.permissions.includes('manage_admins')) {
+                ToastManager.show('⛔ فقط سازنده اصلی می‌تواند ادمین بسازد', 2000);
+                return;
+            }
+            if (!confirm('آیا از ساخت ادمین برای این کاربر مطمئن هستید؟')) return;
+            var user = adminUsers.find(function(u) { return u.objectId === userId; });
+            if (user && CONFIG.ADMIN_EMAILS.indexOf(user.email) !== -1) {
+                ToastManager.show('ℹ️ این کاربر قبلاً ادمین است', 1500);
+                return;
+            }
+            BackendlessService.saveUser({
+                objectId: userId,
+                role: 'admin',
+                permissions: ['manage_users', 'manage_rooms', 'view_logs', 'ban_users']
+            }).then(function() {
+                ToastManager.show('✅ کاربر ادمین شد', 1500);
+                loadAdminPanel();
+                BackendlessService.saveLog('make_admin', { userId: userId });
+            }).catch(function() {});
+        }
+
+        function adminRemoveAdmin(userId) {
+            var p = DataManager.getPlayer();
+            if (p.role !== 'owner') {
+                ToastManager.show('⛔ فقط سازنده اصلی می‌تواند ادمین را بردارد', 2000);
+                return;
+            }
+            if (!confirm('آیا از برداشتن دسترسی ادمین برای این کاربر مطمئن هستید؟')) return;
+            var user = adminUsers.find(function(u) { return u.objectId === userId; });
+            if (user && user.email === CONFIG.OWNER_EMAIL) {
+                ToastManager.show('⛔ نمی‌توانید سازنده اصلی را تغییر دهید', 2000);
+                return;
+            }
+            BackendlessService.saveUser({
+                objectId: userId,
+                role: 'user',
+                permissions: []
+            }).then(function() {
+                ToastManager.show('✅ دسترسی ادمین برداشته شد', 1500);
+                loadAdminPanel();
+                BackendlessService.saveLog('remove_admin', { userId: userId });
+            }).catch(function() {});
+        }
+
+        function adminBan(userId) {
+            var p = DataManager.getPlayer();
+            if (!p.isAdmin && p.role !== 'owner') {
+                ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
+                return;
+            }
+            if (!confirm('آیا از مسدود کردن این کاربر مطمئن هستید؟')) return;
+            BackendlessService.saveUser({ objectId: userId, isBanned: true, banExpiry: null })
+                .then(function() { ToastManager.show('✅ کاربر مسدود شد', 1500);
+                    loadAdminPanel(); })
+                .catch(function() {});
+        }
+
+        function adminUnban(userId) {
+            var p = DataManager.getPlayer();
+            if (!p.isAdmin && p.role !== 'owner') {
+                ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
+                return;
+            }
+            if (!confirm('آیا از برداشتن مسدودی این کاربر مطمئن هستید؟')) return;
+            BackendlessService.saveUser({ objectId: userId, isBanned: false, banExpiry: null })
+                .then(function() { ToastManager.show('✅ مسدودی برداشته شد', 1500);
+                    loadAdminPanel(); })
+                .catch(function() {});
+        }
+
+        function adminEdit(userId) {
+            var p = DataManager.getPlayer();
+            if (!p.isAdmin && p.role !== 'owner') {
+                ToastManager.show('⛔ شما دسترسی مدیریت کاربران ندارید', 2000);
+                return;
+            }
+            var user = adminUsers.find(function(u) { return u.objectId === userId; });
+            if (!user) { ToastManager.show('❌ کاربر یافت نشد', 1500); return; }
+            if (user.email === CONFIG.OWNER_EMAIL) {
+                ToastManager.show('⛔ نمی‌توانید سازنده اصلی را ویرایش کنید', 2000);
+                return;
+            }
+            var choice = prompt('عملیات:\n1. تغییر نام\n2. تغییر لیگ\n3. تغییر کاپ\n4. افزودن سکه\n5. کم کردن سکه\n6. افزودن الماس\n7. کم کردن الماس');
+            if (!choice) return;
+            var idx = parseInt(choice) - 1;
+            if (idx < 0 || idx >= 7) { ToastManager.show('❌ انتخاب نامعتبر', 1500); return; }
+            switch (idx) {
+                case 0: {
+                    var newName = prompt('نام جدید:');
+                    if (newName && newName.trim()) {
+                        BackendlessService.saveUser({ objectId: userId, userName: newName.trim() })
+                            .then(function() { ToastManager.show('✅ نام تغییر کرد', 1500);
+                                loadAdminPanel(); })
+                            .catch(function() {});
+                    }
+                    break;
+                }
+                case 1: {
+                    var leagueMap = ['برنز', 'نقره', 'طلا', 'الماس', 'کریستال', 'مستر', 'لجند'];
+                    var lChoice = prompt('لیگ جدید (1-7)');
+                    if (lChoice) {
+                        var lIdx = parseInt(lChoice) - 1;
+                        if (lIdx >= 0 && lIdx < 7) {
+                            BackendlessService.saveUser({ objectId: userId, league: leagueMap[lIdx], leagueLevel: lIdx +
+                                    1 })
+                                .then(function() { ToastManager.show('✅ لیگ تغییر کرد', 1500);
+                                    loadAdminPanel(); })
+                                .catch(function() {});
+                        }
+                    }
+                    break;
+                }
+                case 2: {
+                    var newCups = prompt('تعداد کاپ جدید:');
+                    if (newCups && !isNaN(newCups)) {
+                        BackendlessService.saveUser({ objectId: userId, cups: parseInt(newCups) })
+                            .then(function() { ToastManager.show('✅ کاپ تغییر کرد', 1500);
+                                loadAdminPanel(); })
+                            .catch(function() {});
+                    }
+                    break;
+                }
+                case 3: {
+                    var amount = prompt('مقدار سکه برای افزودن:');
+                    if (amount && !isNaN(amount)) {
+                        BackendlessService.saveUser({ objectId: userId, coins: (user.coins || 0) + parseInt(amount) })
+                            .then(function() { ToastManager.show('✅ سکه افزوده شد', 1500);
+                                loadAdminPanel(); })
+                            .catch(function() {});
+                    }
+                    break;
+                }
+                case 4: {
+                    var amount = prompt('مقدار سکه برای کم کردن:');
+                    if (amount && !isNaN(amount)) {
+                        BackendlessService.saveUser({ objectId: userId, coins: Math.max(0, (user.coins || 0) - parseInt(
+                                amount)) })
+                            .then(function() { ToastManager.show('✅ سکه کم شد', 1500);
+                                loadAdminPanel(); })
+                            .catch(function() {});
+                    }
+                    break;
+                }
+                case 5: {
+                    var amount = prompt('مقدار الماس برای افزودن:');
+                    if (amount && !isNaN(amount)) {
+                        BackendlessService.saveUser({ objectId: userId, diamonds: (user.diamonds || 0) + parseInt(amount) })
+                            .then(function() { ToastManager.show('✅ الماس افزوده شد', 1500);
+                                loadAdminPanel(); })
+                            .catch(function() {});
+                    }
+                    break;
+                }
+                case 6: {
+                    var amount = prompt('مقدار الماس برای کم کردن:');
+                    if (amount && !isNaN(amount)) {
+                        BackendlessService.saveUser({ objectId: userId, diamonds: Math.max(0, (user.diamonds || 0) -
+                                parseInt(amount)) })
+                            .then(function() { ToastManager.show('✅ الماس کم شد', 1500);
+                                loadAdminPanel(); })
+                            .catch(function() {});
+                    }
+                    break;
+                }
+            }
+        }
+
+        // ============================================================
+        //  🎯  Event Listeners
+        // ============================================================
+
+        // ===== Rename Events =====
+        safeAddListener('usernameLabel', 'click', function() {
+            RenameManager.open();
+        });
+
+        safeAddListener('renameCancel', 'click', function() {
+            RenameManager.close();
+        });
+
+        safeAddListener('renameConfirm', 'click', function() {
+            RenameManager.confirm();
+        });
+
+        safeAddListener('renameInput', 'keydown', function(e) {
+            if (e.key === 'Enter') {
+                RenameManager.confirm();
+            }
+            if (e.key === 'Escape') {
+                RenameManager.close();
+            }
+        });
 
         // ===== Auth Events =====
         safeAddListener('switchToRegister', 'click', function() {
@@ -2546,333 +3019,7 @@
         }
 
         // ============================================================
-        //  👑  Admin Functions
-        // ============================================================
-
-        var adminUsers = [];
-
-        function loadAdminPanel() {
-            var p = DataManager.getPlayer();
-            if (!p.isAdmin && p.role !== 'owner') {
-                ToastManager.show('⛔ شما دسترسی به این بخش را ندارید', 2000);
-                return;
-            }
-            var panel = $('adminPanel');
-            if (panel) panel.classList.add('active');
-
-            var badge = $('adminRoleBadge');
-            if (badge) {
-                if (p.role === 'owner') {
-                    badge.className = 'badge-owner';
-                    badge.textContent = '👑 سازنده اصلی';
-                } else if (p.isAdmin || p.role === 'admin') {
-                    badge.className = 'badge-admin';
-                    badge.textContent = '🛡️ مدیر';
-                } else {
-                    badge.className = 'badge-admin';
-                    badge.textContent = '👤 کاربر';
-                }
-            }
-
-            BackendlessService.findUsers(null, 'created DESC', 50)
-                .then(function(users) {
-                    adminUsers = users || [];
-                    updateAdminStats(users);
-                    renderAdminUsers(users);
-                })
-                .catch(function() {});
-        }
-
-        function updateAdminStats(users) {
-            var now = new Date();
-            var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            var weekAgo = new Date(today);
-            weekAgo.setDate(weekAgo.getDate() - 7);
-            var monthAgo = new Date(today);
-            monthAgo.setMonth(monthAgo.getMonth() - 1);
-            var online = users.filter(function(u) { return u.onlineStatus === true; });
-            var offline = users.filter(function(u) { return u.onlineStatus !== true; });
-            var banned = users.filter(function(u) { return u.isBanned === true; });
-            var todayUsers = users.filter(function(u) { return new Date(u.created) >= today; });
-            var weekUsers = users.filter(function(u) { return new Date(u.created) >= weekAgo; });
-            var monthUsers = users.filter(function(u) { return new Date(u.created) >= monthAgo; });
-            var total = $('adminTotalUsers');
-            var onlineEl = $('adminOnlineUsers');
-            var offlineEl = $('adminOfflineUsers');
-            var bannedEl = $('adminBannedUsers');
-            var roomsEl = $('adminActiveRooms');
-            var todayEl = $('adminTodayUsers');
-            var weekEl = $('adminWeekUsers');
-            var monthEl = $('adminMonthUsers');
-            if (total) total.textContent = users.length;
-            if (onlineEl) onlineEl.textContent = online.length;
-            if (offlineEl) offlineEl.textContent = offline.length;
-            if (bannedEl) bannedEl.textContent = banned.length;
-            if (roomsEl) roomsEl.textContent = LobbyManager.lobbies.length;
-            if (todayEl) todayEl.textContent = todayUsers.length;
-            if (weekEl) weekEl.textContent = weekUsers.length;
-            if (monthEl) monthEl.textContent = monthUsers.length;
-
-            var roomsStatus = $('roomsStatus');
-            if (roomsStatus) {
-                if (LobbyManager.isShutdown) {
-                    roomsStatus.textContent = '🚫 لابی‌ها بسته شده‌اند';
-                    roomsStatus.style.color = 'var(--danger)';
-                } else {
-                    roomsStatus.textContent = '⏳ لابی‌ها در حال بروزرسانی هستند';
-                    roomsStatus.style.color = 'var(--warning)';
-                }
-            }
-        }
-
-        function renderAdminUsers(users) {
-            var list = $('adminUsersList');
-            if (!list) return;
-            list.innerHTML = '';
-            var searchInput = $('adminSearchInput');
-            var searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-            var filtered = users;
-            if (searchTerm) {
-                filtered = filtered.filter(function(u) {
-                    return (u.userName && u.userName.toLowerCase().indexOf(searchTerm) !== -1) ||
-                        (u.email && u.email.toLowerCase().indexOf(searchTerm) !== -1);
-                });
-            }
-            if (filtered.length === 0) {
-                list.innerHTML =
-                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);font-family:Vazirmatn,sans-serif;">کاربری یافت نشد</div>';
-                return;
-            }
-            var sliced = filtered.slice(0, 50);
-            var p = DataManager.getPlayer();
-            for (var i = 0; i < sliced.length; i++) {
-                var user = sliced[i];
-                var item = document.createElement('div');
-                item.className = 'admin-user-item';
-                var isOnline = user.onlineStatus === true;
-                var isBanned = user.isBanned === true;
-                var isAdminUser = CONFIG.ADMIN_EMAILS.indexOf(user.email) !== -1 || user.role === 'admin' || user
-                .role === 'owner';
-                var isOwnerUser = user.role === 'owner' || user.email === CONFIG.OWNER_EMAIL;
-                var userRole = user.role || 'user';
-                var isCurrentUser = user.email === p.email;
-
-                var roleBadge = '';
-                if (isOwnerUser) {
-                    roleBadge = '<span class="role-badge owner">👑 سازنده</span>';
-                } else if (isAdminUser) {
-                    roleBadge = '<span class="role-badge admin">🛡️ مدیر</span>';
-                } else {
-                    roleBadge = '<span class="role-badge user">👤 کاربر</span>';
-                }
-
-                item.innerHTML = `
-                        <div class="info">
-                            <div class="avatar">${user.avatar || '👤'}</div>
-                            <div class="details">
-                                <div class="name">
-                                    ${user.userName || 'بی‌نام'} 
-                                    <span class="${isOnline ? 'status-online' : 'status-offline'}"></span>
-                                    ${isBanned ? '⛔' : ''}
-                                    ${roleBadge}
-                                    ${isCurrentUser ? '<span style="font-size:9px;color:var(--gold);">(شما)</span>' : ''}
-                                </div>
-                                <div class="sub">
-                                    ${user.email} • سطح ${user.level || 1} • 🪙 ${user.coins || 0} • 💎 ${user.diamonds || 0} • 🏆 ${user.cups || 0}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            ${!isOwnerUser && !isCurrentUser ? `
-                                ${isBanned ? 
-                                    `<button class="unban-btn" onclick="adminUnban('${user.objectId}')">رفع بن</button>` :
-                                    `<button class="ban-btn" onclick="adminBan('${user.objectId}')">بن</button>`
-                                }
-                                <button class="edit-btn" onclick="adminEdit('${user.objectId}')"><i class="fas fa-edit"></i></button>
-                                ${(p.role === 'owner' || p.permissions.includes('manage_admins')) && !isAdminUser ? `
-                                    <button class="make-admin-btn" onclick="adminMakeAdmin('${user.objectId}')">ساخت ادمین</button>
-                                ` : ''}
-                                ${(p.role === 'owner') && isAdminUser ? `
-                                    <button class="remove-admin-btn" onclick="adminRemoveAdmin('${user.objectId}')">برداشتن ادمین</button>
-                                ` : ''}
-                            ` : ''}
-                        </div>
-                    `;
-                list.appendChild(item);
-            }
-        }
-
-        function adminMakeAdmin(userId) {
-            var p = DataManager.getPlayer();
-            if (p.role !== 'owner' && !p.permissions.includes('manage_admins')) {
-                ToastManager.show('⛔ فقط سازنده اصلی می‌تواند ادمین بسازد', 2000);
-                return;
-            }
-            if (!confirm('آیا از ساخت ادمین برای این کاربر مطمئن هستید؟')) return;
-            var user = adminUsers.find(function(u) { return u.objectId === userId; });
-            if (user && CONFIG.ADMIN_EMAILS.indexOf(user.email) !== -1) {
-                ToastManager.show('ℹ️ این کاربر قبلاً ادمین است', 1500);
-                return;
-            }
-            BackendlessService.saveUser({
-                objectId: userId,
-                role: 'admin',
-                permissions: ['manage_users', 'manage_rooms', 'view_logs', 'ban_users']
-            }).then(function() {
-                ToastManager.show('✅ کاربر ادمین شد', 1500);
-                loadAdminPanel();
-                BackendlessService.saveLog('make_admin', { userId: userId });
-            }).catch(function() {});
-        }
-
-        function adminRemoveAdmin(userId) {
-            var p = DataManager.getPlayer();
-            if (p.role !== 'owner') {
-                ToastManager.show('⛔ فقط سازنده اصلی می‌تواند ادمین را بردارد', 2000);
-                return;
-            }
-            if (!confirm('آیا از برداشتن دسترسی ادمین برای این کاربر مطمئن هستید؟')) return;
-            var user = adminUsers.find(function(u) { return u.objectId === userId; });
-            if (user && user.email === CONFIG.OWNER_EMAIL) {
-                ToastManager.show('⛔ نمی‌توانید سازنده اصلی را تغییر دهید', 2000);
-                return;
-            }
-            BackendlessService.saveUser({
-                objectId: userId,
-                role: 'user',
-                permissions: []
-            }).then(function() {
-                ToastManager.show('✅ دسترسی ادمین برداشته شد', 1500);
-                loadAdminPanel();
-                BackendlessService.saveLog('remove_admin', { userId: userId });
-            }).catch(function() {});
-        }
-
-        function adminBan(userId) {
-            var p = DataManager.getPlayer();
-            if (!p.isAdmin && p.role !== 'owner') {
-                ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
-                return;
-            }
-            if (!confirm('آیا از مسدود کردن این کاربر مطمئن هستید؟')) return;
-            BackendlessService.saveUser({ objectId: userId, isBanned: true, banExpiry: null })
-                .then(function() { ToastManager.show('✅ کاربر مسدود شد', 1500);
-                    loadAdminPanel(); })
-                .catch(function() {});
-        }
-
-        function adminUnban(userId) {
-            var p = DataManager.getPlayer();
-            if (!p.isAdmin && p.role !== 'owner') {
-                ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
-                return;
-            }
-            if (!confirm('آیا از برداشتن مسدودی این کاربر مطمئن هستید؟')) return;
-            BackendlessService.saveUser({ objectId: userId, isBanned: false, banExpiry: null })
-                .then(function() { ToastManager.show('✅ مسدودی برداشته شد', 1500);
-                    loadAdminPanel(); })
-                .catch(function() {});
-        }
-
-        function adminEdit(userId) {
-            var p = DataManager.getPlayer();
-            if (!p.isAdmin && p.role !== 'owner') {
-                ToastManager.show('⛔ شما دسترسی مدیریت کاربران ندارید', 2000);
-                return;
-            }
-            var user = adminUsers.find(function(u) { return u.objectId === userId; });
-            if (!user) { ToastManager.show('❌ کاربر یافت نشد', 1500); return; }
-            if (user.email === CONFIG.OWNER_EMAIL) {
-                ToastManager.show('⛔ نمی‌توانید سازنده اصلی را ویرایش کنید', 2000);
-                return;
-            }
-            var choice = prompt('عملیات:\n1. تغییر نام\n2. تغییر لیگ\n3. تغییر کاپ\n4. افزودن سکه\n5. کم کردن سکه\n6. افزودن الماس\n7. کم کردن الماس');
-            if (!choice) return;
-            var idx = parseInt(choice) - 1;
-            if (idx < 0 || idx >= 7) { ToastManager.show('❌ انتخاب نامعتبر', 1500); return; }
-            switch (idx) {
-                case 0: {
-                    var newName = prompt('نام جدید:');
-                    if (newName && newName.trim()) {
-                        BackendlessService.saveUser({ objectId: userId, userName: newName.trim() })
-                            .then(function() { ToastManager.show('✅ نام تغییر کرد', 1500);
-                                loadAdminPanel(); })
-                            .catch(function() {});
-                    }
-                    break;
-                }
-                case 1: {
-                    var leagueMap = ['برنز', 'نقره', 'طلا', 'الماس', 'کریستال', 'مستر', 'لجند'];
-                    var lChoice = prompt('لیگ جدید (1-7)');
-                    if (lChoice) {
-                        var lIdx = parseInt(lChoice) - 1;
-                        if (lIdx >= 0 && lIdx < 7) {
-                            BackendlessService.saveUser({ objectId: userId, league: leagueMap[lIdx], leagueLevel: lIdx +
-                                    1 })
-                                .then(function() { ToastManager.show('✅ لیگ تغییر کرد', 1500);
-                                    loadAdminPanel(); })
-                                .catch(function() {});
-                        }
-                    }
-                    break;
-                }
-                case 2: {
-                    var newCups = prompt('تعداد کاپ جدید:');
-                    if (newCups && !isNaN(newCups)) {
-                        BackendlessService.saveUser({ objectId: userId, cups: parseInt(newCups) })
-                            .then(function() { ToastManager.show('✅ کاپ تغییر کرد', 1500);
-                                loadAdminPanel(); })
-                            .catch(function() {});
-                    }
-                    break;
-                }
-                case 3: {
-                    var amount = prompt('مقدار سکه برای افزودن:');
-                    if (amount && !isNaN(amount)) {
-                        BackendlessService.saveUser({ objectId: userId, coins: (user.coins || 0) + parseInt(amount) })
-                            .then(function() { ToastManager.show('✅ سکه افزوده شد', 1500);
-                                loadAdminPanel(); })
-                            .catch(function() {});
-                    }
-                    break;
-                }
-                case 4: {
-                    var amount = prompt('مقدار سکه برای کم کردن:');
-                    if (amount && !isNaN(amount)) {
-                        BackendlessService.saveUser({ objectId: userId, coins: Math.max(0, (user.coins || 0) - parseInt(
-                                amount)) })
-                            .then(function() { ToastManager.show('✅ سکه کم شد', 1500);
-                                loadAdminPanel(); })
-                            .catch(function() {});
-                    }
-                    break;
-                }
-                case 5: {
-                    var amount = prompt('مقدار الماس برای افزودن:');
-                    if (amount && !isNaN(amount)) {
-                        BackendlessService.saveUser({ objectId: userId, diamonds: (user.diamonds || 0) + parseInt(amount) })
-                            .then(function() { ToastManager.show('✅ الماس افزوده شد', 1500);
-                                loadAdminPanel(); })
-                            .catch(function() {});
-                    }
-                    break;
-                }
-                case 6: {
-                    var amount = prompt('مقدار الماس برای کم کردن:');
-                    if (amount && !isNaN(amount)) {
-                        BackendlessService.saveUser({ objectId: userId, diamonds: Math.max(0, (user.diamonds || 0) -
-                                parseInt(amount)) })
-                            .then(function() { ToastManager.show('✅ الماس کم شد', 1500);
-                                loadAdminPanel(); })
-                            .catch(function() {});
-                    }
-                    break;
-                }
-            }
-        }
-
-        // ============================================================
-        //  🚀  Boot
+        //  🚀  UI Functions
         // ============================================================
 
         function openAvatarShop() {
@@ -3180,6 +3327,7 @@
             if (label) {
                 label.textContent = name.length > 10 ? name.substring(0, 10) + '...' : name;
                 label.classList.add('show');
+                label.title = '✏️ کلیک برای تغییر نام';
             }
             var logout = $('logoutBtn');
             if (logout) logout.classList.add('show');
@@ -3367,6 +3515,9 @@
                                             console.log('🔑 API_KEY:', CONFIG.API_KEY);
                                             console.log('👑 سازنده اصلی: tiger.mafia.best@gmail.com');
                                             console.log('🛡️ مدیر: mohammadjavad1160yt@gmail.com');
+                                            console.log('✅ ایمیل سازنده در لیست کاربران مخفی شد');
+                                            console.log('✏️ تغییر اسم با سکه فعال شد');
+                                            console.log('📡 استریم زنده واقعی با Ably');
                                         }, 500);
                                     }, 500);
                                 }, 500);
@@ -3388,15 +3539,15 @@
 
         setTimeout(boot, 300);
 
-        console.log('🎮 مافیا بیس — نسخه نهایی');
+        console.log('🎮 مافیا بیس — نسخه نهایی با رفع مشکلات');
         console.log('🔑 APP_ID:', CONFIG.APP_ID);
         console.log('🔑 API_KEY:', CONFIG.API_KEY);
         console.log('👑 سازنده اصلی: tiger.mafia.best@gmail.com');
         console.log('🛡️ مدیر: mohammadjavad1160yt@gmail.com');
-        console.log('✅ خطاها به کاربر نمایش داده نمیشوند');
-        console.log('✅ اسپینر به جای پیام خطا');
-        console.log('✅ محدودیت ۵۰ درخواست مدیریت شده');
-        console.log('📡 پخش زنده با کاهش درخواست');
+        console.log('✅ ایمیل سازنده در لیست کاربران مخفی شد');
+        console.log('✏️ تغییر اسم با سکه فعال شد (بار اول رایگان)');
+        console.log('📡 استریم زنده واقعی با Ably');
+        console.log('📱 کاربران آنلاین به صورت لحظه‌ای');
     </script>
 </body>
 </html>
