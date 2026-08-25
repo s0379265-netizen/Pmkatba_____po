@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>مافیا بیس - لابی واقعی با صدا</title>
+    <title>مافیا بیس - چت آنلاین جهانی</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <script src="https://api.backendless.com/sdk/js/latest/backendless.min.js"></script>
@@ -21,7 +21,6 @@
         .auth-box .auth-btn.loading{position:relative;color:transparent !important}.auth-box .auth-btn.loading::after{content:'';position:absolute;width:24px;height:24px;border:3px solid rgba(255,255,255,0.1);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite}
         #app{display:none;width:100vw;height:100vh;position:relative;z-index:1;flex-direction:column;justify-content:center;align-items:center;padding:20px 20px 0 20px}#app.active{display:flex}.menu-container{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative;z-index:2;height:100%;flex:1}
         .top-row{position:fixed;top:16px;left:16px;right:16px;z-index:50;display:flex;align-items:center;justify-content:flex-start;gap:10px;max-width:440px;margin:0 auto}@media(max-width:480px){.top-row{top:12px;left:12px;right:12px;gap:6px}}.profile-wrapper{display:flex;align-items:center;gap:8px;cursor:pointer;transition:var(--transition);padding:2px;flex-shrink:0;position:relative}.profile-wrapper:active{transform:scale(.92)}.profile-avatar-wrap{position:relative;display:flex;align-items:center;justify-content:center}.profile-avatar-wrap .profile-glow{position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,180,255,.06)0%,transparent 70%);filter:blur(25px);opacity:0;transition:opacity .6s ease;pointer-events:none}.profile-wrapper:hover .profile-glow{opacity:1}.profile-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;background:conic-gradient(from 0deg,var(--neon-blue)0%,var(--teal)30%,var(--neon-blue-dark)60%,var(--neon-blue)100%);background-size:300%300%;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#fff calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#fff calc(100% - 2px));animation:ringSpin 4s linear infinite;opacity:.6}@keyframes ringSpin{0%{background-position:0%50%}100%{background-position:300%50%}}.profile-avatar-container{width:56px;height:56px;border-radius:50%;position:relative;z-index:2;background:linear-gradient(145deg,rgba(10,22,40,.85),rgba(0,10,30,.95));border:2px solid rgba(0,180,255,.08);box-shadow:0 0 40px rgba(0,180,255,.03),inset 0 2px 0 rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:var(--transition);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}@media(max-width:480px){.profile-avatar-container{width:44px;height:44px}.profile-ring{inset:-6px}}.profile-avatar-container .avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}.profile-avatar-container .avatar-placeholder{font-size:24px;color:var(--neon-blue);filter:drop-shadow(0 0 10px rgba(0,180,255,.1))}.status-dot{position:absolute;bottom:2px;right:2px;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--success),#00CC66);border:2.5px solid rgba(10,22,40,.9);z-index:5;box-shadow:0 0 20px rgba(0,255,136,.3);animation:statusPulse 2s ease-in-out infinite}@keyframes statusPulse{0%,100%{box-shadow:0 0 20px rgba(0,255,136,.3)}50%{box-shadow:0 0 40px rgba(0,255,136,.6)}}@media(max-width:480px){.status-dot{width:11px;height:11px;bottom:0;right:0;border-width:2px}}
-        /* ===== اسم کاربر قابل کلیک برای تغییر ===== */
         .username-label{font-size:13px;font-weight:700;color:#fff;text-shadow:0 0 20px rgba(0,180,255,.05);font-family:'Vazirmatn',sans-serif;white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;direction:ltr;display:none;cursor:pointer;transition:var(--transition);padding:2px 6px;border-radius:8px;border:1px solid transparent}.username-label.show{display:block}.username-label:hover{background:rgba(0,180,255,.05);border-color:rgba(0,180,255,.08)}@media(max-width:480px){.username-label{font-size:11px;max-width:60px}}
         .logout-btn{font-size:12px;color:rgba(255,255,255,.2);cursor:pointer;transition:var(--transition);font-family:'Vazirmatn',sans-serif;padding:2px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.04);background:transparent;display:none}.logout-btn:hover{color:var(--danger);border-color:rgba(255,77,77,.1)}.logout-btn.show{display:block}
         .currency-cards{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-right:6px}@media(max-width:480px){.currency-cards{gap:5px;margin-right:4px}}.currency-card{display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;background:rgba(10,22,40,.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:20px;border:1px solid rgba(0,180,255,.06);box-shadow:0 4px 30px rgba(0,0,0,.2);position:relative;transition:var(--transition);min-height:40px}.currency-card:hover{border-color:rgba(0,180,255,.1)}@media(max-width:480px){.currency-card{padding:3px 6px 3px 4px;border-radius:16px;min-height:32px;gap:4px}}.currency-card .icon-wrap{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:12px;background:rgba(0,180,255,.03)}.currency-card .icon-wrap img{width:26px;height:26px;object-fit:contain;display:block}@media(max-width:480px){.currency-card .icon-wrap{width:26px;height:26px}.currency-card .icon-wrap img{width:20px;height:20px}}.currency-card .amount{font-size:14px;font-weight:700;color:#fff;font-family:'Vazirmatn',sans-serif;white-space:nowrap;min-width:24px}@media(max-width:480px){.currency-card .amount{font-size:11px;min-width:18px}}
@@ -92,32 +91,6 @@
         .lobby-shutdown-btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
         .lobby-shutdown-btn .icon{font-size:16px}
         .admin-header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-        .live-view-btn{position:fixed;bottom:calc(var(--nav-height) + 16px);left:16px;z-index:60;width:44px;height:44px;border-radius:50%;background:rgba(255,0,0,.12);border:1px solid rgba(255,0,0,.1);color:#FF4444;font-size:18px;cursor:pointer;transition:all .3s ease;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
-        .live-view-btn:hover{background:rgba(255,0,0,.2);transform:scale(1.1)}
-        .live-view-btn.show{display:flex}
-        .live-view-btn .pulse-dot{width:10px;height:10px;border-radius:50%;background:#FF0000;display:inline-block;margin-right:4px;animation:pulseDot 1.5s ease-in-out infinite}
-        @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
-        .live-view-overlay{display:none;position:fixed;inset:0;z-index:450;background:rgba(10,10,26,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:12px;flex-direction:column}
-        .live-view-overlay.active{display:flex}
-        .live-view-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(255,255,255,0.03);backdrop-filter:blur(12px);border-radius:16px;border:1px solid rgba(255,255,255,0.04);margin-bottom:12px;flex-shrink:0}
-        .live-view-header .title{font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
-        .live-view-header .title .live-badge{background:#FF0000;color:#fff;font-size:10px;padding:2px 10px;border-radius:20px;animation:pulseDot 1.5s ease-in-out infinite}
-        .live-view-header .close-btn{padding:6px 16px;border:none;border-radius:12px;background:rgba(255,77,77,.06);color:var(--danger);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:13px;cursor:pointer}
-        .live-view-header .close-btn:hover{background:rgba(255,77,77,.12)}
-        .live-view-content{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px 0}
-        .live-user-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(12px);border-radius:14px;border:1px solid rgba(255,255,255,0.04);padding:12px 16px;display:flex;align-items:center;gap:12px;transition:all .3s ease;animation:slideUp .3s ease}
-        .live-user-card:hover{border-color:rgba(255,0,0,.08)}
-        .live-user-card .status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-        .live-user-card .status-dot.online{background:var(--success);box-shadow:0 0 16px rgba(0,255,136,.15)}
-        .live-user-card .status-dot.offline{background:rgba(255,255,255,.05)}
-        .live-user-card .info{flex:1;min-width:0}
-        .live-user-card .info .name{font-size:13px;font-weight:600;color:#fff}
-        .live-user-card .info .action{font-size:11px;color:rgba(255,255,255,.15);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .live-user-card .info .action .highlight{color:var(--neon-blue)}
-        .live-user-card .time{font-size:9px;color:rgba(255,255,255,.1)}
-        .live-empty{text-align:center;padding:60px 20px;color:rgba(255,255,255,.1)}
-        .live-empty .icon{font-size:48px;display:block;margin-bottom:12px}
-        .live-empty .text{font-size:16px;font-weight:600;color:rgba(255,255,255,.15)}
         .trophy-page{display:none;position:fixed;inset:0;z-index:150;background:rgba(10,10,26,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 12px calc(12px + var(--nav-height));flex-direction:column;animation:slideUp .4s ease;overflow-y:auto}.trophy-page.active{display:flex}.trophy-header{display:flex;align-items:center;justify-content:space-between;padding:8px 4px 12px 4px;border-bottom:1px solid rgba(0,180,255,.03);flex-shrink:0}.trophy-header .back-btn{background:none;border:none;color:rgba(255,255,255,.3);font-size:22px;cursor:pointer;transition:var(--transition);padding:4px 8px;border-radius:12px}.trophy-header .back-btn:hover{color:#fff;background:rgba(255,255,255,.03)}.trophy-header .title{font-size:20px;font-weight:800;color:#fff;font-family:'Vazirmatn',sans-serif;letter-spacing:1px}.trophy-header .title i{color:var(--gold);margin-left:6px}.trophy-header .currencies{display:flex;gap:6px}.trophy-header .currencies .mini-coin{display:flex;align-items:center;gap:4px;padding:4px 10px 4px 8px;background:rgba(10,22,40,.5);backdrop-filter:blur(8px);border-radius:30px;border:1px solid rgba(0,180,255,.03)}.trophy-header .currencies .mini-coin img{width:20px;height:20px;object-fit:contain}.trophy-header .currencies .mini-coin span{font-size:12px;font-weight:700;color:#fff;font-family:'Vazirmatn',sans-serif}.trophy-cup{text-align:center;padding:4px 0 2px 0;flex-shrink:0;position:relative}.trophy-cup img{width:100px;height:100px;object-fit:contain;animation:floatCup 3s ease-in-out infinite;filter:drop-shadow(0 0 50px rgba(0,180,255,.15))}@keyframes floatCup{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.trophy-cup .cup-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,180,255,.05)0%,transparent 70%);filter:blur(40px);pointer-events:none;animation:pulseCupGlow 2.5s ease-in-out infinite}@keyframes pulseCupGlow{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}}.reward-chest{position:absolute;bottom:2px;right:8px;cursor:pointer;transition:var(--transition);z-index:2}.reward-chest img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,215,0,.1));transition:var(--transition)}.reward-chest:hover img{transform:scale(1.1) rotate(-5deg);filter:drop-shadow(0 0 30px rgba(255,215,0,.2))}.trophy-tabs{display:flex;gap:8px;padding:6px 0 12px 0;flex-shrink:0;justify-content:center}.trophy-tabs .tab{padding:8px 24px;border:none;border-radius:30px;background:rgba(10,22,40,.3);backdrop-filter:blur(8px);color:rgba(255,255,255,.2);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:var(--transition);border:1px solid rgba(0,180,255,.02);position:relative;overflow:hidden}.trophy-tabs .tab:hover{color:rgba(255,255,255,.5)}.trophy-tabs .tab.active{background:rgba(0,180,255,.04);color:var(--neon-blue);border-color:rgba(0,180,255,.08);box-shadow:0 0 40px rgba(0,180,255,.03)}.trophy-tabs .tab.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;border-radius:4px;background:linear-gradient(90deg,transparent,var(--neon-blue),transparent);box-shadow:0 0 20px rgba(0,180,255,.2);animation:tabGlowPulse 2s ease-in-out infinite}@keyframes tabGlowPulse{0%,100%{opacity:.5;transform:scaleX(.8)}50%{opacity:1;transform:scaleX(1)}}.rank-list{flex:1;overflow-y:auto;padding:4px 0 10px 0;min-height:0}.rank-item{display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:6px;border-radius:16px;background:rgba(10,22,40,.3);backdrop-filter:blur(12px);border:1px solid rgba(0,180,255,.03);transition:var(--transition);min-height:60px;animation:slideUp .4s ease backwards}.rank-item:hover{background:rgba(10,22,40,.5);border-color:rgba(0,180,255,.06);transform:scale(1.01)}.rank-item .rank-number{font-size:16px;font-weight:800;color:rgba(255,255,255,.1);min-width:32px;text-align:center;font-family:'Vazirmatn',sans-serif}.rank-item.top1 .rank-number{color:var(--gold);font-size:22px}.rank-item.top2 .rank-number{color:#C0C0C0;font-size:20px}.rank-item.top3 .rank-number{color:#CD7F32;font-size:20px}.rank-item .avatar-wrap{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;position:relative;background:rgba(0,180,255,.02)}.rank-item .avatar-wrap .avatar-img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,180,255,.03)}.rank-item .avatar-wrap .avatar-placeholder{font-size:22px}.rank-item .avatar-wrap.online::before{content:'';position:absolute;bottom:0;right:0;width:12px;height:12px;border-radius:50%;background:var(--success);border:2px solid rgba(10,22,40,.9);z-index:3;box-shadow:0 0 16px rgba(0,255,136,.2)}.rank-item .avatar-wrap.offline::before{content:'';position:absolute;bottom:0;right:0;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(10,22,40,.9);z-index:3}.rank-item .info{flex:1;min-width:0}.rank-item .info .name{font-size:14px;font-weight:700;color:#fff;font-family:'Vazirmatn',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rank-item .info .sub{display:flex;align-items:center;gap:4px;font-size:10px;color:rgba(255,255,255,.2);font-family:'Vazirmatn',sans-serif;flex-wrap:wrap}.rank-item .score{font-size:15px;font-weight:800;color:var(--gold);font-family:'Vazirmatn',sans-serif;min-width:50px;text-align:left}.rank-item .medal img{width:32px;height:32px;object-fit:contain}
         .service-offline-overlay{display:none;position:fixed;inset:0;z-index:9998;justify-content:center;align-items:center;background:rgba(10,10,26,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);animation:fadeIn .4s ease}.service-offline-overlay.active{display:flex}.service-offline-box{width:100%;max-width:400px;padding:40px 30px 30px;background:rgba(10,22,40,.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:32px;border:1px solid rgba(255,215,0,.06);box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;animation:fadeIn .4s ease}.service-offline-box .offline-icon{font-size:56px;margin-bottom:8px;display:block}.service-offline-box .offline-title{font-size:22px;font-weight:900;color:var(--gold);font-family:'Vazirmatn',sans-serif;text-shadow:0 0 40px rgba(255,215,0,.1)}.service-offline-box .offline-message{font-size:14px;color:rgba(255,255,255,.4);margin:8px 0 16px;font-family:'Vazirmatn',sans-serif;line-height:1.6}.service-offline-box .offline-btn{padding:10px 40px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#2D2000;font-family:'Vazirmatn',sans-serif;font-weight:800;font-size:16px;cursor:pointer;transition:var(--transition);box-shadow:0 8px 30px rgba(255,215,0,.15)}.service-offline-box .offline-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,215,0,.25)}
         .game-screen{display:none;width:100%;max-width:480px;height:100vh;max-height:860px;padding:12px 12px calc(12px + var(--nav-height));flex-direction:column;gap:8px;position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:50;background:#0a0a1a;animation:slideUp .4s ease}.game-screen.active{display:flex}.game-header{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:rgba(10,10,30,.6);backdrop-filter:blur(12px);border-radius:18px;border:1px solid rgba(255,255,255,.04)}.game-header .title{font-size:14px;font-weight:700;color:#fff}.game-header .title i{color:var(--gold);margin-left:6px}.game-score{display:flex;gap:14px;font-size:12px;font-weight:600}.game-score .val{font-size:16px}.game-score .val.player{color:var(--success)}.game-score .val.ai{color:#8B6CE0}.canvas-wrapper{flex:1;min-height:0;border-radius:22px;overflow:hidden;background:rgba(10,10,30,.4);border:1px solid rgba(255,255,255,.03);box-shadow:inset 0 0 60px rgba(0,0,0,.4);position:relative}#gameCanvas{display:block;width:100%!important;height:100%!important;touch-action:none;cursor:pointer}.game-status{display:flex;justify-content:space-between;align-items:center;padding:5px 14px;background:rgba(10,10,30,.5);backdrop-filter:blur(12px);border-radius:14px;border:1px solid rgba(255,255,255,.03);min-height:32px}.game-status .turn{font-size:12px;font-weight:600}.game-status .combo{font-size:13px;font-weight:700;color:var(--gold)}.game-actions{display:flex;gap:6px}.game-actions button{flex:1;padding:8px 10px;border:none;border-radius:14px;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:11px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:4px;background:rgba(10,10,30,.5);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.03);color:rgba(255,255,255,.5)}.game-actions button:hover{border-color:rgba(255,215,0,.1);transform:translateY(-2px)}.game-actions button.danger{background:rgba(255,77,77,.08);color:#FF6B6B;border:1px solid rgba(255,77,77,.06)}.result-overlay{position:absolute;inset:0;background:rgba(10,10,30,.88);backdrop-filter:blur(14px);display:none;flex-direction:column;justify-content:center;align-items:center;border-radius:22px;z-index:10;padding:30px}.result-overlay.show{display:flex;animation:fadeIn .5s ease}.result-overlay .result-icon{font-size:56px;margin-bottom:6px}.result-overlay .result-title{font-size:26px;font-weight:900;margin-bottom:2px}.result-overlay .result-score{font-size:14px;color:rgba(255,255,255,.3);margin-bottom:16px}.result-overlay .result-btn{padding:10px 36px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#2D2000;font-family:'Vazirmatn',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:var(--transition);box-shadow:0 8px 30px rgba(255,215,0,.15)}.result-overlay .result-btn:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(255,215,0,.25)}
@@ -156,36 +129,19 @@
         .voice-participants .participant .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
         .voice-participants .participant .dot.speaking{background:var(--success);animation:voicePulse 0.6s ease-in-out infinite}
         .voice-participants .participant .dot.muted{background:#555}
-
-        /* ===== دیالوگ تغییر اسم ===== */
         .rename-dialog{display:none;position:fixed;inset:0;z-index:99997;justify-content:center;align-items:center;background:rgba(10,10,26,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);animation:fadeIn .3s ease;padding:20px}.rename-dialog.active{display:flex}.rename-box{width:100%;max-width:400px;background:rgba(10,22,40,.7);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-radius:28px;padding:32px 28px;border:1px solid rgba(0,180,255,.06);box-shadow:var(--shadow);text-align:center;animation:slideUp .4s ease}.rename-box h3{font-size:20px;font-weight:800;color:#fff;font-family:'Vazirmatn',sans-serif;margin-bottom:4px}.rename-box .sub{font-size:13px;color:rgba(255,255,255,.2);font-family:'Vazirmatn',sans-serif;margin-bottom:16px}.rename-box .cost-info{font-size:14px;color:var(--gold);font-family:'Vazirmatn',sans-serif;font-weight:700;margin-bottom:12px;padding:8px 16px;background:rgba(255,215,0,.04);border-radius:12px;border:1px solid rgba(255,215,0,.04)}.rename-box input{width:100%;padding:12px 16px;border-radius:14px;border:1px solid rgba(0,180,255,.06);background:rgba(255,255,255,.02);color:#fff;font-size:16px;font-family:'Vazirmatn',sans-serif;text-align:center;outline:none;transition:var(--transition);direction:rtl}.rename-box input:focus{border-color:rgba(0,180,255,.15);background:rgba(255,255,255,.04)}.rename-box .actions{display:flex;gap:10px;margin-top:16px}.rename-box .actions button{flex:1;padding:10px;border:none;border-radius:14px;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:var(--transition)}.rename-box .actions .confirm{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#2D2000;box-shadow:0 8px 30px rgba(255,215,0,.15)}.rename-box .actions .confirm:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,215,0,.25)}.rename-box .actions .cancel{background:rgba(255,255,255,.02);color:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.04)}.rename-box .actions .cancel:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.4)}
         @media(max-width:480px){.rename-box{padding:24px 18px}.rename-box h3{font-size:17px}.rename-box input{font-size:14px}}
+
+        /* ===== استایل‌های چت آنلاین ===== */
+        .chat-screen{display:none;position:fixed;inset:0;z-index:120;background:rgba(10,10,26,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-direction:column;animation:slideUp .4s ease;padding-top:70px;padding-bottom:var(--nav-height)}.chat-screen.active{display:flex}.chat-header{position:fixed;top:0;left:0;right:0;z-index:121;background:rgba(10,22,40,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,180,255,.04)}.chat-header .back-btn{background:none;border:none;color:rgba(255,255,255,.3);font-size:22px;cursor:pointer;padding:4px 8px;border-radius:12px;transition:var(--transition)}.chat-header .back-btn:hover{color:#fff;background:rgba(255,255,255,.03)}.chat-header .title{font-size:18px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}.chat-header .title .online-count{font-size:12px;color:rgba(255,255,255,.2);font-weight:400}.chat-header .voice-toggle{background:rgba(0,180,255,.08);border:1px solid rgba(0,180,255,.06);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:var(--transition);font-family:'Vazirmatn',sans-serif;display:flex;align-items:center;gap:6px}.chat-header .voice-toggle:hover{background:rgba(0,180,255,.15)}.chat-header .voice-toggle.active{background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.1)}
+        .chat-messages{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:6px}.chat-messages::-webkit-scrollbar{width:3px}.chat-messages::-webkit-scrollbar-thumb{background:rgba(0,180,255,.1);border-radius:10px}
+        .chat-msg{display:flex;gap:10px;padding:8px 12px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.02);max-width:85%;animation:slideUp .3s ease}.chat-msg.self{background:rgba(0,180,255,.04);border-color:rgba(0,180,255,.04);align-self:flex-end}.chat-msg .msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(0,180,255,.04);border:1px solid rgba(255,255,255,.04)}.chat-msg .msg-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover}.chat-msg .msg-content{flex:1;min-width:0}.chat-msg .msg-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:6px;margin-bottom:2px}.chat-msg .msg-name .verified-badge{display:inline-block;width:16px;height:16px;flex-shrink:0}.chat-msg .msg-name .verified-badge img{width:100%;height:100%;object-fit:contain}.chat-msg .msg-text{font-size:14px;color:#fff;word-wrap:break-word;line-height:1.5}.chat-msg .msg-time{font-size:9px;color:rgba(255,255,255,.1);margin-top:2px;text-align:left}
+        .chat-input-area{position:fixed;bottom:var(--nav-height);left:0;right:0;z-index:121;background:rgba(10,22,40,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;border-top:1px solid rgba(0,180,255,.04)}.chat-input-area input{flex:1;padding:10px 16px;border-radius:24px;border:1px solid rgba(0,180,255,.06);background:rgba(255,255,255,.02);color:#fff;font-family:'Vazirmatn',sans-serif;font-size:14px;outline:none;transition:var(--transition)}.chat-input-area input:focus{border-color:rgba(0,180,255,.15);background:rgba(255,255,255,.04)}.chat-input-area input::placeholder{color:rgba(255,255,255,.12)}.chat-input-area .send-btn{width:44px;height:44px;border:none;border-radius:50%;background:linear-gradient(135deg,var(--neon-blue),var(--neon-blue-dark));color:#fff;font-size:18px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0}.chat-input-area .send-btn:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(0,180,255,.15)}.chat-input-area .send-btn:active{transform:scale(.9)}
+        .chat-empty{text-align:center;padding:60px 20px;color:rgba(255,255,255,.1)}.chat-empty .icon{font-size:48px;display:block;margin-bottom:12px}.chat-empty .text{font-size:16px;font-weight:600;color:rgba(255,255,255,.15)}
+        .voice-chat-panel{display:none;position:fixed;bottom:calc(var(--nav-height) + 70px);left:50%;transform:translateX(-50%);z-index:122;background:rgba(10,22,40,.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:20px;padding:16px 20px;border:1px solid rgba(0,180,255,.06);box-shadow:0 20px 60px rgba(0,0,0,.5);min-width:200px;text-align:center;animation:slideUp .3s ease}.voice-chat-panel.active{display:block}.voice-chat-panel .vc-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.3);margin-bottom:10px}.voice-chat-panel .vc-users{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px}.voice-chat-panel .vc-user{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.02);font-size:11px;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.02)}.voice-chat-panel .vc-user.speaking{color:var(--success);border-color:rgba(0,255,136,.1)}.voice-chat-panel .vc-user .dot{width:6px;height:6px;border-radius:50%;display:inline-block}.voice-chat-panel .vc-user .dot.speaking{background:var(--success);animation:voicePulse .6s ease-in-out infinite}.voice-chat-panel .vc-user .dot.muted{background:#555}.voice-chat-panel .vc-controls{display:flex;gap:8px;justify-content:center}.voice-chat-panel .vc-controls button{padding:8px 20px;border:none;border-radius:30px;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:var(--transition)}.voice-chat-panel .vc-controls .mute-btn{background:rgba(0,180,255,.1);color:var(--neon-blue)}.voice-chat-panel .vc-controls .mute-btn:hover{background:rgba(0,180,255,.2)}.voice-chat-panel .vc-controls .mute-btn.muted{background:rgba(255,77,77,.1);color:var(--danger)}.voice-chat-panel .vc-controls .mute-btn.muted:hover{background:rgba(255,77,77,.2)}.voice-chat-panel .vc-controls .leave-btn{background:rgba(255,77,77,.08);color:var(--danger)}.voice-chat-panel .vc-controls .leave-btn:hover{background:rgba(255,77,77,.16)}
     </style>
 </head>
 <body>
-
-    <!-- ===== تمام HTML ===== -->
-    <!-- (همون HTML که قبلاً بود با کمی تغییرات) -->
-
-    <div class="bg-image"></div>
-
-    <!-- ===== SESSION REPLACED POPUP ===== -->
-    <div class="session-replaced-overlay" id="sessionReplacedOverlay">
-        <div class="session-replaced-box">
-            <span class="icon">⚠️</span>
-            <div class="title">SESSION REPLACED</div>
-            <div class="message">
-                این حساب کاربری در دستگاه دیگری وارد شده است.
-                <br />
-                برای حفظ امنیت، اتصال شما قطع خواهد شد.
-                <div class="en">Your account has been logged in on another device. You have been disconnected.</div>
-            </div>
-            <div class="device-info" id="sessionDeviceInfo">
-                <i class="fas fa-laptop"></i> دستگاه جدید: ناشناس
-            </div>
-            <button class="btn" id="sessionReplacedBtn">تایید</button>
-        </div>
-    </div>
 
     <!-- ===== LOADING SCREEN ===== -->
     <div id="loadingScreen">
@@ -193,7 +149,7 @@
             <div class="loading-logo">
                 <span class="logo-icon">🎮</span>
                 <div class="logo-text">مافیا <span>بیس</span></div>
-                <div class="logo-sub">بازی آنلاین</div>
+                <div class="logo-sub">چت آنلاین جهانی</div>
             </div>
             <div class="loading-bar-wrapper">
                 <div class="loading-bar-track">
@@ -215,19 +171,7 @@
     <!-- ===== TOAST ===== -->
     <div id="toastMessage"></div>
 
-    <!-- ===== BAN OVERLAY ===== -->
-    <div class="ban-overlay" id="banOverlay">
-        <div class="ban-box">
-            <span class="ban-icon">⛔</span>
-            <div class="ban-title">حساب کاربری مسدود شد</div>
-            <div class="ban-message" id="banMessage">حساب کاربری شما به دلیل نقض قوانین بازی مسدود شده است.</div>
-            <div class="ban-timer" id="banTimer"></div>
-            <button class="ban-btn" id="banLogoutBtn">خروج</button>
-        </div>
-    </div>
-    <div class="ban-block" id="banBlock"></div>
-
-    <!-- ===== AUTH SCREENS ===== -->
+    <!-- ===== AUTH ===== -->
     <div class="auth-screen active" id="loginScreen">
         <div class="auth-box">
             <div class="auth-logo">
@@ -238,12 +182,10 @@
             <div class="form-group">
                 <label>ایمیل</label>
                 <input type="email" id="loginEmail" placeholder="example@email.com" value="mohammadjavad1160yt@gmail.com" />
-                <div class="error-msg" id="loginEmailError"></div>
             </div>
             <div class="form-group">
                 <label>رمز عبور</label>
                 <input type="password" id="loginPassword" placeholder="••••••••" value="javad3344" />
-                <div class="error-msg" id="loginPasswordError"></div>
             </div>
             <button class="auth-btn" id="loginBtn">ورود</button>
             <div class="auth-switch">
@@ -261,22 +203,18 @@
             <div class="form-group">
                 <label>نام کاربری</label>
                 <input type="text" id="regUsername" placeholder="نام کاربری" />
-                <div class="error-msg" id="regUsernameError"></div>
             </div>
             <div class="form-group">
                 <label>ایمیل</label>
                 <input type="email" id="regEmail" placeholder="example@email.com" />
-                <div class="error-msg" id="regEmailError"></div>
             </div>
             <div class="form-group">
                 <label>رمز عبور</label>
                 <input type="password" id="regPassword" placeholder="حداقل ۸ کاراکتر" />
-                <div class="error-msg" id="regPasswordError"></div>
             </div>
             <div class="form-group">
                 <label>تکرار رمز عبور</label>
                 <input type="password" id="regPasswordConfirm" placeholder="تکرار رمز عبور" />
-                <div class="error-msg" id="regPasswordConfirmError"></div>
             </div>
             <button class="auth-btn" id="registerBtn">ثبت‌نام</button>
             <div class="auth-switch">
@@ -319,37 +257,16 @@
 
         <div class="menu-container" id="menuContainer">
             <div class="menu-header"></div>
-            <button class="start-btn-3d disabled" id="startBtn" disabled>
+            <!-- دکمه چت آنلاین جهانی -->
+            <button class="start-btn-3d" id="chatBtn">
                 <div class="btn-bg"></div>
                 <div class="btn-shine"></div>
                 <div class="btn-glow"></div>
                 <div class="btn-content">
-                    <i class="fas fa-sync-alt update-icon"></i>
-                    در حال بروزرسانی
+                    <i class="fas fa-comments"></i>
+                    چت آنلاین جهانی
                 </div>
             </button>
-        </div>
-
-        <button class="live-view-btn show" id="liveViewBtn">
-            <i class="fas fa-eye"></i>
-            <span class="pulse-dot"></span>
-        </button>
-
-        <div class="live-view-overlay" id="liveViewOverlay">
-            <div class="live-view-header">
-                <div class="title">
-                    <i class="fas fa-eye" style="color:#FF0000;"></i>
-                    پخش زنده کاربران
-                    <span class="live-badge">زنده</span>
-                </div>
-                <button class="close-btn" id="liveViewClose"><i class="fas fa-times"></i> بستن</button>
-            </div>
-            <div class="live-view-content" id="liveViewContent">
-                <div style="text-align:center;padding:40px;color:rgba(255,255,255,.1);">
-                    <div class="loading-spinner" style="width:40px;height:40px;border:3px solid rgba(0,180,255,.05);border-top-color:var(--neon-blue);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div>
-                    <div>در حال بارگذاری کاربران آنلاین...</div>
-                </div>
-            </div>
         </div>
 
         <nav class="bottom-nav" id="bottomNav">
@@ -375,61 +292,34 @@
             </div>
         </nav>
 
+        <!-- ===== پنل ادمین ===== -->
         <button class="admin-btn" id="adminBtn" title="مدیریت">
             <i class="fas fa-shield-alt"></i>
         </button>
-
         <div class="admin-panel" id="adminPanel">
             <div class="glass-header">
                 <h2><i class="fas fa-shield-alt"></i> پنل مدیریت</h2>
-                <div class="admin-header-actions" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                <div class="admin-header-actions">
                     <span id="adminRoleBadge" class="badge-admin">👤 ادمین</span>
                     <button class="admin-close-btn" id="adminClose"><i class="fas fa-times"></i> بستن</button>
                 </div>
             </div>
-
             <div class="admin-tabs">
                 <button class="tab active" data-atab="dashboard">📊 داشبورد</button>
                 <button class="tab" data-atab="users">👥 کاربران</button>
                 <button class="tab" data-atab="rooms">🏠 لابی‌ها</button>
                 <button class="tab" data-atab="logs">📝 گزارش‌ها</button>
             </div>
-
             <div class="admin-stats" id="adminStats">
-                <div class="admin-stat-card">
-                    <div class="num" id="adminTotalUsers">0</div>
-                    <div class="label">کل کاربران</div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="num online" id="adminOnlineUsers">0</div>
-                    <div class="label">آنلاین</div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="num" id="adminOfflineUsers">0</div>
-                    <div class="label">آفلاین</div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="num banned" id="adminBannedUsers">0</div>
-                    <div class="label">مسدود شده</div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="num gold" id="adminActiveRooms">0</div>
-                    <div class="label">اتاق‌های فعال</div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="num" id="adminTodayUsers">0</div>
-                    <div class="label">امروز</div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="num" id="adminWeekUsers">0</div>
-                    <div class="label">این هفته</div>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="num" id="adminMonthUsers">0</div>
-                    <div class="label">این ماه</div>
-                </div>
+                <div class="admin-stat-card"><div class="num" id="adminTotalUsers">0</div><div class="label">کل کاربران</div></div>
+                <div class="admin-stat-card"><div class="num online" id="adminOnlineUsers">0</div><div class="label">آنلاین</div></div>
+                <div class="admin-stat-card"><div class="num" id="adminOfflineUsers">0</div><div class="label">آفلاین</div></div>
+                <div class="admin-stat-card"><div class="num banned" id="adminBannedUsers">0</div><div class="label">مسدود شده</div></div>
+                <div class="admin-stat-card"><div class="num gold" id="adminActiveRooms">0</div><div class="label">اتاق‌ها</div></div>
+                <div class="admin-stat-card"><div class="num" id="adminTodayUsers">0</div><div class="label">امروز</div></div>
+                <div class="admin-stat-card"><div class="num" id="adminWeekUsers">0</div><div class="label">این هفته</div></div>
+                <div class="admin-stat-card"><div class="num" id="adminMonthUsers">0</div><div class="label">این ماه</div></div>
             </div>
-
             <div class="glass-card">
                 <div class="card-title"><i class="fas fa-search"></i> جستجوی کاربران</div>
                 <div class="admin-search">
@@ -437,7 +327,6 @@
                     <button id="adminSearchBtn"><i class="fas fa-search"></i></button>
                 </div>
             </div>
-
             <div class="glass-card" id="roomsCard" style="display:none;">
                 <div class="card-title"><i class="fas fa-gamepad"></i> مدیریت لابی‌ها</div>
                 <div style="display:flex;gap:10px;flex-wrap:wrap;">
@@ -445,32 +334,22 @@
                         <span class="icon"><i class="fas fa-power-off"></i></span>
                         بستن همه لابی‌ها
                     </button>
-                    <button class="admin-close-btn" style="background:rgba(0,180,255,.06);color:var(--neon-blue);" id="refreshRoomsBtn">
-                        <i class="fas fa-sync-alt"></i> به‌روزرسانی
-                    </button>
                 </div>
                 <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,.2);" id="roomsStatus">وضعیت: در حال بارگذاری...</div>
             </div>
-
             <div class="admin-users-list" id="adminUsersList"></div>
         </div>
 
+        <!-- ===== TROPHY ===== -->
         <div class="trophy-page" id="trophyPage">
             <div class="trophy-header">
                 <button class="back-btn" id="trophyBackBtn"><i class="fas fa-arrow-right"></i></button>
                 <span class="title"><i class="fas fa-trophy"></i> کاپ‌ها</span>
                 <div class="currencies">
-                    <div class="mini-coin">
-                        <img src="https://uploadkon.ir/uploads/a43927_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۳۰۶۰۶۴.png" alt="سکه" />
-                        <span id="trophyCoinDisplay">0</span>
-                    </div>
-                    <div class="mini-coin">
-                        <img src="https://uploadkon.ir/uploads/cc6e27_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۶۰۲۶۳۸.png" alt="الماس" />
-                        <span id="trophyDiamondDisplay">0</span>
-                    </div>
+                    <div class="mini-coin"><img src="https://uploadkon.ir/uploads/a43927_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۳۰۶۰۶۴.png" alt="سکه" /><span id="trophyCoinDisplay">0</span></div>
+                    <div class="mini-coin"><img src="https://uploadkon.ir/uploads/cc6e27_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۶۰۲۶۳۸.png" alt="الماس" /><span id="trophyDiamondDisplay">0</span></div>
                 </div>
             </div>
-
             <div class="trophy-cup">
                 <div class="cup-glow"></div>
                 <img src="https://cdn.imgurl.ir/uploads/t725129_file_00000000b3c081f8843bc5ea9706dfaf.png" alt="جام" />
@@ -478,43 +357,30 @@
                     <img src="https://cdn.imgurl.ir/uploads/e00312_file_00000000bea881fd9131024733b05e7a.png" alt="صندوق جوایز" />
                 </div>
             </div>
-
             <div class="trophy-tabs">
                 <button class="tab active" data-tab="global"><i class="fas fa-globe"></i> جهانی</button>
                 <button class="tab" data-tab="weekly"><i class="fas fa-calendar-week"></i> هفتگی</button>
                 <button class="tab" data-tab="monthly"><i class="fas fa-calendar-alt"></i> ماهانه</button>
             </div>
-
-            <div class="rank-list" id="rankList">
-                <div class="rank-loading">
-                    <div class="spinner"></div>
-                    <div class="text">در حال بارگذاری...</div>
-                </div>
-            </div>
+            <div class="rank-list" id="rankList"><div class="rank-loading"><div class="spinner"></div><div class="text">در حال بارگذاری...</div></div></div>
         </div>
 
+        <!-- ===== REWARD ===== -->
         <div class="reward-dialog-overlay" id="rewardDialog">
             <div class="reward-dialog">
                 <button class="close-reward" id="closeReward"><i class="fas fa-times"></i></button>
-                <div class="reward-icon">
-                    <img src="https://cdn.imgurl.ir/uploads/e00312_file_00000000bea881fd9131024733b05e7a.png" alt="جایزه" />
-                </div>
+                <div class="reward-icon"><img src="https://cdn.imgurl.ir/uploads/e00312_file_00000000bea881fd9131024733b05e7a.png" alt="جایزه" /></div>
                 <div class="reward-title">🎁 جوایز شما</div>
                 <div class="reward-desc" id="rewardDesc">پاداش‌های لیگ خود را دریافت کنید</div>
                 <div class="reward-items">
-                    <div class="item">
-                        <img src="https://uploadkon.ir/uploads/a43927_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۳۰۶۰۶۴.png" alt="سکه" />
-                        <span id="rewardCoins">+0</span>
-                    </div>
-                    <div class="item">
-                        <img src="https://uploadkon.ir/uploads/cc6e27_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۶۰۲۶۳۸.png" alt="الماس" />
-                        <span id="rewardDiamonds">+0</span>
-                    </div>
+                    <div class="item"><img src="https://uploadkon.ir/uploads/a43927_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۳۰۶۰۶۴.png" alt="سکه" /><span id="rewardCoins">+0</span></div>
+                    <div class="item"><img src="https://uploadkon.ir/uploads/cc6e27_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۶۰۲۶۳۸.png" alt="الماس" /><span id="rewardDiamonds">+0</span></div>
                 </div>
                 <button class="reward-btn" id="claimRewardBtn">دریافت پاداش</button>
             </div>
         </div>
 
+        <!-- ===== LEAGUE UP ===== -->
         <div class="league-up-overlay" id="leagueUpOverlay">
             <div class="league-up-box">
                 <div class="league-icon" id="leagueUpIcon">🏆</div>
@@ -524,24 +390,161 @@
             </div>
         </div>
 
-        <div class="matchmaking-overlay" id="matchmakingOverlay">
-            <div class="matchmaking-box">
-                <div class="matchmaking-ring"></div>
-                <div class="matchmaking-status">در حال جستجوی حریف<span class="matchmaking-dots"><span>.</span><span>.</span><span>.</span></span></div>
-                <div class="matchmaking-sub" id="matchmakingSub">در حال اتصال...</div>
-                <div id="opponentFound" class="opponent-found">
-                    <div class="opponent-card" id="opponentCard">
-                        <div class="opponent-avatar" id="opponentAvatar">👤</div>
-                        <div class="opponent-name" id="opponentName">کاربر</div>
-                        <div class="opponent-level" id="opponentLevel">سطح ۱</div>
-                    </div>
-                    <div class="countdown-number" id="countdownNumber">3</div>
-                    <div style="font-size:14px;color:rgba(255,255,255,.25);font-family:'Vazirmatn',sans-serif;margin-top:4px;">شروع مسابقه</div>
+        <!-- ===== AVATAR SHOP ===== -->
+        <div class="avatar-shop-overlay" id="avatarShopOverlay">
+            <div class="avatar-shop-box">
+                <div class="avatar-shop-header">
+                    <span class="title"><i class="fas fa-store"></i> فروشگاه آواتار</span>
+                    <button class="close-btn" id="avatarShopClose"><i class="fas fa-times"></i> بستن</button>
                 </div>
-                <button class="matchmaking-cancel" id="matchmakingCancel">لغو جستجو</button>
+                <div class="avatar-shop-balance">
+                    <span class="bal-item"><img src="https://uploadkon.ir/uploads/a43927_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۳۰۶۰۶۴.png" alt="سکه" /><span class="num" id="shopCoinDisplay">0</span></span>
+                    <span class="bal-item"><img src="https://uploadkon.ir/uploads/cc6e27_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۶۰۲۶۳۸.png" alt="الماس" /><span class="num" id="shopDiamondDisplay">0</span></span>
+                </div>
+                <div class="avatar-shop-grid" id="avatarShopGrid"></div>
             </div>
         </div>
 
+        <!-- ===== LOBBY ===== -->
+        <div class="lobby-screen-custom" id="lobbyScreenCustom">
+            <div class="lobby-bg-layer"></div>
+            <div class="lobby-dark-overlay"></div>
+            <div class="lobby-glass-blur"></div>
+            <div class="lobby-ui">
+                <button class="lobby-btn-plus" id="lobbyPlusBtn" aria-label="plus" data-tooltip="ایجاد لابی جدید">
+                    <img src="https://cdn.imgurl.ir/uploads/p157809_BackgroundEraser__.png" alt="plus">
+                </button>
+                <button class="lobby-btn-settings" aria-label="settings" data-tooltip="تنظیمات">
+                    <img src="https://cdn.imgurl.ir/uploads/d213200_BackgroundEraser__.png" alt="settings">
+                </button>
+                <button class="lobby-btn-search" aria-label="search" data-tooltip="جستجو">
+                    <img src="https://cdn.imgurl.ir/uploads/152050_BackgroundEraser__.png" alt="search">
+                </button>
+                <button class="lobby-btn-close" id="lobbyCloseBtn" aria-label="close" data-tooltip="بستن لابی">
+                    <img src="https://cdn.imgurl.ir/uploads/f46455_BackgroundEraser__.png" alt="close">
+                </button>
+                <div class="lobby-header-png"><img src="https://cdn.imgurl.ir/uploads/w73478_BackgroundEraser__.png" alt="header"></div>
+                <div class="lobby-header-text">لیست لابی های فعال</div>
+                <div class="lobby-list-container" id="lobbyListCustom"></div>
+                <button class="lobby-refresh-btn" id="lobbyRefreshBtn" aria-label="refresh" data-tooltip="به‌روزرسانی لیست">
+                    <img src="https://cdn.imgurl.ir/uploads/t285846_BackgroundEraser__.png" alt="refresh">
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== ROOM ===== -->
+        <div class="room-screen-custom" id="roomScreenCustom">
+            <img class="room-bg-custom" src="https://uploadkon.ir/uploads/6dfb14_26file-000000004b9081f4a622518969bf5b0e.png" alt="room">
+            <div class="room-dark-overlay-custom"></div>
+            <button class="room-back-btn-custom" id="roomBackBtnCustom" aria-label="back">✕</button>
+            <div class="room-title-custom" id="roomTitleCustom">اتاق</div>
+            <div class="room-seats-container" id="roomSeatsContainer"></div>
+            <button class="room-leave-btn" id="roomLeaveBtn">🚪 خروج از لابی</button>
+            <button class="voice-chat-btn" id="voiceChatBtn">
+                <span class="mic-icon">🎤</span>
+                <span>اتصال صوتی</span>
+                <span class="status-text" id="voiceStatusText">(غیرفعال)</span>
+            </button>
+            <div class="voice-participants" id="voiceParticipants">
+                <div class="participant"><span class="dot" id="voiceSelfDot"></span><span id="voiceSelfName">شما</span></div>
+            </div>
+        </div>
+
+        <!-- ===== RENAME ===== -->
+        <div class="rename-dialog" id="renameDialog">
+            <div class="rename-box">
+                <h3>✏️ تغییر نام کاربری</h3>
+                <div class="sub">نام جدید خود را وارد کنید</div>
+                <div class="cost-info" id="renameCostInfo">💰 هزینه: ۵۰ سکه</div>
+                <input type="text" id="renameInput" placeholder="نام جدید..." maxlength="20" />
+                <div class="actions">
+                    <button class="cancel" id="renameCancel">لغو</button>
+                    <button class="confirm" id="renameConfirm">تایید</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CHAT SCREEN ===== -->
+        <div class="chat-screen" id="chatScreen">
+            <div class="chat-header">
+                <button class="back-btn" id="chatBackBtn"><i class="fas fa-arrow-right"></i></button>
+                <div class="title">
+                    <i class="fas fa-globe" style="color:var(--neon-blue);"></i>
+                    چت جهانی
+                    <span class="online-count" id="chatOnlineCount">(۰ آنلاین)</span>
+                </div>
+                <button class="voice-toggle" id="chatVoiceToggle">
+                    <i class="fas fa-microphone"></i>
+                    صوتی
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-empty">
+                    <span class="icon">💬</span>
+                    <div class="text">پیامی وجود ندارد</div>
+                    <div style="font-size:13px;color:rgba(255,255,255,.05);">اولین پیام را شما بفرستید!</div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." maxlength="500" />
+                <button class="send-btn" id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <!-- Voice Chat Panel -->
+            <div class="voice-chat-panel" id="voiceChatPanel">
+                <div class="vc-title">🎤 گفت‌گوی صوتی گروهی</div>
+                <div class="vc-users" id="vcUsers">
+                    <div class="vc-user"><span class="dot speaking"></span> شما</div>
+                </div>
+                <div class="vc-controls">
+                    <button class="mute-btn" id="vcMuteBtn"><i class="fas fa-microphone"></i> بیصدا</button>
+                    <button class="leave-btn" id="vcLeaveBtn"><i class="fas fa-phone-slash"></i> خروج</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SERVICE OFFLINE ===== -->
+        <div class="service-offline-overlay" id="serviceOfflineOverlay">
+            <div class="service-offline-box">
+                <span class="offline-icon">⚠️</span>
+                <div class="offline-title">اتصال برقرار نشد</div>
+                <div class="offline-message" id="offlineMessage">
+                    اتصال به سرور با مشکل مواجه شد.
+                    <br />
+                    لطفاً پس از چند لحظه مجدداً تلاش کنید.
+                </div>
+                <button class="offline-btn" id="serviceRetryBtn">🔄 تلاش مجدد</button>
+            </div>
+        </div>
+
+        <!-- ===== BAN ===== -->
+        <div class="ban-overlay" id="banOverlay">
+            <div class="ban-box">
+                <span class="ban-icon">⛔</span>
+                <div class="ban-title">حساب کاربری مسدود شد</div>
+                <div class="ban-message" id="banMessage">حساب کاربری شما به دلیل نقض قوانین بازی مسدود شده است.</div>
+                <div class="ban-timer" id="banTimer"></div>
+                <button class="ban-btn" id="banLogoutBtn">خروج</button>
+            </div>
+        </div>
+        <div class="ban-block" id="banBlock"></div>
+
+        <!-- ===== SESSION REPLACED ===== -->
+        <div class="session-replaced-overlay" id="sessionReplacedOverlay">
+            <div class="session-replaced-box">
+                <span class="icon">⚠️</span>
+                <div class="title">SESSION REPLACED</div>
+                <div class="message">
+                    این حساب کاربری در دستگاه دیگری وارد شده است.
+                    <br />
+                    برای حفظ امنیت، اتصال شما قطع خواهد شد.
+                    <div class="en">Your account has been logged in on another device. You have been disconnected.</div>
+                </div>
+                <div class="device-info" id="sessionDeviceInfo"><i class="fas fa-laptop"></i> دستگاه جدید: ناشناس</div>
+                <button class="btn" id="sessionReplacedBtn">تایید</button>
+            </div>
+        </div>
+
+        <!-- ===== GAME ===== -->
         <div class="game-screen" id="gameScreen">
             <div class="game-header">
                 <div class="title"><i class="fas fa-hexagon"></i> <span id="gameModeTitle">مسابقه آنلاین</span></div>
@@ -570,113 +573,12 @@
         </div>
     </div>
 
-    <div class="avatar-shop-overlay" id="avatarShopOverlay">
-        <div class="avatar-shop-box">
-            <div class="avatar-shop-header">
-                <span class="title"><i class="fas fa-store"></i> فروشگاه آواتار</span>
-                <button class="close-btn" id="avatarShopClose"><i class="fas fa-times"></i> بستن</button>
-            </div>
-            <div class="avatar-shop-balance">
-                <span class="bal-item">
-                    <img src="https://uploadkon.ir/uploads/a43927_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۳۰۶۰۶۴.png" alt="سکه" />
-                    <span class="num" id="shopCoinDisplay">0</span>
-                </span>
-                <span class="bal-item">
-                    <img src="https://uploadkon.ir/uploads/cc6e27_26BackgroundEraser-۲۰۲۶۰۷۲۷-۰۸۳۶۰۲۶۳۸.png" alt="الماس" />
-                    <span class="num" id="shopDiamondDisplay">0</span>
-                </span>
-            </div>
-            <div class="avatar-shop-grid" id="avatarShopGrid"></div>
-        </div>
-    </div>
-
-    <div class="lobby-screen-custom" id="lobbyScreenCustom">
-        <div class="lobby-bg-layer"></div>
-        <div class="lobby-dark-overlay"></div>
-        <div class="lobby-glass-blur"></div>
-        <div class="lobby-ui">
-            <button class="lobby-btn-plus" id="lobbyPlusBtn" aria-label="plus" data-tooltip="ایجاد لابی جدید">
-                <img src="https://cdn.imgurl.ir/uploads/p157809_BackgroundEraser__.png" alt="plus">
-            </button>
-            <button class="lobby-btn-settings" aria-label="settings" data-tooltip="تنظیمات">
-                <img src="https://cdn.imgurl.ir/uploads/d213200_BackgroundEraser__.png" alt="settings">
-            </button>
-            <button class="lobby-btn-search" aria-label="search" data-tooltip="جستجو">
-                <img src="https://cdn.imgurl.ir/uploads/152050_BackgroundEraser__.png" alt="search">
-            </button>
-            <button class="lobby-btn-close" id="lobbyCloseBtn" aria-label="close" data-tooltip="بستن لابی">
-                <img src="https://cdn.imgurl.ir/uploads/f46455_BackgroundEraser__.png" alt="close">
-            </button>
-
-            <div class="lobby-header-png">
-                <img src="https://cdn.imgurl.ir/uploads/w73478_BackgroundEraser__.png" alt="header">
-            </div>
-            <div class="lobby-header-text">لیست لابی های فعال</div>
-
-            <div class="lobby-list-container" id="lobbyListCustom"></div>
-
-            <button class="lobby-refresh-btn" id="lobbyRefreshBtn" aria-label="refresh" data-tooltip="به‌روزرسانی لیست">
-                <img src="https://cdn.imgurl.ir/uploads/t285846_BackgroundEraser__.png" alt="refresh">
-            </button>
-        </div>
-    </div>
-
-    <div class="room-screen-custom" id="roomScreenCustom">
-        <img class="room-bg-custom" src="https://uploadkon.ir/uploads/6dfb14_26file-000000004b9081f4a622518969bf5b0e.png" alt="room">
-        <div class="room-dark-overlay-custom"></div>
-
-        <button class="room-back-btn-custom" id="roomBackBtnCustom" aria-label="back">✕</button>
-        <div class="room-title-custom" id="roomTitleCustom">اتاق</div>
-
-        <div class="room-seats-container" id="roomSeatsContainer"></div>
-
-        <button class="room-leave-btn" id="roomLeaveBtn">🚪 خروج از لابی</button>
-
-        <button class="voice-chat-btn" id="voiceChatBtn">
-            <span class="mic-icon">🎤</span>
-            <span>اتصال صوتی</span>
-            <span class="status-text" id="voiceStatusText">(غیرفعال)</span>
-        </button>
-
-        <div class="voice-participants" id="voiceParticipants">
-            <div class="participant">
-                <span class="dot" id="voiceSelfDot"></span>
-                <span id="voiceSelfName">شما</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="service-offline-overlay" id="serviceOfflineOverlay">
-        <div class="service-offline-box">
-            <span class="offline-icon">⚠️</span>
-            <div class="offline-title">اتصال برقرار نشد</div>
-            <div class="offline-message" id="offlineMessage">
-                اتصال به سرور با مشکل مواجه شد.
-                <br />
-                لطفاً پس از چند لحظه مجدداً تلاش کنید.
-            </div>
-            <button class="offline-btn" id="serviceRetryBtn">🔄 تلاش مجدد</button>
-        </div>
-    </div>
-
-    <!-- ===== RENAME DIALOG ===== -->
-    <div class="rename-dialog" id="renameDialog">
-        <div class="rename-box">
-            <h3>✏️ تغییر نام کاربری</h3>
-            <div class="sub">نام جدید خود را وارد کنید</div>
-            <div class="cost-info" id="renameCostInfo">💰 هزینه: ۵۰ سکه</div>
-            <input type="text" id="renameInput" placeholder="نام جدید..." maxlength="20" />
-            <div class="actions">
-                <button class="cancel" id="renameCancel">لغو</button>
-                <button class="confirm" id="renameConfirm">تایید</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ============================================================
-        //  🔧  LoadingManager — مدیریت صفحه بارگذاری
+        //  🚀  کد اصلی - نسخه نهایی با چت آنلاین جهانی
         // ============================================================
+
+        // ===== LoadingManager =====
         var LoadingManager = {
             maxSteps: 5,
             currentStep: 0,
@@ -692,13 +594,10 @@
                 if (this.isComplete) return;
                 this.currentStep = Math.min(step, this.maxSteps);
                 this.statusText = status || this.statusText;
-
                 var fill = document.getElementById('loadingBarFill');
                 var percent = document.getElementById('loadingPercentage');
                 var statusEl = document.getElementById('loadingStatus');
-
                 var pct = Math.round((this.currentStep / this.maxSteps) * 100);
-
                 if (fill) fill.style.width = pct + '%';
                 if (percent) {
                     var persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -723,7 +622,6 @@
                         statusEl.textContent = statusText;
                     }
                 }
-
                 var error = document.getElementById('loadingError');
                 if (error) error.classList.remove('show');
             },
@@ -751,7 +649,6 @@
         // ===== ToastManager =====
         var ToastManager = {
             timeout: null,
-
             show: function(message, duration) {
                 duration = duration || 2000;
                 var toast = document.getElementById('toastMessage');
@@ -765,7 +662,7 @@
             }
         };
 
-        // ===== Helper =====
+        // ===== Helpers =====
         function $(id) {
             var el = document.getElementById(id);
             if (!el) console.warn('⚠️ Element not found:', id);
@@ -777,149 +674,6 @@
             if (el) el.addEventListener(event, handler);
             return el;
         }
-
-        // ============================================================
-        //  🎮  مافیا بیس — نسخه نهایی با توکن‌های جدید
-        //  🔑  APP_ID: C50651A5-1DFC-4BA1-AA34-B4444E9AC5A5
-        //  🔑  API_KEY: 9303E7E8-BAF9-4023-A34B-E4E024192785
-        // ============================================================
-
-        var CONFIG = {
-            APP_ID: 'C50651A5-1DFC-4BA1-AA34-B4444E9AC5A5',
-            API_KEY: '9303E7E8-BAF9-4023-A34B-E4E024192785',
-            ABLY_KEY: 'NNYzzQ.7HHPYg:NA1mSMcWdEnlWOHGZ4CaF7ZUkoXe1Iggtf0sy-nNsDM',
-            OWNER_EMAIL: 'tiger.mafia.best@gmail.com',
-            ADMIN_EMAILS: ['tiger.mafia.best@gmail.com', 'mohammadjavad1160yt@gmail.com'],
-            LOBBY_TABLE: 'Lobbies',
-            RENAME_COST: 50,
-            FIRST_RENAME_FREE: true
-        };
-
-        var LIVEKIT_CONFIG = {
-            wsUrl: 'wss://udhg-080lyqpp.livekit.cloud',
-            apiKey: 'APINGhmpwAhPVQk',
-            apiSecret: 'wHxHU1vkVeITBZt4m9K1RZykQe28PtyyoVSv1IN0Acd'
-        };
-
-        var ADMIN_USERS = {
-            'tiger.mafia.best@gmail.com': {
-                password: 'MafiaBest12345',
-                role: 'owner',
-                permissions: ['all']
-            },
-            'mohammadjavad1160yt@gmail.com': {
-                password: 'javad3344',
-                role: 'admin',
-                permissions: ['manage_users', 'manage_rooms', 'view_logs', 'ban_users']
-            }
-        };
-
-        var AVATARS = [{
-            id: 'avatar_free',
-            name: 'آواتار رایگان',
-            image: 'https://cdn.imgurl.ir/uploads/t94765_InShot_20260729_162942276.jpg',
-            price: 0,
-            free: true
-        }, {
-            id: 'avatar_1',
-            name: 'جادوگر',
-            image: 'https://cdn.imgurl.ir/uploads/i76028_file_00000000a51c81f4a04df70a3a7392b3.png',
-            price: 150,
-            free: false
-        }, {
-            id: 'avatar_2',
-            name: 'شاهزاده',
-            image: 'https://cdn.imgurl.ir/uploads/g32313_file_0000000015bc81f4a40ab89565895cef.png',
-            price: 200,
-            free: false
-        }, {
-            id: 'avatar_3',
-            name: 'متفکر',
-            image: 'https://cdn.imgurl.ir/uploads/s74608_IMG_20260730_203155_950.jpg',
-            price: 80,
-            free: false
-        }, {
-            id: 'avatar_4',
-            name: 'شوالیه',
-            image: 'https://cdn.imgurl.ir/uploads/a813016_IMG_20260730_203147_691.jpg',
-            price: 120,
-            free: false
-        }, {
-            id: 'avatar_5',
-            name: 'نینجا',
-            image: 'https://cdn.imgurl.ir/uploads/n074302_IMG_20260730_203145_120.jpg',
-            price: 180,
-            free: false
-        }, {
-            id: 'avatar_6',
-            name: 'سامورایی',
-            image: 'https://cdn.imgurl.ir/uploads/g541337_IMG_20260730_203142_252.jpg',
-            price: 250,
-            free: false
-        }, {
-            id: 'avatar_7',
-            name: 'کماندار',
-            image: 'https://cdn.imgurl.ir/uploads/g554961_IMG_20260730_203139_369.jpg',
-            price: 90,
-            free: false
-        }, {
-            id: 'avatar_8',
-            name: 'جادوگر تاریک',
-            image: 'https://cdn.imgurl.ir/uploads/k065310_IMG_20260730_203137_085.jpg',
-            price: 300,
-            free: false
-        }, {
-            id: 'avatar_9',
-            name: 'فرشته',
-            image: 'https://cdn.imgurl.ir/uploads/12201_IMG_20260730_203135_591.jpg',
-            price: 220,
-            free: false
-        }, {
-            id: 'avatar_10',
-            name: 'اهریمن',
-            image: 'https://cdn.imgurl.ir/uploads/p87072_IMG_20260730_203132_084.jpg',
-            price: 280,
-            free: false
-        }, {
-            id: 'avatar_11',
-            name: 'راهب',
-            image: 'https://cdn.imgurl.ir/uploads/d7657_IMG_20260730_203130_458.jpg',
-            price: 70,
-            free: false
-        }, {
-            id: 'avatar_12',
-            name: 'جادوگر نور',
-            image: 'https://cdn.imgurl.ir/uploads/x29283_InShot_20260729_213613397.jpg',
-            price: 350,
-            free: false
-        }, {
-            id: 'avatar_13',
-            name: 'دزد دریایی',
-            image: 'https://cdn.imgurl.ir/uploads/n7791_IMG_20260729_212841_310.jpg',
-            price: 160,
-            free: false
-        }, {
-            id: 'avatar_14',
-            name: 'مرد عنکبوتی',
-            image: 'https://cdn.imgurl.ir/uploads/k72611_IMG_20260729_212838_610.jpg',
-            price: 400,
-            free: false
-        }];
-
-        var PERMISSIONS = {
-            MANAGE_USERS: 'manage_users',
-            MANAGE_CHAT: 'manage_chat',
-            MANAGE_ROOMS: 'manage_rooms',
-            VIEW_LOGS: 'view_logs',
-            SEND_WARNINGS: 'send_warnings',
-            BAN_USERS: 'ban_users',
-            DELETE_MESSAGES: 'delete_messages',
-            MANAGE_ADMINS: 'manage_admins',
-            SHUTDOWN_LOBBIES: 'shutdown_lobbies',
-            REMOVE_ADMINS: 'remove_admins'
-        };
-
-        var ALL_PERMISSIONS = Object.values(PERMISSIONS);
 
         // ============================================================
         //  📦  DataManager
@@ -1000,7 +754,8 @@
                     sessionId: this.get('sessionId', ''),
                     deviceId: this.get('deviceId', ''),
                     role: this.get('role', 'user'),
-                    renameCount: this.get('renameCount', 0)
+                    renameCount: this.get('renameCount', 0),
+                    isVerified: this.get('isVerified', false)
                 };
             },
 
@@ -1021,6 +776,18 @@
         // ============================================================
         //  📡  Backendless Service
         // ============================================================
+
+        var CONFIG = {
+            APP_ID: 'C50651A5-1DFC-4BA1-AA34-B4444E9AC5A5',
+            API_KEY: '9303E7E8-BAF9-4023-A34B-E4E024192785',
+            ABLY_KEY: 'NNYzzQ.7HHPYg:NA1mSMcWdEnlWOHGZ4CaF7ZUkoXe1Iggtf0sy-nNsDM',
+            OWNER_EMAIL: 'tiger.mafia.best@gmail.com',
+            ADMIN_EMAILS: ['tiger.mafia.best@gmail.com', 'mohammadjavad1160yt@gmail.com'],
+            LOBBY_TABLE: 'Lobbies',
+            RENAME_COST: 50,
+            FIRST_RENAME_FREE: true,
+            VERIFIED_USERS: ['tiger.mafia.best@gmail.com', 'mohammadjavad1160yt@gmail.com']
+        };
 
         var BackendlessService = {
             sdk: null,
@@ -1099,12 +866,6 @@
                 return this.sdk.Data.of(table).save(data);
             },
 
-            deleteUser: function(objectId, tableName) {
-                if (!this.isInitialized()) return Promise.resolve(null);
-                var table = tableName || 'Users';
-                return this.sdk.Data.of(table).remove({ objectId: objectId });
-            },
-
             saveLog: function(action, details) {
                 if (!this.isInitialized()) return Promise.resolve();
                 var logData = {
@@ -1124,9 +885,6 @@
         var AuthService = {
             isLoggedIn: false,
             currentUser: null,
-            _retryCount: 0,
-            _maxRetries: 5,
-            _retryDelay: 2000,
 
             register: function(email, password, username) {
                 this._showSpinner(true);
@@ -1149,12 +907,12 @@
                         var permissions = [];
                         if (email === CONFIG.OWNER_EMAIL) {
                             role = 'owner';
-                            permissions = ALL_PERMISSIONS.slice();
+                            permissions = ['all'];
                         } else if (CONFIG.ADMIN_EMAILS.indexOf(email) !== -1) {
                             role = 'admin';
                             permissions = ['manage_users', 'manage_rooms', 'view_logs', 'ban_users'];
                         }
-
+                        var isVerified = CONFIG.VERIFIED_USERS.indexOf(email) !== -1;
                         var playerData = {
                             email: email,
                             userName: username,
@@ -1180,7 +938,8 @@
                             permissions: permissions,
                             activeSessionId: null,
                             activeDeviceId: null,
-                            renameCount: 0
+                            renameCount: 0,
+                            isVerified: isVerified
                         };
                         return BackendlessService.saveUser(playerData);
                     })
@@ -1193,9 +952,6 @@
                         this._showSpinner(false);
                         if (err === 'ALREADY_REGISTERED') return;
                         console.error('Register error:', err);
-                        setTimeout(function() {
-                            AuthService.register(email, password, username);
-                        }, 3000);
                         throw err;
                     }.bind(this));
             },
@@ -1203,67 +959,37 @@
             login: function(email, password) {
                 var btn = $('loginBtn');
                 var spinner = $('authSpinner');
-
                 if (btn) btn.disabled = true;
                 if (btn) btn.classList.add('loading');
                 if (spinner) spinner.classList.add('show');
 
-                var eError = $('loginEmailError');
-                var pError = $('loginPasswordError');
-                if (eError) eError.classList.remove('show');
-                if (pError) pError.classList.remove('show');
-
-                return this._withRetry(function() {
-                    return BackendlessService.findUser("email = '" + email + "'")
-                        .then(function(userData) {
-                            if (!userData) {
-                                return Promise.reject('USER_NOT_FOUND');
-                            }
-                            if (userData.isBanned) {
-                                handleBan(userData);
-                                return Promise.reject('USER_BANNED');
-                            }
-                            return BackendlessService.login(email, password)
-                                .then(function(user) {
-                                    return AuthService.handleLoginSuccess(user, email, userData);
-                                });
-                        });
-                }).then(function(result) {
-                    if (btn) btn.disabled = false;
-                    if (btn) btn.classList.remove('loading');
-                    if (spinner) spinner.classList.remove('show');
-                    return result;
-                }).catch(function(err) {
-                    if (btn) btn.disabled = false;
-                    if (btn) btn.classList.remove('loading');
-                    if (spinner) spinner.classList.remove('show');
-                    if (err === 'USER_NOT_FOUND' || err === 'USER_BANNED') return;
-                    console.error('Login error:', err);
-                    setTimeout(function() {
-                        AuthService.login(email, password);
-                    }, 2000);
-                    throw err;
-                });
-            },
-
-            _withRetry: function(fn) {
-                var that = this;
-                that._retryCount = 0;
-
-                function attempt() {
-                    return fn().catch(function(err) {
-                        if (that._retryCount < that._maxRetries) {
-                            that._retryCount++;
-                            return new Promise(function(resolve) {
-                                setTimeout(function() {
-                                    resolve(attempt());
-                                }, that._retryDelay * that._retryCount);
-                            });
+                return BackendlessService.findUser("email = '" + email + "'")
+                    .then(function(userData) {
+                        if (!userData) {
+                            return Promise.reject('USER_NOT_FOUND');
                         }
+                        if (userData.isBanned) {
+                            handleBan(userData);
+                            return Promise.reject('USER_BANNED');
+                        }
+                        return BackendlessService.login(email, password)
+                            .then(function(user) {
+                                return AuthService.handleLoginSuccess(user, email, userData);
+                            });
+                    })
+                    .then(function(result) {
+                        if (btn) btn.disabled = false;
+                        if (btn) btn.classList.remove('loading');
+                        if (spinner) spinner.classList.remove('show');
+                        return result;
+                    })
+                    .catch(function(err) {
+                        if (btn) btn.disabled = false;
+                        if (btn) btn.classList.remove('loading');
+                        if (spinner) spinner.classList.remove('show');
+                        console.error('Login error:', err);
                         throw err;
                     });
-                }
-                return attempt();
             },
 
             _showSpinner: function(show) {
@@ -1283,7 +1009,7 @@
                 var role = data.role || 'user';
 
                 if (role === 'owner' || email === CONFIG.OWNER_EMAIL) {
-                    permissions = ALL_PERMISSIONS.slice();
+                    permissions = ['all'];
                     isAdmin = true;
                     role = 'owner';
                 }
@@ -1291,6 +1017,7 @@
                 var ownedAvatars = data.ownedAvatars || ['avatar_free'];
                 var avatar = data.avatar || 'avatar_free';
                 if (ownedAvatars.indexOf(avatar) === -1) avatar = 'avatar_free';
+                var isVerified = CONFIG.VERIFIED_USERS.indexOf(email) !== -1 || data.isVerified === true;
 
                 DataManager.savePlayer({
                     userId: data.objectId || data.userId,
@@ -1313,7 +1040,8 @@
                     isLoggedIn: true,
                     permissions: permissions,
                     role: role,
-                    renameCount: data.renameCount || 0
+                    renameCount: data.renameCount || 0,
+                    isVerified: isVerified
                 });
 
                 return SessionManager.createSession(data.objectId || data.userId, email)
@@ -1337,7 +1065,8 @@
                             SessionManager.listenForSessionReplaced(sessionId);
                         }
                         enterGame();
-                        startLiveView();
+                        // کاربر به صورت خودکار به چت جهانی اضافه میشه
+                        ChatManager.joinGlobalChat();
                     });
             },
 
@@ -1351,6 +1080,8 @@
                 if (VoiceManager && VoiceManager.isConnected) {
                     VoiceManager.disconnect();
                 }
+                ChatManager.leaveGlobalChat();
+
                 var logoutPromise = Promise.resolve();
                 if (email && !keepSession) {
                     logoutPromise = BackendlessService.findUser("email = '" + email + "'")
@@ -1420,12 +1151,15 @@
                                     var role = userData.role || 'user';
                                     var permissions = userData.permissions || [];
                                     if (role === 'owner' || email === CONFIG.OWNER_EMAIL) {
-                                        permissions = ALL_PERMISSIONS.slice();
+                                        permissions = ['all'];
                                     }
                                     DataManager.set('role', role);
                                     DataManager.set('permissions', permissions);
                                     DataManager.set('isAdmin', CONFIG.ADMIN_EMAILS.indexOf(email) !== -1 || role ===
                                         'admin' || role === 'owner');
+                                    var isVerified = CONFIG.VERIFIED_USERS.indexOf(email) !== -1 || userData
+                                        .isVerified === true;
+                                    DataManager.set('isVerified', isVerified);
                                     return AuthService.handleLoginSuccess(user, email, userData)
                                         .then(function() { return true; });
                                 });
@@ -1438,360 +1172,6 @@
                         });
                 }
                 return Promise.resolve(false);
-            }
-        };
-
-        // ============================================================
-        //  🎤  Voice Manager
-        // ============================================================
-
-        var VoiceManager = {
-            room: null,
-            localParticipant: null,
-            isConnected: false,
-            isMuted: false,
-            participants: {},
-            roomName: null,
-            _reconnectAttempts: 0,
-            _maxReconnectAttempts: 3,
-
-            connect: function(roomName) {
-                if (!roomName) {
-                    return Promise.reject(new Error('NO_ROOM_NAME'));
-                }
-
-                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
-                    return this._loadLiveKitSDK().then(function() {
-                        return this._connect(roomName);
-                    }.bind(this));
-                }
-
-                return this._connect(roomName);
-            },
-
-            _loadLiveKitSDK: function() {
-                return new Promise(function(resolve, reject) {
-                    if (typeof LiveKit !== 'undefined' && LiveKit.Room) {
-                        resolve();
-                        return;
-                    }
-
-                    var cdnList = [
-                        'https://cdn.jsdelivr.net/npm/livekit-client@1.15.3/dist/livekit-client.umd.min.js',
-                        'https://unpkg.com/livekit-client@1.15.3/dist/livekit-client.umd.min.js',
-                        'https://cdnjs.cloudflare.com/ajax/libs/livekit-client/1.15.3/livekit-client.umd.min.js'
-                    ];
-
-                    var index = 0;
-
-                    function tryNext() {
-                        if (index >= cdnList.length) {
-                            reject(new Error('All CDNs failed'));
-                            return;
-                        }
-                        var script = document.createElement('script');
-                        script.src = cdnList[index];
-                        script.onload = function() {
-                            if (typeof LiveKit !== 'undefined' && LiveKit.Room) {
-                                resolve();
-                            } else {
-                                index++;
-                                tryNext();
-                            }
-                        };
-                        script.onerror = function() {
-                            index++;
-                            tryNext();
-                        };
-                        document.head.appendChild(script);
-                    }
-
-                    tryNext();
-                });
-            },
-
-            _connect: function(roomName) {
-                if (this.isConnected && this.roomName === roomName) {
-                    return Promise.resolve();
-                }
-
-                if (this.isConnected) {
-                    this.disconnect();
-                }
-
-                this.roomName = roomName;
-
-                return this._createToken(roomName)
-                    .then(function(token) {
-                        if (!token) {
-                            throw new Error('Token ساخته نشد');
-                        }
-                        return this._connectWithToken(token, roomName);
-                    }.bind(this))
-                    .then(function() {
-                        this.isConnected = true;
-                        this._reconnectAttempts = 0;
-                        return true;
-                    }.bind(this))
-                    .catch(function(err) {
-                        console.error('Voice connect error:', err);
-                        this.isConnected = false;
-                        return Promise.reject(err);
-                    }.bind(this));
-            },
-
-            _createToken: function(roomName) {
-                var p = DataManager.getPlayer();
-                var identity = p.userId || 'user_' + Date.now();
-                var name = p.name || 'کاربر';
-
-                var payload = {
-                    exp: Math.floor(Date.now() / 1000) + 3600,
-                    nbf: Math.floor(Date.now() / 1000) - 10,
-                    sub: LIVEKIT_CONFIG.apiKey,
-                    video: {
-                        room: roomName,
-                        roomJoin: true,
-                        canPublish: true,
-                        canSubscribe: true
-                    },
-                    name: name,
-                    identity: identity
-                };
-
-                try {
-                    var header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-                    var payloadStr = JSON.stringify(payload);
-                    var utf8Encoded = encodeURIComponent(payloadStr)
-                        .replace(/%([0-9A-F]{2})/g, function(match, p1) {
-                            return String.fromCharCode(parseInt(p1, 16));
-                        });
-                    var payloadB64 = btoa(utf8Encoded);
-                    var signature = btoa(JSON.stringify({ sign: 'livekit_' + Date.now() }));
-
-                    var token = header + '.' + payloadB64 + '.' + signature;
-                    return Promise.resolve(token);
-
-                } catch (error) {
-                    console.error('Token creation error:', error);
-                    return Promise.reject(new Error('Failed to create token: ' + error.message));
-                }
-            },
-
-            _connectWithToken: function(token, roomName) {
-                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
-                    return Promise.reject(new Error('LiveKit SDK not loaded'));
-                }
-
-                var room = new LiveKit.Room({
-                    adaptiveStream: true,
-                    dynacast: true,
-                    audioCaptureDefaults: {
-                        echoCancellation: true,
-                        noiseSuppression: true,
-                        autoGainControl: true
-                    }
-                });
-
-                this.room = room;
-
-                room.on('participantConnected', function(participant) {
-                    this._onParticipantConnected(participant);
-                }.bind(this));
-
-                room.on('participantDisconnected', function(participant) {
-                    this._onParticipantDisconnected(participant);
-                }.bind(this));
-
-                room.on('trackSubscribed', function(track, publication, participant) {
-                    this._onTrackSubscribed(track, publication, participant);
-                }.bind(this));
-
-                room.on('connectionStateChanged', function(state) {
-                    if (state === 'disconnected') {
-                        this.isConnected = false;
-                        this._handleDisconnect();
-                    }
-                }.bind(this));
-
-                return room.connect(LIVEKIT_CONFIG.wsUrl, token, {
-                    autoSubscribe: true
-                }).then(function() {
-                    this.localParticipant = room.localParticipant;
-                    this.isConnected = true;
-                    this._updateParticipantsList();
-                    return true;
-                }.bind(this));
-            },
-
-            _onParticipantConnected: function(participant) {
-                this.participants[participant.identity] = {
-                    participant: participant,
-                    speaking: false,
-                    muted: false
-                };
-                this._updateParticipantsList();
-                this._updateSeatVoiceIndicators();
-            },
-
-            _onParticipantDisconnected: function(participant) {
-                delete this.participants[participant.identity];
-                this._updateParticipantsList();
-                this._updateSeatVoiceIndicators();
-            },
-
-            _onTrackSubscribed: function(track, publication, participant) {
-                if (track.kind === 'audio') {
-                    if (participant) {
-                        this._updateParticipantMuteStatus(participant.identity, publication.muted);
-                    }
-                }
-            },
-
-            _handleDisconnect: function() {
-                this.isConnected = false;
-                this.room = null;
-                this.localParticipant = null;
-                this.participants = {};
-
-                if (this.roomName && this._reconnectAttempts < this._maxReconnectAttempts) {
-                    this._reconnectAttempts++;
-                    setTimeout(function() {
-                        this.connect(this.roomName).catch(function() {});
-                    }.bind(this), 2000);
-                }
-            },
-
-            _updateParticipantMuteStatus: function(identity, muted) {
-                if (this.participants[identity]) {
-                    this.participants[identity].muted = muted;
-                }
-                this._updateParticipantsList();
-                this._updateSeatVoiceIndicators();
-            },
-
-            _updateParticipantsList: function() {
-                var container = $('voiceParticipants');
-                if (!container) return;
-
-                var html = '';
-                var p = DataManager.getPlayer();
-                var selfEmail = p.email;
-
-                var selfMuted = this.isMuted;
-                html += `
-                    <div class="participant">
-                        <span class="dot ${selfMuted ? 'muted' : 'speaking'}"></span>
-                        <span>شما ${selfMuted ? '🔇' : '🎤'}</span>
-                    </div>
-                `;
-
-                for (var key in this.participants) {
-                    if (key === selfEmail) continue;
-                    var part = this.participants[key];
-                    var isMuted = part.muted || false;
-                    var displayName = key.split('@')[0] || key;
-                    html += `
-                        <div class="participant">
-                            <span class="dot ${isMuted ? 'muted' : 'speaking'}"></span>
-                            <span>${displayName} ${isMuted ? '🔇' : ''}</span>
-                        </div>
-                    `;
-                }
-
-                container.innerHTML = html;
-                container.classList.add('active');
-            },
-
-            _updateSeatVoiceIndicators: function() {
-                var indicators = document.querySelectorAll('.seat-custom .voice-indicator');
-
-                for (var key in this.participants) {
-                    var part = this.participants[key];
-                    var isSpeaking = part.speaking || false;
-                    var seats = document.querySelectorAll('.seat-custom');
-                    for (var i = 0; i < seats.length; i++) {
-                        var usernameEl = seats[i].querySelector('.username');
-                        if (usernameEl && usernameEl.textContent.trim() === key.split('@')[0]) {
-                            var indicator = seats[i].querySelector('.voice-indicator');
-                            if (indicator) {
-                                if (isSpeaking && !part.muted) {
-                                    indicator.classList.add('active');
-                                    indicator.textContent = '🔊';
-                                } else {
-                                    indicator.classList.remove('active');
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            },
-
-            toggleMute: function() {
-                if (!this.isConnected || !this.localParticipant) {
-                    return;
-                }
-
-                this.isMuted = !this.isMuted;
-
-                try {
-                    this.localParticipant.setMicrophoneEnabled(!this.isMuted);
-                    this._updateParticipantsList();
-                } catch (e) {
-                    console.error('Toggle mute error:', e);
-                }
-            },
-
-            disconnect: function() {
-                if (this.room) {
-                    try {
-                        this.room.disconnect();
-                    } catch (e) {}
-                }
-                this.room = null;
-                this.localParticipant = null;
-                this.isConnected = false;
-                this.isMuted = false;
-                this.roomName = null;
-                this.participants = {};
-                var container = $('voiceParticipants');
-                if (container) container.classList.remove('active');
-                var indicators = document.querySelectorAll('.seat-custom .voice-indicator');
-                for (var i = 0; i < indicators.length; i++) {
-                    indicators[i].classList.remove('active');
-                }
-            },
-
-            updateVoiceUI: function(state, statusText) {
-                var btn = $('voiceChatBtn');
-                var statusEl = $('voiceStatusText');
-                if (!btn) return;
-
-                btn.classList.remove('connected', 'connecting', 'muted');
-
-                if (state === 'connected') {
-                    btn.classList.add('connected');
-                    if (this.isMuted) {
-                        btn.classList.add('muted');
-                        if (statusEl) statusEl.textContent = '(بیصدا)';
-                    } else {
-                        if (statusEl) statusEl.textContent = '(فعال)';
-                    }
-                } else if (state === 'connecting') {
-                    btn.classList.add('connecting');
-                    if (statusEl) statusEl.textContent = '(در حال اتصال...)';
-                } else {
-                    if (statusEl) statusEl.textContent = '(غیرفعال)';
-                }
-            },
-
-            isInRoom: function() {
-                return this.isConnected && this.roomName !== null;
-            },
-
-            getRoomName: function() {
-                return this.roomName;
             }
         };
 
@@ -1863,7 +1243,7 @@
                         channel.publish('session_replaced', {
                             newDeviceId: newDeviceId,
                             timestamp: new Date().toISOString(),
-                            message: 'این حساب کاربری در دستگاه دیگری وارد شده است. برای حفظ امنیت، اتصال شما قطع خواهد شد.'
+                            message: 'این حساب کاربری در دستگاه دیگری وارد شده است.'
                         });
                         setTimeout(function() {
                             try { channel.unsubscribe(); } catch (e) {}
@@ -1911,11 +1291,8 @@
                 if (VoiceManager.isConnected) {
                     VoiceManager.disconnect();
                 }
+                ChatManager.leaveGlobalChat();
                 setTimeout(function() { AuthService.logout(); }, 500);
-                BackendlessService.saveLog('session_replaced_detected', {
-                    userId: DataManager.get('userId', ''),
-                    newDeviceId: newDeviceId
-                });
                 if (this.checkInterval) { clearInterval(this.checkInterval);
                     this.checkInterval = null; }
             },
@@ -1939,6 +1316,559 @@
                         SessionManager.handleSessionReplaced(deviceInfo);
                     });
                 } catch (e) { console.warn('Listen for session replaced error:', e); }
+            }
+        };
+
+        // ============================================================
+        //  💬  Chat Manager - چت آنلاین جهانی
+        // ============================================================
+
+        var ChatManager = {
+            channel: null,
+            isJoined: false,
+            messages: [],
+            onlineUsers: [],
+            isVoiceActive: false,
+            voiceRoom: null,
+            voiceParticipants: {},
+
+            init: function() {
+                if (!ablyClient) return;
+                this.channel = ablyClient.channels.get('global_chat');
+                this._subscribeToMessages();
+                this._subscribeToPresence();
+            },
+
+            joinGlobalChat: function() {
+                if (this.isJoined) return;
+                if (!this.channel) this.init();
+                if (!this.channel) return;
+
+                var p = DataManager.getPlayer();
+                this.channel.presence.enter({
+                    userId: p.userId,
+                    email: p.email,
+                    userName: p.name,
+                    avatar: p.avatar,
+                    isVerified: p.isVerified || false,
+                    role: p.role || 'user',
+                    status: 'online'
+                });
+
+                this.isJoined = true;
+                this._updateOnlineCount();
+                console.log('✅ Joined global chat');
+            },
+
+            leaveGlobalChat: function() {
+                if (!this.isJoined || !this.channel) return;
+                try {
+                    this.channel.presence.leave();
+                } catch (e) {}
+                this.isJoined = false;
+                if (this.isVoiceActive) {
+                    this.leaveVoiceChat();
+                }
+                this.onlineUsers = [];
+                this._updateOnlineCount();
+                console.log('✅ Left global chat');
+            },
+
+            sendMessage: function(text) {
+                if (!text || !text.trim()) return;
+                if (!this.channel) {
+                    ToastManager.show('❌ اتصال به چت برقرار نیست', 1500);
+                    return;
+                }
+
+                var p = DataManager.getPlayer();
+                var msg = {
+                    userId: p.userId,
+                    email: p.email,
+                    userName: p.name,
+                    text: text.trim(),
+                    avatar: p.avatar,
+                    isVerified: p.isVerified || false,
+                    role: p.role || 'user',
+                    timestamp: new Date().toISOString()
+                };
+
+                this.channel.publish('message', msg);
+                // نمایش پیام خودکار
+                this._addMessage(msg, true);
+            },
+
+            _subscribeToMessages: function() {
+                if (!this.channel) return;
+                this.channel.subscribe('message', function(msg) {
+                    var data = msg.data;
+                    if (data) {
+                        this._addMessage(data, false);
+                    }
+                }.bind(this));
+            },
+
+            _subscribeToPresence: function() {
+                if (!this.channel) return;
+                this.channel.presence.subscribe(function(msg) {
+                    if (msg.action === 'enter' || msg.action === 'update') {
+                        var data = msg.data || {};
+                        var existing = this.onlineUsers.find(function(u) { return u.userId === data.userId; });
+                        if (!existing) {
+                            this.onlineUsers.push(data);
+                        } else {
+                            Object.assign(existing, data);
+                        }
+                    } else if (msg.action === 'leave') {
+                        var data = msg.data || {};
+                        this.onlineUsers = this.onlineUsers.filter(function(u) { return u.userId !== data.userId; });
+                    }
+                    this._updateOnlineCount();
+                    this._updateVoiceUsers();
+                }.bind(this));
+
+                // دریافت لیست اولیه
+                this.channel.presence.get(function(err, members) {
+                    if (!err && members) {
+                        this.onlineUsers = members.map(function(m) { return m.data; }).filter(function(d) { return d; });
+                        this._updateOnlineCount();
+                    }
+                }.bind(this));
+            },
+
+            _addMessage: function(msg, isSelf) {
+                // جلوگیری از داپلیکیت
+                var exists = this.messages.some(function(m) {
+                    return m.timestamp === msg.timestamp && m.userId === msg.userId && m.text === msg.text;
+                });
+                if (exists) return;
+
+                this.messages.push(msg);
+                this._renderMessage(msg, isSelf);
+                this._scrollToBottom();
+            },
+
+            _renderMessage: function(msg, isSelf) {
+                var container = $('chatMessages');
+                if (!container) return;
+
+                // حذف placeholder
+                var empty = container.querySelector('.chat-empty');
+                if (empty) empty.remove();
+
+                var div = document.createElement('div');
+                div.className = 'chat-msg' + (isSelf ? ' self' : '');
+
+                var avatarHtml = '';
+                var avatarData = AvatarManager.getAvatarById(msg.avatar);
+                if (avatarData && avatarData.image) {
+                    avatarHtml = '<img src="' + avatarData.image + '" alt="avatar">';
+                } else {
+                    avatarHtml = '👤';
+                }
+
+                var verifiedHtml = '';
+                if (msg.isVerified) {
+                    verifiedHtml = '<span class="verified-badge"><img src="https://uploadkon.ir/uploads/50f425_26BackgroundEraser-۲۰۲۶۰۸۲۵-۰۶۴۳۳۹۳۷۳.png" alt="verified"></span>';
+                }
+
+                var roleEmoji = '';
+                if (msg.role === 'owner') roleEmoji = '👑 ';
+                else if (msg.role === 'admin') roleEmoji = '🛡️ ';
+
+                var time = new Date(msg.timestamp).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+
+                div.innerHTML = `
+                    <div class="msg-avatar">${avatarHtml}</div>
+                    <div class="msg-content">
+                        <div class="msg-name">
+                            ${roleEmoji}${msg.userName || 'بی‌نام'}
+                            ${verifiedHtml}
+                        </div>
+                        <div class="msg-text">${this._escapeHtml(msg.text)}</div>
+                        <div class="msg-time">${time}</div>
+                    </div>
+                `;
+
+                container.appendChild(div);
+            },
+
+            _escapeHtml: function(text) {
+                var div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            },
+
+            _scrollToBottom: function() {
+                var container = $('chatMessages');
+                if (container) {
+                    setTimeout(function() {
+                        container.scrollTop = container.scrollHeight;
+                    }, 50);
+                }
+            },
+
+            _updateOnlineCount: function() {
+                var count = $('chatOnlineCount');
+                if (count) {
+                    count.textContent = '(' + this.onlineUsers.length + ' آنلاین)';
+                }
+            },
+
+            _updateVoiceUsers: function() {
+                var container = $('vcUsers');
+                if (!container) return;
+
+                var html = '';
+                var participants = this.voiceParticipants;
+                var p = DataManager.getPlayer();
+
+                // خود کاربر
+                html += `
+                    <div class="vc-user speaking">
+                        <span class="dot speaking"></span>
+                        شما ${VoiceManager.isMuted ? '🔇' : '🎤'}
+                    </div>
+                `;
+
+                for (var key in participants) {
+                    if (key === p.userId) continue;
+                    var user = participants[key];
+                    var isSpeaking = user.speaking || false;
+                    var isMuted = user.muted || false;
+                    var name = user.userName || key.split('@')[0];
+                    html += `
+                        <div class="vc-user ${isSpeaking ? 'speaking' : ''}">
+                            <span class="dot ${isSpeaking ? 'speaking' : 'muted'}"></span>
+                            ${name} ${isMuted ? '🔇' : ''}
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = html;
+            },
+
+            toggleVoiceChat: function() {
+                if (this.isVoiceActive) {
+                    this.leaveVoiceChat();
+                } else {
+                    this.joinVoiceChat();
+                }
+            },
+
+            joinVoiceChat: function() {
+                if (this.isVoiceActive) return;
+                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
+                    ToastManager.show('⏳ در حال بارگذاری SDK صوتی...', 1500);
+                    this._loadLiveKitSDK().then(function() {
+                        this._joinVoiceChat();
+                    }.bind(this)).catch(function() {
+                        ToastManager.show('❌ خطا در بارگذاری SDK صوتی', 2000);
+                    });
+                    return;
+                }
+                this._joinVoiceChat();
+            },
+
+            _loadLiveKitSDK: function() {
+                return new Promise(function(resolve, reject) {
+                    if (typeof LiveKit !== 'undefined' && LiveKit.Room) {
+                        resolve();
+                        return;
+                    }
+                    var cdnList = [
+                        'https://cdn.jsdelivr.net/npm/livekit-client@1.15.3/dist/livekit-client.umd.min.js',
+                        'https://unpkg.com/livekit-client@1.15.3/dist/livekit-client.umd.min.js'
+                    ];
+                    var index = 0;
+
+                    function tryNext() {
+                        if (index >= cdnList.length) {
+                            reject(new Error('All CDNs failed'));
+                            return;
+                        }
+                        var script = document.createElement('script');
+                        script.src = cdnList[index];
+                        script.onload = function() {
+                            if (typeof LiveKit !== 'undefined' && LiveKit.Room) {
+                                resolve();
+                            } else {
+                                index++;
+                                tryNext();
+                            }
+                        };
+                        script.onerror = function() {
+                            index++;
+                            tryNext();
+                        };
+                        document.head.appendChild(script);
+                    }
+                    tryNext();
+                });
+            },
+
+            _joinVoiceChat: function() {
+                var p = DataManager.getPlayer();
+                var roomName = 'global_voice_' + Date.now();
+
+                VoiceManager.connect(roomName)
+                    .then(function() {
+                        this.isVoiceActive = true;
+                        var toggle = $('chatVoiceToggle');
+                        if (toggle) {
+                            toggle.classList.add('active');
+                            toggle.innerHTML = '<i class="fas fa-microphone-slash"></i> خروج صوتی';
+                        }
+                        var panel = $('voiceChatPanel');
+                        if (panel) panel.classList.add('active');
+
+                        // به‌روزرسانی لیست کاربران صوتی
+                        VoiceManager.participants = {};
+                        this.voiceParticipants = {};
+                        this._updateVoiceUsers();
+
+                        ToastManager.show('🎤 به گفت‌گوی صوتی پیوستید', 1500);
+                    }.bind(this))
+                    .catch(function(err) {
+                        console.error('Voice join error:', err);
+                        ToastManager.show('❌ خطا در اتصال صوتی', 2000);
+                    });
+            },
+
+            leaveVoiceChat: function() {
+                VoiceManager.disconnect();
+                this.isVoiceActive = false;
+                this.voiceParticipants = {};
+                var toggle = $('chatVoiceToggle');
+                if (toggle) {
+                    toggle.classList.remove('active');
+                    toggle.innerHTML = '<i class="fas fa-microphone"></i> صوتی';
+                }
+                var panel = $('voiceChatPanel');
+                if (panel) panel.classList.remove('active');
+                ToastManager.show('🔇 از گفت‌گوی صوتی خارج شدید', 1500);
+            },
+
+            toggleMute: function() {
+                VoiceManager.toggleMute();
+                var btn = $('vcMuteBtn');
+                if (btn) {
+                    if (VoiceManager.isMuted) {
+                        btn.classList.add('muted');
+                        btn.innerHTML = '<i class="fas fa-microphone-slash"></i> فعال کردن';
+                    } else {
+                        btn.classList.remove('muted');
+                        btn.innerHTML = '<i class="fas fa-microphone"></i> بیصدا';
+                    }
+                }
+                this._updateVoiceUsers();
+            },
+
+            openChat: function() {
+                var screen = $('chatScreen');
+                if (screen) screen.classList.add('active');
+                this._scrollToBottom();
+                this._updateOnlineCount();
+            },
+
+            closeChat: function() {
+                var screen = $('chatScreen');
+                if (screen) screen.classList.remove('active');
+                if (this.isVoiceActive) {
+                    this.leaveVoiceChat();
+                }
+            }
+        };
+
+        // ============================================================
+        //  🎤  Voice Manager (برای چت صوتی)
+        // ============================================================
+
+        var VoiceManager = {
+            room: null,
+            localParticipant: null,
+            isConnected: false,
+            isMuted: false,
+            participants: {},
+            roomName: null,
+            _reconnectAttempts: 0,
+            _maxReconnectAttempts: 3,
+
+            connect: function(roomName) {
+                if (!roomName) {
+                    return Promise.reject(new Error('NO_ROOM_NAME'));
+                }
+
+                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
+                    return Promise.reject(new Error('LiveKit SDK not loaded'));
+                }
+
+                if (this.isConnected && this.roomName === roomName) {
+                    return Promise.resolve();
+                }
+
+                if (this.isConnected) {
+                    this.disconnect();
+                }
+
+                this.roomName = roomName;
+                return this._createToken(roomName)
+                    .then(function(token) {
+                        if (!token) throw new Error('Token failed');
+                        return this._connectWithToken(token, roomName);
+                    }.bind(this))
+                    .then(function() {
+                        this.isConnected = true;
+                        this._reconnectAttempts = 0;
+                        return true;
+                    }.bind(this))
+                    .catch(function(err) {
+                        console.error('Voice connect error:', err);
+                        this.isConnected = false;
+                        return Promise.reject(err);
+                    }.bind(this));
+            },
+
+            _createToken: function(roomName) {
+                var p = DataManager.getPlayer();
+                var identity = p.userId || 'user_' + Date.now();
+                var name = p.name || 'کاربر';
+
+                var payload = {
+                    exp: Math.floor(Date.now() / 1000) + 3600,
+                    nbf: Math.floor(Date.now() / 1000) - 10,
+                    sub: 'APINGhmpwAhPVQk',
+                    video: {
+                        room: roomName,
+                        roomJoin: true,
+                        canPublish: true,
+                        canSubscribe: true
+                    },
+                    name: name,
+                    identity: identity
+                };
+
+                try {
+                    var header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+                    var payloadStr = JSON.stringify(payload);
+                    var utf8Encoded = encodeURIComponent(payloadStr)
+                        .replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                            return String.fromCharCode(parseInt(p1, 16));
+                        });
+                    var payloadB64 = btoa(utf8Encoded);
+                    var signature = btoa(JSON.stringify({ sign: 'livekit_' + Date.now() }));
+                    return Promise.resolve(header + '.' + payloadB64 + '.' + signature);
+                } catch (error) {
+                    console.error('Token creation error:', error);
+                    return Promise.reject(new Error('Failed to create token'));
+                }
+            },
+
+            _connectWithToken: function(token, roomName) {
+                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
+                    return Promise.reject(new Error('LiveKit SDK not loaded'));
+                }
+
+                var room = new LiveKit.Room({
+                    adaptiveStream: true,
+                    dynacast: true,
+                    audioCaptureDefaults: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    }
+                });
+
+                this.room = room;
+
+                room.on('participantConnected', function(participant) {
+                    this.participants[participant.identity] = {
+                        participant: participant,
+                        speaking: false,
+                        muted: false,
+                        userName: participant.name || participant.identity
+                    };
+                    ChatManager.voiceParticipants = this.participants;
+                    ChatManager._updateVoiceUsers();
+                }.bind(this));
+
+                room.on('participantDisconnected', function(participant) {
+                    delete this.participants[participant.identity];
+                    ChatManager.voiceParticipants = this.participants;
+                    ChatManager._updateVoiceUsers();
+                }.bind(this));
+
+                room.on('trackSubscribed', function(track, publication, participant) {
+                    if (track.kind === 'audio' && participant) {
+                        if (this.participants[participant.identity]) {
+                            this.participants[participant.identity].muted = publication.muted || false;
+                        }
+                        ChatManager.voiceParticipants = this.participants;
+                        ChatManager._updateVoiceUsers();
+                    }
+                }.bind(this));
+
+                room.on('connectionStateChanged', function(state) {
+                    if (state === 'disconnected') {
+                        this.isConnected = false;
+                        this._handleDisconnect();
+                    }
+                }.bind(this));
+
+                return room.connect('wss://udhg-080lyqpp.livekit.cloud', token, {
+                    autoSubscribe: true
+                }).then(function() {
+                    this.localParticipant = room.localParticipant;
+                    this.isConnected = true;
+                    return true;
+                }.bind(this));
+            },
+
+            _handleDisconnect: function() {
+                this.isConnected = false;
+                this.room = null;
+                this.localParticipant = null;
+                this.participants = {};
+                ChatManager.voiceParticipants = {};
+                ChatManager._updateVoiceUsers();
+                if (this.roomName && this._reconnectAttempts < this._maxReconnectAttempts) {
+                    this._reconnectAttempts++;
+                    setTimeout(function() {
+                        this.connect(this.roomName).catch(function() {});
+                    }.bind(this), 2000);
+                }
+            },
+
+            toggleMute: function() {
+                if (!this.isConnected || !this.localParticipant) {
+                    return;
+                }
+                this.isMuted = !this.isMuted;
+                try {
+                    this.localParticipant.setMicrophoneEnabled(!this.isMuted);
+                } catch (e) {
+                    console.error('Toggle mute error:', e);
+                }
+            },
+
+            disconnect: function() {
+                if (this.room) {
+                    try {
+                        this.room.disconnect();
+                    } catch (e) {}
+                }
+                this.room = null;
+                this.localParticipant = null;
+                this.isConnected = false;
+                this.isMuted = false;
+                this.roomName = null;
+                this.participants = {};
+                ChatManager.voiceParticipants = {};
+                ChatManager._updateVoiceUsers();
+            },
+
+            isInRoom: function() {
+                return this.isConnected && this.roomName !== null;
             }
         };
 
@@ -1981,39 +1911,27 @@
             renderLobbies: function() {
                 var container = $('lobbyListCustom');
                 if (!container) return;
-
                 var lobbies = this.lobbies;
-                var p = DataManager.getPlayer();
 
                 if (this.isShutdown) {
-                    container.innerHTML = `
-                        <div class="lobby-empty-custom">
-                            <span class="icon">🚫</span>
-                            <div class="text">لابی‌ها توسط مدیر بسته شده است</div>
-                            <div class="sub">لطفاً بعداً مراجعه کنید</div>
-                        </div>
-                    `;
+                    container.innerHTML =
+                        '<div class="lobby-empty-custom"><span class="icon">🚫</span><div class="text">لابی‌ها توسط مدیر بسته شده است</div></div>';
                     return;
                 }
 
                 if (lobbies.length === 0) {
-                    container.innerHTML = `
-                        <div class="lobby-empty-custom">
-                            <span class="icon">🏠</span>
-                            <div class="text">هیچ لابی فعالی وجود ندارد</div>
-                            <div class="sub">برای شروع، یک لابی جدید ایجاد کنید</div>
-                        </div>
-                    `;
+                    container.innerHTML =
+                        '<div class="lobby-empty-custom"><span class="icon">🏠</span><div class="text">هیچ لابی فعالی وجود ندارد</div><div class="sub">برای شروع، یک لابی جدید ایجاد کنید</div></div>';
                     return;
                 }
 
                 var html = '';
+                var p = DataManager.getPlayer();
                 for (var i = 0; i < lobbies.length; i++) {
                     var lobby = lobbies[i];
                     var players = lobby.players || [];
                     var playerCount = players.length;
                     var isFull = playerCount >= 10;
-                    var isJoined = players.indexOf(p.email) !== -1;
 
                     html += `
                         <div class="lobby-card-custom" data-lobby-id="${lobby.objectId}">
@@ -2044,42 +1962,6 @@
                         });
                     })(joinBtns[j]);
                 }
-
-                var cards = container.querySelectorAll('.lobby-card-custom');
-                for (var k = 0; k < cards.length; k++) {
-                    (function(card) {
-                        card.addEventListener('click', function() {
-                            ToastManager.show('⏳ بخش لابی در حال بروزرسانی است', 2000);
-                        });
-                    })(cards[k]);
-                }
-            },
-
-            createLobby: function(lobbyName) {
-                ToastManager.show('⏳ بخش لابی در حال بروزرسانی است', 3000);
-                return Promise.reject('LOBBY_DISABLED');
-            },
-
-            joinLobby: function(lobbyId) {
-                ToastManager.show('⏳ بخش لابی در حال بروزرسانی است', 3000);
-                return Promise.reject('LOBBY_DISABLED');
-            },
-
-            openRoom: function(lobbyId) {
-                ToastManager.show('⏳ بخش لابی در حال بروزرسانی است', 2000);
-                return;
-            },
-
-            leaveRoom: function() {
-                var roomScreen = $('roomScreenCustom');
-                if (roomScreen) roomScreen.classList.remove('active');
-
-                var lobbyScreen = $('lobbyScreenCustom');
-                if (lobbyScreen) lobbyScreen.classList.add('active');
-
-                VoiceManager.disconnect();
-
-                this.currentLobbyId = null;
             },
 
             shutdownAllLobbies: function() {
@@ -2095,7 +1977,6 @@
                 }
 
                 ToastManager.show('⏳ در حال بستن همه لابی‌ها...', 2000);
-
                 var that = this;
                 return BackendlessService.findUsers("isActive = true", null, 100, CONFIG.LOBBY_TABLE)
                     .then(function(lobbies) {
@@ -2105,7 +1986,6 @@
                             that.renderLobbies();
                             return;
                         }
-
                         var promises = lobbies.map(function(lobby) {
                             return BackendlessService.saveUser({
                                 objectId: lobby.objectId,
@@ -2114,7 +1994,6 @@
                                 shutdownAt: new Date().toISOString()
                             }, CONFIG.LOBBY_TABLE);
                         });
-
                         return Promise.all(promises);
                     })
                     .then(function() {
@@ -2122,10 +2001,6 @@
                         that.lobbies = [];
                         that.renderLobbies();
                         ToastManager.show('✅ همه لابی‌ها با موفقیت بسته شدند!', 2000);
-                        BackendlessService.saveLog('shutdown_lobbies', {
-                            by: p.email,
-                            timestamp: new Date().toISOString()
-                        });
                     })
                     .catch(function(err) {
                         console.error('Shutdown error:', err);
@@ -2134,208 +2009,15 @@
                     });
             },
 
-            reopenLobbies: function() {
-                var p = DataManager.getPlayer();
-                if (p.role !== 'owner') {
-                    ToastManager.show('⛔ فقط سازنده اصلی می‌تواند لابی‌ها را باز کند', 2000);
-                    return Promise.reject('NO_PERMISSION');
-                }
-
-                if (!this.isShutdown) {
-                    ToastManager.show('ℹ️ لابی‌ها قبلاً باز هستند', 1500);
-                    return Promise.resolve();
-                }
-
-                this.isShutdown = false;
-                this.loadLobbies();
-                ToastManager.show('✅ لابی‌ها باز شدند!', 2000);
-                BackendlessService.saveLog('reopen_lobbies', {
-                    by: p.email,
-                    timestamp: new Date().toISOString()
-                });
-                return Promise.resolve();
+            leaveRoom: function() {
+                var roomScreen = $('roomScreenCustom');
+                if (roomScreen) roomScreen.classList.remove('active');
+                var lobbyScreen = $('lobbyScreenCustom');
+                if (lobbyScreen) lobbyScreen.classList.add('active');
+                VoiceManager.disconnect();
+                this.currentLobbyId = null;
             }
         };
-
-        // ============================================================
-        //  📡  Live View — استریم زنده واقعی
-        // ============================================================
-
-        var liveViewInterval = null;
-        var liveUsers = [];
-        var userActions = {};
-        var ablyClient = null;
-        var matchmakingChannel = null;
-
-        function startLiveView() {
-            if (liveViewInterval) clearInterval(liveViewInterval);
-            liveViewInterval = setInterval(function() {
-                updateLiveUsers();
-            }, 3000); // هر ۳ ثانیه به‌روزرسانی
-            updateLiveUsers();
-        }
-
-        function updateLiveUsers() {
-            var p = DataManager.getPlayer();
-            if (!p.isLoggedIn) {
-                if (liveViewInterval) clearInterval(liveViewInterval);
-                return;
-            }
-
-            BackendlessService.findUsers(null, 'onlineStatus DESC', 50)
-                .then(function(users) {
-                    if (!users) return;
-                    liveUsers = users.filter(function(u) {
-                        return u.email !== p.email && u.onlineStatus === true;
-                    });
-                    renderLiveView(liveUsers);
-                })
-                .catch(function(err) {
-                    console.warn('Live view error:', err);
-                });
-        }
-
-        function renderLiveView(users) {
-            var container = $('liveViewContent');
-            if (!container) return;
-
-            if (users.length === 0) {
-                container.innerHTML = `
-                    <div class="live-empty">
-                        <span class="icon">👀</span>
-                        <div class="text">هیچ کاربر آنلاینی وجود ندارد</div>
-                        <div style="font-size:13px;color:rgba(255,255,255,.05);">کاربران آنلاین در اینجا نمایش داده می‌شوند</div>
-                    </div>
-                `;
-                return;
-            }
-
-            var html = '';
-            for (var i = 0; i < users.length; i++) {
-                var u = users[i];
-                var action = userActions[u.email] || 'در حال مرور صفحه اصلی';
-                var time = new Date().toLocaleTimeString('fa-IR');
-
-                html += `
-                    <div class="live-user-card">
-                        <span class="status-dot online"></span>
-                        <div class="info">
-                            <div class="name">${u.userName || 'بی‌نام'}</div>
-                            <div class="action"><span class="highlight">◉</span> ${action}</div>
-                        </div>
-                        <span class="time">${time}</span>
-                    </div>
-                `;
-            }
-            container.innerHTML = html;
-        }
-
-        // ===== دریافت فعالیت‌های واقعی از Backendless =====
-        function fetchUserActivities() {
-            var p = DataManager.getPlayer();
-            if (!p.isLoggedIn) return;
-
-            // گرفتن لاگ‌های اخیر کاربران
-            BackendlessService.findUsers(null, 'lastActivity DESC', 20, 'Logs')
-                .then(function(logs) {
-                    if (!logs) return;
-                    var now = Date.now();
-                    for (var i = 0; i < logs.length; i++) {
-                        var log = logs[i];
-                        var userId = log.userId;
-                        if (userId && userId !== p.userId) {
-                            var time = new Date(log.timestamp);
-                            if ((now - time.getTime()) < 60000) { // کمتر از ۱ دقیقه
-                                userActions[userId] = log.action || 'در حال فعالیت';
-                            }
-                        }
-                    }
-                })
-                .catch(function() {});
-        }
-
-        // هر ۵ ثانیه فعالیت‌های واقعی رو میگیریم
-        setInterval(function() {
-            fetchUserActivities();
-        }, 5000);
-
-        // ===== Ably =====
-        function initAbly() {
-            try {
-                if (typeof Ably === 'undefined') {
-                    console.warn('Ably SDK not loaded');
-                    return false;
-                }
-                if (ablyClient) { try { ablyClient.close(); } catch (e) {} }
-                ablyClient = new Ably.Realtime({
-                    key: CONFIG.ABLY_KEY,
-                    clientId: 'player_' + Date.now(),
-                    echoMessages: false,
-                    autoConnect: true
-                });
-                ablyClient.connection.on('connected', function() {
-                    console.log('Ably connected');
-                    var overlay = $('serviceOfflineOverlay');
-                    if (overlay) overlay.classList.remove('active');
-                    if (!matchmakingChannel) {
-                        matchmakingChannel = ablyClient.channels.get('matchmaking');
-                        presenceEnter();
-                        // گوش دادن به تغییرات حضور
-                        matchmakingChannel.presence.subscribe(function(msg) {
-                            if (msg.action === 'enter' || msg.action === 'update') {
-                                var data = msg.data || {};
-                                if (data.userId && data.userId !== DataManager.get('userId', '')) {
-                                    var action = data.action || 'آنلاین';
-                                    userActions[data.userId] = action;
-                                    updateLiveUsers();
-                                }
-                            }
-                            if (msg.action === 'leave') {
-                                var data = msg.data || {};
-                                if (data.userId) {
-                                    delete userActions[data.userId];
-                                    updateLiveUsers();
-                                }
-                            }
-                        });
-                    }
-                });
-                ablyClient.connection.on('disconnected', function() {
-                    console.log('Ably disconnected');
-                    var overlay = $('serviceOfflineOverlay');
-                    if (overlay) overlay.classList.add('active');
-                });
-                ablyClient.connection.on('failed', function() {
-                    console.log('Ably failed');
-                    var overlay = $('serviceOfflineOverlay');
-                    if (overlay) overlay.classList.add('active');
-                });
-                matchmakingChannel = ablyClient.channels.get('matchmaking');
-                var sessionId = DataManager.get('sessionId', '');
-                if (sessionId) { SessionManager.listenForSessionReplaced(sessionId); }
-                return true;
-            } catch (e) {
-                console.error('Ably init error:', e);
-                return false;
-            }
-        }
-
-        function presenceEnter() {
-            try {
-                var p = DataManager.getPlayer();
-                if (!matchmakingChannel || !p.email) return;
-                matchmakingChannel.presence.enter({
-                    userId: p.userId,
-                    email: p.email,
-                    userName: p.name,
-                    level: p.level,
-                    avatar: p.avatar,
-                    status: 'online',
-                    action: 'آنلاین',
-                    sessionId: DataManager.get('sessionId', '')
-                });
-            } catch (e) { console.warn('Presence enter error:', e); }
-        }
 
         // ============================================================
         //  ✏️  Rename System
@@ -2350,7 +2032,6 @@
                     ToastManager.show('❌ لطفاً ابتدا وارد شوید', 1500);
                     return;
                 }
-
                 var cost = this.getCost();
                 var costInfo = $('renameCostInfo');
                 var input = $('renameInput');
@@ -2390,7 +2071,6 @@
             confirm: function() {
                 var input = $('renameInput');
                 if (!input) return;
-
                 var newName = input.value.trim();
                 if (!newName || newName.length < 2 || newName.length > 20) {
                     ToastManager.show('❌ نام باید بین ۲ تا ۲۰ کاراکتر باشد', 2000);
@@ -2405,7 +2085,6 @@
                     return;
                 }
 
-                // ثبت تغییر
                 var newCoins = p.coins - cost;
                 var newRenameCount = (p.renameCount || 0) + 1;
 
@@ -2413,7 +2092,6 @@
                 DataManager.set('coins', newCoins);
                 DataManager.set('renameCount', newRenameCount);
 
-                // ذخیره در سرور
                 var email = p.email;
                 BackendlessService.findUser("email = '" + email + "'")
                     .then(function(userData) {
@@ -2430,9 +2108,9 @@
                         ToastManager.show('✅ نام شما با موفقیت تغییر کرد!', 1500);
                         updateUI();
                         this.close();
-                        // به‌روزرسانی حضور
-                        if (matchmakingChannel) {
-                            matchmakingChannel.presence.update({
+                        // بروزرسانی در چت
+                        if (ChatManager.channel) {
+                            ChatManager.channel.presence.update({
                                 userName: newName
                             });
                         }
@@ -2539,7 +2217,7 @@
             }
             if (filtered.length === 0) {
                 list.innerHTML =
-                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);font-family:Vazirmatn,sans-serif;">کاربری یافت نشد</div>';
+                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);">کاربری یافت نشد</div>';
                 return;
             }
             var sliced = filtered.slice(0, 50);
@@ -2553,7 +2231,6 @@
                 var isAdminUser = CONFIG.ADMIN_EMAILS.indexOf(user.email) !== -1 || user.role === 'admin' || user
                 .role === 'owner';
                 var isOwnerUser = user.role === 'owner' || user.email === CONFIG.OWNER_EMAIL;
-                var userRole = user.role || 'user';
                 var isCurrentUser = user.email === p.email;
 
                 var roleBadge = '';
@@ -2565,70 +2242,65 @@
                     roleBadge = '<span class="role-badge user">👤 کاربر</span>';
                 }
 
-                // مخفی کردن ایمیل سازنده
                 var displayEmail = user.email;
                 if (user.email === CONFIG.OWNER_EMAIL) {
                     displayEmail = '••••••••';
                 }
 
+                var verifiedBadge = '';
+                if (CONFIG.VERIFIED_USERS.indexOf(user.email) !== -1 || user.isVerified === true) {
+                    verifiedBadge =
+                        '<img src="https://uploadkon.ir/uploads/50f425_26BackgroundEraser-۲۰۲۶۰۸۲۵-۰۶۴۳۳۹۳۷۳.png" style="width:14px;height:14px;display:inline-block;vertical-align:middle;" alt="verified">';
+                }
+
                 item.innerHTML = `
-                        <div class="info">
-                            <div class="avatar">${user.avatar || '👤'}</div>
-                            <div class="details">
-                                <div class="name">
-                                    ${user.userName || 'بی‌نام'} 
-                                    <span class="${isOnline ? 'status-online' : 'status-offline'}"></span>
-                                    ${isBanned ? '⛔' : ''}
-                                    ${roleBadge}
-                                    ${isCurrentUser ? '<span style="font-size:9px;color:var(--gold);">(شما)</span>' : ''}
-                                </div>
-                                <div class="sub">
-                                    ${displayEmail} • سطح ${user.level || 1} • 🪙 ${user.coins || 0} • 💎 ${user.diamonds || 0} • 🏆 ${user.cups || 0}
-                                    ${user.renameCount > 0 ? '• ✏️ ' + user.renameCount : ''}
-                                </div>
+                    <div class="info">
+                        <div class="avatar">${user.avatar || '👤'}</div>
+                        <div class="details">
+                            <div class="name">
+                                ${user.userName || 'بی‌نام'} ${verifiedBadge}
+                                <span class="${isOnline ? 'status-online' : 'status-offline'}"></span>
+                                ${isBanned ? '⛔' : ''}
+                                ${roleBadge}
+                                ${isCurrentUser ? '<span style="font-size:9px;color:var(--gold);">(شما)</span>' : ''}
+                            </div>
+                            <div class="sub">
+                                ${displayEmail} • سطح ${user.level || 1} • 🪙 ${user.coins || 0} • 💎 ${user.diamonds || 0} • 🏆 ${user.cups || 0}
+                                ${user.renameCount > 0 ? '• ✏️ ' + user.renameCount : ''}
                             </div>
                         </div>
-                        <div class="actions">
-                            ${!isOwnerUser && !isCurrentUser ? `
-                                ${isBanned ? 
-                                    `<button class="unban-btn" onclick="adminUnban('${user.objectId}')">رفع بن</button>` :
-                                    `<button class="ban-btn" onclick="adminBan('${user.objectId}')">بن</button>`
-                                }
-                                <button class="edit-btn" onclick="adminEdit('${user.objectId}')"><i class="fas fa-edit"></i></button>
-                                ${(p.role === 'owner' || p.permissions.includes('manage_admins')) && !isAdminUser ? `
-                                    <button class="make-admin-btn" onclick="adminMakeAdmin('${user.objectId}')">ساخت ادمین</button>
-                                ` : ''}
-                                ${(p.role === 'owner') && isAdminUser ? `
-                                    <button class="remove-admin-btn" onclick="adminRemoveAdmin('${user.objectId}')">برداشتن ادمین</button>
-                                ` : ''}
+                    </div>
+                    <div class="actions">
+                        ${!isOwnerUser && !isCurrentUser ? `
+                            ${isBanned ? `<button class="unban-btn" onclick="adminUnban('${user.objectId}')">رفع بن</button>` :
+                                `<button class="ban-btn" onclick="adminBan('${user.objectId}')">بن</button>`}
+                            <button class="edit-btn" onclick="adminEdit('${user.objectId}')"><i class="fas fa-edit"></i></button>
+                            ${(p.role === 'owner' || p.permissions.includes('manage_admins')) && !isAdminUser ? `
+                                <button class="make-admin-btn" onclick="adminMakeAdmin('${user.objectId}')">ساخت ادمین</button>
                             ` : ''}
-                        </div>
-                    `;
+                            ${(p.role === 'owner') && isAdminUser ? `
+                                <button class="remove-admin-btn" onclick="adminRemoveAdmin('${user.objectId}')">برداشتن ادمین</button>
+                            ` : ''}
+                        ` : ''}
+                    </div>
+                `;
                 list.appendChild(item);
             }
         }
 
         function adminMakeAdmin(userId) {
             var p = DataManager.getPlayer();
-            if (p.role !== 'owner' && !p.permissions.includes('manage_admins')) {
+            if (p.role !== 'owner') {
                 ToastManager.show('⛔ فقط سازنده اصلی می‌تواند ادمین بسازد', 2000);
                 return;
             }
             if (!confirm('آیا از ساخت ادمین برای این کاربر مطمئن هستید؟')) return;
-            var user = adminUsers.find(function(u) { return u.objectId === userId; });
-            if (user && CONFIG.ADMIN_EMAILS.indexOf(user.email) !== -1) {
-                ToastManager.show('ℹ️ این کاربر قبلاً ادمین است', 1500);
-                return;
-            }
-            BackendlessService.saveUser({
-                objectId: userId,
-                role: 'admin',
-                permissions: ['manage_users', 'manage_rooms', 'view_logs', 'ban_users']
-            }).then(function() {
-                ToastManager.show('✅ کاربر ادمین شد', 1500);
-                loadAdminPanel();
-                BackendlessService.saveLog('make_admin', { userId: userId });
-            }).catch(function() {});
+            BackendlessService.saveUser({ objectId: userId, role: 'admin', permissions: ['manage_users', 'manage_rooms',
+                    'view_logs', 'ban_users'
+                ] })
+                .then(function() { ToastManager.show('✅ کاربر ادمین شد', 1500);
+                    loadAdminPanel(); })
+                .catch(function() {});
         }
 
         function adminRemoveAdmin(userId) {
@@ -2643,15 +2315,10 @@
                 ToastManager.show('⛔ نمی‌توانید سازنده اصلی را تغییر دهید', 2000);
                 return;
             }
-            BackendlessService.saveUser({
-                objectId: userId,
-                role: 'user',
-                permissions: []
-            }).then(function() {
-                ToastManager.show('✅ دسترسی ادمین برداشته شد', 1500);
-                loadAdminPanel();
-                BackendlessService.saveLog('remove_admin', { userId: userId });
-            }).catch(function() {});
+            BackendlessService.saveUser({ objectId: userId, role: 'user', permissions: [] })
+                .then(function() { ToastManager.show('✅ دسترسی ادمین برداشته شد', 1500);
+                    loadAdminPanel(); })
+                .catch(function() {});
         }
 
         function adminBan(userId) {
@@ -2778,249 +2445,219 @@
         }
 
         // ============================================================
-        //  🎯  Event Listeners
-        // ============================================================
-
-        // ===== Rename Events =====
-        safeAddListener('usernameLabel', 'click', function() {
-            RenameManager.open();
-        });
-
-        safeAddListener('renameCancel', 'click', function() {
-            RenameManager.close();
-        });
-
-        safeAddListener('renameConfirm', 'click', function() {
-            RenameManager.confirm();
-        });
-
-        safeAddListener('renameInput', 'keydown', function(e) {
-            if (e.key === 'Enter') {
-                RenameManager.confirm();
-            }
-            if (e.key === 'Escape') {
-                RenameManager.close();
-            }
-        });
-
-        // ===== Auth Events =====
-        safeAddListener('switchToRegister', 'click', function() {
-            var login = $('loginScreen');
-            var register = $('registerScreen');
-            if (login) login.classList.remove('active');
-            if (register) register.classList.add('active');
-        });
-
-        safeAddListener('switchToLogin', 'click', function() {
-            var login = $('loginScreen');
-            var register = $('registerScreen');
-            if (register) register.classList.remove('active');
-            if (login) login.classList.add('active');
-        });
-
-        safeAddListener('registerBtn', 'click', function() {
-            var username = $('regUsername');
-            var email = $('regEmail');
-            var password = $('regPassword');
-            var confirm = $('regPasswordConfirm');
-            var usernameVal = username ? username.value.trim() : '';
-            var emailVal = email ? email.value.trim().toLowerCase() : '';
-            var passwordVal = password ? password.value : '';
-            var confirmVal = confirm ? confirm.value : '';
-            var uError = $('regUsernameError');
-            var eError = $('regEmailError');
-            var pError = $('regPasswordError');
-            var cError = $('regPasswordConfirmError');
-            if (uError) uError.classList.remove('show');
-            if (eError) eError.classList.remove('show');
-            if (pError) pError.classList.remove('show');
-            if (cError) cError.classList.remove('show');
-            if (!usernameVal || usernameVal.length < 3) {
-                if (uError) { uError.textContent = 'نام کاربری حداقل ۳ کاراکتر باشد';
-                    uError.classList.add('show'); }
-                return;
-            }
-            if (!emailVal || emailVal.indexOf('@') === -1) {
-                if (eError) { eError.textContent = 'ایمیل معتبر وارد کنید';
-                    eError.classList.add('show'); }
-                return;
-            }
-            if (!passwordVal || passwordVal.length < 8) {
-                if (pError) { pError.textContent = 'رمز عبور حداقل ۸ کاراکتر باشد';
-                    pError.classList.add('show'); }
-                return;
-            }
-            if (passwordVal !== confirmVal) {
-                if (cError) { cError.textContent = 'رمز عبور مطابقت ندارد';
-                    cError.classList.add('show'); }
-                return;
-            }
-            AuthService.register(emailVal, passwordVal, usernameVal).catch(function() {});
-        });
-
-        safeAddListener('loginBtn', 'click', function() {
-            var email = $('loginEmail');
-            var password = $('loginPassword');
-            var emailVal = email ? email.value.trim().toLowerCase() : '';
-            var passwordVal = password ? password.value : '';
-
-            if (!emailVal || emailVal.indexOf('@') === -1) {
-                return;
-            }
-            if (!passwordVal || passwordVal.length < 8) {
-                return;
-            }
-
-            AuthService.login(emailVal, passwordVal);
-        });
-
-        safeAddListener('loginPassword', 'keydown', function(e) {
-            if (e.key === 'Enter') {
-                var btn = $('loginBtn');
-                if (btn) btn.click();
-            }
-        });
-
-        safeAddListener('loginEmail', 'keydown', function(e) {
-            if (e.key === 'Enter') {
-                var pass = $('loginPassword');
-                if (pass) pass.focus();
-            }
-        });
-
-        safeAddListener('logoutBtn', 'click', function() { AuthService.logout(); });
-
-        safeAddListener('profileBtn', 'click', function() { openAvatarShop(); });
-
-        safeAddListener('avatarShopClose', 'click', closeAvatarShop);
-
-        var avatarShop = $('avatarShopOverlay');
-        if (avatarShop) {
-            avatarShop.addEventListener('click', function(e) {
-                if (e.target === this) closeAvatarShop();
-            });
-        }
-
-        safeAddListener('liveViewBtn', 'click', function() {
-            var overlay = $('liveViewOverlay');
-            if (overlay) {
-                if (overlay.classList.contains('active')) {
-                    overlay.classList.remove('active');
-                } else {
-                    overlay.classList.add('active');
-                    updateLiveUsers();
-                }
-            }
-        });
-
-        safeAddListener('liveViewClose', 'click', function() {
-            var overlay = $('liveViewOverlay');
-            if (overlay) overlay.classList.remove('active');
-        });
-
-        safeAddListener('voiceChatBtn', 'click', function() {
-            var p = DataManager.getPlayer();
-            if (!p.isLoggedIn) return;
-
-            if (!LobbyManager.currentLobbyId) {
-                ToastManager.show('❌ ابتدا وارد یک لابی شوید', 1500);
-                return;
-            }
-
-            if (VoiceManager.isConnected) {
-                VoiceManager.toggleMute();
-            } else {
-                var roomName = 'lobby_' + LobbyManager.currentLobbyId;
-                VoiceManager.connect(roomName).catch(function() {});
-            }
-        });
-
-        safeAddListener('adminBtn', 'click', loadAdminPanel);
-        safeAddListener('adminClose', 'click', function() {
-            var panel = $('adminPanel');
-            if (panel) panel.classList.remove('active');
-        });
-
-        safeAddListener('shutdownLobbiesBtn', 'click', function() {
-            var btn = $('shutdownLobbiesBtn');
-            var p = DataManager.getPlayer();
-
-            if (p.role !== 'owner') {
-                ToastManager.show('⛔ فقط سازنده اصلی می‌تواند لابی‌ها را مدیریت کند', 2000);
-                return;
-            }
-
-            if (LobbyManager.isShutdown) {
-                if (confirm('آیا مطمئن هستید که می‌خواهید لابی‌ها را دوباره باز کنید؟')) {
-                    LobbyManager.reopenLobbies();
-                    btn.innerHTML = '<span class="icon"><i class="fas fa-power-off"></i></span> بستن همه لابی‌ها';
-                    btn.style.background = 'linear-gradient(135deg, var(--danger), #CC0000)';
-                }
-                return;
-            }
-
-            if (!confirm('⚠️ هشدار!\n\nشما در حال بستن همه لابی‌های فعال هستید.\nاین کار باعث می‌شود همه کاربران از لابی‌ها خارج شوند.\n\nآیا مطمئن هستید؟')) {
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading-spinner"></span> در حال بستن...';
-
-            LobbyManager.shutdownAllLobbies()
-                .then(function() {
-                    btn.innerHTML = '<span class="icon"><i class="fas fa-play"></i></span> باز کردن لابی‌ها';
-                    btn.style.background = 'linear-gradient(135deg, var(--success), #00CC66)';
-                })
-                .catch(function() {})
-                .finally(function() {
-                    btn.disabled = false;
-                });
-        });
-
-        safeAddListener('adminSearchInput', 'input', function() { renderAdminUsers(adminUsers); });
-        safeAddListener('adminSearchBtn', 'click', function() { renderAdminUsers(adminUsers); });
-
-        var adminTabs = document.querySelectorAll('.admin-tabs .tab');
-        for (var at = 0; at < adminTabs.length; at++) {
-            (function(tab) {
-                if (tab) {
-                    tab.addEventListener('click', function() {
-                        var tabs = document.querySelectorAll('.admin-tabs .tab');
-                        for (var tj = 0; tj < tabs.length; tj++) {
-                            if (tabs[tj]) tabs[tj].classList.remove('active');
-                        }
-                        if (this) this.classList.add('active');
-                        var atab = this ? this.dataset.atab : '';
-                        if (atab === 'dashboard' || atab === 'users') {
-                            loadAdminPanel();
-                            var roomsCard = $('roomsCard');
-                            if (roomsCard) roomsCard.style.display = 'none';
-                        } else if (atab === 'rooms') {
-                            var roomsCard = $('roomsCard');
-                            if (roomsCard) roomsCard.style.display = 'block';
-                            loadAdminPanel();
-                        } else if (atab === 'logs') {
-                            var list = $('adminUsersList');
-                            if (list) {
-                                list.innerHTML = `
-                                        <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);font-family:Vazirmatn,sans-serif;">
-                                            <i class="fas fa-file-alt" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                                            📝 لاگ‌ها در حال پیاده‌سازی...
-                                            <div style="font-size:12px;color:rgba(255,255,255,.05);margin-top:8px;">نسخه آتی</div>
-                                        </div>
-                                    `;
-                            }
-                            var roomsCard = $('roomsCard');
-                            if (roomsCard) roomsCard.style.display = 'none';
-                        }
-                    });
-                }
-            })(adminTabs[at]);
-        }
-
-        // ============================================================
         //  🚀  UI Functions
         // ============================================================
+
+        var ablyClient = null;
+
+        function initAbly() {
+            try {
+                if (typeof Ably === 'undefined') {
+                    console.warn('Ably SDK not loaded');
+                    return false;
+                }
+                if (ablyClient) { try { ablyClient.close(); } catch (e) {} }
+                ablyClient = new Ably.Realtime({
+                    key: CONFIG.ABLY_KEY,
+                    clientId: 'player_' + Date.now(),
+                    echoMessages: false,
+                    autoConnect: true
+                });
+                ablyClient.connection.on('connected', function() {
+                    console.log('Ably connected');
+                    var overlay = $('serviceOfflineOverlay');
+                    if (overlay) overlay.classList.remove('active');
+                    ChatManager.init();
+                    if (DataManager.get('isLoggedIn', false)) {
+                        ChatManager.joinGlobalChat();
+                    }
+                });
+                ablyClient.connection.on('disconnected', function() {
+                    console.log('Ably disconnected');
+                    var overlay = $('serviceOfflineOverlay');
+                    if (overlay) overlay.classList.add('active');
+                });
+                ablyClient.connection.on('failed', function() {
+                    console.log('Ably failed');
+                    var overlay = $('serviceOfflineOverlay');
+                    if (overlay) overlay.classList.add('active');
+                });
+                var sessionId = DataManager.get('sessionId', '');
+                if (sessionId) { SessionManager.listenForSessionReplaced(sessionId); }
+                return true;
+            } catch (e) {
+                console.error('Ably init error:', e);
+                return false;
+            }
+        }
+
+        var AvatarManager = {
+            getDefaultAvatar: function() { return AVATARS[0]; },
+            getAvatarById: function(id) {
+                for (var i = 0; i < AVATARS.length; i++) {
+                    if (AVATARS[i].id === id) return AVATARS[i];
+                }
+                return null;
+            },
+            getOwnedAvatars: function() {
+                var p = DataManager.getPlayer();
+                return p.ownedAvatars || ['avatar_free'];
+            },
+            isOwned: function(avatarId) {
+                var owned = this.getOwnedAvatars();
+                return owned.indexOf(avatarId) !== -1;
+            },
+            isEquipped: function(avatarId) {
+                var p = DataManager.getPlayer();
+                return p.avatar === avatarId;
+            },
+            getPrice: function(avatarId) {
+                var avatar = this.getAvatarById(avatarId);
+                return avatar ? avatar.price : 0;
+            },
+            purchaseAvatar: function(avatarId) {
+                var p = DataManager.getPlayer();
+                var avatar = this.getAvatarById(avatarId);
+                if (!avatar) return { success: false, message: 'آواتار یافت نشد' };
+                if (avatar.free) return { success: false, message: 'این آواتار رایگان است' };
+                if (this.isOwned(avatarId)) return { success: false, message: 'این آواتار را قبلاً خریداری کرده‌اید' };
+                var price = avatar.price;
+                if (p.diamonds < price) {
+                    return { success: false, message: 'الماس کافی نیست! نیاز به ' + price + ' الماس دارید' };
+                }
+                var newDiamonds = p.diamonds - price;
+                var owned = this.getOwnedAvatars();
+                owned.push(avatarId);
+                DataManager.set('diamonds', newDiamonds);
+                DataManager.set('ownedAvatars', owned);
+                var email = p.email;
+                BackendlessService.findUser("email = '" + email + "'")
+                    .then(function(userData) {
+                        if (userData) {
+                            return BackendlessService.saveUser({
+                                objectId: userData.objectId,
+                                diamonds: newDiamonds,
+                                ownedAvatars: owned
+                            });
+                        }
+                    })
+                    .catch(function() {});
+                updateCurrencyUI();
+                return { success: true, message: '✅ آواتار خریداری شد!' };
+            },
+            equipAvatar: function(avatarId) {
+                var p = DataManager.getPlayer();
+                if (!this.isOwned(avatarId)) {
+                    return { success: false, message: 'این آواتار را ندارید' };
+                }
+                DataManager.set('avatar', avatarId);
+                var email = p.email;
+                BackendlessService.findUser("email = '" + email + "'")
+                    .then(function(userData) {
+                        if (userData) {
+                            return BackendlessService.saveUser({
+                                objectId: userData.objectId,
+                                avatar: avatarId
+                            });
+                        }
+                    })
+                    .catch(function() {});
+                updateUI();
+                return { success: true, message: '✅ آواتار تغییر کرد!' };
+            }
+        };
+
+        var AVATARS = [{
+            id: 'avatar_free',
+            name: 'آواتار رایگان',
+            image: 'https://cdn.imgurl.ir/uploads/t94765_InShot_20260729_162942276.jpg',
+            price: 0,
+            free: true
+        }, {
+            id: 'avatar_1',
+            name: 'جادوگر',
+            image: 'https://cdn.imgurl.ir/uploads/i76028_file_00000000a51c81f4a04df70a3a7392b3.png',
+            price: 150,
+            free: false
+        }, {
+            id: 'avatar_2',
+            name: 'شاهزاده',
+            image: 'https://cdn.imgurl.ir/uploads/g32313_file_0000000015bc81f4a40ab89565895cef.png',
+            price: 200,
+            free: false
+        }, {
+            id: 'avatar_3',
+            name: 'متفکر',
+            image: 'https://cdn.imgurl.ir/uploads/s74608_IMG_20260730_203155_950.jpg',
+            price: 80,
+            free: false
+        }, {
+            id: 'avatar_4',
+            name: 'شوالیه',
+            image: 'https://cdn.imgurl.ir/uploads/a813016_IMG_20260730_203147_691.jpg',
+            price: 120,
+            free: false
+        }, {
+            id: 'avatar_5',
+            name: 'نینجا',
+            image: 'https://cdn.imgurl.ir/uploads/n074302_IMG_20260730_203145_120.jpg',
+            price: 180,
+            free: false
+        }, {
+            id: 'avatar_6',
+            name: 'سامورایی',
+            image: 'https://cdn.imgurl.ir/uploads/g541337_IMG_20260730_203142_252.jpg',
+            price: 250,
+            free: false
+        }, {
+            id: 'avatar_7',
+            name: 'کماندار',
+            image: 'https://cdn.imgurl.ir/uploads/g554961_IMG_20260730_203139_369.jpg',
+            price: 90,
+            free: false
+        }, {
+            id: 'avatar_8',
+            name: 'جادوگر تاریک',
+            image: 'https://cdn.imgurl.ir/uploads/k065310_IMG_20260730_203137_085.jpg',
+            price: 300,
+            free: false
+        }, {
+            id: 'avatar_9',
+            name: 'فرشته',
+            image: 'https://cdn.imgurl.ir/uploads/12201_IMG_20260730_203135_591.jpg',
+            price: 220,
+            free: false
+        }, {
+            id: 'avatar_10',
+            name: 'اهریمن',
+            image: 'https://cdn.imgurl.ir/uploads/p87072_IMG_20260730_203132_084.jpg',
+            price: 280,
+            free: false
+        }, {
+            id: 'avatar_11',
+            name: 'راهب',
+            image: 'https://cdn.imgurl.ir/uploads/d7657_IMG_20260730_203130_458.jpg',
+            price: 70,
+            free: false
+        }, {
+            id: 'avatar_12',
+            name: 'جادوگر نور',
+            image: 'https://cdn.imgurl.ir/uploads/x29283_InShot_20260729_213613397.jpg',
+            price: 350,
+            free: false
+        }, {
+            id: 'avatar_13',
+            name: 'دزد دریایی',
+            image: 'https://cdn.imgurl.ir/uploads/n7791_IMG_20260729_212841_310.jpg',
+            price: 160,
+            free: false
+        }, {
+            id: 'avatar_14',
+            name: 'مرد عنکبوتی',
+            image: 'https://cdn.imgurl.ir/uploads/k72611_IMG_20260729_212838_610.jpg',
+            price: 400,
+            free: false
+        }];
 
         function openAvatarShop() {
             var p = DataManager.getPlayer();
@@ -3151,82 +2788,6 @@
             }
         }
 
-        var AvatarManager = {
-            getDefaultAvatar: function() { return AVATARS[0]; },
-            getAvatarById: function(id) {
-                for (var i = 0; i < AVATARS.length; i++) {
-                    if (AVATARS[i].id === id) return AVATARS[i];
-                }
-                return null;
-            },
-            getOwnedAvatars: function() {
-                var p = DataManager.getPlayer();
-                return p.ownedAvatars || ['avatar_free'];
-            },
-            isOwned: function(avatarId) {
-                var owned = this.getOwnedAvatars();
-                return owned.indexOf(avatarId) !== -1;
-            },
-            isEquipped: function(avatarId) {
-                var p = DataManager.getPlayer();
-                return p.avatar === avatarId;
-            },
-            getPrice: function(avatarId) {
-                var avatar = this.getAvatarById(avatarId);
-                return avatar ? avatar.price : 0;
-            },
-            purchaseAvatar: function(avatarId) {
-                var p = DataManager.getPlayer();
-                var avatar = this.getAvatarById(avatarId);
-                if (!avatar) return { success: false, message: 'آواتار یافت نشد' };
-                if (avatar.free) return { success: false, message: 'این آواتار رایگان است' };
-                if (this.isOwned(avatarId)) return { success: false, message: 'این آواتار را قبلاً خریداری کرده‌اید' };
-                var price = avatar.price;
-                if (p.diamonds < price) {
-                    return { success: false, message: 'الماس کافی نیست! نیاز به ' + price + ' الماس دارید' };
-                }
-                var newDiamonds = p.diamonds - price;
-                var owned = this.getOwnedAvatars();
-                owned.push(avatarId);
-                DataManager.set('diamonds', newDiamonds);
-                DataManager.set('ownedAvatars', owned);
-                var email = p.email;
-                BackendlessService.findUser("email = '" + email + "'")
-                    .then(function(userData) {
-                        if (userData) {
-                            return BackendlessService.saveUser({
-                                objectId: userData.objectId,
-                                diamonds: newDiamonds,
-                                ownedAvatars: owned
-                            });
-                        }
-                    })
-                    .catch(function() {});
-                updateCurrencyUI();
-                return { success: true, message: '✅ آواتار خریداری شد!' };
-            },
-            equipAvatar: function(avatarId) {
-                var p = DataManager.getPlayer();
-                if (!this.isOwned(avatarId)) {
-                    return { success: false, message: 'این آواتار را ندارید' };
-                }
-                DataManager.set('avatar', avatarId);
-                var email = p.email;
-                BackendlessService.findUser("email = '" + email + "'")
-                    .then(function(userData) {
-                        if (userData) {
-                            return BackendlessService.saveUser({
-                                objectId: userData.objectId,
-                                avatar: avatarId
-                            });
-                        }
-                    })
-                    .catch(function() {});
-                updateUI();
-                return { success: true, message: '✅ آواتار تغییر کرد!' };
-            }
-        };
-
         function handleBan(userData) {
             var overlay = $('banOverlay');
             var block = $('banBlock');
@@ -3269,16 +2830,6 @@
                 }
             }
         }
-
-        safeAddListener('banLogoutBtn', 'click', function() {
-            VoiceManager.disconnect();
-            AuthService.logout();
-            var overlay = $('banOverlay');
-            var block = $('banBlock');
-            if (overlay) overlay.classList.remove('active');
-            if (block) block.classList.remove('active');
-            enableAllAccess();
-        });
 
         function showAuthScreen(screen) {
             var screens = document.querySelectorAll('.auth-screen');
@@ -3371,36 +2922,240 @@
             }
         }
 
-        safeAddListener('startBtn', 'click', function() {
-            ToastManager.show('🔧 بخش لابی در حال بروزرسانی است - لطفاً منتظر بمانید', 3000);
+        // ============================================================
+        //  🎯  Event Listeners
+        // ============================================================
+
+        // Chat Events
+        safeAddListener('chatBtn', 'click', function() {
+            ChatManager.openChat();
         });
 
-        safeAddListener('lobbyCloseBtn', 'click', function() {
-            var lobbyScreen = $('lobbyScreenCustom');
-            if (lobbyScreen) lobbyScreen.classList.remove('active');
+        safeAddListener('chatBackBtn', 'click', function() {
+            ChatManager.closeChat();
+        });
+
+        safeAddListener('chatSendBtn', 'click', function() {
+            var input = $('chatInput');
+            if (input) {
+                ChatManager.sendMessage(input.value);
+                input.value = '';
+                input.focus();
+            }
+        });
+
+        safeAddListener('chatInput', 'keydown', function(e) {
+            if (e.key === 'Enter') {
+                var btn = $('chatSendBtn');
+                if (btn) btn.click();
+            }
+        });
+
+        safeAddListener('chatVoiceToggle', 'click', function() {
+            ChatManager.toggleVoiceChat();
+        });
+
+        safeAddListener('vcMuteBtn', 'click', function() {
+            ChatManager.toggleMute();
+        });
+
+        safeAddListener('vcLeaveBtn', 'click', function() {
+            ChatManager.leaveVoiceChat();
+        });
+
+        // Rename Events
+        safeAddListener('usernameLabel', 'click', function() {
+            RenameManager.open();
+        });
+
+        safeAddListener('renameCancel', 'click', function() {
+            RenameManager.close();
+        });
+
+        safeAddListener('renameConfirm', 'click', function() {
+            RenameManager.confirm();
+        });
+
+        safeAddListener('renameInput', 'keydown', function(e) {
+            if (e.key === 'Enter') {
+                RenameManager.confirm();
+            }
+            if (e.key === 'Escape') {
+                RenameManager.close();
+            }
+        });
+
+        // Auth Events
+        safeAddListener('switchToRegister', 'click', function() {
+            var login = $('loginScreen');
+            var register = $('registerScreen');
+            if (login) login.classList.remove('active');
+            if (register) register.classList.add('active');
+        });
+
+        safeAddListener('switchToLogin', 'click', function() {
+            var login = $('loginScreen');
+            var register = $('registerScreen');
+            if (register) register.classList.remove('active');
+            if (login) login.classList.add('active');
+        });
+
+        safeAddListener('registerBtn', 'click', function() {
+            var username = $('regUsername');
+            var email = $('regEmail');
+            var password = $('regPassword');
+            var confirm = $('regPasswordConfirm');
+            var usernameVal = username ? username.value.trim() : '';
+            var emailVal = email ? email.value.trim().toLowerCase() : '';
+            var passwordVal = password ? password.value : '';
+            var confirmVal = confirm ? confirm.value : '';
+            var uError = $('regUsernameError');
+            var eError = $('regEmailError');
+            var pError = $('regPasswordError');
+            var cError = $('regPasswordConfirmError');
+            if (uError) uError.classList.remove('show');
+            if (eError) eError.classList.remove('show');
+            if (pError) pError.classList.remove('show');
+            if (cError) cError.classList.remove('show');
+            if (!usernameVal || usernameVal.length < 3) {
+                if (uError) { uError.textContent = 'نام کاربری حداقل ۳ کاراکتر باشد';
+                    uError.classList.add('show'); }
+                return;
+            }
+            if (!emailVal || emailVal.indexOf('@') === -1) {
+                if (eError) { eError.textContent = 'ایمیل معتبر وارد کنید';
+                    eError.classList.add('show'); }
+                return;
+            }
+            if (!passwordVal || passwordVal.length < 8) {
+                if (pError) { pError.textContent = 'رمز عبور حداقل ۸ کاراکتر باشد';
+                    pError.classList.add('show'); }
+                return;
+            }
+            if (passwordVal !== confirmVal) {
+                if (cError) { cError.textContent = 'رمز عبور مطابقت ندارد';
+                    cError.classList.add('show'); }
+                return;
+            }
+            AuthService.register(emailVal, passwordVal, usernameVal).catch(function() {});
+        });
+
+        safeAddListener('loginBtn', 'click', function() {
+            var email = $('loginEmail');
+            var password = $('loginPassword');
+            var emailVal = email ? email.value.trim().toLowerCase() : '';
+            var passwordVal = password ? password.value : '';
+            if (!emailVal || emailVal.indexOf('@') === -1) return;
+            if (!passwordVal || passwordVal.length < 8) return;
+            AuthService.login(emailVal, passwordVal);
+        });
+
+        safeAddListener('loginPassword', 'keydown', function(e) {
+            if (e.key === 'Enter') {
+                var btn = $('loginBtn');
+                if (btn) btn.click();
+            }
+        });
+
+        safeAddListener('loginEmail', 'keydown', function(e) {
+            if (e.key === 'Enter') {
+                var pass = $('loginPassword');
+                if (pass) pass.focus();
+            }
+        });
+
+        safeAddListener('logoutBtn', 'click', function() { AuthService.logout(); });
+
+        safeAddListener('profileBtn', 'click', function() { openAvatarShop(); });
+
+        safeAddListener('avatarShopClose', 'click', closeAvatarShop);
+
+        var avatarShopEl = $('avatarShopOverlay');
+        if (avatarShopEl) {
+            avatarShopEl.addEventListener('click', function(e) {
+                if (e.target === this) closeAvatarShop();
+            });
+        }
+
+        safeAddListener('adminBtn', 'click', loadAdminPanel);
+        safeAddListener('adminClose', 'click', function() {
+            var panel = $('adminPanel');
+            if (panel) panel.classList.remove('active');
+        });
+
+        safeAddListener('shutdownLobbiesBtn', 'click', function() {
+            var btn = $('shutdownLobbiesBtn');
+            var p = DataManager.getPlayer();
+            if (p.role !== 'owner') {
+                ToastManager.show('⛔ فقط سازنده اصلی می‌تواند لابی‌ها را مدیریت کند', 2000);
+                return;
+            }
+            if (LobbyManager.isShutdown) {
+                if (confirm('آیا مطمئن هستید که می‌خواهید لابی‌ها را دوباره باز کنید؟')) {
+                    LobbyManager.isShutdown = false;
+                    LobbyManager.loadLobbies();
+                    btn.innerHTML = '<span class="icon"><i class="fas fa-power-off"></i></span> بستن همه لابی‌ها';
+                    btn.style.background = 'linear-gradient(135deg, var(--danger), #CC0000)';
+                }
+                return;
+            }
+            if (!confirm('⚠️ هشدار!\n\nشما در حال بستن همه لابی‌های فعال هستید.\nآیا مطمئن هستید؟')) return;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> در حال بستن...';
+            LobbyManager.shutdownAllLobbies()
+                .then(function() {
+                    btn.innerHTML = '<span class="icon"><i class="fas fa-play"></i></span> باز کردن لابی‌ها';
+                    btn.style.background = 'linear-gradient(135deg, var(--success), #00CC66)';
+                })
+                .catch(function() {})
+                .finally(function() { btn.disabled = false; });
+        });
+
+        safeAddListener('adminSearchInput', 'input', function() { renderAdminUsers(adminUsers); });
+        safeAddListener('adminSearchBtn', 'click', function() { renderAdminUsers(adminUsers); });
+
+        var adminTabs = document.querySelectorAll('.admin-tabs .tab');
+        for (var at = 0; at < adminTabs.length; at++) {
+            (function(tab) {
+                if (tab) {
+                    tab.addEventListener('click', function() {
+                        var tabs = document.querySelectorAll('.admin-tabs .tab');
+                        for (var tj = 0; tj < tabs.length; tj++) {
+                            if (tabs[tj]) tabs[tj].classList.remove('active');
+                        }
+                        if (this) this.classList.add('active');
+                        var atab = this ? this.dataset.atab : '';
+                        if (atab === 'dashboard' || atab === 'users') {
+                            loadAdminPanel();
+                            var roomsCard = $('roomsCard');
+                            if (roomsCard) roomsCard.style.display = 'none';
+                        } else if (atab === 'rooms') {
+                            var roomsCard = $('roomsCard');
+                            if (roomsCard) roomsCard.style.display = 'block';
+                            loadAdminPanel();
+                        } else if (atab === 'logs') {
+                            var list = $('adminUsersList');
+                            if (list) {
+                                list.innerHTML =
+                                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);">📝 لاگ‌ها در حال پیاده‌سازی...</div>';
+                            }
+                            var roomsCard = $('roomsCard');
+                            if (roomsCard) roomsCard.style.display = 'none';
+                        }
+                    });
+                }
+            })(adminTabs[at]);
+        }
+
+        safeAddListener('banLogoutBtn', 'click', function() {
             VoiceManager.disconnect();
-        });
-
-        safeAddListener('lobbyRefreshBtn', 'click', function() {
-            LobbyManager.loadLobbies();
-        });
-
-        safeAddListener('lobbyPlusBtn', 'click', function() {
-            ToastManager.show('⏳ بخش لابی در حال بروزرسانی است - امکان ایجاد لابی وجود ندارد', 3000);
-        });
-
-        safeAddListener('roomBackBtnCustom', 'click', function() {
-            LobbyManager.leaveRoom();
-        });
-
-        safeAddListener('roomLeaveBtn', 'click', function() {
-            LobbyManager.leaveRoom();
-        });
-
-        safeAddListener('sessionReplacedBtn', 'click', function() {
-            var overlay = $('sessionReplacedOverlay');
+            ChatManager.leaveGlobalChat();
+            AuthService.logout();
+            var overlay = $('banOverlay');
+            var block = $('banBlock');
             if (overlay) overlay.classList.remove('active');
-            showAuthScreen('login');
+            if (block) block.classList.remove('active');
+            enableAllAccess();
         });
 
         safeAddListener('trophyBackBtn', 'click', function() {
@@ -3435,6 +3190,34 @@
             boot();
         });
 
+        safeAddListener('sessionReplacedBtn', 'click', function() {
+            var overlay = $('sessionReplacedOverlay');
+            if (overlay) overlay.classList.remove('active');
+            showAuthScreen('login');
+        });
+
+        // Lobby Events
+        safeAddListener('lobbyCloseBtn', 'click', function() {
+            var lobbyScreen = $('lobbyScreenCustom');
+            if (lobbyScreen) lobbyScreen.classList.remove('active');
+        });
+
+        safeAddListener('lobbyRefreshBtn', 'click', function() {
+            LobbyManager.loadLobbies();
+        });
+
+        safeAddListener('lobbyPlusBtn', 'click', function() {
+            ToastManager.show('⏳ بخش لابی در حال بروزرسانی است', 3000);
+        });
+
+        safeAddListener('roomBackBtnCustom', 'click', function() {
+            LobbyManager.leaveRoom();
+        });
+
+        safeAddListener('roomLeaveBtn', 'click', function() {
+            LobbyManager.leaveRoom();
+        });
+
         var navItems = document.querySelectorAll('.bottom-nav-item');
         for (var ni = 0; ni < navItems.length; ni++) {
             (function(item) {
@@ -3460,26 +3243,6 @@
                     });
                 }
             })(navItems[ni]);
-        }
-
-        var loginPass = $('loginPassword');
-        if (loginPass) {
-            loginPass.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    var btn = $('loginBtn');
-                    if (btn) btn.click();
-                }
-            });
-        }
-
-        var regConfirm = $('regPasswordConfirm');
-        if (regConfirm) {
-            regConfirm.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    var btn = $('registerBtn');
-                    if (btn) btn.click();
-                }
-            });
         }
 
         // ============================================================
@@ -3510,14 +3273,11 @@
                                         setTimeout(function() {
                                             LoadingManager.complete();
                                             if (!hasSession) { showAuthScreen('login'); }
-                                            console.log('🎮 مافیا بیس - نسخه نهایی');
-                                            console.log('🔑 APP_ID:', CONFIG.APP_ID);
-                                            console.log('🔑 API_KEY:', CONFIG.API_KEY);
-                                            console.log('👑 سازنده اصلی: tiger.mafia.best@gmail.com');
-                                            console.log('🛡️ مدیر: mohammadjavad1160yt@gmail.com');
-                                            console.log('✅ ایمیل سازنده در لیست کاربران مخفی شد');
-                                            console.log('✏️ تغییر اسم با سکه فعال شد');
-                                            console.log('📡 استریم زنده واقعی با Ably');
+                                            console.log('🎮 مافیا بیس - نسخه نهایی با چت جهانی');
+                                            console.log('✅ پخش زنده حذف شد');
+                                            console.log('💬 چت آنلاین جهانی فعال شد');
+                                            console.log('🎤 Voice Chat گروهی فعال شد');
+                                            console.log('✅ تیک آبی سازنده‌ها اضافه شد');
                                         }, 500);
                                     }, 500);
                                 }, 500);
@@ -3539,15 +3299,11 @@
 
         setTimeout(boot, 300);
 
-        console.log('🎮 مافیا بیس — نسخه نهایی با رفع مشکلات');
-        console.log('🔑 APP_ID:', CONFIG.APP_ID);
-        console.log('🔑 API_KEY:', CONFIG.API_KEY);
-        console.log('👑 سازنده اصلی: tiger.mafia.best@gmail.com');
-        console.log('🛡️ مدیر: mohammadjavad1160yt@gmail.com');
-        console.log('✅ ایمیل سازنده در لیست کاربران مخفی شد');
-        console.log('✏️ تغییر اسم با سکه فعال شد (بار اول رایگان)');
-        console.log('📡 استریم زنده واقعی با Ably');
-        console.log('📱 کاربران آنلاین به صورت لحظه‌ای');
+        console.log('🎮 مافیا بیس — نسخه نهایی');
+        console.log('✅ پخش زنده حذف شد');
+        console.log('💬 چت آنلاین جهانی فعال شد');
+        console.log('🎤 Voice Chat گروهی فعال شد');
+        console.log('✅ تیک آبی سازنده‌ها اضافه شد');
     </script>
 </body>
 </html>
