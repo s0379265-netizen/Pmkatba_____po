@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>مافیا بیس - چت آنلاین جهانی</title>
+    <title>مافیا بیس - چت آنلاین</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <script src="https://api.backendless.com/sdk/js/latest/backendless.min.js"></script>
     <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/livekit-client@1.15.3/dist/livekit-client.umd.min.js"></script>
     <style>
-        /* ===== تمام استایل‌های قبلی ===== */
+        /* ===== تمام استایل‌های قبلی با تغییرات ===== */
         *{margin:0;padding:0;box-sizing:border-box}:root{--gold:#FFD700;--gold-dark:#C9A800;--neon-blue:#00B4FF;--neon-blue-dark:#0066AA;--teal:#00D4FF;--danger:#FF4D4D;--success:#00FF88;--warning:#FFAA00;--nav-height:62px;--radius:16px;--shadow:0 8px 32px rgba(0,0,0,.5);--transition:all .3s cubic-bezier(.4,0,.2,1)}body{font-family:'Vazirmatn',sans-serif;min-height:100vh;overflow:hidden;user-select:none;-webkit-tap-highlight-color:transparent;background:#0a0a1a;color:#fff}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,.02)}::-webkit-scrollbar-thumb{background:rgba(0,180,255,.2);border-radius:10px}
         #loadingScreen{position:fixed;inset:0;z-index:99999;display:flex;justify-content:center;align-items:center;background:#0a0a1a;transition:opacity .8s ease,visibility .8s ease}#loadingScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}.loading-container{text-align:center;max-width:420px;width:90%;padding:40px 30px;background:rgba(10,22,40,.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:32px;border:1px solid rgba(0,180,255,.06);box-shadow:var(--shadow);animation:fadeIn .6s ease}.loading-logo{margin-bottom:24px}.loading-logo .logo-icon{font-size:52px;display:block;margin-bottom:4px;animation:pulseGlow 2s ease-in-out infinite}.loading-logo .logo-text{font-size:30px;font-weight:900;color:#fff;text-shadow:0 0 40px rgba(0,180,255,.1)}.loading-logo .logo-text span{color:var(--gold);text-shadow:0 0 40px rgba(255,215,0,.15)}.loading-logo .logo-sub{font-size:13px;color:rgba(255,255,255,.2);letter-spacing:6px;font-weight:300;margin-top:2px}.loading-bar-wrapper{margin:20px 0 12px}.loading-bar-track{width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;position:relative}.loading-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--neon-blue),var(--gold));border-radius:10px;transition:width .4s ease;box-shadow:0 0 30px rgba(0,180,255,.2)}.loading-percentage{font-size:14px;font-weight:700;color:rgba(255,255,255,.3);margin-top:8px;font-variant-numeric:tabular-nums}.loading-status{font-size:13px;color:rgba(255,255,255,.2);margin-top:4px;min-height:24px;font-weight:300}.loading-status .dots{display:inline-block;min-width:24px;text-align:left}.loading-status .dots span{display:inline-block;animation:dotAnim 1.4s infinite}.loading-status .dots span:nth-child(2){animation-delay:.2s}.loading-status .dots span:nth-child(3){animation-delay:.4s}.loading-error{display:none;margin-top:16px}.loading-error.show{display:block}.loading-error .error-icon{font-size:32px;display:block;margin-bottom:4px}.loading-error .error-text{font-size:14px;color:rgba(255,255,255,.3)}.loading-error .error-btn{margin-top:12px;padding:8px 32px;border:none;border-radius:12px;background:rgba(0,180,255,.1);color:var(--neon-blue);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:var(--transition);border:1px solid rgba(0,180,255,.06)}.loading-error .error-btn:hover{background:rgba(0,180,255,.15);transform:translateY(-2px)}
         @keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}@keyframes pulseGlow{0%,100%{filter:drop-shadow(0 0 30px rgba(100,50,200,.2))}50%{filter:drop-shadow(0 0 60px rgba(100,50,200,.4))}}@keyframes dotAnim{0%,80%,100%{opacity:0;transform:scale(.8)}40%{opacity:1;transform:scale(1.2)}}@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}@keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-8px)}20%,40%,60%,80%{transform:translateX(8px)}}
+        /* ===== پس زمینه اصلی ===== */
         .bg-image{position:fixed;inset:0;background:url('https://cdn.imgurl.ir/uploads/d434250_file_00000000863881f494e0adb4acfcabf8.png') center/cover no-repeat;z-index:0;filter:brightness(1.1) saturate(1.1)}.bg-image::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(10,10,26,.3)100%);pointer-events:none}
         #toastMessage{position:fixed;top:8%;left:50%;transform:translateX(-50%) translateY(-20px);padding:12px 28px;border-radius:50px;background:rgba(10,10,30,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.06);color:#fff;font-weight:700;font-size:14px;pointer-events:none;opacity:0;transition:all .4s ease;z-index:9999;font-family:'Vazirmatn',sans-serif;box-shadow:0 8px 40px rgba(0,0,0,.4);white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}#toastMessage.show{opacity:1;transform:translateX(-50%) translateY(0)}
         .auth-screen{display:none;position:fixed;inset:0;z-index:500;justify-content:center;align-items:center;background:rgba(10,10,26,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:20px;animation:fadeIn .4s ease}.auth-screen.active{display:flex}.auth-box{width:100%;max-width:400px;background:rgba(10,22,40,.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:32px;padding:32px 28px 28px;border:1px solid rgba(0,180,255,.06);box-shadow:var(--shadow);position:relative;overflow:hidden;animation:fadeIn .4s ease}.auth-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30%20%,rgba(0,180,255,.03)0%,transparent 60%);pointer-events:none}.auth-box .auth-logo{text-align:center;margin-bottom:24px}.auth-box .auth-logo h1{font-size:28px;font-weight:900;color:#fff;text-shadow:0 0 40px rgba(0,180,255,.1)}.auth-box .auth-logo h1 span{color:var(--gold);text-shadow:0 0 40px rgba(255,215,0,.1)}.auth-box .auth-logo p{font-size:12px;color:rgba(255,255,255,.2);letter-spacing:4px;font-weight:300;margin-top:2px}.auth-box .form-group{margin-bottom:14px;position:relative;z-index:1}.auth-box .form-group label{font-size:12px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:4px;font-family:'Vazirmatn',sans-serif;display:block}.auth-box .form-group input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(0,180,255,.06);background:rgba(255,255,255,.02);color:#fff;font-size:14px;font-family:'Vazirmatn',sans-serif;transition:var(--transition);outline:none;direction:ltr}.auth-box .form-group input:focus{border-color:rgba(0,180,255,.15);box-shadow:0 0 30px rgba(0,180,255,.03);background:rgba(255,255,255,.04)}.auth-box .form-group input::placeholder{color:rgba(255,255,255,.12)}.auth-box .form-group .error-msg{font-size:11px;color:var(--danger);margin-top:4px;display:none;font-family:'Vazirmatn',sans-serif}.auth-box .form-group .error-msg.show{display:block}.auth-box .auth-btn{width:100%;padding:12px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--neon-blue),var(--neon-blue-dark));color:#fff;font-family:'Vazirmatn',sans-serif;font-weight:800;font-size:16px;cursor:pointer;transition:var(--transition);box-shadow:0 8px 30px rgba(0,180,255,.15);margin-top:6px;position:relative;z-index:1}.auth-box .auth-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,180,255,.25)}.auth-box .auth-btn:active{transform:scale(.96)}.auth-box .auth-btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}.auth-box .auth-loading{display:none;text-align:center;padding:8px;color:rgba(255,255,255,.2);font-size:13px;font-family:'Vazirmatn',sans-serif;position:relative;z-index:1}.auth-box .auth-loading.show{display:block}.auth-box .auth-switch{text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.3);font-family:'Vazirmatn',sans-serif;position:relative;z-index:1}.auth-box .auth-switch span{color:var(--neon-blue);cursor:pointer;font-weight:700;transition:var(--transition)}.auth-box .auth-switch span:hover{color:var(--gold)}
@@ -24,7 +24,15 @@
         .username-label{font-size:13px;font-weight:700;color:#fff;text-shadow:0 0 20px rgba(0,180,255,.05);font-family:'Vazirmatn',sans-serif;white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;direction:ltr;display:none;cursor:pointer;transition:var(--transition);padding:2px 6px;border-radius:8px;border:1px solid transparent}.username-label.show{display:block}.username-label:hover{background:rgba(0,180,255,.05);border-color:rgba(0,180,255,.08)}@media(max-width:480px){.username-label{font-size:11px;max-width:60px}}
         .logout-btn{font-size:12px;color:rgba(255,255,255,.2);cursor:pointer;transition:var(--transition);font-family:'Vazirmatn',sans-serif;padding:2px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.04);background:transparent;display:none}.logout-btn:hover{color:var(--danger);border-color:rgba(255,77,77,.1)}.logout-btn.show{display:block}
         .currency-cards{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-right:6px}@media(max-width:480px){.currency-cards{gap:5px;margin-right:4px}}.currency-card{display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;background:rgba(10,22,40,.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:20px;border:1px solid rgba(0,180,255,.06);box-shadow:0 4px 30px rgba(0,0,0,.2);position:relative;transition:var(--transition);min-height:40px}.currency-card:hover{border-color:rgba(0,180,255,.1)}@media(max-width:480px){.currency-card{padding:3px 6px 3px 4px;border-radius:16px;min-height:32px;gap:4px}}.currency-card .icon-wrap{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:12px;background:rgba(0,180,255,.03)}.currency-card .icon-wrap img{width:26px;height:26px;object-fit:contain;display:block}@media(max-width:480px){.currency-card .icon-wrap{width:26px;height:26px}.currency-card .icon-wrap img{width:20px;height:20px}}.currency-card .amount{font-size:14px;font-weight:700;color:#fff;font-family:'Vazirmatn',sans-serif;white-space:nowrap;min-width:24px}@media(max-width:480px){.currency-card .amount{font-size:11px;min-width:18px}}
-        .start-btn-3d.disabled{opacity:0.5 !important;cursor:not-allowed !important;pointer-events:none !important}.start-btn-3d.disabled .btn-content{color:rgba(255,255,255,0.3) !important}.start-btn-3d.disabled .btn-bg{background:linear-gradient(180deg,#555 0%,#333 40%,#222 100%) !important;box-shadow:0 12px 0 #111,0 16px 30px rgba(0,0,0,0.2) !important}.start-btn-3d .btn-content .update-icon{animation:spinUpdate 2s linear infinite;color:var(--gold)}@keyframes spinUpdate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        
+        /* ===== دکمه شروع ===== */
+        .start-btn-3d{position:relative;width:100%;max-width:280px;padding:0;border:none;background:transparent;cursor:pointer;transition:transform .15s ease,filter .15s ease;outline:none;font-family:'Vazirmatn',sans-serif;display:block;margin:0 auto}.start-btn-3d:active{transform:scale(.96)}.start-btn-3d .btn-bg{position:relative;width:100%;height:64px;background:linear-gradient(180deg,#00B4FF 0%,#0088DD 40%,#0066AA 100%);border-radius:18px;box-shadow:0 8px 0 #004488,0 12px 40px rgba(0,180,255,.25);transition:all .15s ease;display:flex;align-items:center;justify-content:center;overflow:hidden}.start-btn-3d .btn-bg::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.15)0%,transparent 100%);border-radius:18px 18px 0 0;pointer-events:none}.start-btn-3d .btn-shine{position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.08)0%,transparent 60%);pointer-events:none;border-radius:50%;animation:shineFloat 4s ease-in-out infinite}@keyframes shineFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5%,5%) scale(1.1)}}.start-btn-3d .btn-glow{position:absolute;inset:-2px;border-radius:20px;background:linear-gradient(135deg,rgba(0,180,255,.0),rgba(255,215,0,.0));filter:blur(20px);opacity:.4;transition:opacity .4s ease;pointer-events:none}.start-btn-3d:hover .btn-glow{opacity:.8}.start-btn-3d .btn-content{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;font-weight:800;font-size:18px;text-shadow:0 2px 8px rgba(0,0,0,.2);letter-spacing:.3px;padding:0 16px;width:100%;height:100%}.start-btn-3d .btn-content i{font-size:20px;color:var(--gold);text-shadow:0 0 20px rgba(255,215,0,.2)}.start-btn-3d .btn-content .update-icon{animation:spinUpdate 2s linear infinite;color:var(--gold)}@keyframes spinUpdate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        .start-btn-3d.disabled{opacity:.7;cursor:not-allowed;pointer-events:none}.start-btn-3d.disabled .btn-bg{background:linear-gradient(180deg,#555 0%,#333 40%,#222 100%) !important;box-shadow:0 8px 0 #111,0 12px 30px rgba(0,0,0,.2) !important}.start-btn-3d.disabled .btn-content{color:rgba(255,255,255,.3) !important}
+        
+        /* ===== دکمه چت ===== */
+        .chat-btn-3d{position:relative;width:100%;max-width:280px;padding:0;border:none;background:transparent;cursor:pointer;transition:transform .15s ease,filter .15s ease;outline:none;font-family:'Vazirmatn',sans-serif;display:block;margin:0 auto}.chat-btn-3d:active{transform:scale(.96)}.chat-btn-3d .btn-bg{position:relative;width:100%;height:56px;background:linear-gradient(180deg,#00D4AA 0%,#00BB99 40%,#009977 100%);border-radius:16px;box-shadow:0 6px 0 #007755,0 10px 30px rgba(0,210,170,.2);transition:all .15s ease;display:flex;align-items:center;justify-content:center;overflow:hidden}.chat-btn-3d .btn-bg::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.12)0%,transparent 100%);border-radius:16px 16px 0 0;pointer-events:none}.chat-btn-3d .btn-content{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;font-weight:800;font-size:16px;text-shadow:0 2px 8px rgba(0,0,0,.2);letter-spacing:.3px;padding:0 16px;width:100%;height:100%}.chat-btn-3d .btn-content i{font-size:18px;color:var(--gold);text-shadow:0 0 20px rgba(255,215,0,.2)}
+        .chat-btn-3d .online-badge{position:absolute;top:-6px;right:-6px;background:var(--success);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;box-shadow:0 0 20px rgba(0,255,136,.2);z-index:5}
+        
         .bottom-nav{position:fixed;bottom:0;left:0;right:0;width:100%;height:var(--nav-height);background:rgba(10,22,40,.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(0,180,255,.04);box-shadow:0 -8px 40px rgba(0,0,0,.4);display:flex;justify-content:center;align-items:center;z-index:100;padding:0 8px}.bottom-nav-inner{width:100%;max-width:340px;height:100%;display:flex;justify-content:space-between;align-items:center;padding:0 4px}.bottom-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:4px 6px;border-radius:14px;cursor:pointer;transition:var(--transition);position:relative;min-width:56px;height:100%;background:transparent;border:none;font-family:'Vazirmatn',sans-serif;flex:1}.bottom-nav-item:hover{background:rgba(0,180,255,.03)}.bottom-nav-item:active{transform:scale(.9)}.bottom-nav-item .icon-wrap{display:flex;align-items:center;justify-content:center;border-radius:10px;transition:var(--transition);width:38px;height:38px}.bottom-nav-item .icon-wrap img{width:30px;height:30px;object-fit:contain;filter:grayscale(1) brightness(.4);transition:var(--transition);display:block}.bottom-nav-item .label{font-size:8px;font-weight:600;color:rgba(150,180,210,.2);transition:var(--transition);letter-spacing:.5px;line-height:1}.bottom-nav-item.center-home .icon-wrap{width:50px;height:50px;margin-top:-8px;background:rgba(0,180,255,.03);border:1px solid rgba(0,180,255,.04);border-radius:14px}.bottom-nav-item.center-home .icon-wrap img{width:38px;height:38px}.bottom-nav-item.active .icon-wrap{background:rgba(0,180,255,.04);box-shadow:0 0 30px rgba(0,180,255,.03)}.bottom-nav-item.active .icon-wrap img{filter:grayscale(0) brightness(1) drop-shadow(0 0 12px rgba(0,180,255,.2))}.bottom-nav-item.active .label{color:rgba(0,180,255,.6)}.bottom-nav-item.active::after{content:'';position:absolute;bottom:2px;left:25%;right:25%;height:2px;border-radius:4px;background:linear-gradient(90deg,transparent,var(--neon-blue),transparent);box-shadow:0 0 20px rgba(0,180,255,.2);animation:activePulse 2s ease-in-out infinite}@keyframes activePulse{0%,100%{opacity:.5}50%{opacity:1}}
         .admin-btn{position:fixed;bottom:calc(var(--nav-height) + 16px);right:16px;z-index:60;width:44px;height:44px;border-radius:50%;background:rgba(0,180,255,.08);border:1px solid rgba(0,180,255,.1);color:var(--neon-blue);font-size:18px;cursor:pointer;transition:var(--transition);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}.admin-btn:hover{background:rgba(0,180,255,.15);transform:scale(1.1)}.admin-btn.show{display:flex}
         .admin-panel{display:none;position:fixed;inset:0;z-index:400;background:rgba(10,10,26,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px;overflow-y:auto}.admin-panel.active{display:block}
@@ -82,6 +90,7 @@
         .admin-tabs .tab{padding:6px 18px;border:none;border-radius:20px;background:rgba(255,255,255,.02);color:rgba(255,255,255,.2);font-family:'Vazirmatn',sans-serif;font-weight:600;font-size:12px;cursor:pointer;transition:all .3s ease;border:1px solid transparent}
         .admin-tabs .tab:hover{color:rgba(255,255,255,.4)}
         .admin-tabs .tab.active{background:rgba(0,180,255,.06);color:var(--neon-blue);border-color:rgba(0,180,255,.08)}
+        .admin-tabs .tab.has-badge{position:relative}.admin-tabs .tab.has-badge .badge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:8px;font-weight:700;padding:1px 6px;border-radius:20px;min-width:16px;text-align:center}
         .admin-danger-btn{padding:8px 16px;border:none;border-radius:12px;background:linear-gradient(135deg,#FF4D4D,#CC0000);color:#fff;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .3s ease;box-shadow:0 8px 30px rgba(255,77,77,.15);display:flex;align-items:center;gap:6px}
         .admin-danger-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,77,77,.25)}
         .admin-close-btn{padding:6px 16px;border:none;border-radius:12px;background:rgba(255,77,77,.06);color:var(--danger);font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .3s ease}
@@ -111,34 +120,94 @@
         .lobby-card-custom .creator-name{max-width:80px;overflow:hidden;text-overflow:ellipsis}.lobby-card-custom .room-name{max-width:100px;overflow:hidden;text-overflow:ellipsis}
         .lobby-btn-plus:active,.lobby-btn-settings:active,.lobby-btn-search:active,.lobby-btn-close:active,.lobby-refresh-btn:active,.lobby-card-custom .join-btn:active{transform:scale(0.9)!important;transition:transform 0.05s}
         .seat-custom .username{background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:10px;backdrop-filter:blur(4px);font-size:10px;max-width:70px}.room-title-custom{font-size:16px;padding:6px 20px;background:rgba(10,12,18,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}.room-back-btn-custom{background:rgba(10,12,18,0.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}.room-back-btn-custom:hover{background:rgba(255,77,77,0.2);border-color:rgba(255,77,77,0.3)}.auth-box .auth-btn:disabled{opacity:0.6;cursor:not-allowed}#loadingScreen .loading-bar-fill{background:linear-gradient(90deg,#00B4FF,#FFD700);box-shadow:0 0 30px rgba(0,180,255,0.2)}
-        .voice-chat-btn{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:70;padding:12px 24px;border:none;border-radius:30px;background:rgba(0,180,255,0.15);color:#fff;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);border:1px solid rgba(0,180,255,0.1);display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-        .voice-chat-btn:hover{background:rgba(0,180,255,0.25);transform:translateX(-50%) scale(1.05)}
-        .voice-chat-btn.muted{background:rgba(255,77,77,0.15);border-color:rgba(255,77,77,0.2);color:#ff6b6b}
-        .voice-chat-btn.muted:hover{background:rgba(255,77,77,0.25)}
-        .voice-chat-btn .mic-icon{font-size:18px}
-        .voice-chat-btn .status-text{font-size:12px;font-weight:400;opacity:0.7}
-        .voice-chat-btn.connected{background:rgba(0,255,136,0.12);border-color:rgba(0,255,136,0.15)}
-        .voice-chat-btn.connecting{animation:pulseBtn 1.5s ease-in-out infinite}
-        @keyframes pulseBtn{0%,100%{opacity:0.8}50%{opacity:1;transform:translateX(-50%) scale(1.02)}}
-        .seat-custom .voice-indicator{position:absolute;bottom:28%;left:50%;transform:translateX(-50%);font-size:10px;color:var(--success);background:rgba(0,0,0,0.6);padding:1px 6px;border-radius:8px;z-index:4;display:none;backdrop-filter:blur(4px)}
-        .seat-custom .voice-indicator.active{display:block;animation:voicePulse 0.8s ease-in-out infinite}
-        @keyframes voicePulse{0%,100%{opacity:0.5;transform:translateX(-50%) scale(0.9)}50%{opacity:1;transform:translateX(-50%) scale(1.1)}}
-        .voice-participants{position:absolute;bottom:140px;left:50%;transform:translateX(-50%);z-index:65;background:rgba(10,12,18,0.7);backdrop-filter:blur(12px);border-radius:16px;padding:8px 16px;border:1px solid rgba(255,255,255,0.05);min-width:120px;text-align:center;display:none}
-        .voice-participants.active{display:block}
-        .voice-participants .participant{font-size:11px;color:rgba(255,255,255,0.6);padding:2px 0;display:flex;align-items:center;gap:6px;justify-content:center}
-        .voice-participants .participant .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
-        .voice-participants .participant .dot.speaking{background:var(--success);animation:voicePulse 0.6s ease-in-out infinite}
-        .voice-participants .participant .dot.muted{background:#555}
         .rename-dialog{display:none;position:fixed;inset:0;z-index:99997;justify-content:center;align-items:center;background:rgba(10,10,26,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);animation:fadeIn .3s ease;padding:20px}.rename-dialog.active{display:flex}.rename-box{width:100%;max-width:400px;background:rgba(10,22,40,.7);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-radius:28px;padding:32px 28px;border:1px solid rgba(0,180,255,.06);box-shadow:var(--shadow);text-align:center;animation:slideUp .4s ease}.rename-box h3{font-size:20px;font-weight:800;color:#fff;font-family:'Vazirmatn',sans-serif;margin-bottom:4px}.rename-box .sub{font-size:13px;color:rgba(255,255,255,.2);font-family:'Vazirmatn',sans-serif;margin-bottom:16px}.rename-box .cost-info{font-size:14px;color:var(--gold);font-family:'Vazirmatn',sans-serif;font-weight:700;margin-bottom:12px;padding:8px 16px;background:rgba(255,215,0,.04);border-radius:12px;border:1px solid rgba(255,215,0,.04)}.rename-box input{width:100%;padding:12px 16px;border-radius:14px;border:1px solid rgba(0,180,255,.06);background:rgba(255,255,255,.02);color:#fff;font-size:16px;font-family:'Vazirmatn',sans-serif;text-align:center;outline:none;transition:var(--transition);direction:rtl}.rename-box input:focus{border-color:rgba(0,180,255,.15);background:rgba(255,255,255,.04)}.rename-box .actions{display:flex;gap:10px;margin-top:16px}.rename-box .actions button{flex:1;padding:10px;border:none;border-radius:14px;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:var(--transition)}.rename-box .actions .confirm{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#2D2000;box-shadow:0 8px 30px rgba(255,215,0,.15)}.rename-box .actions .confirm:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,215,0,.25)}.rename-box .actions .cancel{background:rgba(255,255,255,.02);color:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.04)}.rename-box .actions .cancel:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.4)}
         @media(max-width:480px){.rename-box{padding:24px 18px}.rename-box h3{font-size:17px}.rename-box input{font-size:14px}}
 
-        /* ===== استایل‌های چت آنلاین ===== */
-        .chat-screen{display:none;position:fixed;inset:0;z-index:120;background:rgba(10,10,26,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-direction:column;animation:slideUp .4s ease;padding-top:70px;padding-bottom:var(--nav-height)}.chat-screen.active{display:flex}.chat-header{position:fixed;top:0;left:0;right:0;z-index:121;background:rgba(10,22,40,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,180,255,.04)}.chat-header .back-btn{background:none;border:none;color:rgba(255,255,255,.3);font-size:22px;cursor:pointer;padding:4px 8px;border-radius:12px;transition:var(--transition)}.chat-header .back-btn:hover{color:#fff;background:rgba(255,255,255,.03)}.chat-header .title{font-size:18px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}.chat-header .title .online-count{font-size:12px;color:rgba(255,255,255,.2);font-weight:400}.chat-header .voice-toggle{background:rgba(0,180,255,.08);border:1px solid rgba(0,180,255,.06);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:var(--transition);font-family:'Vazirmatn',sans-serif;display:flex;align-items:center;gap:6px}.chat-header .voice-toggle:hover{background:rgba(0,180,255,.15)}.chat-header .voice-toggle.active{background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.1)}
-        .chat-messages{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:6px}.chat-messages::-webkit-scrollbar{width:3px}.chat-messages::-webkit-scrollbar-thumb{background:rgba(0,180,255,.1);border-radius:10px}
-        .chat-msg{display:flex;gap:10px;padding:8px 12px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.02);max-width:85%;animation:slideUp .3s ease}.chat-msg.self{background:rgba(0,180,255,.04);border-color:rgba(0,180,255,.04);align-self:flex-end}.chat-msg .msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(0,180,255,.04);border:1px solid rgba(255,255,255,.04)}.chat-msg .msg-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover}.chat-msg .msg-content{flex:1;min-width:0}.chat-msg .msg-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:6px;margin-bottom:2px}.chat-msg .msg-name .verified-badge{display:inline-block;width:16px;height:16px;flex-shrink:0}.chat-msg .msg-name .verified-badge img{width:100%;height:100%;object-fit:contain}.chat-msg .msg-text{font-size:14px;color:#fff;word-wrap:break-word;line-height:1.5}.chat-msg .msg-time{font-size:9px;color:rgba(255,255,255,.1);margin-top:2px;text-align:left}
-        .chat-input-area{position:fixed;bottom:var(--nav-height);left:0;right:0;z-index:121;background:rgba(10,22,40,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;border-top:1px solid rgba(0,180,255,.04)}.chat-input-area input{flex:1;padding:10px 16px;border-radius:24px;border:1px solid rgba(0,180,255,.06);background:rgba(255,255,255,.02);color:#fff;font-family:'Vazirmatn',sans-serif;font-size:14px;outline:none;transition:var(--transition)}.chat-input-area input:focus{border-color:rgba(0,180,255,.15);background:rgba(255,255,255,.04)}.chat-input-area input::placeholder{color:rgba(255,255,255,.12)}.chat-input-area .send-btn{width:44px;height:44px;border:none;border-radius:50%;background:linear-gradient(135deg,var(--neon-blue),var(--neon-blue-dark));color:#fff;font-size:18px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0}.chat-input-area .send-btn:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(0,180,255,.15)}.chat-input-area .send-btn:active{transform:scale(.9)}
+        /* ===== استایل‌های چت ===== */
+        .chat-screen{display:none;position:fixed;inset:0;z-index:120;background:rgba(10,10,26,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-direction:column;animation:slideUp .4s ease;padding-top:70px;padding-bottom:calc(var(--nav-height) + 70px)}.chat-screen.active{display:flex}
+        .chat-header{position:fixed;top:0;left:0;right:0;z-index:121;background:rgba(10,22,40,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,180,255,.04)}
+        .chat-header .back-btn{background:none;border:none;color:rgba(255,255,255,.3);font-size:22px;cursor:pointer;padding:4px 8px;border-radius:12px;transition:var(--transition)}.chat-header .back-btn:hover{color:#fff;background:rgba(255,255,255,.03)}
+        .chat-header .title{font-size:18px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}
+        .chat-header .title .online-count{font-size:12px;color:rgba(255,255,255,.2);font-weight:400}
+        .chat-header .voice-toggle{background:rgba(0,180,255,.08);border:1px solid rgba(0,180,255,.06);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:var(--transition);font-family:'Vazirmatn',sans-serif;display:flex;align-items:center;gap:6px}.chat-header .voice-toggle:hover{background:rgba(0,180,255,.15)}.chat-header .voice-toggle.active{background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.1)}
+        
+        .chat-messages{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px;padding-bottom:12px}.chat-messages::-webkit-scrollbar{width:3px}.chat-messages::-webkit-scrollbar-thumb{background:rgba(0,180,255,.1);border-radius:10px}
+        
+        .chat-msg{display:flex;gap:10px;padding:10px 14px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.02);max-width:85%;animation:slideUp .3s ease;position:relative}
+        .chat-msg.self{background:rgba(0,180,255,.04);border-color:rgba(0,180,255,.04);align-self:flex-end}
+        .chat-msg .msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(0,180,255,.04);border:1px solid rgba(255,255,255,.04);overflow:hidden}
+        .chat-msg .msg-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+        .chat-msg .msg-content{flex:1;min-width:0}
+        .chat-msg .msg-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:6px;margin-bottom:2px}
+        .chat-msg .msg-name .verified-badge{display:inline-block;width:16px;height:16px;flex-shrink:0}
+        .chat-msg .msg-name .verified-badge img{width:100%;height:100%;object-fit:contain}
+        .chat-msg .msg-text{font-size:14px;color:#fff;word-wrap:break-word;line-height:1.6}
+        .chat-msg .msg-text audio{width:100%;max-width:200px;height:36px;border-radius:20px;background:rgba(0,0,0,.2)}
+        .chat-msg .msg-time{font-size:9px;color:rgba(255,255,255,.1);margin-top:4px;display:flex;justify-content:space-between;align-items:center}
+        .chat-msg .msg-actions{display:flex;gap:4px;align-items:center}
+        .chat-msg .msg-actions button{background:none;border:none;color:rgba(255,255,255,.1);font-size:11px;cursor:pointer;transition:var(--transition);padding:2px 4px;border-radius:4px}
+        .chat-msg .msg-actions button:hover{color:var(--danger);background:rgba(255,77,77,.05)}
+        
         .chat-empty{text-align:center;padding:60px 20px;color:rgba(255,255,255,.1)}.chat-empty .icon{font-size:48px;display:block;margin-bottom:12px}.chat-empty .text{font-size:16px;font-weight:600;color:rgba(255,255,255,.15)}
-        .voice-chat-panel{display:none;position:fixed;bottom:calc(var(--nav-height) + 70px);left:50%;transform:translateX(-50%);z-index:122;background:rgba(10,22,40,.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:20px;padding:16px 20px;border:1px solid rgba(0,180,255,.06);box-shadow:0 20px 60px rgba(0,0,0,.5);min-width:200px;text-align:center;animation:slideUp .3s ease}.voice-chat-panel.active{display:block}.voice-chat-panel .vc-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.3);margin-bottom:10px}.voice-chat-panel .vc-users{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px}.voice-chat-panel .vc-user{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.02);font-size:11px;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.02)}.voice-chat-panel .vc-user.speaking{color:var(--success);border-color:rgba(0,255,136,.1)}.voice-chat-panel .vc-user .dot{width:6px;height:6px;border-radius:50%;display:inline-block}.voice-chat-panel .vc-user .dot.speaking{background:var(--success);animation:voicePulse .6s ease-in-out infinite}.voice-chat-panel .vc-user .dot.muted{background:#555}.voice-chat-panel .vc-controls{display:flex;gap:8px;justify-content:center}.voice-chat-panel .vc-controls button{padding:8px 20px;border:none;border-radius:30px;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:var(--transition)}.voice-chat-panel .vc-controls .mute-btn{background:rgba(0,180,255,.1);color:var(--neon-blue)}.voice-chat-panel .vc-controls .mute-btn:hover{background:rgba(0,180,255,.2)}.voice-chat-panel .vc-controls .mute-btn.muted{background:rgba(255,77,77,.1);color:var(--danger)}.voice-chat-panel .vc-controls .mute-btn.muted:hover{background:rgba(255,77,77,.2)}.voice-chat-panel .vc-controls .leave-btn{background:rgba(255,77,77,.08);color:var(--danger)}.voice-chat-panel .vc-controls .leave-btn:hover{background:rgba(255,77,77,.16)}
+        
+        .chat-input-area{position:fixed;bottom:var(--nav-height);left:0;right:0;z-index:121;background:rgba(10,22,40,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;border-top:1px solid rgba(0,180,255,.04)}
+        .chat-input-area input{flex:1;padding:10px 16px;border-radius:24px;border:1px solid rgba(0,180,255,.06);background:rgba(255,255,255,.02);color:#fff;font-family:'Vazirmatn',sans-serif;font-size:14px;outline:none;transition:var(--transition)}
+        .chat-input-area input:focus{border-color:rgba(0,180,255,.15);background:rgba(255,255,255,.04)}
+        .chat-input-area input::placeholder{color:rgba(255,255,255,.12)}
+        .chat-input-area .send-btn{width:44px;height:44px;border:none;border-radius:50%;background:linear-gradient(135deg,var(--neon-blue),var(--neon-blue-dark));color:#fff;font-size:18px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .chat-input-area .send-btn:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(0,180,255,.15)}.chat-input-area .send-btn:active{transform:scale(.9)}
+        .chat-input-area .voice-record-btn{width:44px;height:44px;border:none;border-radius:50%;background:rgba(255,77,77,.08);color:var(--danger);font-size:18px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+        .chat-input-area .voice-record-btn:hover{background:rgba(255,77,77,.15)}
+        .chat-input-area .voice-record-btn.recording{background:rgba(255,0,0,.15);animation:pulseRecord 1s ease-in-out infinite}
+        @keyframes pulseRecord{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+        .chat-input-area .voice-record-btn .rec-dot{width:10px;height:10px;border-radius:50%;background:red;display:none}
+        .chat-input-area .voice-record-btn.recording .rec-dot{display:block}
+        .chat-input-area .voice-record-btn.recording .mic-icon{display:none}
+        
+        .voice-chat-panel{display:none;position:fixed;bottom:calc(var(--nav-height) + 70px);left:50%;transform:translateX(-50%);z-index:122;background:rgba(10,22,40,.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:20px;padding:16px 20px;border:1px solid rgba(0,180,255,.06);box-shadow:0 20px 60px rgba(0,0,0,.5);min-width:200px;text-align:center;animation:slideUp .3s ease}.voice-chat-panel.active{display:block}
+        .voice-chat-panel .vc-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.3);margin-bottom:10px}
+        .voice-chat-panel .vc-users{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px}
+        .voice-chat-panel .vc-user{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.02);font-size:11px;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.02)}
+        .voice-chat-panel .vc-user.speaking{color:var(--success);border-color:rgba(0,255,136,.1)}
+        .voice-chat-panel .vc-user .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+        .voice-chat-panel .vc-user .dot.speaking{background:var(--success);animation:voicePulse .6s ease-in-out infinite}
+        .voice-chat-panel .vc-user .dot.muted{background:#555}
+        .voice-chat-panel .vc-controls{display:flex;gap:8px;justify-content:center}
+        .voice-chat-panel .vc-controls button{padding:8px 20px;border:none;border-radius:30px;font-family:'Vazirmatn',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:var(--transition)}
+        .voice-chat-panel .vc-controls .mute-btn{background:rgba(0,180,255,.1);color:var(--neon-blue)}
+        .voice-chat-panel .vc-controls .mute-btn:hover{background:rgba(0,180,255,.2)}
+        .voice-chat-panel .vc-controls .mute-btn.muted{background:rgba(255,77,77,.1);color:var(--danger)}
+        .voice-chat-panel .vc-controls .mute-btn.muted:hover{background:rgba(255,77,77,.2)}
+        .voice-chat-panel .vc-controls .leave-btn{background:rgba(255,77,77,.08);color:var(--danger)}
+        .voice-chat-panel .vc-controls .leave-btn:hover{background:rgba(255,77,77,.16)}
+        @keyframes voicePulse{0%,100%{opacity:0.5;transform:scale(0.9)}50%{opacity:1;transform:scale(1.1)}}
+        
+        /* ===== گزارش‌ها در پنل ادمین ===== */
+        .report-item{background:rgba(255,77,77,.03);border:1px solid rgba(255,77,77,.04);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;flex-direction:column;gap:8px}
+        .report-item .report-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+        .report-item .report-header .reporter{font-size:12px;color:rgba(255,255,255,.3)}
+        .report-item .report-header .reporter strong{color:#fff}
+        .report-item .report-header .time{font-size:10px;color:rgba(255,255,255,.1)}
+        .report-item .report-msg{font-size:14px;color:#fff;padding:6px 12px;background:rgba(0,0,0,.2);border-radius:8px;margin:4px 0}
+        .report-item .report-reason{font-size:12px;color:rgba(255,255,255,.2)}
+        .report-item .report-actions{display:flex;gap:6px;flex-wrap:wrap}
+        .report-item .report-actions button{padding:4px 16px;border:none;border-radius:8px;font-family:'Vazirmatn',sans-serif;font-weight:600;font-size:11px;cursor:pointer;transition:all .2s ease}
+        .report-item .report-actions .approve-btn{background:rgba(0,255,136,.08);color:var(--success);border:1px solid rgba(0,255,136,.04)}
+        .report-item .report-actions .approve-btn:hover{background:rgba(0,255,136,.16)}
+        .report-item .report-actions .reject-btn{background:rgba(255,255,255,.02);color:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.02)}
+        .report-item .report-actions .reject-btn:hover{background:rgba(255,255,255,.04)}
+        .report-item .report-actions .ban-user-btn{background:rgba(255,77,77,.08);color:var(--danger);border:1px solid rgba(255,77,77,.04)}
+        .report-item .report-actions .ban-user-btn:hover{background:rgba(255,77,77,.16)}
+        .report-item.status-approved{border-color:rgba(0,255,136,.06);opacity:.5}
+        .report-item.status-rejected{border-color:rgba(255,255,255,.02);opacity:.3}
+        .report-item .status-badge{font-size:10px;font-weight:600;padding:2px 10px;border-radius:12px}
+        .report-item .status-badge.pending{background:rgba(255,215,0,.08);color:var(--gold)}
+        .report-item .status-badge.approved{background:rgba(0,255,136,.08);color:var(--success)}
+        .report-item .status-badge.rejected{background:rgba(255,255,255,.02);color:rgba(255,255,255,.1)}
+        
+        /* ===== دکمه گزارش در چت ===== */
+        .report-btn{background:none;border:none;color:rgba(255,255,255,.08);font-size:11px;cursor:pointer;transition:var(--transition);padding:2px 6px;border-radius:4px;display:inline-flex;align-items:center;gap:3px}
+        .report-btn:hover{color:var(--danger);background:rgba(255,77,77,.05)}
     </style>
 </head>
 <body>
@@ -149,7 +218,7 @@
             <div class="loading-logo">
                 <span class="logo-icon">🎮</span>
                 <div class="logo-text">مافیا <span>بیس</span></div>
-                <div class="logo-sub">چت آنلاین جهانی</div>
+                <div class="logo-sub">چت آنلاین</div>
             </div>
             <div class="loading-bar-wrapper">
                 <div class="loading-bar-track">
@@ -257,14 +326,27 @@
 
         <div class="menu-container" id="menuContainer">
             <div class="menu-header"></div>
-            <!-- دکمه چت آنلاین جهانی -->
-            <button class="start-btn-3d" id="chatBtn">
-                <div class="btn-bg"></div>
-                <div class="btn-shine"></div>
-                <div class="btn-glow"></div>
-                <div class="btn-content">
-                    <i class="fas fa-comments"></i>
-                    چت آنلاین جهانی
+            
+            <!-- ===== دکمه شروع ===== -->
+            <button class="start-btn-3d disabled" id="startBtn" disabled>
+                <div class="btn-bg">
+                    <div class="btn-shine"></div>
+                    <div class="btn-glow"></div>
+                    <div class="btn-content">
+                        <i class="fas fa-sync-alt update-icon"></i>
+                        در حال بروزرسانی
+                    </div>
+                </div>
+            </button>
+
+            <!-- ===== دکمه چت آنلاین ===== -->
+            <button class="chat-btn-3d" id="chatBtn">
+                <div class="btn-bg">
+                    <div class="btn-content">
+                        <i class="fas fa-comments"></i>
+                        چت آنلاین جهانی
+                        <span class="online-badge" id="chatOnlineBadge">۰</span>
+                    </div>
                 </div>
             </button>
         </div>
@@ -308,7 +390,10 @@
                 <button class="tab active" data-atab="dashboard">📊 داشبورد</button>
                 <button class="tab" data-atab="users">👥 کاربران</button>
                 <button class="tab" data-atab="rooms">🏠 لابی‌ها</button>
-                <button class="tab" data-atab="logs">📝 گزارش‌ها</button>
+                <button class="tab has-badge" data-atab="reports" id="reportsTab">
+                    📝 گزارش‌ها
+                    <span class="badge" id="reportsBadge">0</span>
+                </button>
             </div>
             <div class="admin-stats" id="adminStats">
                 <div class="admin-stat-card"><div class="num" id="adminTotalUsers">0</div><div class="label">کل کاربران</div></div>
@@ -336,6 +421,10 @@
                     </button>
                 </div>
                 <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,.2);" id="roomsStatus">وضعیت: در حال بارگذاری...</div>
+            </div>
+            <div class="glass-card" id="reportsCard" style="display:none;">
+                <div class="card-title"><i class="fas fa-flag"></i> گزارش‌های دریافتی</div>
+                <div id="reportsList"></div>
             </div>
             <div class="admin-users-list" id="adminUsersList"></div>
         </div>
@@ -440,14 +529,6 @@
             <div class="room-title-custom" id="roomTitleCustom">اتاق</div>
             <div class="room-seats-container" id="roomSeatsContainer"></div>
             <button class="room-leave-btn" id="roomLeaveBtn">🚪 خروج از لابی</button>
-            <button class="voice-chat-btn" id="voiceChatBtn">
-                <span class="mic-icon">🎤</span>
-                <span>اتصال صوتی</span>
-                <span class="status-text" id="voiceStatusText">(غیرفعال)</span>
-            </button>
-            <div class="voice-participants" id="voiceParticipants">
-                <div class="participant"><span class="dot" id="voiceSelfDot"></span><span id="voiceSelfName">شما</span></div>
-            </div>
         </div>
 
         <!-- ===== RENAME ===== -->
@@ -473,10 +554,6 @@
                     چت جهانی
                     <span class="online-count" id="chatOnlineCount">(۰ آنلاین)</span>
                 </div>
-                <button class="voice-toggle" id="chatVoiceToggle">
-                    <i class="fas fa-microphone"></i>
-                    صوتی
-                </button>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="chat-empty">
@@ -487,18 +564,11 @@
             </div>
             <div class="chat-input-area">
                 <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." maxlength="500" />
+                <button class="voice-record-btn" id="voiceRecordBtn">
+                    <span class="mic-icon">🎤</span>
+                    <span class="rec-dot"></span>
+                </button>
                 <button class="send-btn" id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
-            </div>
-            <!-- Voice Chat Panel -->
-            <div class="voice-chat-panel" id="voiceChatPanel">
-                <div class="vc-title">🎤 گفت‌گوی صوتی گروهی</div>
-                <div class="vc-users" id="vcUsers">
-                    <div class="vc-user"><span class="dot speaking"></span> شما</div>
-                </div>
-                <div class="vc-controls">
-                    <button class="mute-btn" id="vcMuteBtn"><i class="fas fa-microphone"></i> بیصدا</button>
-                    <button class="leave-btn" id="vcLeaveBtn"><i class="fas fa-phone-slash"></i> خروج</button>
-                </div>
             </div>
         </div>
 
@@ -575,7 +645,7 @@
 
     <script>
         // ============================================================
-        //  🚀  کد اصلی - نسخه نهایی با چت آنلاین جهانی
+        //  🚀  کد کامل - نسخه نهایی با چت و گزارش
         // ============================================================
 
         // ===== LoadingManager =====
@@ -879,7 +949,366 @@
         };
 
         // ============================================================
-        //  🔐  Auth Service
+        //  🎤  Voice Recorder (ضبط صدا مثل روبیکا)
+        // ============================================================
+
+        var VoiceRecorder = {
+            mediaRecorder: null,
+            audioChunks: [],
+            isRecording: false,
+            stream: null,
+
+            startRecording: function() {
+                if (this.isRecording) return;
+
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function(stream) {
+                        this.stream = stream;
+                        this.mediaRecorder = new MediaRecorder(stream);
+                        this.audioChunks = [];
+
+                        this.mediaRecorder.ondataavailable = function(event) {
+                            if (event.data.size > 0) {
+                                this.audioChunks.push(event.data);
+                            }
+                        }.bind(this);
+
+                        this.mediaRecorder.onstop = function() {
+                            var audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+                            this._sendAudio(audioBlob);
+                            this.audioChunks = [];
+                            if (this.stream) {
+                                this.stream.getTracks().forEach(function(track) { track.stop(); });
+                                this.stream = null;
+                            }
+                        }.bind(this);
+
+                        this.mediaRecorder.start();
+                        this.isRecording = true;
+                        this._updateUI(true);
+                        ToastManager.show('🎤 در حال ضبط... برای توقف دوباره کلیک کنید', 3000);
+                    }.bind(this))
+                    .catch(function(err) {
+                        console.error('Microphone error:', err);
+                        ToastManager.show('❌ دسترسی به میکروفون امکان‌پذیر نیست', 2000);
+                    });
+            },
+
+            stopRecording: function() {
+                if (!this.isRecording || !this.mediaRecorder) return;
+                this.mediaRecorder.stop();
+                this.isRecording = false;
+                this._updateUI(false);
+                ToastManager.show('⏳ در حال ارسال صدا...', 1000);
+            },
+
+            _sendAudio: function(blob) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    var base64 = reader.result.split(',')[1];
+                    var p = DataManager.getPlayer();
+                    var msg = {
+                        userId: p.userId,
+                        email: p.email,
+                        userName: p.name,
+                        audio: base64,
+                        audioType: blob.type,
+                        isVoice: true,
+                        avatar: p.avatar,
+                        isVerified: p.isVerified || false,
+                        role: p.role || 'user',
+                        timestamp: new Date().toISOString()
+                    };
+                    if (ChatManager.channel) {
+                        ChatManager.channel.publish('message', msg);
+                        ChatManager._addMessage(msg, true);
+                    }
+                };
+                reader.readAsDataURL(blob);
+            },
+
+            _updateUI: function(recording) {
+                var btn = document.getElementById('voiceRecordBtn');
+                if (!btn) return;
+                if (recording) {
+                    btn.classList.add('recording');
+                } else {
+                    btn.classList.remove('recording');
+                }
+            }
+        };
+
+        // ============================================================
+        //  💬  Chat Manager
+        // ============================================================
+
+        var ChatManager = {
+            channel: null,
+            isJoined: false,
+            messages: [],
+            onlineUsers: [],
+
+            init: function() {
+                if (!ablyClient) return;
+                this.channel = ablyClient.channels.get('global_chat');
+                this._subscribeToMessages();
+                this._subscribeToPresence();
+            },
+
+            joinGlobalChat: function() {
+                if (this.isJoined) return;
+                if (!this.channel) this.init();
+                if (!this.channel) return;
+
+                var p = DataManager.getPlayer();
+                this.channel.presence.enter({
+                    userId: p.userId,
+                    email: p.email,
+                    userName: p.name,
+                    avatar: p.avatar,
+                    isVerified: p.isVerified || false,
+                    role: p.role || 'user',
+                    status: 'online'
+                });
+
+                this.isJoined = true;
+                this._updateOnlineCount();
+                console.log('✅ Joined global chat');
+            },
+
+            leaveGlobalChat: function() {
+                if (!this.isJoined || !this.channel) return;
+                try {
+                    this.channel.presence.leave();
+                } catch (e) {}
+                this.isJoined = false;
+                this.onlineUsers = [];
+                this._updateOnlineCount();
+                console.log('✅ Left global chat');
+            },
+
+            sendMessage: function(text) {
+                if (!text || !text.trim()) return;
+                if (!this.channel) {
+                    ToastManager.show('❌ اتصال به چت برقرار نیست', 1500);
+                    return;
+                }
+
+                var p = DataManager.getPlayer();
+                var msg = {
+                    userId: p.userId,
+                    email: p.email,
+                    userName: p.name,
+                    text: text.trim(),
+                    avatar: p.avatar,
+                    isVerified: p.isVerified || false,
+                    role: p.role || 'user',
+                    timestamp: new Date().toISOString()
+                };
+
+                this.channel.publish('message', msg);
+                this._addMessage(msg, true);
+            },
+
+            _subscribeToMessages: function() {
+                if (!this.channel) return;
+                this.channel.subscribe('message', function(msg) {
+                    var data = msg.data;
+                    if (data) {
+                        this._addMessage(data, false);
+                    }
+                }.bind(this));
+            },
+
+            _subscribeToPresence: function() {
+                if (!this.channel) return;
+                this.channel.presence.subscribe(function(msg) {
+                    if (msg.action === 'enter' || msg.action === 'update') {
+                        var data = msg.data || {};
+                        var existing = this.onlineUsers.find(function(u) { return u.userId === data.userId; });
+                        if (!existing) {
+                            this.onlineUsers.push(data);
+                        } else {
+                            Object.assign(existing, data);
+                        }
+                    } else if (msg.action === 'leave') {
+                        var data = msg.data || {};
+                        this.onlineUsers = this.onlineUsers.filter(function(u) { return u.userId !== data.userId; });
+                    }
+                    this._updateOnlineCount();
+                }.bind(this));
+
+                this.channel.presence.get(function(err, members) {
+                    if (!err && members) {
+                        this.onlineUsers = members.map(function(m) { return m.data; }).filter(function(d) { return d; });
+                        this._updateOnlineCount();
+                    }
+                }.bind(this));
+            },
+
+            _addMessage: function(msg, isSelf) {
+                var exists = this.messages.some(function(m) {
+                    return m.timestamp === msg.timestamp && m.userId === msg.userId && 
+                           ((m.text && m.text === msg.text) || (m.audio && m.audio === msg.audio));
+                });
+                if (exists) return;
+
+                this.messages.push(msg);
+                this._renderMessage(msg, isSelf);
+                this._scrollToBottom();
+            },
+
+            _renderMessage: function(msg, isSelf) {
+                var container = $('chatMessages');
+                if (!container) return;
+
+                var empty = container.querySelector('.chat-empty');
+                if (empty) empty.remove();
+
+                var div = document.createElement('div');
+                div.className = 'chat-msg' + (isSelf ? ' self' : '');
+
+                var avatarHtml = '';
+                var avatarData = AvatarManager.getAvatarById(msg.avatar);
+                if (avatarData && avatarData.image) {
+                    avatarHtml = '<img src="' + avatarData.image + '" alt="avatar">';
+                } else {
+                    avatarHtml = '👤';
+                }
+
+                var verifiedHtml = '';
+                if (msg.isVerified) {
+                    verifiedHtml = '<span class="verified-badge"><img src="https://uploadkon.ir/uploads/50f425_26BackgroundEraser-۲۰۲۶۰۸۲۵-۰۶۴۳۳۹۳۷۳.png" alt="verified"></span>';
+                }
+
+                var roleEmoji = '';
+                if (msg.role === 'owner') roleEmoji = '👑 ';
+                else if (msg.role === 'admin') roleEmoji = '🛡️ ';
+
+                var time = new Date(msg.timestamp).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+
+                var contentHtml = '';
+                if (msg.isVoice && msg.audio) {
+                    contentHtml = '<audio controls src="data:' + (msg.audioType || 'audio/webm') + ';base64,' + msg.audio + '"></audio>';
+                } else {
+                    contentHtml = '<div class="msg-text">' + this._escapeHtml(msg.text || '') + '</div>';
+                }
+
+                var reportBtn = '';
+                if (!isSelf) {
+                    reportBtn = '<button class="report-btn" onclick="ChatManager.reportMessage(\'' + msg.userId + '\', \'' + this._escapeHtml(msg.text || 'پیام صوتی') + '\')"><i class="fas fa-flag"></i></button>';
+                }
+
+                div.innerHTML = `
+                    <div class="msg-avatar">${avatarHtml}</div>
+                    <div class="msg-content">
+                        <div class="msg-name">
+                            ${roleEmoji}${msg.userName || 'بی‌نام'}
+                            ${verifiedHtml}
+                        </div>
+                        ${contentHtml}
+                        <div class="msg-time">
+                            <span>${time}</span>
+                            <span class="msg-actions">
+                                ${reportBtn}
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(div);
+            },
+
+            _escapeHtml: function(text) {
+                var div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            },
+
+            _scrollToBottom: function() {
+                var container = $('chatMessages');
+                if (container) {
+                    setTimeout(function() {
+                        container.scrollTop = container.scrollHeight;
+                    }, 50);
+                }
+            },
+
+            _updateOnlineCount: function() {
+                var count = $('chatOnlineCount');
+                var badge = $('chatOnlineBadge');
+                if (count) {
+                    count.textContent = '(' + this.onlineUsers.length + ' آنلاین)';
+                }
+                if (badge) {
+                    badge.textContent = this.onlineUsers.length;
+                }
+            },
+
+            reportMessage: function(userId, text) {
+                var p = DataManager.getPlayer();
+                if (!p.isLoggedIn) {
+                    ToastManager.show('❌ لطفاً وارد شوید', 1500);
+                    return;
+                }
+                if (userId === p.userId) {
+                    ToastManager.show('❌ نمی‌توانید پیام خود را گزارش کنید', 1500);
+                    return;
+                }
+
+                var reason = prompt('دلیل گزارش:', 'فحاشی یا توهین');
+                if (!reason || !reason.trim()) return;
+
+                var report = {
+                    reporterId: p.userId,
+                    reporterName: p.name,
+                    reportedId: userId,
+                    reportedName: '',
+                    message: text,
+                    reason: reason.trim(),
+                    status: 'pending',
+                    timestamp: new Date().toISOString()
+                };
+
+                // پیدا کردن نام کاربر گزارش شده
+                var reportedUser = this.onlineUsers.find(function(u) { return u.userId === userId; });
+                if (reportedUser) {
+                    report.reportedName = reportedUser.userName || 'بی‌نام';
+                }
+
+                BackendlessService.saveUser(report, 'Reports')
+                    .then(function() {
+                        ToastManager.show('✅ گزارش شما ثبت شد. در اسرع وقت بررسی می‌شود.', 2500);
+                        BackendlessService.saveLog('report_submitted', {
+                            reporterId: p.userId,
+                            reportedId: userId,
+                            reason: reason.trim()
+                        });
+                    })
+                    .catch(function(err) {
+                        console.error('Report error:', err);
+                        ToastManager.show('❌ خطا در ثبت گزارش', 2000);
+                    });
+            },
+
+            openChat: function() {
+                var screen = $('chatScreen');
+                if (screen) screen.classList.add('active');
+                this._scrollToBottom();
+                this._updateOnlineCount();
+            },
+
+            closeChat: function() {
+                var screen = $('chatScreen');
+                if (screen) screen.classList.remove('active');
+                if (VoiceRecorder.isRecording) {
+                    VoiceRecorder.stopRecording();
+                }
+            }
+        };
+
+        // ============================================================
+        //  🔐  Auth Service (خلاصه)
         // ============================================================
 
         var AuthService = {
@@ -887,20 +1316,21 @@
             currentUser: null,
 
             register: function(email, password, username) {
-                this._showSpinner(true);
+                var btn = $('registerBtn');
+                var spinner = $('authSpinner');
+                if (btn) btn.disabled = true;
+                if (spinner) spinner.classList.add('show');
+
                 return BackendlessService.findUser("email = '" + email + "'")
                     .then(function(existing) {
                         if (existing) {
-                            this._showSpinner(false);
-                            var loginEmail = $('loginEmail');
-                            if (loginEmail) loginEmail.value = email;
-                            var loginPassword = $('loginPassword');
-                            if (loginPassword) loginPassword.value = '';
-                            showAuthScreen('login');
+                            ToastManager.show('❌ این ایمیل قبلاً ثبت شده است', 2000);
+                            if (btn) btn.disabled = false;
+                            if (spinner) spinner.classList.remove('show');
                             return Promise.reject('ALREADY_REGISTERED');
                         }
                         return BackendlessService.register(email, password, username);
-                    }.bind(this))
+                    })
                     .then(function() {
                         var isAdmin = CONFIG.ADMIN_EMAILS.indexOf(email) !== -1;
                         var role = 'user';
@@ -945,15 +1375,18 @@
                     })
                     .then(function() { return BackendlessService.login(email, password); })
                     .then(function(user) {
-                        this._showSpinner(false);
+                        if (btn) btn.disabled = false;
+                        if (spinner) spinner.classList.remove('show');
                         return AuthService.handleLoginSuccess(user, email, null);
-                    }.bind(this))
+                    })
                     .catch(function(err) {
-                        this._showSpinner(false);
+                        if (btn) btn.disabled = false;
+                        if (spinner) spinner.classList.remove('show');
                         if (err === 'ALREADY_REGISTERED') return;
                         console.error('Register error:', err);
+                        ToastManager.show('❌ خطا در ثبت‌نام', 2000);
                         throw err;
-                    }.bind(this));
+                    });
             },
 
             login: function(email, password) {
@@ -966,6 +1399,7 @@
                 return BackendlessService.findUser("email = '" + email + "'")
                     .then(function(userData) {
                         if (!userData) {
+                            ToastManager.show('❌ کاربر یافت نشد', 2000);
                             return Promise.reject('USER_NOT_FOUND');
                         }
                         if (userData.isBanned) {
@@ -987,19 +1421,11 @@
                         if (btn) btn.disabled = false;
                         if (btn) btn.classList.remove('loading');
                         if (spinner) spinner.classList.remove('show');
+                        if (err === 'USER_NOT_FOUND' || err === 'USER_BANNED') return;
+                        ToastManager.show('❌ خطا در ورود', 2000);
                         console.error('Login error:', err);
                         throw err;
                     });
-            },
-
-            _showSpinner: function(show) {
-                var spinner = $('authSpinner');
-                if (spinner) {
-                    if (show) spinner.classList.add('show');
-                    else spinner.classList.remove('show');
-                }
-                var btn = $('registerBtn');
-                if (btn) btn.disabled = show;
             },
 
             handleLoginSuccess: function(user, email, userData) {
@@ -1065,7 +1491,6 @@
                             SessionManager.listenForSessionReplaced(sessionId);
                         }
                         enterGame();
-                        // کاربر به صورت خودکار به چت جهانی اضافه میشه
                         ChatManager.joinGlobalChat();
                     });
             },
@@ -1077,8 +1502,8 @@
                     clearInterval(SessionManager.checkInterval);
                     SessionManager.checkInterval = null;
                 }
-                if (VoiceManager && VoiceManager.isConnected) {
-                    VoiceManager.disconnect();
+                if (VoiceRecorder.isRecording) {
+                    VoiceRecorder.stopRecording();
                 }
                 ChatManager.leaveGlobalChat();
 
@@ -1191,9 +1616,7 @@
                 if (window.crypto && window.crypto.randomUUID) {
                     deviceId = window.crypto.randomUUID();
                 } else {
-                    deviceId = 'device_' + Date.now() + '_' +
-                        Math.random().toString(36).substr(2, 9) +
-                        Math.random().toString(36).substr(2, 9);
+                    deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 }
                 DataManager.set('deviceId', deviceId);
                 return deviceId;
@@ -1216,11 +1639,6 @@
                         if (!userData) return sessionData;
                         if (userData.activeSessionId) {
                             SessionManager.notifySessionReplaced(userData.activeSessionId, deviceId);
-                            BackendlessService.saveLog('session_replaced', {
-                                userId: userId,
-                                oldSessionId: userData.activeSessionId,
-                                newDeviceId: deviceId
-                            });
                         }
                         return BackendlessService.saveUser({
                             objectId: userData.objectId,
@@ -1229,10 +1647,6 @@
                             lastLogin: new Date().toISOString(),
                             onlineStatus: true
                         }).then(function() { return sessionData; });
-                    })
-                    .catch(function(error) {
-                        console.error('Create session error:', error);
-                        throw new Error('Failed to create session: ' + error.message);
                     });
             },
 
@@ -1242,12 +1656,9 @@
                         var channel = ablyClient.channels.get('session_' + oldSessionId);
                         channel.publish('session_replaced', {
                             newDeviceId: newDeviceId,
-                            timestamp: new Date().toISOString(),
-                            message: 'این حساب کاربری در دستگاه دیگری وارد شده است.'
+                            timestamp: new Date().toISOString()
                         });
-                        setTimeout(function() {
-                            try { channel.unsubscribe(); } catch (e) {}
-                        }, 1000);
+                        setTimeout(function() { try { channel.unsubscribe(); } catch (e) {} }, 1000);
                     }
                 } catch (e) { console.warn('Notify session replaced error:', e); }
             },
@@ -1288,9 +1699,7 @@
                 }
                 if (overlay) overlay.classList.add('active');
                 if (ablyClient) { try { ablyClient.close(); } catch (e) {} }
-                if (VoiceManager.isConnected) {
-                    VoiceManager.disconnect();
-                }
+                if (VoiceRecorder.isRecording) { VoiceRecorder.stopRecording(); }
                 ChatManager.leaveGlobalChat();
                 setTimeout(function() { AuthService.logout(); }, 500);
                 if (this.checkInterval) { clearInterval(this.checkInterval);
@@ -1316,559 +1725,6 @@
                         SessionManager.handleSessionReplaced(deviceInfo);
                     });
                 } catch (e) { console.warn('Listen for session replaced error:', e); }
-            }
-        };
-
-        // ============================================================
-        //  💬  Chat Manager - چت آنلاین جهانی
-        // ============================================================
-
-        var ChatManager = {
-            channel: null,
-            isJoined: false,
-            messages: [],
-            onlineUsers: [],
-            isVoiceActive: false,
-            voiceRoom: null,
-            voiceParticipants: {},
-
-            init: function() {
-                if (!ablyClient) return;
-                this.channel = ablyClient.channels.get('global_chat');
-                this._subscribeToMessages();
-                this._subscribeToPresence();
-            },
-
-            joinGlobalChat: function() {
-                if (this.isJoined) return;
-                if (!this.channel) this.init();
-                if (!this.channel) return;
-
-                var p = DataManager.getPlayer();
-                this.channel.presence.enter({
-                    userId: p.userId,
-                    email: p.email,
-                    userName: p.name,
-                    avatar: p.avatar,
-                    isVerified: p.isVerified || false,
-                    role: p.role || 'user',
-                    status: 'online'
-                });
-
-                this.isJoined = true;
-                this._updateOnlineCount();
-                console.log('✅ Joined global chat');
-            },
-
-            leaveGlobalChat: function() {
-                if (!this.isJoined || !this.channel) return;
-                try {
-                    this.channel.presence.leave();
-                } catch (e) {}
-                this.isJoined = false;
-                if (this.isVoiceActive) {
-                    this.leaveVoiceChat();
-                }
-                this.onlineUsers = [];
-                this._updateOnlineCount();
-                console.log('✅ Left global chat');
-            },
-
-            sendMessage: function(text) {
-                if (!text || !text.trim()) return;
-                if (!this.channel) {
-                    ToastManager.show('❌ اتصال به چت برقرار نیست', 1500);
-                    return;
-                }
-
-                var p = DataManager.getPlayer();
-                var msg = {
-                    userId: p.userId,
-                    email: p.email,
-                    userName: p.name,
-                    text: text.trim(),
-                    avatar: p.avatar,
-                    isVerified: p.isVerified || false,
-                    role: p.role || 'user',
-                    timestamp: new Date().toISOString()
-                };
-
-                this.channel.publish('message', msg);
-                // نمایش پیام خودکار
-                this._addMessage(msg, true);
-            },
-
-            _subscribeToMessages: function() {
-                if (!this.channel) return;
-                this.channel.subscribe('message', function(msg) {
-                    var data = msg.data;
-                    if (data) {
-                        this._addMessage(data, false);
-                    }
-                }.bind(this));
-            },
-
-            _subscribeToPresence: function() {
-                if (!this.channel) return;
-                this.channel.presence.subscribe(function(msg) {
-                    if (msg.action === 'enter' || msg.action === 'update') {
-                        var data = msg.data || {};
-                        var existing = this.onlineUsers.find(function(u) { return u.userId === data.userId; });
-                        if (!existing) {
-                            this.onlineUsers.push(data);
-                        } else {
-                            Object.assign(existing, data);
-                        }
-                    } else if (msg.action === 'leave') {
-                        var data = msg.data || {};
-                        this.onlineUsers = this.onlineUsers.filter(function(u) { return u.userId !== data.userId; });
-                    }
-                    this._updateOnlineCount();
-                    this._updateVoiceUsers();
-                }.bind(this));
-
-                // دریافت لیست اولیه
-                this.channel.presence.get(function(err, members) {
-                    if (!err && members) {
-                        this.onlineUsers = members.map(function(m) { return m.data; }).filter(function(d) { return d; });
-                        this._updateOnlineCount();
-                    }
-                }.bind(this));
-            },
-
-            _addMessage: function(msg, isSelf) {
-                // جلوگیری از داپلیکیت
-                var exists = this.messages.some(function(m) {
-                    return m.timestamp === msg.timestamp && m.userId === msg.userId && m.text === msg.text;
-                });
-                if (exists) return;
-
-                this.messages.push(msg);
-                this._renderMessage(msg, isSelf);
-                this._scrollToBottom();
-            },
-
-            _renderMessage: function(msg, isSelf) {
-                var container = $('chatMessages');
-                if (!container) return;
-
-                // حذف placeholder
-                var empty = container.querySelector('.chat-empty');
-                if (empty) empty.remove();
-
-                var div = document.createElement('div');
-                div.className = 'chat-msg' + (isSelf ? ' self' : '');
-
-                var avatarHtml = '';
-                var avatarData = AvatarManager.getAvatarById(msg.avatar);
-                if (avatarData && avatarData.image) {
-                    avatarHtml = '<img src="' + avatarData.image + '" alt="avatar">';
-                } else {
-                    avatarHtml = '👤';
-                }
-
-                var verifiedHtml = '';
-                if (msg.isVerified) {
-                    verifiedHtml = '<span class="verified-badge"><img src="https://uploadkon.ir/uploads/50f425_26BackgroundEraser-۲۰۲۶۰۸۲۵-۰۶۴۳۳۹۳۷۳.png" alt="verified"></span>';
-                }
-
-                var roleEmoji = '';
-                if (msg.role === 'owner') roleEmoji = '👑 ';
-                else if (msg.role === 'admin') roleEmoji = '🛡️ ';
-
-                var time = new Date(msg.timestamp).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
-
-                div.innerHTML = `
-                    <div class="msg-avatar">${avatarHtml}</div>
-                    <div class="msg-content">
-                        <div class="msg-name">
-                            ${roleEmoji}${msg.userName || 'بی‌نام'}
-                            ${verifiedHtml}
-                        </div>
-                        <div class="msg-text">${this._escapeHtml(msg.text)}</div>
-                        <div class="msg-time">${time}</div>
-                    </div>
-                `;
-
-                container.appendChild(div);
-            },
-
-            _escapeHtml: function(text) {
-                var div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            },
-
-            _scrollToBottom: function() {
-                var container = $('chatMessages');
-                if (container) {
-                    setTimeout(function() {
-                        container.scrollTop = container.scrollHeight;
-                    }, 50);
-                }
-            },
-
-            _updateOnlineCount: function() {
-                var count = $('chatOnlineCount');
-                if (count) {
-                    count.textContent = '(' + this.onlineUsers.length + ' آنلاین)';
-                }
-            },
-
-            _updateVoiceUsers: function() {
-                var container = $('vcUsers');
-                if (!container) return;
-
-                var html = '';
-                var participants = this.voiceParticipants;
-                var p = DataManager.getPlayer();
-
-                // خود کاربر
-                html += `
-                    <div class="vc-user speaking">
-                        <span class="dot speaking"></span>
-                        شما ${VoiceManager.isMuted ? '🔇' : '🎤'}
-                    </div>
-                `;
-
-                for (var key in participants) {
-                    if (key === p.userId) continue;
-                    var user = participants[key];
-                    var isSpeaking = user.speaking || false;
-                    var isMuted = user.muted || false;
-                    var name = user.userName || key.split('@')[0];
-                    html += `
-                        <div class="vc-user ${isSpeaking ? 'speaking' : ''}">
-                            <span class="dot ${isSpeaking ? 'speaking' : 'muted'}"></span>
-                            ${name} ${isMuted ? '🔇' : ''}
-                        </div>
-                    `;
-                }
-
-                container.innerHTML = html;
-            },
-
-            toggleVoiceChat: function() {
-                if (this.isVoiceActive) {
-                    this.leaveVoiceChat();
-                } else {
-                    this.joinVoiceChat();
-                }
-            },
-
-            joinVoiceChat: function() {
-                if (this.isVoiceActive) return;
-                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
-                    ToastManager.show('⏳ در حال بارگذاری SDK صوتی...', 1500);
-                    this._loadLiveKitSDK().then(function() {
-                        this._joinVoiceChat();
-                    }.bind(this)).catch(function() {
-                        ToastManager.show('❌ خطا در بارگذاری SDK صوتی', 2000);
-                    });
-                    return;
-                }
-                this._joinVoiceChat();
-            },
-
-            _loadLiveKitSDK: function() {
-                return new Promise(function(resolve, reject) {
-                    if (typeof LiveKit !== 'undefined' && LiveKit.Room) {
-                        resolve();
-                        return;
-                    }
-                    var cdnList = [
-                        'https://cdn.jsdelivr.net/npm/livekit-client@1.15.3/dist/livekit-client.umd.min.js',
-                        'https://unpkg.com/livekit-client@1.15.3/dist/livekit-client.umd.min.js'
-                    ];
-                    var index = 0;
-
-                    function tryNext() {
-                        if (index >= cdnList.length) {
-                            reject(new Error('All CDNs failed'));
-                            return;
-                        }
-                        var script = document.createElement('script');
-                        script.src = cdnList[index];
-                        script.onload = function() {
-                            if (typeof LiveKit !== 'undefined' && LiveKit.Room) {
-                                resolve();
-                            } else {
-                                index++;
-                                tryNext();
-                            }
-                        };
-                        script.onerror = function() {
-                            index++;
-                            tryNext();
-                        };
-                        document.head.appendChild(script);
-                    }
-                    tryNext();
-                });
-            },
-
-            _joinVoiceChat: function() {
-                var p = DataManager.getPlayer();
-                var roomName = 'global_voice_' + Date.now();
-
-                VoiceManager.connect(roomName)
-                    .then(function() {
-                        this.isVoiceActive = true;
-                        var toggle = $('chatVoiceToggle');
-                        if (toggle) {
-                            toggle.classList.add('active');
-                            toggle.innerHTML = '<i class="fas fa-microphone-slash"></i> خروج صوتی';
-                        }
-                        var panel = $('voiceChatPanel');
-                        if (panel) panel.classList.add('active');
-
-                        // به‌روزرسانی لیست کاربران صوتی
-                        VoiceManager.participants = {};
-                        this.voiceParticipants = {};
-                        this._updateVoiceUsers();
-
-                        ToastManager.show('🎤 به گفت‌گوی صوتی پیوستید', 1500);
-                    }.bind(this))
-                    .catch(function(err) {
-                        console.error('Voice join error:', err);
-                        ToastManager.show('❌ خطا در اتصال صوتی', 2000);
-                    });
-            },
-
-            leaveVoiceChat: function() {
-                VoiceManager.disconnect();
-                this.isVoiceActive = false;
-                this.voiceParticipants = {};
-                var toggle = $('chatVoiceToggle');
-                if (toggle) {
-                    toggle.classList.remove('active');
-                    toggle.innerHTML = '<i class="fas fa-microphone"></i> صوتی';
-                }
-                var panel = $('voiceChatPanel');
-                if (panel) panel.classList.remove('active');
-                ToastManager.show('🔇 از گفت‌گوی صوتی خارج شدید', 1500);
-            },
-
-            toggleMute: function() {
-                VoiceManager.toggleMute();
-                var btn = $('vcMuteBtn');
-                if (btn) {
-                    if (VoiceManager.isMuted) {
-                        btn.classList.add('muted');
-                        btn.innerHTML = '<i class="fas fa-microphone-slash"></i> فعال کردن';
-                    } else {
-                        btn.classList.remove('muted');
-                        btn.innerHTML = '<i class="fas fa-microphone"></i> بیصدا';
-                    }
-                }
-                this._updateVoiceUsers();
-            },
-
-            openChat: function() {
-                var screen = $('chatScreen');
-                if (screen) screen.classList.add('active');
-                this._scrollToBottom();
-                this._updateOnlineCount();
-            },
-
-            closeChat: function() {
-                var screen = $('chatScreen');
-                if (screen) screen.classList.remove('active');
-                if (this.isVoiceActive) {
-                    this.leaveVoiceChat();
-                }
-            }
-        };
-
-        // ============================================================
-        //  🎤  Voice Manager (برای چت صوتی)
-        // ============================================================
-
-        var VoiceManager = {
-            room: null,
-            localParticipant: null,
-            isConnected: false,
-            isMuted: false,
-            participants: {},
-            roomName: null,
-            _reconnectAttempts: 0,
-            _maxReconnectAttempts: 3,
-
-            connect: function(roomName) {
-                if (!roomName) {
-                    return Promise.reject(new Error('NO_ROOM_NAME'));
-                }
-
-                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
-                    return Promise.reject(new Error('LiveKit SDK not loaded'));
-                }
-
-                if (this.isConnected && this.roomName === roomName) {
-                    return Promise.resolve();
-                }
-
-                if (this.isConnected) {
-                    this.disconnect();
-                }
-
-                this.roomName = roomName;
-                return this._createToken(roomName)
-                    .then(function(token) {
-                        if (!token) throw new Error('Token failed');
-                        return this._connectWithToken(token, roomName);
-                    }.bind(this))
-                    .then(function() {
-                        this.isConnected = true;
-                        this._reconnectAttempts = 0;
-                        return true;
-                    }.bind(this))
-                    .catch(function(err) {
-                        console.error('Voice connect error:', err);
-                        this.isConnected = false;
-                        return Promise.reject(err);
-                    }.bind(this));
-            },
-
-            _createToken: function(roomName) {
-                var p = DataManager.getPlayer();
-                var identity = p.userId || 'user_' + Date.now();
-                var name = p.name || 'کاربر';
-
-                var payload = {
-                    exp: Math.floor(Date.now() / 1000) + 3600,
-                    nbf: Math.floor(Date.now() / 1000) - 10,
-                    sub: 'APINGhmpwAhPVQk',
-                    video: {
-                        room: roomName,
-                        roomJoin: true,
-                        canPublish: true,
-                        canSubscribe: true
-                    },
-                    name: name,
-                    identity: identity
-                };
-
-                try {
-                    var header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-                    var payloadStr = JSON.stringify(payload);
-                    var utf8Encoded = encodeURIComponent(payloadStr)
-                        .replace(/%([0-9A-F]{2})/g, function(match, p1) {
-                            return String.fromCharCode(parseInt(p1, 16));
-                        });
-                    var payloadB64 = btoa(utf8Encoded);
-                    var signature = btoa(JSON.stringify({ sign: 'livekit_' + Date.now() }));
-                    return Promise.resolve(header + '.' + payloadB64 + '.' + signature);
-                } catch (error) {
-                    console.error('Token creation error:', error);
-                    return Promise.reject(new Error('Failed to create token'));
-                }
-            },
-
-            _connectWithToken: function(token, roomName) {
-                if (typeof LiveKit === 'undefined' || !LiveKit.Room) {
-                    return Promise.reject(new Error('LiveKit SDK not loaded'));
-                }
-
-                var room = new LiveKit.Room({
-                    adaptiveStream: true,
-                    dynacast: true,
-                    audioCaptureDefaults: {
-                        echoCancellation: true,
-                        noiseSuppression: true,
-                        autoGainControl: true
-                    }
-                });
-
-                this.room = room;
-
-                room.on('participantConnected', function(participant) {
-                    this.participants[participant.identity] = {
-                        participant: participant,
-                        speaking: false,
-                        muted: false,
-                        userName: participant.name || participant.identity
-                    };
-                    ChatManager.voiceParticipants = this.participants;
-                    ChatManager._updateVoiceUsers();
-                }.bind(this));
-
-                room.on('participantDisconnected', function(participant) {
-                    delete this.participants[participant.identity];
-                    ChatManager.voiceParticipants = this.participants;
-                    ChatManager._updateVoiceUsers();
-                }.bind(this));
-
-                room.on('trackSubscribed', function(track, publication, participant) {
-                    if (track.kind === 'audio' && participant) {
-                        if (this.participants[participant.identity]) {
-                            this.participants[participant.identity].muted = publication.muted || false;
-                        }
-                        ChatManager.voiceParticipants = this.participants;
-                        ChatManager._updateVoiceUsers();
-                    }
-                }.bind(this));
-
-                room.on('connectionStateChanged', function(state) {
-                    if (state === 'disconnected') {
-                        this.isConnected = false;
-                        this._handleDisconnect();
-                    }
-                }.bind(this));
-
-                return room.connect('wss://udhg-080lyqpp.livekit.cloud', token, {
-                    autoSubscribe: true
-                }).then(function() {
-                    this.localParticipant = room.localParticipant;
-                    this.isConnected = true;
-                    return true;
-                }.bind(this));
-            },
-
-            _handleDisconnect: function() {
-                this.isConnected = false;
-                this.room = null;
-                this.localParticipant = null;
-                this.participants = {};
-                ChatManager.voiceParticipants = {};
-                ChatManager._updateVoiceUsers();
-                if (this.roomName && this._reconnectAttempts < this._maxReconnectAttempts) {
-                    this._reconnectAttempts++;
-                    setTimeout(function() {
-                        this.connect(this.roomName).catch(function() {});
-                    }.bind(this), 2000);
-                }
-            },
-
-            toggleMute: function() {
-                if (!this.isConnected || !this.localParticipant) {
-                    return;
-                }
-                this.isMuted = !this.isMuted;
-                try {
-                    this.localParticipant.setMicrophoneEnabled(!this.isMuted);
-                } catch (e) {
-                    console.error('Toggle mute error:', e);
-                }
-            },
-
-            disconnect: function() {
-                if (this.room) {
-                    try {
-                        this.room.disconnect();
-                    } catch (e) {}
-                }
-                this.room = null;
-                this.localParticipant = null;
-                this.isConnected = false;
-                this.isMuted = false;
-                this.roomName = null;
-                this.participants = {};
-                ChatManager.voiceParticipants = {};
-                ChatManager._updateVoiceUsers();
-            },
-
-            isInRoom: function() {
-                return this.isConnected && this.roomName !== null;
             }
         };
 
@@ -2014,13 +1870,12 @@
                 if (roomScreen) roomScreen.classList.remove('active');
                 var lobbyScreen = $('lobbyScreenCustom');
                 if (lobbyScreen) lobbyScreen.classList.add('active');
-                VoiceManager.disconnect();
                 this.currentLobbyId = null;
             }
         };
 
         // ============================================================
-        //  ✏️  Rename System
+        //  ✏️  Rename Manager
         // ============================================================
 
         var RenameManager = {
@@ -2108,11 +1963,8 @@
                         ToastManager.show('✅ نام شما با موفقیت تغییر کرد!', 1500);
                         updateUI();
                         this.close();
-                        // بروزرسانی در چت
                         if (ChatManager.channel) {
-                            ChatManager.channel.presence.update({
-                                userName: newName
-                            });
+                            ChatManager.channel.presence.update({ userName: newName });
                         }
                     }.bind(this))
                     .catch(function(err) {
@@ -2123,10 +1975,11 @@
         };
 
         // ============================================================
-        //  👑  Admin Functions
+        //  📊  Admin Functions
         // ============================================================
 
         var adminUsers = [];
+        var reports = [];
 
         function loadAdminPanel() {
             var p = DataManager.getPlayer();
@@ -2151,6 +2004,9 @@
                 }
             }
 
+            // بارگذاری گزارش‌ها
+            loadReports();
+
             BackendlessService.findUsers(null, 'created DESC', 50)
                 .then(function(users) {
                     adminUsers = users || [];
@@ -2159,6 +2015,106 @@
                 })
                 .catch(function() {});
         }
+
+        function loadReports() {
+            BackendlessService.findUsers("status = 'pending'", 'timestamp DESC', 50, 'Reports')
+                .then(function(data) {
+                    reports = data || [];
+                    var badge = $('reportsBadge');
+                    var pending = reports.filter(function(r) { return r.status === 'pending'; });
+                    if (badge) badge.textContent = pending.length;
+                    renderReports(reports);
+                })
+                .catch(function() {
+                    reports = [];
+                    renderReports([]);
+                });
+        }
+
+        function renderReports(reportsData) {
+            var container = $('reportsList');
+            if (!container) return;
+
+            if (!reportsData || reportsData.length === 0) {
+                container.innerHTML =
+                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);">هیچ گزارشی وجود ندارد</div>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < reportsData.length; i++) {
+                var r = reportsData[i];
+                var statusClass = r.status === 'pending' ? 'pending' : r.status === 'approved' ? 'approved' : 'rejected';
+                var statusText = r.status === 'pending' ? 'در انتظار' : r.status === 'approved' ? 'تایید شده' : 'رد شده';
+
+                html += `
+                    <div class="report-item status-${r.status}">
+                        <div class="report-header">
+                            <span class="reporter">
+                                <strong>${r.reporterName || 'بی‌نام'}</strong> 
+                                گزارش داد: 
+                                <strong>${r.reportedName || 'کاربر'}</strong>
+                            </span>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                            <span class="time">${new Date(r.timestamp).toLocaleString('fa-IR')}</span>
+                        </div>
+                        <div class="report-msg">📝 ${r.message || 'پیام'}</div>
+                        <div class="report-reason">⚠️ دلیل: ${r.reason || 'نامشخص'}</div>
+                        ${r.status === 'pending' ? `
+                        <div class="report-actions">
+                            <button class="approve-btn" onclick="approveReport('${r.objectId}')">✅ تایید</button>
+                            <button class="reject-btn" onclick="rejectReport('${r.objectId}')">❌ رد</button>
+                            <button class="ban-user-btn" onclick="banUserFromReport('${r.reportedId}')">⛔ مسدود کردن کاربر</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function approveReport(reportId) {
+            if (!confirm('آیا از تایید این گزارش مطمئن هستید؟')) return;
+            BackendlessService.saveUser({ objectId: reportId, status: 'approved' }, 'Reports')
+                .then(function() {
+                    ToastManager.show('✅ گزارش تایید شد', 1500);
+                    loadReports();
+                    loadAdminPanel();
+                })
+                .catch(function() {});
+        }
+
+        function rejectReport(reportId) {
+            if (!confirm('آیا از رد این گزارش مطمئن هستید؟')) return;
+            BackendlessService.saveUser({ objectId: reportId, status: 'rejected' }, 'Reports')
+                .then(function() {
+                    ToastManager.show('✅ گزارش رد شد', 1500);
+                    loadReports();
+                    loadAdminPanel();
+                })
+                .catch(function() {});
+        }
+
+        function banUserFromReport(userId) {
+            if (!userId) {
+                ToastManager.show('❌ شناسه کاربر یافت نشد', 1500);
+                return;
+            }
+            if (!confirm('آیا از مسدود کردن این کاربر مطمئن هستید؟')) return;
+            BackendlessService.saveUser({ objectId: userId, isBanned: true, banExpiry: null })
+                .then(function() {
+                    ToastManager.show('✅ کاربر مسدود شد', 1500);
+                    loadReports();
+                    loadAdminPanel();
+                })
+                .catch(function() {});
+        }
+
+        // ===== توابع کمکی برای استفاده در HTML =====
+        window.approveReport = approveReport;
+        window.rejectReport = rejectReport;
+        window.banUserFromReport = banUserFromReport;
+        window.ChatManager = ChatManager;
 
         function updateAdminStats(users) {
             var now = new Date();
@@ -2189,17 +2145,6 @@
             if (todayEl) todayEl.textContent = todayUsers.length;
             if (weekEl) weekEl.textContent = weekUsers.length;
             if (monthEl) monthEl.textContent = monthUsers.length;
-
-            var roomsStatus = $('roomsStatus');
-            if (roomsStatus) {
-                if (LobbyManager.isShutdown) {
-                    roomsStatus.textContent = '🚫 لابی‌ها بسته شده‌اند';
-                    roomsStatus.style.color = 'var(--danger)';
-                } else {
-                    roomsStatus.textContent = '⏳ لابی‌ها در حال بروزرسانی هستند';
-                    roomsStatus.style.color = 'var(--warning)';
-                }
-            }
         }
 
         function renderAdminUsers(users) {
@@ -2288,7 +2233,34 @@
             }
         }
 
-        function adminMakeAdmin(userId) {
+        // ===== توابع مدیریتی =====
+        window.adminBan = function(userId) {
+            var p = DataManager.getPlayer();
+            if (!p.isAdmin && p.role !== 'owner') {
+                ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
+                return;
+            }
+            if (!confirm('آیا از مسدود کردن این کاربر مطمئن هستید؟')) return;
+            BackendlessService.saveUser({ objectId: userId, isBanned: true, banExpiry: null })
+                .then(function() { ToastManager.show('✅ کاربر مسدود شد', 1500);
+                    loadAdminPanel(); })
+                .catch(function() {});
+        };
+
+        window.adminUnban = function(userId) {
+            var p = DataManager.getPlayer();
+            if (!p.isAdmin && p.role !== 'owner') {
+                ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
+                return;
+            }
+            if (!confirm('آیا از برداشتن مسدودی این کاربر مطمئن هستید؟')) return;
+            BackendlessService.saveUser({ objectId: userId, isBanned: false, banExpiry: null })
+                .then(function() { ToastManager.show('✅ مسدودی برداشته شد', 1500);
+                    loadAdminPanel(); })
+                .catch(function() {});
+        };
+
+        window.adminMakeAdmin = function(userId) {
             var p = DataManager.getPlayer();
             if (p.role !== 'owner') {
                 ToastManager.show('⛔ فقط سازنده اصلی می‌تواند ادمین بسازد', 2000);
@@ -2301,53 +2273,22 @@
                 .then(function() { ToastManager.show('✅ کاربر ادمین شد', 1500);
                     loadAdminPanel(); })
                 .catch(function() {});
-        }
+        };
 
-        function adminRemoveAdmin(userId) {
+        window.adminRemoveAdmin = function(userId) {
             var p = DataManager.getPlayer();
             if (p.role !== 'owner') {
                 ToastManager.show('⛔ فقط سازنده اصلی می‌تواند ادمین را بردارد', 2000);
                 return;
             }
             if (!confirm('آیا از برداشتن دسترسی ادمین برای این کاربر مطمئن هستید؟')) return;
-            var user = adminUsers.find(function(u) { return u.objectId === userId; });
-            if (user && user.email === CONFIG.OWNER_EMAIL) {
-                ToastManager.show('⛔ نمی‌توانید سازنده اصلی را تغییر دهید', 2000);
-                return;
-            }
             BackendlessService.saveUser({ objectId: userId, role: 'user', permissions: [] })
                 .then(function() { ToastManager.show('✅ دسترسی ادمین برداشته شد', 1500);
                     loadAdminPanel(); })
                 .catch(function() {});
-        }
+        };
 
-        function adminBan(userId) {
-            var p = DataManager.getPlayer();
-            if (!p.isAdmin && p.role !== 'owner') {
-                ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
-                return;
-            }
-            if (!confirm('آیا از مسدود کردن این کاربر مطمئن هستید؟')) return;
-            BackendlessService.saveUser({ objectId: userId, isBanned: true, banExpiry: null })
-                .then(function() { ToastManager.show('✅ کاربر مسدود شد', 1500);
-                    loadAdminPanel(); })
-                .catch(function() {});
-        }
-
-        function adminUnban(userId) {
-            var p = DataManager.getPlayer();
-            if (!p.isAdmin && p.role !== 'owner') {
-                ToastManager.show('⛔ شما دسترسی بن کردن ندارید', 2000);
-                return;
-            }
-            if (!confirm('آیا از برداشتن مسدودی این کاربر مطمئن هستید؟')) return;
-            BackendlessService.saveUser({ objectId: userId, isBanned: false, banExpiry: null })
-                .then(function() { ToastManager.show('✅ مسدودی برداشته شد', 1500);
-                    loadAdminPanel(); })
-                .catch(function() {});
-        }
-
-        function adminEdit(userId) {
+        window.adminEdit = function(userId) {
             var p = DataManager.getPlayer();
             if (!p.isAdmin && p.role !== 'owner') {
                 ToastManager.show('⛔ شما دسترسی مدیریت کاربران ندارید', 2000);
@@ -2442,7 +2383,7 @@
                     break;
                 }
             }
-        }
+        };
 
         // ============================================================
         //  🚀  UI Functions
@@ -2951,16 +2892,13 @@
             }
         });
 
-        safeAddListener('chatVoiceToggle', 'click', function() {
-            ChatManager.toggleVoiceChat();
-        });
-
-        safeAddListener('vcMuteBtn', 'click', function() {
-            ChatManager.toggleMute();
-        });
-
-        safeAddListener('vcLeaveBtn', 'click', function() {
-            ChatManager.leaveVoiceChat();
+        // Voice Record
+        safeAddListener('voiceRecordBtn', 'click', function() {
+            if (VoiceRecorder.isRecording) {
+                VoiceRecorder.stopRecording();
+            } else {
+                VoiceRecorder.startRecording();
+            }
         });
 
         // Rename Events
@@ -3129,18 +3067,21 @@
                             loadAdminPanel();
                             var roomsCard = $('roomsCard');
                             if (roomsCard) roomsCard.style.display = 'none';
+                            var reportsCard = $('reportsCard');
+                            if (reportsCard) reportsCard.style.display = 'none';
                         } else if (atab === 'rooms') {
                             var roomsCard = $('roomsCard');
                             if (roomsCard) roomsCard.style.display = 'block';
+                            var reportsCard = $('reportsCard');
+                            if (reportsCard) reportsCard.style.display = 'none';
                             loadAdminPanel();
-                        } else if (atab === 'logs') {
-                            var list = $('adminUsersList');
-                            if (list) {
-                                list.innerHTML =
-                                    '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.15);">📝 لاگ‌ها در حال پیاده‌سازی...</div>';
-                            }
+                        } else if (atab === 'reports') {
+                            var reportsCard = $('reportsCard');
+                            if (reportsCard) reportsCard.style.display = 'block';
                             var roomsCard = $('roomsCard');
                             if (roomsCard) roomsCard.style.display = 'none';
+                            loadReports();
+                            loadAdminPanel();
                         }
                     });
                 }
@@ -3148,7 +3089,7 @@
         }
 
         safeAddListener('banLogoutBtn', 'click', function() {
-            VoiceManager.disconnect();
+            if (VoiceRecorder.isRecording) { VoiceRecorder.stopRecording(); }
             ChatManager.leaveGlobalChat();
             AuthService.logout();
             var overlay = $('banOverlay');
@@ -3273,11 +3214,11 @@
                                         setTimeout(function() {
                                             LoadingManager.complete();
                                             if (!hasSession) { showAuthScreen('login'); }
-                                            console.log('🎮 مافیا بیس - نسخه نهایی با چت جهانی');
-                                            console.log('✅ پخش زنده حذف شد');
-                                            console.log('💬 چت آنلاین جهانی فعال شد');
-                                            console.log('🎤 Voice Chat گروهی فعال شد');
-                                            console.log('✅ تیک آبی سازنده‌ها اضافه شد');
+                                            console.log('🎮 مافیا بیس - نسخه نهایی');
+                                            console.log('✅ دکمه شروع سر جای خودش');
+                                            console.log('💬 چت آنلاین با ضبط صدا');
+                                            console.log('📝 گزارش پیام‌ها');
+                                            console.log('✅ تیک آبی سازنده‌ها');
                                         }, 500);
                                     }, 500);
                                 }, 500);
@@ -3300,10 +3241,10 @@
         setTimeout(boot, 300);
 
         console.log('🎮 مافیا بیس — نسخه نهایی');
-        console.log('✅ پخش زنده حذف شد');
-        console.log('💬 چت آنلاین جهانی فعال شد');
-        console.log('🎤 Voice Chat گروهی فعال شد');
-        console.log('✅ تیک آبی سازنده‌ها اضافه شد');
+        console.log('✅ دکمه شروع سر جای خودش');
+        console.log('💬 چت آنلاین با ضبط صدا');
+        console.log('📝 گزارش پیام‌ها در پنل ادمین');
+        console.log('✅ تیک آبی سازنده‌ها');
     </script>
 </body>
 </html>
