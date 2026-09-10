@@ -1,1 +1,116 @@
-....
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>نمایش ساده</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #0d1117;
+            color: #c9d1d9;
+            font-family: system-ui, sans-serif;
+            overscroll-behavior: none;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-size: 1.1rem;
+            color: #8b949e;
+            letter-spacing: 0.5px;
+        }
+        #loading::after {
+            content: "";
+            display: inline-block;
+            width: 8px; height: 8px;
+            margin-right: 10px;
+            border-radius: 50%;
+            background: #58a6ff;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50%      { opacity: 1;   transform: scale(1.2); }
+        }
+        #error {
+            display: none;
+            padding: 2rem;
+            text-align: center;
+            color: #f85149;
+            line-height: 1.8;
+        }
+        #frame {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            border: 0;
+            background: #0d1117;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">در حال بارگذاری</div>
+    <div id="error"></div>
+    <iframe id="frame" allow="clipboard-read; clipboard-write; microphone; camera; autoplay"></iframe>
+
+    <script>
+        const URL_SRC = 'https://raw.githubusercontent.com/TIGER-IR/virax/refs/heads/main/index.html';
+        const BASE    = 'https://raw.githubusercontent.com/TIGER-IR/virax/refs/heads/main/';
+
+        const frame   = document.getElementById('frame');
+        const loading = document.getElementById('loading');
+        const errBox  = document.getElementById('error');
+
+        function showError(msg) {
+            loading.style.display = 'none';
+            errBox.style.display = 'block';
+            errBox.textContent = 'خطا در بارگذاری: ' + msg;
+        }
+
+        fetch(URL_SRC, { cache: 'no-store' })
+            .then(res => {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.text();
+            })
+            .then(html => {
+                // <base> برای مسیرهای نسبی (خیلی مهم برای اسکریپت‌ها و SDKها)
+                if (!/<base\s/i.test(html)) {
+                    html = html.replace(/<head([^>]*)>/i, '<head$1><base href="' + BASE + '">');
+                }
+                // متا viewport برای موبایل
+                if (!/name=["']viewport["']/i.test(html)) {
+                    html = html.replace(
+                        /<head([^>]*)>/i,
+                        '<head$1><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">'
+                    );
+                }
+
+                // تنظیم مستقیم srcdoc (بدون Blob، چون createObjectURL در دسترس نیست)
+                frame.srcdoc = html;
+
+                frame.addEventListener('load', () => {
+                    loading.style.display = 'none';
+                    frame.style.display = 'block';
+                }, { once: true });
+
+                // فالبک: اگه تا ۸ ثانیه load نشد، به هر حال نشون بده
+                setTimeout(() => {
+                    if (frame.style.display !== 'block') {
+                        loading.style.display = 'none';
+                        frame.style.display = 'block';
+                    }
+                }, 8000);
+            })
+            .catch(err => showError(err.message));
+    </script>
+</body>
+</html>
