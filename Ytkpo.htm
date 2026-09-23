@@ -5,19 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0a0a15">
-<title>TPS Pro + Helicopter</title>
+<title>TPS Pro + Helicopter + Oak Trees</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:#0a0a15;touch-action:none;font-family:Arial,Tahoma,sans-serif}
 canvas{display:block;width:100%;height:100%;touch-action:none}
 
-/* LOADING */
 #loading{position:fixed;inset:0;z-index:1000;background:#0a0a15;background-image:url('https://uploadkon.ir/uploads/a6c023_26grok-1790086009059.jpg');background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:40px;transition:opacity 0.6s, visibility 0.6s}
 #loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
 #loadingBarWrapper{width:75%;max-width:500px;height:6px;background:rgba(0,0,0,0.6);border-radius:3px;overflow:hidden;box-shadow:0 0 20px rgba(0,0,0,0.7)}
 #loadingBar{height:100%;width:0%;background:linear-gradient(90deg,#ffcc00,#ffe066,#ffcc00);border-radius:3px;transition:width 0.3s ease-out;box-shadow:0 0 15px rgba(255,204,0,0.9)}
 
-/* JOYSTICK */
 #joyZoneLeft{position:fixed;bottom:0;left:0;width:55%;height:70%;z-index:15;touch-action:none}
 #joyZoneLeft.hidden{display:none}
 #joyBaseFloat{position:absolute;width:120px;height:120px;border-radius:50%;border:3px solid rgba(255,255,255,0.35);background:radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 70%);transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity 0.2s}
@@ -28,7 +26,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #camZoneRight{position:fixed;top:0;right:0;width:50%;height:100%;z-index:14;touch-action:none}
 #camZoneRight.hidden{display:none}
 
-/* CAR CONTROLS */
 #carControls{position:fixed;inset:0;pointer-events:none;z-index:16;display:none}
 #carControls.show{display:block}
 .steer-svg-btn{position:absolute;bottom:20px;width:65px;height:65px;pointer-events:auto;touch-action:none;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.6))}
@@ -42,76 +39,24 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #reverseBtn{position:absolute;bottom:205px;right:15px;width:62px;height:62px;pointer-events:auto;touch-action:none;filter:drop-shadow(0 5px 15px rgba(0,0,0,0.7))}
 #reverseBtn:active,#reverseBtn.active{transform:scale(0.92) translateY(3px)}
 
-/* HELICOPTER CONTROLS */
 #heliControls{position:fixed;inset:0;pointer-events:none;z-index:16;display:none}
 #heliControls.show{display:block}
-
-.heli-btn{
-  position:absolute;
-  border-radius:50%;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  pointer-events:auto;
-  touch-action:none;
-  font-weight:900;
-  text-shadow:0 2px 4px rgba(0,0,0,0.8);
-  transition:transform 0.08s, box-shadow 0.08s;
-  border:2px solid rgba(255,255,255,0.35);
-  backdrop-filter:blur(8px);
-  box-shadow:0 4px 15px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2);
-}
-.heli-btn:active,.heli-btn.active{
-  transform:scale(0.9);
-  box-shadow:0 0 22px rgba(100,180,255,0.9), inset 0 1px 2px rgba(255,255,255,0.3);
-}
-
+.heli-btn{position:absolute;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;pointer-events:auto;touch-action:none;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,0.8);transition:transform 0.08s, box-shadow 0.08s;border:2px solid rgba(255,255,255,0.35);backdrop-filter:blur(8px);box-shadow:0 4px 15px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2)}
+.heli-btn:active,.heli-btn.active{transform:scale(0.9);box-shadow:0 0 22px rgba(100,180,255,0.9), inset 0 1px 2px rgba(255,255,255,0.3)}
 #heli-left{left:15px;bottom:20px;width:60px;height:60px;font-size:20px;background:linear-gradient(135deg, rgba(50,100,200,0.75), rgba(30,60,140,0.75))}
 #heli-right{left:85px;bottom:20px;width:60px;height:60px;font-size:20px;background:linear-gradient(135deg, rgba(50,100,200,0.75), rgba(30,60,140,0.75))}
 #heli-fwd{left:50px;bottom:105px;width:60px;height:60px;font-size:20px;background:linear-gradient(135deg, rgba(60,120,220,0.75), rgba(30,70,150,0.75))}
 #heli-back{left:50px;bottom:180px;width:60px;height:60px;font-size:20px;background:linear-gradient(135deg, rgba(60,120,220,0.75), rgba(30,70,150,0.75))}
 #heli-up{right:85px;bottom:20px;width:60px;height:60px;font-size:20px;background:linear-gradient(135deg, rgba(60,180,100,0.75), rgba(30,120,60,0.75))}
 #heli-down{right:15px;bottom:20px;width:60px;height:60px;font-size:20px;background:linear-gradient(135deg, rgba(200,60,60,0.75), rgba(140,30,30,0.75))}
-
-#heli-engine{
-  right:20px;
-  bottom:105px;
-  width:110px;
-  height:60px;
-  border-radius:14px;
-  font-size:13px;
-  font-weight:900;
-  letter-spacing:1px;
-  background:linear-gradient(135deg, rgba(200,220,255,0.15), rgba(150,180,240,0.08));
-  border:2px solid rgba(200,220,255,0.55);
-  backdrop-filter:blur(12px);
-  box-shadow:0 4px 20px rgba(100,150,255,0.35), inset 0 1px 2px rgba(255,255,255,0.3), inset 0 -2px 8px rgba(0,0,0,0.2);
-  color:#e8f0ff;
-  text-shadow:0 0 8px rgba(150,200,255,0.9), 0 1px 3px rgba(0,0,0,0.7);
-}
-#heli-engine:active,#heli-engine.active{
-  background:linear-gradient(135deg, rgba(150,200,255,0.4), rgba(100,150,240,0.25));
-  box-shadow:0 0 30px rgba(150,200,255,0.9), inset 0 1px 3px rgba(255,255,255,0.5);
-  transform:scale(0.94);
-}
-#heli-engine.running{
-  background:linear-gradient(135deg, rgba(150,255,200,0.3), rgba(60,180,120,0.2));
-  border-color:rgba(180,255,220,0.75);
-  color:#e8ffee;
-  text-shadow:0 0 10px rgba(150,255,200,1), 0 1px 3px rgba(0,0,0,0.7);
-  box-shadow:0 0 25px rgba(100,255,180,0.6), inset 0 1px 2px rgba(255,255,255,0.4);
-  animation:engineGlow 1.5s infinite;
-}
-@keyframes engineGlow{
-  0%,100%{box-shadow:0 0 25px rgba(100,255,180,0.5), inset 0 1px 2px rgba(255,255,255,0.4)}
-  50%{box-shadow:0 0 40px rgba(100,255,180,0.9), inset 0 1px 2px rgba(255,255,255,0.6)}
-}
+#heli-engine{right:20px;bottom:105px;width:110px;height:60px;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:1px;background:linear-gradient(135deg, rgba(200,220,255,0.15), rgba(150,180,240,0.08));border:2px solid rgba(200,220,255,0.55);backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(100,150,255,0.35), inset 0 1px 2px rgba(255,255,255,0.3), inset 0 -2px 8px rgba(0,0,0,0.2);color:#e8f0ff;text-shadow:0 0 8px rgba(150,200,255,0.9), 0 1px 3px rgba(0,0,0,0.7)}
+#heli-engine:active,#heli-engine.active{background:linear-gradient(135deg, rgba(150,200,255,0.4), rgba(100,150,240,0.25));box-shadow:0 0 30px rgba(150,200,255,0.9), inset 0 1px 3px rgba(255,255,255,0.5);transform:scale(0.94)}
+#heli-engine.running{background:linear-gradient(135deg, rgba(150,255,200,0.3), rgba(60,180,120,0.2));border-color:rgba(180,255,220,0.75);color:#e8ffee;text-shadow:0 0 10px rgba(150,255,200,1), 0 1px 3px rgba(0,0,0,0.7);box-shadow:0 0 25px rgba(100,255,180,0.6), inset 0 1px 2px rgba(255,255,255,0.4);animation:engineGlow 1.5s infinite}
+@keyframes engineGlow{0%,100%{box-shadow:0 0 25px rgba(100,255,180,0.5), inset 0 1px 2px rgba(255,255,255,0.4)}50%{box-shadow:0 0 40px rgba(100,255,180,0.9), inset 0 1px 2px rgba(255,255,255,0.6)}}
 
 #heliExitBtn{position:absolute;top:12px;left:12px;padding:8px 16px;background:linear-gradient(135deg, rgba(220,40,40,0.85), rgba(160,20,20,0.85));border:2px solid rgba(255,255,255,0.5);border-radius:10px;color:#fff;font-size:12px;font-weight:600;display:none;pointer-events:auto;z-index:20;backdrop-filter:blur(6px)}
 #heliExitBtn.show{display:block}
 
-/* HUD */
 #heliHUD{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg, rgba(10,15,30,0.85), rgba(20,25,45,0.85));backdrop-filter:blur(12px);padding:6px 16px;border-radius:12px;border:1px solid rgba(120,180,255,0.25);display:none;align-items:center;gap:10px;color:#fff;z-index:15;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
 #heliHUD.show{display:flex}
 .heli-hud-item{display:flex;flex-direction:column;align-items:center;min-width:42px}
@@ -216,14 +161,14 @@ const SOLDIER_URL  = "https://raw.githubusercontent.com/google/model-viewer/mast
 const FERRARI_URL  = "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/models/gltf/ferrari.glb";
 const SOUND_URL    = "https://sedatoseda.com/wp-content/uploads/1630988550_1fd32026963b48b.mp3";
 const HELI_URL     = "https://raw.githubusercontent.com/s0379265-netizen/Pmkatba_____po/main/bell_huey_helicopter.glb";
-// ⭐ صدای هلیکوپتر از GitHub با jsDelivr (CORS فعال)
 const HELI_SOUND_URL = "https://cdn.jsdelivr.net/gh/s0379265-netizen/Fagah@main/helicopter_sound.mp3";
+const OAK_TREES_URL = "https://cdn.jsdelivr.net/gh/TIGER-IR/virax@main/oak_trees%281%29.glb";
 
 /* ============================================================
    SAVE SYSTEM
 ============================================================ */
 const SaveSystem = {
-  KEY: "tpspro_save_v5",
+  KEY: "tpspro_save_v6",
   data: {
     charPos: { x: 0, y: 0, z: 0 }, charYaw: 0,
     carPos: { x: -15, y: 0, z: -15 }, carRotation: 0,
@@ -281,7 +226,7 @@ function updateBar(){
 updateBar();
 
 /* ============================================================
-   Car Audio Engine
+   Audio Engines
 ============================================================ */
 const AudioEngine = {
   ctx: null, source: null, gainNode: null, buffer: null,
@@ -299,7 +244,7 @@ const AudioEngine = {
       this.gainNode = this.ctx.createGain();
       this.gainNode.gain.value = 0;
       this.gainNode.connect(this.ctx.destination);
-    } catch(e){ console.warn("Car audio:", e); }
+    } catch(e){}
   },
   playStartup(){
     if(!this.loaded || this.isMuted) return;
@@ -350,21 +295,14 @@ const AudioEngine = {
   }
 };
 
-/* ============================================================
-   🚁 Helicopter Audio Engine - مثل مدل‌ها دانلود می‌شه
-============================================================ */
 const HeliAudio = {
   ctx: null, source: null, gainNode: null, buffer: null,
   loaded: false, isPlaying: false, isMuted: false,
-  targetVolume: 0, currentVolume: 0,
-  loadAttempts: 0,
-  
+  targetVolume: 0, currentVolume: 0, loadAttempts: 0,
   async init(){
     if(this.ctx) return;
     try {
       this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // ⭐ لود فایل صدا مثل بقیه asset ها
       console.log("🚁 Downloading helicopter sound...");
       const r = await fetch(HELI_SOUND_URL);
       if(!r.ok) throw new Error("HTTP " + r.status);
@@ -377,14 +315,10 @@ const HeliAudio = {
       console.log("✅ Helicopter sound loaded | Size:", (ab.byteLength/1024).toFixed(1), "KB");
     } catch(e){
       console.warn("🚁 Heli sound failed:", e.message);
-      // ⭐ تلاش با URL جایگزین
       this.loadAttempts++;
-      if(this.loadAttempts < 3){
-        await this.tryFallback();
-      }
+      if(this.loadAttempts < 3) await this.tryFallback();
     }
   },
-  
   async tryFallback(){
     const fallbacks = [
       "https://cdn.statically.io/gh/s0379265-netizen/Fagah/main/helicopter_sound.mp3",
@@ -394,7 +328,6 @@ const HeliAudio = {
     const url = fallbacks[this.loadAttempts - 1];
     if(!url) return;
     try {
-      console.log("🚁 Trying fallback:", url);
       const r = await fetch(url);
       if(!r.ok) throw new Error("HTTP " + r.status);
       const ab = await r.arrayBuffer();
@@ -405,19 +338,13 @@ const HeliAudio = {
         this.gainNode.gain.value = 0;
         this.gainNode.connect(this.ctx.destination);
       }
-      console.log("✅ Heli sound loaded from fallback");
-    } catch(e){
-      console.warn("🚁 Fallback failed:", e.message);
-      this.loadAttempts++;
-      if(this.loadAttempts < 3) await this.tryFallback();
-    }
+      console.log("✅ Heli sound from fallback");
+    } catch(e){ this.loadAttempts++; if(this.loadAttempts < 3) await this.tryFallback(); }
   },
-  
   start(){
     if(!this.loaded || this.isMuted) return;
     if(this.ctx.state === "suspended") this.ctx.resume();
     if(this.isPlaying) return;
-    
     this.source = this.ctx.createBufferSource();
     this.source.buffer = this.buffer;
     this.source.loop = true;
@@ -425,7 +352,6 @@ const HeliAudio = {
     this.source.start(0);
     this.isPlaying = true;
   },
-  
   stop(){
     if(this.source && this.isPlaying){
       try { this.source.stop(); } catch(e){}
@@ -438,22 +364,16 @@ const HeliAudio = {
       }
     }
   },
-  
   setMuted(m){ this.isMuted = m; if(m) this.stop(); },
-  
   update(dt, engineState, engineRPM){
     if(!this.loaded || !this.ctx || !this.gainNode) return;
-    
     const shouldPlay = (engineState === "STARTING" || engineState === "RUNNING") && !this.isMuted;
-    
-    if(shouldPlay && !this.isPlaying){ this.start(); }
-    else if(!shouldPlay && this.isPlaying){ this.stop(); }
-    
+    if(shouldPlay && !this.isPlaying) this.start();
+    else if(!shouldPlay && this.isPlaying) this.stop();
     if(this.isPlaying && this.gainNode){
       this.targetVolume = 0.18 + engineRPM * 0.55;
       this.currentVolume += (this.targetVolume - this.currentVolume) * Math.min(1, dt * 4);
       this.gainNode.gain.setValueAtTime(this.currentVolume, this.ctx.currentTime);
-      
       if(this.source){
         const targetRate = 0.85 + engineRPM * 0.45;
         const cur = this.source.playbackRate.value;
@@ -503,62 +423,263 @@ const rimLight = new THREE.DirectionalLight(0xffcc88, 0.7);
 rimLight.position.set(0, 20, -70);
 scene.add(rimLight);
 
-/* Ground & Roads */
+/* ============================================================
+   ⭐ Ground & Roads - کیفیت بالا
+============================================================ */
 function makeGroundTex(){
   const c = document.createElement("canvas");
-  c.width = c.height = 512;
+  c.width = c.height = 1024;
   const x = c.getContext("2d");
-  x.fillStyle = "#3d4830"; x.fillRect(0,0,512,512);
-  for(let i=0;i<20000;i++){
-    const b = Math.random()*40-20;
-    x.fillStyle = `rgba(${61+b},${72+b},${48+b},0.6)`;
-    x.fillRect(Math.random()*512, Math.random()*512, Math.random()*3+0.5, Math.random()*3+0.5);
+  // پایه چمن تیره
+  const bg = x.createLinearGradient(0, 0, 1024, 1024);
+  bg.addColorStop(0, "#42502e");
+  bg.addColorStop(0.5, "#3a4828");
+  bg.addColorStop(1, "#465430");
+  x.fillStyle = bg;
+  x.fillRect(0, 0, 1024, 1024);
+  
+  // ذرات خاک و چمن متنوع
+  for(let i=0;i<120000;i++){
+    const r = Math.random();
+    let col;
+    if(r < 0.5) col = `rgba(${60+Math.random()*30},${75+Math.random()*30},${42+Math.random()*20},0.7)`;
+    else if(r < 0.8) col = `rgba(${45+Math.random()*20},${55+Math.random()*20},${30+Math.random()*15},0.8)`;
+    else col = `rgba(${90+Math.random()*30},${80+Math.random()*30},${55+Math.random()*20},0.5)`;
+    x.fillStyle = col;
+    const s = Math.random()*3+0.5;
+    x.fillRect(Math.random()*1024, Math.random()*1024, s, s);
   }
+  
+  // تکه های بزرگتر چمن / برگ
+  for(let i=0;i<3000;i++){
+    x.fillStyle = `rgba(${40+Math.random()*40},${60+Math.random()*50},${30+Math.random()*30},0.4)`;
+    const r = Math.random()*6+2;
+    x.beginPath();
+    x.arc(Math.random()*1024, Math.random()*1024, r, 0, Math.PI*2);
+    x.fill();
+  }
+  
   const t = new THREE.CanvasTexture(c);
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  t.repeat.set(80, 80);
-  t.anisotropy = 8;
+  t.repeat.set(60, 60);
+  t.anisotropy = 16;
   t.colorSpace = THREE.SRGBColorSpace;
+  t.generateMipmaps = true;
+  t.minFilter = THREE.LinearMipmapLinearFilter;
   return t;
 }
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(2000, 2000),
-  new THREE.MeshStandardMaterial({map: makeGroundTex(), color: 0x6a7258, roughness: 0.9, metalness: 0.05})
+  new THREE.MeshStandardMaterial({map: makeGroundTex(), color: 0xffffff, roughness: 0.95, metalness: 0.02})
 );
 ground.rotation.x = -Math.PI/2;
 ground.position.y = -0.05;
 ground.receiveShadow = true;
 scene.add(ground);
 
+/* ============================================================
+   ⭐⭐ Road Texture - کیفیت بالا، آسفالت واقعی
+============================================================ */
 function makeRoadTex(){
   const c = document.createElement("canvas");
-  c.width = 256; c.height = 2048;
+  c.width = 512; c.height = 2048;
   const x = c.getContext("2d");
-  x.fillStyle = "#1e2228"; x.fillRect(0,0,256,2048);
-  for(let i=0;i<40000;i++){
-    const b = Math.random()*30-15;
-    x.fillStyle = `rgba(${30+b},${34+b},${40+b},0.7)`;
-    x.fillRect(Math.random()*256, Math.random()*2048, 1, 1);
+  
+  // پایه آسفالت با گرادیان عرضی (وسط تیره تر)
+  const bg = x.createLinearGradient(0, 0, 512, 0);
+  bg.addColorStop(0, "#2a2d33");
+  bg.addColorStop(0.08, "#1e2126");
+  bg.addColorStop(0.5, "#191c21");
+  bg.addColorStop(0.92, "#1e2126");
+  bg.addColorStop(1, "#2a2d33");
+  x.fillStyle = bg;
+  x.fillRect(0, 0, 512, 2048);
+  
+  // دانه های ریز آسفالت
+  const img = x.getImageData(0, 0, 512, 2048);
+  const d = img.data;
+  for(let i=0;i<d.length;i+=4){
+    const n = (Math.random()-0.5)*38;
+    d[i]   = Math.max(0, Math.min(255, d[i]   + n));
+    d[i+1] = Math.max(0, Math.min(255, d[i+1] + n));
+    d[i+2] = Math.max(0, Math.min(255, d[i+2] + n*0.8));
   }
+  x.putImageData(img, 0, 0);
+  
+  // سنگ ریزه ها (روشن)
+  for(let i=0;i<2500;i++){
+    const g = 80 + Math.random()*70;
+    x.fillStyle = `rgba(${g},${g},${g+5},${0.25+Math.random()*0.35})`;
+    const s = Math.random()*2+0.6;
+    x.fillRect(Math.random()*512, Math.random()*2048, s, s);
+  }
+  
+  // لکه های تیره (روغن/لاستیک)
+  for(let i=0;i<60;i++){
+    const px = Math.random()*512;
+    const py = Math.random()*2048;
+    const pr = Math.random()*40 + 12;
+    const rg = x.createRadialGradient(px, py, 0, px, py, pr);
+    rg.addColorStop(0, "rgba(8,8,12,0.45)");
+    rg.addColorStop(1, "rgba(8,8,12,0)");
+    x.fillStyle = rg;
+    x.beginPath();
+    x.arc(px, py, pr, 0, Math.PI*2);
+    x.fill();
+  }
+  
+  // لکه های روشن (گرد و خاک)
+  for(let i=0;i<40;i++){
+    const px = Math.random()*512;
+    const py = Math.random()*2048;
+    const pr = Math.random()*35 + 8;
+    const rg = x.createRadialGradient(px, py, 0, px, py, pr);
+    rg.addColorStop(0, "rgba(120,115,105,0.18)");
+    rg.addColorStop(1, "rgba(120,115,105,0)");
+    x.fillStyle = rg;
+    x.beginPath();
+    x.arc(px, py, pr, 0, Math.PI*2);
+    x.fill();
+  }
+  
+  // ترک خوردگی ها
+  x.strokeStyle = "rgba(6,6,8,0.65)";
+  x.lineWidth = 1.2;
+  for(let i=0;i<35;i++){
+    x.beginPath();
+    let cx = 60 + Math.random()*390;
+    let cy = Math.random()*2048;
+    x.moveTo(cx, cy);
+    const segs = 8 + Math.floor(Math.random()*12);
+    for(let j=0;j<segs;j++){
+      cx += (Math.random()-0.5)*36;
+      cy += (Math.random()-0.4)*55;
+      x.lineTo(cx, cy);
+    }
+    x.stroke();
+  }
+  // ترک های فرعی
+  x.lineWidth = 0.7;
+  x.strokeStyle = "rgba(6,6,8,0.4)";
+  for(let i=0;i<50;i++){
+    x.beginPath();
+    let cx = Math.random()*512;
+    let cy = Math.random()*2048;
+    x.moveTo(cx, cy);
+    for(let j=0;j<4;j++){
+      cx += (Math.random()-0.5)*20;
+      cy += (Math.random()-0.4)*30;
+      x.lineTo(cx, cy);
+    }
+    x.stroke();
+  }
+  
+  // خطوط سفید کناری
+  x.fillStyle = "rgba(240,240,235,0.92)";
+  x.fillRect(26, 0, 7, 2048);
+  x.fillRect(479, 0, 7, 2048);
+  
+  // ساییدگی لبه خطوط
+  for(let i=0;i<400;i++){
+    x.fillStyle = `rgba(20,22,26,${0.3+Math.random()*0.5})`;
+    x.fillRect(26 + Math.random()*7, Math.random()*2048, 1, Math.random()*25);
+    x.fillRect(479 + Math.random()*7, Math.random()*2048, 1, Math.random()*25);
+  }
+  
+  // خطوط زرد وسط (دوگانه)
   x.fillStyle = "#ffcc33";
-  x.fillRect(124, 0, 3, 2048);
-  x.fillRect(129, 0, 3, 2048);
-  x.fillStyle = "#ffdd55";
-  for(let y=0; y<2048; y+=90){ x.fillRect(126, y, 4, 55); }
-  x.fillStyle = "rgba(240,240,240,0.85)";
-  x.fillRect(20, 0, 4, 2048);
-  x.fillRect(232, 0, 4, 2048);
+  x.fillRect(246, 0, 6, 2048);
+  x.fillRect(260, 0, 6, 2048);
+  
+  // خط چین های روشن مرکزی (خط کشی دوبل)
+  for(let y=0; y<2048; y+=140){
+    x.fillStyle = "#ffe066";
+    x.fillRect(246, y, 20, 90);
+    // انعکاس
+    x.fillStyle = "rgba(255,240,150,0.35)";
+    x.fillRect(248, y+2, 16, 86);
+  }
+  
+  // سایه/ساییدگی روی خطوط زرد
+  for(let i=0;i<150;i++){
+    x.fillStyle = `rgba(30,25,15,${0.15+Math.random()*0.3})`;
+    const yy = Math.random()*2048;
+    x.fillRect(246, yy, 20, Math.random()*4);
+  }
+  
   const t = new THREE.CanvasTexture(c);
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  t.repeat.set(1, 12);
+  t.repeat.set(1, 8);
   t.anisotropy = 16;
   t.colorSpace = THREE.SRGBColorSpace;
+  t.generateMipmaps = true;
+  t.minFilter = THREE.LinearMipmapLinearFilter;
+  t.magFilter = THREE.LinearFilter;
   return t;
 }
+
+// ⭐ Normal Map ساده برای جاده (برجستگی آسفالت)
+function makeRoadNormalMap(){
+  const c = document.createElement("canvas");
+  c.width = 256; c.height = 1024;
+  const x = c.getContext("2d");
+  // بیس neutral normal
+  x.fillStyle = "rgb(128,128,255)";
+  x.fillRect(0, 0, 256, 1024);
+  // نویز ملایم برای حس زبری آسفالت
+  const img = x.getImageData(0, 0, 256, 1024);
+  const d = img.data;
+  for(let i=0;i<d.length;i+=4){
+    const n = (Math.random()-0.5)*40;
+    d[i]   = Math.max(0, Math.min(255, 128 + n));     // R
+    d[i+1] = Math.max(0, Math.min(255, 128 + n*0.7)); // G
+    // B همیشه تقریباً 255
+  }
+  x.putImageData(img, 0, 0);
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(1, 8);
+  t.anisotropy = 8;
+  return t;
+}
+
 const ROAD_WIDTH = 16, ROAD_LENGTH = 500;
+const roadTex = makeRoadTex();
+const roadNormal = makeRoadNormalMap();
+
+function makeRoadMaterial(){
+  return new THREE.MeshStandardMaterial({
+    map: roadTex.clone(),
+    normalMap: roadNormal.clone(),
+    normalScale: new THREE.Vector2(0.35, 0.35),
+    color: 0xffffff,
+    roughness: 0.62,
+    metalness: 0.12,
+    envMapIntensity: 0.6
+  });
+}
+// اطمینان از تنظیمات clone شده
+function configRoadMap(mat){
+  if(mat.map){
+    mat.map.wrapS = mat.map.wrapT = THREE.RepeatWrapping;
+    mat.map.repeat.set(1, 8);
+    mat.map.anisotropy = 16;
+    mat.map.colorSpace = THREE.SRGBColorSpace;
+    mat.map.needsUpdate = true;
+  }
+  if(mat.normalMap){
+    mat.normalMap.wrapS = mat.normalMap.wrapT = THREE.RepeatWrapping;
+    mat.normalMap.repeat.set(1, 8);
+    mat.normalMap.anisotropy = 8;
+    mat.normalMap.needsUpdate = true;
+  }
+}
+
+const roadMat = makeRoadMaterial();
+configRoadMap(roadMat);
 const road = new THREE.Mesh(
   new THREE.PlaneGeometry(ROAD_WIDTH, ROAD_LENGTH),
-  new THREE.MeshStandardMaterial({map: makeRoadTex(), color: 0x2a2e34, roughness: 0.6, metalness: 0.25})
+  roadMat
 );
 road.rotation.x = -Math.PI/2;
 road.position.y = 0.02;
@@ -566,9 +687,11 @@ road.receiveShadow = true;
 scene.add(road);
 
 function makeSideRoad(x, z, rotY){
+  const m = makeRoadMaterial();
+  configRoadMap(m);
   const r = new THREE.Mesh(
     new THREE.PlaneGeometry(ROAD_WIDTH, ROAD_LENGTH),
-    new THREE.MeshStandardMaterial({map: makeRoadTex(), color: 0x2a2e34, roughness: 0.6, metalness: 0.25})
+    m
   );
   r.rotation.x = -Math.PI/2;
   r.rotation.z = rotY;
@@ -594,7 +717,7 @@ draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 const loader = new GLTFLoader();
 loader.setDRACOLoader(draco);
 
-let totalAssets = 4;
+let totalAssets = 5;
 let loadedAssets = 0, failedAssets = 0;
 function assetDone(){ loadedAssets++; updateLoading(); }
 function assetFail(e, n){ failedAssets++; console.warn("❌", n, e); updateLoading(); }
@@ -607,7 +730,7 @@ function updateLoading(){
   }
 }
 
-/* Helpers */
+/* Helpers - PBR گرافیک بالا */
 function prep(obj, hq){
   if(!obj) return;
   obj.traverse(o=>{
@@ -616,7 +739,29 @@ function prep(obj, hq){
       o.receiveShadow = true;
       if(o.material){
         o.material.needsUpdate = true;
-        if("envMapIntensity" in o.material) o.material.envMapIntensity = hq ? 1.6 : 0.8;
+        if("envMapIntensity" in o.material) o.material.envMapIntensity = hq ? 2.0 : 0.8;
+        if(hq){
+          if(o.material.map){
+            o.material.map.anisotropy = 16;
+            o.material.map.colorSpace = THREE.SRGBColorSpace;
+          }
+          if(o.material.isMeshStandardMaterial){
+            if(o.material.name && o.material.name.toLowerCase().includes("leaf")){
+              o.material.roughness = 0.85;
+              o.material.metalness = 0.0;
+            }
+            else if(o.material.name && o.material.name.toLowerCase().includes("bark")){
+              o.material.roughness = 0.9;
+              o.material.metalness = 0.0;
+            }
+            else {
+              if(o.material.roughness !== undefined && o.material.roughness > 0.95) o.material.roughness = 0.85;
+            }
+          }
+          o.material.side = THREE.DoubleSide;
+          o.material.alphaTest = 0.1;
+          o.material.depthWrite = true;
+        }
       }
     }
   });
@@ -700,7 +845,6 @@ const carState = {
   steerSpeed: 3, steerReturn: 4, wheelRotation: 0
 };
 
-/* 🚁 Helicopter */
 let heliModel = null;
 let heliMixer = null;
 let heliTopRotor = null;
@@ -720,11 +864,8 @@ const heliState = {
   pitch: 0, targetPitch: 0,
   roll: 0, targetRoll: 0,
   yaw: SaveSystem.data.heliRotation,
-  vibrationTime: 0,
-  groundY: 0,
-  hoverPhase: 0,
-  restAltitude: 1.5,
-  maxAltitude: 120
+  vibrationTime: 0, groundY: 0, hoverPhase: 0,
+  restAltitude: 1.5, maxAltitude: 120
 };
 
 let mode = SaveSystem.data.mode || "walking";
@@ -757,6 +898,57 @@ loader.load(BUILDING_URL, g => {
   } catch(e){ console.warn(e); }
   assetDone();
 }, undefined, e => assetFail(e, "building"));
+
+/* 🌳 Oak Trees */
+loader.load(OAK_TREES_URL, (gltf) => {
+  try {
+    const trees = gltf.scene;
+    prep(trees, true);
+    const box = new THREE.Box3().setFromObject(trees);
+    const size = box.getSize(new THREE.Vector3());
+    console.log("🌳 Oak trees loaded | Size:", size.x.toFixed(2), size.y.toFixed(2), size.z.toFixed(2));
+    const targetHeight = 8;
+    const treeScale = targetHeight / size.y;
+    trees.scale.setScalar(treeScale);
+    trees.updateMatrixWorld(true);
+    const box2 = new THREE.Box3().setFromObject(trees);
+    const center = box2.getCenter(new THREE.Vector3());
+    const TREE_X = 35;
+    const TREE_Z = -12;
+    trees.position.set(
+      TREE_X - center.x,
+      -box2.min.y,
+      TREE_Z - center.z
+    );
+    trees.traverse(o => {
+      if(o.isMesh && o.material){
+        o.castShadow = true;
+        o.receiveShadow = true;
+        if("envMapIntensity" in o.material) o.material.envMapIntensity = 1.5;
+        const mname = (o.material.name || "").toLowerCase();
+        if(mname.includes("leaf") || mname.includes("leaves") || mname.includes("foliage")){
+          o.material.side = THREE.DoubleSide;
+          o.material.roughness = 0.85;
+          o.material.metalness = 0.0;
+          o.material.alphaTest = 0.15;
+        }
+        else if(mname.includes("bark") || mname.includes("trunk") || mname.includes("wood")){
+          o.material.roughness = 0.92;
+          o.material.metalness = 0.0;
+        }
+      }
+    });
+    scene.add(trees);
+    const treeBox = new THREE.Box3().setFromObject(trees);
+    const treeCollider = new THREE.Box3(
+      new THREE.Vector3(treeBox.min.x + 0.3, 0, treeBox.min.z + 0.3),
+      new THREE.Vector3(treeBox.max.x - 0.3, treeBox.max.y, treeBox.max.z - 0.3)
+    );
+    addBoxCollider(treeCollider, "oak_trees");
+    console.log("🌳 Oak trees placed at", TREE_X, TREE_Z, "| scale:", treeScale.toFixed(3));
+  } catch(e){ console.warn("Oak trees setup:", e); }
+  assetDone();
+}, undefined, e => assetFail(e, "oak_trees"));
 
 /* Soldier */
 function pickClip(clips, kws){
@@ -798,7 +990,6 @@ loader.load(FERRARI_URL, (gltf) => {
   try {
     carModel = gltf.scene;
     prep(carModel, true);
-
     const wg = { fl: null, fr: null, rl: null, rr: null };
     carModel.traverse((node) => {
       const n = (node.name || "").toLowerCase();
@@ -807,7 +998,6 @@ loader.load(FERRARI_URL, (gltf) => {
       else if(n === "wheel_rl") wg.rl = node;
       else if(n === "wheel_rr") wg.rr = node;
     });
-
     if(!wg.fl || !wg.fr || !wg.rl || !wg.rr){
       const cand = [];
       carModel.traverse(n => {
@@ -834,7 +1024,6 @@ loader.load(FERRARI_URL, (gltf) => {
         if(!wg.rr) wg.rr = rear[1]?.node;
       }
     }
-
     function setupWheel(grp, key, isFront){
       if(!grp || !grp.parent) return;
       const parent = grp.parent;
@@ -851,17 +1040,14 @@ loader.load(FERRARI_URL, (gltf) => {
       w.add(grp);
       carWheels[key] = { steerGroup: w, spinGroup: grp, isFront };
     }
-
     if(wg.fl) setupWheel(wg.fl, "fl", true);
     if(wg.fr) setupWheel(wg.fr, "fr", true);
     if(wg.rl) setupWheel(wg.rl, "rl", false);
     if(wg.rr) setupWheel(wg.rr, "rr", false);
-
     const box = new THREE.Box3().setFromObject(carModel);
     const size = box.getSize(new THREE.Vector3());
     carHalfWidth = size.x * 0.32;
     carHalfLength = size.z * 0.38;
-    
     const gy = -box.min.y;
     carModel.position.set(carState.position.x, gy, carState.position.z);
     carState.position.y = gy;
@@ -871,15 +1057,13 @@ loader.load(FERRARI_URL, (gltf) => {
   assetDone();
 }, undefined, e => assetFail(e, "ferrari"));
 
-/* 🚁 Helicopter */
+/* Helicopter */
 loader.load(HELI_URL, (gltf) => {
   try {
     heliModel = gltf.scene;
     prep(heliModel, true);
-    
     console.log("🚁 Helicopter loaded");
     heliModel.traverse(o => { if(o.name) console.log("   ", o.type, "|", o.name); });
-    
     if(gltf.animations && gltf.animations.length > 0){
       console.log("🚁 Animations:", gltf.animations.length);
       gltf.animations.forEach((clip, i) => {
@@ -888,66 +1072,46 @@ loader.load(HELI_URL, (gltf) => {
       heliMixer = new THREE.AnimationMixer(heliModel);
       gltf.animations.forEach(clip => {
         const n = clip.name.toLowerCase();
-        if(n.includes("rotor") || n.includes("spin")){
-          heliMixer.clipAction(clip).play();
-        }
+        if(n.includes("rotor") || n.includes("spin")) heliMixer.clipAction(clip).play();
       });
     }
-    
     heliTopRotor = heliModel.getObjectByName("Top_Rotor");
     heliBackRotor = heliModel.getObjectByName("Back_Rotor");
     heliBellHuey = heliModel.getObjectByName("Bell_Huey");
-    
     if(!heliTopRotor){
-      heliModel.traverse(o => {
-        if(o.name && o.name.toLowerCase().includes("top") && o.name.toLowerCase().includes("rotor")) heliTopRotor = o;
-      });
+      heliModel.traverse(o => { if(o.name && o.name.toLowerCase().includes("top") && o.name.toLowerCase().includes("rotor")) heliTopRotor = o; });
     }
     if(!heliBackRotor){
-      heliModel.traverse(o => {
-        if(o.name && o.name.toLowerCase().includes("back") && o.name.toLowerCase().includes("rotor")) heliBackRotor = o;
-      });
+      heliModel.traverse(o => { if(o.name && o.name.toLowerCase().includes("back") && o.name.toLowerCase().includes("rotor")) heliBackRotor = o; });
     }
-    
     console.log("🚁 Top_Rotor:", heliTopRotor ? "✅" : "❌");
     console.log("🚁 Back_Rotor:", heliBackRotor ? "✅" : "❌");
     console.log("🚁 Bell_Huey:", heliBellHuey ? "✅" : "❌");
-    
     const box = new THREE.Box3().setFromObject(heliModel);
     const size = box.getSize(new THREE.Vector3());
     const targetLength = 12;
     const maxDim = Math.max(size.x, size.z);
     const scale = targetLength / maxDim;
     heliModel.scale.setScalar(scale);
-    
     heliModel.updateMatrixWorld(true);
     const box2 = new THREE.Box3().setFromObject(heliModel);
-    
-    if(heliBellHuey){
-      heliBodyInitialY = heliBellHuey.position.y;
-    }
-    
+    if(heliBellHuey) heliBodyInitialY = heliBellHuey.position.y;
     const hp = SaveSystem.data.heliPos;
     const groundY = -box2.min.y;
-    // ⭐ اگه height ذخیره شده از groundY کمتر بود، از groundY استفاده کن
     const savedY = Math.max(hp.y || (groundY + 0.1), groundY + 0.1);
     heliModel.position.set(hp.x, savedY, hp.z);
     heliModel.rotation.y = heliState.yaw;
     heliState.position.copy(heliModel.position);
     heliState.groundY = groundY;
     heliState.restAltitude = groundY + 0.1;
-    
     scene.add(heliModel);
-    console.log("🚁 Helicopter ready at", hp.x.toFixed(1), savedY.toFixed(1), hp.z.toFixed(1));
-    
-    // ⭐ لود صدای هلیکوپتر مثل بقیه asset ها
+    console.log("🚁 Helicopter ready");
     setTimeout(() => { HeliAudio.init(); }, 100);
-    
   } catch(e){ console.warn("Heli setup:", e); }
   assetDone();
 }, undefined, e => assetFail(e, "helicopter"));
 
-/* Animation */
+/* Animation switching */
 function setAction(name){
   const nx = actions[name];
   if(!nx || nx === currentAction) return;
@@ -1001,7 +1165,10 @@ joyZoneLeft.addEventListener("pointerup", releaseJoy);
 joyZoneLeft.addEventListener("pointercancel", releaseJoy);
 joyZoneLeft.addEventListener("lostpointercapture", releaseJoy);
 
-/* Camera Touch */
+/* ============================================================
+   Camera Touch - ⭐⭐ اصلاح: علامت dy معکوس شد
+   الان کشیدن به بالا = نگاه به بالا ✅
+============================================================ */
 const camZoneRight = document.getElementById("camZoneRight");
 const camTouch = { active: false, pointerId: null, startX: 0, startY: 0, startUserYaw: 0, startUserPitch: 0 };
 
@@ -1022,8 +1189,10 @@ camZoneRight.addEventListener("pointermove", (e) => {
   e.preventDefault();
   const dx = e.clientX - camTouch.startX;
   const dy = e.clientY - camTouch.startY;
+  // ⭐ Yaw: کشیدن راست = چرخش دوربین به راست ✅
   cameraUserYaw = camTouch.startUserYaw - dx * CAM_SENSITIVITY_X;
-  cameraUserPitch = camTouch.startUserPitch - dy * CAM_SENSITIVITY_Y;
+  // ⭐ Pitch (اصلاح شده): کشیدن بالا (dy منفی) = نگاه به بالا ✅
+  cameraUserPitch = camTouch.startUserPitch + dy * CAM_SENSITIVITY_Y;
   cameraUserPitch = Math.max(CAM_PITCH_MIN, Math.min(CAM_PITCH_MAX, cameraUserPitch));
 }, { passive: false });
 
@@ -1128,7 +1297,7 @@ soundToggle.addEventListener("click", async () => {
   soundToggle.classList.toggle("muted", m);
 });
 
-/* UI */
+/* UI Elements */
 const enterCarBtn = document.getElementById("enterCarBtn");
 const enterHeliBtn = document.getElementById("enterHeliBtn");
 const exitCarBtn = document.getElementById("exitCarBtn");
@@ -1203,7 +1372,6 @@ function exitCar(e){
   cameraState.transitionProgress = 0;
   cameraUserYaw = 0; cameraUserPitch = 0;
   camAutoReturn.active = true;
-  // ⭐ ذخیره موقعیت ماشین
   SaveSystem.data.carPos = { x: carState.position.x, y: carState.position.y, z: carState.position.z };
   SaveSystem.data.carRotation = carState.rotation;
   SaveSystem.data.mode = "walking";
@@ -1213,7 +1381,7 @@ function exitCar(e){
 enterCarBtn.addEventListener("pointerdown", enterCar, {passive: false});
 exitCarBtn.addEventListener("pointerdown", exitCar, {passive: false});
 
-/* Engine System */
+/* Engine */
 function toggleHeliEngine(){
   if(mode !== "flying") return;
   if(heliState.engineState === "OFF" || heliState.engineState === "STOPPING"){
@@ -1221,13 +1389,11 @@ function toggleHeliEngine(){
     heliState.targetRPM = 1.0;
     heliState.targetRotorSpeed = 1.0;
     heliEngineBtn.textContent = "خاموش";
-    console.log("🚁 ENGINE STARTING");
   } else if(heliState.engineState === "RUNNING" || heliState.engineState === "STARTING"){
     heliState.engineState = "STOPPING";
     heliState.targetRPM = 0;
     heliState.targetRotorSpeed = 0;
     heliEngineBtn.textContent = "استارت";
-    console.log("🚁 ENGINE STOPPING");
   }
 }
 
@@ -1235,7 +1401,6 @@ function toggleHeliEngine(){
 async function enterHeli(e){
   if(e){ e.preventDefault(); e.stopPropagation(); }
   if(mode !== "walking" || !heliModel || !character) return;
-  
   mode = "flying";
   character.visible = false;
   heliHUD.classList.add("show");
@@ -1245,42 +1410,30 @@ async function enterHeli(e){
   enterHeliBtn.classList.remove("show");
   enterCarBtn.classList.remove("show");
   hintEl.classList.add("hidden");
-  
   joy.active = false; joy.moveX = 0; joy.moveY = 0;
   joyBaseFloat.classList.remove("active");
   joyKnobFloat.classList.remove("active");
-  
   cameraState.transitioning = true;
   cameraState.transitionProgress = 0;
   cameraUserYaw = 0; cameraUserPitch = 0;
   camAutoReturn.active = true;
   if(camAutoReturn.timer){ clearTimeout(camAutoReturn.timer); camAutoReturn.timer = null; }
   cameraBaseYaw = heliState.yaw;
-  
-  // ⭐ اطمینان از لود شدن صدا
-  if(!HeliAudio.loaded && HeliAudio.loadAttempts < 3){
-    await HeliAudio.init();
-  }
-  
+  if(!HeliAudio.loaded && HeliAudio.loadAttempts < 3){ await HeliAudio.init(); }
   SaveSystem.data.mode = "flying";
   SaveSystem.save();
-  console.log("🚁 Entered helicopter");
 }
 
 function exitHeli(e){
   if(e){ e.preventDefault(); e.stopPropagation(); }
   if(mode !== "flying" || !heliModel || !character) return;
-  
-  // خاموش کردن موتور
   if(heliState.engineState !== "OFF"){
     heliState.engineState = "STOPPING";
     heliState.targetRPM = 0;
     heliState.targetRotorSpeed = 0;
     heliEngineBtn.textContent = "استارت";
   }
-  
   HeliAudio.stop();
-  
   mode = "walking";
   const rx = Math.cos(heliState.yaw);
   const rz = -Math.sin(heliState.yaw);
@@ -1292,31 +1445,21 @@ function exitHeli(e){
   charYaw = heliState.yaw;
   cameraBaseYaw = heliState.yaw;
   character.visible = true;
-  
   heliHUD.classList.remove("show");
   heliControls.classList.remove("show");
   joyZoneLeftEl.classList.remove("hidden");
   heliExitBtn.classList.remove("show");
   hintEl.classList.remove("hidden");
-  
   cameraState.transitioning = true;
   cameraState.transitionProgress = 0;
   cameraUserYaw = 0; cameraUserPitch = 0;
   camAutoReturn.active = true;
-  
-  // ⭐⭐ ذخیره موقعیت هلیکوپتر - مهم برای اینکه گم نشه
   if(heliModel){
-    SaveSystem.data.heliPos = { 
-      x: heliState.position.x, 
-      y: heliState.position.y, 
-      z: heliState.position.z 
-    };
+    SaveSystem.data.heliPos = { x: heliState.position.x, y: heliState.position.y, z: heliState.position.z };
     SaveSystem.data.heliRotation = heliState.yaw;
   }
-  
   SaveSystem.data.mode = "walking";
   SaveSystem.save();
-  console.log("🚁 Exited - position saved:", heliState.position.x.toFixed(1), heliState.position.z.toFixed(1));
 }
 
 enterHeliBtn.addEventListener("pointerdown", enterHeli, {passive: false});
@@ -1337,7 +1480,9 @@ document.addEventListener("visibilitychange", () => {
   if(document.hidden){ releaseAllKeys(); SaveSystem.save(); }
 });
 
-/* Character Walk */
+/* ============================================================
+   Character Walk - ⭐⭐ اصلاح: فرمول راست/چپ معکوس شد
+============================================================ */
 const tmpDir = new THREE.Vector3();
 const WALK_SPEED = 3.5, RUN_SPEED = 5.5;
 
@@ -1348,15 +1493,14 @@ function updateCharacterWalk(dt){
   if(keys.back) inputY = -1;
   if(keys.left) inputX = -1;
   if(keys.right) inputX = 1;
-  
   const camYaw = cameraBaseYaw + cameraUserYaw;
   const cFX = Math.sin(camYaw), cFZ = Math.cos(camYaw);
-  const cRX = Math.sin(camYaw + Math.PI/2), cRZ = Math.cos(camYaw + Math.PI/2);
+  // ⭐⭐ اصلاح معکوس بودن: از camYaw - π/2 استفاده می کنیم
+  // قبلاً camYaw + π/2 بود که باعث می شد چپ/راست معکوس بشه
+  const cRX = Math.sin(camYaw - Math.PI/2), cRZ = Math.cos(camYaw - Math.PI/2);
   tmpDir.set(cFX*inputY + cRX*inputX, 0, cFZ*inputY + cRZ*inputX);
-  
   const mag = Math.min(1, Math.sqrt(inputX*inputX + inputY*inputY));
   const moving = mag > 0.1;
-  
   if(moving && tmpDir.lengthSq() > 0.0001){
     tmpDir.normalize();
     const isRun = mag > 0.85;
@@ -1396,7 +1540,6 @@ function updateCarDrive(dt){
   if(carKeys.right) st = -carState.maxSteerAngle;
   if(st !== 0) carState.steerAngle += (st - carState.steerAngle) * carState.steerSpeed * dt;
   else carState.steerAngle += (0 - carState.steerAngle) * carState.steerReturn * dt;
-
   if(carKeys.brake){
     if(carState.speed > 0) carState.speed = Math.max(0, carState.speed - carState.brakingForce * dt);
     else if(carState.speed < 0) carState.speed = Math.min(0, carState.speed + carState.brakingForce * dt);
@@ -1412,7 +1555,6 @@ function updateCarDrive(dt){
       else carState.speed = Math.min(0, carState.speed + f);
     } else carState.speed = 0;
   }
-
   let newRot = carState.rotation;
   if(Math.abs(carState.speed) > 0.1){
     const spN = Math.abs(carState.speed) / carState.maxForwardSpeed;
@@ -1420,13 +1562,11 @@ function updateCarDrive(dt){
     const dir = carState.speed >= 0 ? 1 : -1;
     newRot += carState.steerAngle * dir * sf * 1.8 * dt;
   }
-
   const fX = Math.sin(newRot), fZ = Math.cos(newRot);
   let nX = carState.position.x + fX * carState.speed * dt;
   let nZ = carState.position.z + fZ * carState.speed * dt;
   nX = Math.max(-WORLD_LIMIT, Math.min(WORLD_LIMIT, nX));
   nZ = Math.max(-WORLD_LIMIT, Math.min(WORLD_LIMIT, nZ));
-
   const collide = checkCarCollision(nX, nZ, newRot, carHalfWidth, carHalfLength);
   if(!collide){
     carState.rotation = newRot;
@@ -1439,10 +1579,8 @@ function updateCarDrive(dt){
     else if(xC && !zC){ carState.rotation = newRot; carState.position.z = nZ; carState.speed *= 0.6; }
     else { carState.speed *= 0.2; if(Math.abs(carState.speed) < 0.3) carState.speed = 0; }
   }
-
   carModel.position.copy(carState.position);
   carModel.rotation.y = carState.rotation + CAR_MODEL_YAW_OFFSET;
-
   carState.wheelRotation += carState.speed * dt * 2.5;
   const wr = carState.wheelRotation;
   if(carWheels.fl.steerGroup) carWheels.fl.steerGroup.rotation.y = carState.steerAngle;
@@ -1451,13 +1589,11 @@ function updateCarDrive(dt){
   if(carWheels.fr.spinGroup) carWheels.fr.spinGroup.rotation.x = wr;
   if(carWheels.rl.spinGroup) carWheels.rl.spinGroup.rotation.x = wr;
   if(carWheels.rr.spinGroup) carWheels.rr.spinGroup.rotation.x = wr;
-
   const isMove = Math.abs(carState.speed) > 0.5;
   AudioEngine.update(dt, carState.speed, carKeys.forward, carKeys.reverse, mode === "driving");
   if(isMove && !wasMoving) onCarMoving();
   else if(!isMove && wasMoving) onCarStopped();
   wasMoving = isMove;
-
   const kmh = Math.abs(carState.speed * 3.6);
   carSpeedEl.textContent = kmh.toFixed(0);
   speedBarFill.style.width = Math.min(100, (kmh / (carState.maxForwardSpeed * 3.6)) * 100) + "%";
@@ -1468,17 +1604,14 @@ function updateCarDrive(dt){
 function onCarMoving(){ if(AudioEngine.gainNode && AudioEngine.source === null) AudioEngine.startIdleLoop(); }
 function onCarStopped(){ if(AudioEngine.gainNode && AudioEngine.source === null) AudioEngine.startIdleLoop(); }
 
-/* 🚁 Helicopter Update - با تنظیمات جدید */
+/* Helicopter Update */
 function updateHelicopter(dt){
   if(!heliModel) return;
-  
-  // Engine state machine
   if(heliState.engineState === "STARTING"){
-    heliState.engineRPM += (1 - heliState.engineRPM) * Math.min(1, dt * 0.5);  // ⭐ سریع‌تر
+    heliState.engineRPM += (1 - heliState.engineRPM) * Math.min(1, dt * 0.5);
     if(heliState.engineRPM > 0.95){
       heliState.engineState = "RUNNING";
       heliEngineBtn.classList.add("running");
-      console.log("🚁 ENGINE RUNNING");
     }
   } else if(heliState.engineState === "STOPPING"){
     heliState.engineRPM += (0 - heliState.engineRPM) * Math.min(1, dt * 0.6);
@@ -1486,22 +1619,16 @@ function updateHelicopter(dt){
       heliState.engineRPM = 0;
       heliState.engineState = "OFF";
       heliEngineBtn.classList.remove("running");
-      console.log("🚁 ENGINE OFF");
     }
   } else if(heliState.engineState === "RUNNING"){
     heliState.engineRPM += (1 - heliState.engineRPM) * Math.min(1, dt * 0.6);
   } else {
     heliState.engineRPM += (0 - heliState.engineRPM) * Math.min(1, dt * 2);
   }
-  
-  // Rotor speed
   heliState.targetRotorSpeed = heliState.engineRPM;
   heliState.rotorSpeed += (heliState.targetRotorSpeed - heliState.rotorSpeed) * Math.min(1, dt * 0.9);
-  
-  // ⭐⭐ Rotor rotation - سریع‌تر مثل COD
-  const topRotorSpeed = heliState.rotorSpeed * 55;   // ⭐ از 25 به 55
-  const backRotorSpeed = heliState.rotorSpeed * 90;  // ⭐ از 45 به 90
-  
+  const topRotorSpeed = heliState.rotorSpeed * 55;
+  const backRotorSpeed = heliState.rotorSpeed * 90;
   if(heliTopRotor){
     heliState.rotorAngleTop += topRotorSpeed * dt;
     heliTopRotor.rotation.y = heliState.rotorAngleTop;
@@ -1510,11 +1637,9 @@ function updateHelicopter(dt){
     heliState.rotorAngleBack += backRotorSpeed * dt;
     heliBackRotor.rotation.x = heliState.rotorAngleBack;
   }
-  
-  // ⭐⭐ Vibration - خیلی کمتر
   if(heliState.rotorSpeed > 0.05 && heliBellHuey){
     heliState.vibrationTime += dt * 30;
-    const vibAmount = heliState.rotorSpeed * 0.007;  // ⭐ از 0.02 به 0.007
+    const vibAmount = heliState.rotorSpeed * 0.007;
     heliBellHuey.position.x = Math.sin(heliState.vibrationTime * 1.3) * vibAmount;
     heliBellHuey.position.z = Math.cos(heliState.vibrationTime * 1.7) * vibAmount;
     heliBellHuey.position.y = heliBodyInitialY + Math.sin(heliState.vibrationTime * 2.3) * vibAmount * 0.5;
@@ -1523,13 +1648,8 @@ function updateHelicopter(dt){
     heliBellHuey.position.z *= 0.9;
     heliBellHuey.position.y += (heliBodyInitialY - heliBellHuey.position.y) * 0.1;
   }
-  
-  // ⭐ صدا
   HeliAudio.update(dt, heliState.engineState, heliState.engineRPM);
-  
-  // Flight
   const engineReady = heliState.engineRPM > 0.6;
-  
   if(mode === "flying"){
     let targetForwardSpeed = 0;
     if(engineReady){
@@ -1538,12 +1658,10 @@ function updateHelicopter(dt){
     }
     heliState.targetSpeed = targetForwardSpeed;
     heliState.speed += (heliState.targetSpeed - heliState.speed) * Math.min(1, dt * 1.5);
-    
-    // ⭐⭐ Vertical speed - سریع‌تر
     let targetVert = 0;
     if(engineReady){
-      if(heliKeys.up) targetVert = 12;         // ⭐ از 8 به 12
-      else if(heliKeys.down) targetVert = -18; // ⭐ از -6 به -18
+      if(heliKeys.up) targetVert = 12;
+      else if(heliKeys.down) targetVert = -18;
       else {
         heliState.hoverPhase += dt * 1.2;
         targetVert = Math.sin(heliState.hoverPhase) * 0.25;
@@ -1553,37 +1671,28 @@ function updateHelicopter(dt){
       else targetVert = 0;
     }
     heliState.targetVerticalSpeed = targetVert;
-    // ⭐⭐ پاسخ سریع‌تر - از dt*2 به dt*5
     heliState.verticalSpeed += (heliState.targetVerticalSpeed - heliState.verticalSpeed) * Math.min(1, dt * 5);
-    
     let targetYawRate = 0;
     if(engineReady){
       if(heliKeys.left) targetYawRate = 1.2;
       else if(heliKeys.right) targetYawRate = -1.2;
     }
     heliState.yaw += targetYawRate * dt;
-    
     const forwardX = Math.sin(heliState.yaw);
     const forwardZ = Math.cos(heliState.yaw);
-    
     let newX = heliState.position.x + forwardX * heliState.speed * dt;
     let newZ = heliState.position.z + forwardZ * heliState.speed * dt;
     newX = Math.max(-WORLD_LIMIT, Math.min(WORLD_LIMIT, newX));
     newZ = Math.max(-WORLD_LIMIT, Math.min(WORLD_LIMIT, newZ));
-    
     let newY = heliState.position.y + heliState.verticalSpeed * dt;
     const minY = heliState.restAltitude;
     if(newY < minY){ newY = minY; heliState.verticalSpeed = 0; }
     if(newY > heliState.maxAltitude){ newY = heliState.maxAltitude; heliState.verticalSpeed = Math.min(0, heliState.verticalSpeed); }
-    
     heliState.position.set(newX, newY, newZ);
-    
     heliState.targetPitch = -heliState.speed * 0.015;
     heliState.pitch += (heliState.targetPitch - heliState.pitch) * Math.min(1, dt * 3);
-    
     heliState.targetRoll = -targetYawRate * 0.35;
     heliState.roll += (heliState.targetRoll - heliState.roll) * Math.min(1, dt * 3);
-    
     heliModel.position.copy(heliState.position);
     heliModel.rotation.order = "YXZ";
     heliModel.rotation.y = heliState.yaw;
@@ -1594,20 +1703,16 @@ function updateHelicopter(dt){
     heliState.verticalSpeed *= 0.95;
     heliState.pitch *= 0.9;
     heliState.roll *= 0.9;
-    
     if(heliState.position.y > heliState.restAltitude){
-      heliState.position.y -= 3 * dt;  // ⭐ سریع‌تر پایین بیاد
+      heliState.position.y -= 3 * dt;
       if(heliState.position.y < heliState.restAltitude) heliState.position.y = heliState.restAltitude;
     }
-    
     heliModel.position.copy(heliState.position);
     heliModel.rotation.order = "YXZ";
     heliModel.rotation.y = heliState.yaw;
     heliModel.rotation.x = heliState.pitch;
     heliModel.rotation.z = heliState.roll;
   }
-  
-  // HUD
   if(mode === "flying"){
     heliSpeedEl.textContent = Math.abs(heliState.speed * 3.6).toFixed(0);
     heliAltitudeEl.textContent = (heliState.position.y - heliState.restAltitude).toFixed(1);
@@ -1669,10 +1774,8 @@ function updateCamera(dt){
   else if(mode === "flying" && heliModel){ tp = heliState.position; ry = heliState.yaw; tc = CAM_HELI; }
   else if(character){ tp = character.position; ry = charYaw; tc = CAM_WALK; }
   else return;
-
   const yl = (mode === "flying") ? 6.0 : ((mode === "driving") ? 8.0 : 5.0);
   cameraBaseYaw = dampAngle(cameraBaseYaw, ry, yl, dt);
-
   if(cameraState.transitioning){
     cameraState.transitionProgress = Math.min(1, cameraState.transitionProgress + dt * 1.5);
     const t = cameraState.transitionProgress;
@@ -1686,27 +1789,22 @@ function updateCamera(dt){
     currentCamParams.height += (tc.height - currentCamParams.height) * Math.min(1, dt * 4);
     currentCamParams.lookHeight += (tc.lookHeight - currentCamParams.lookHeight) * Math.min(1, dt * 4);
   }
-
   if(camAutoReturn.active && !camTouch.active){
     cameraUserYaw = dampAngle(cameraUserYaw, 0, CAM_AUTO_RETURN_SPEED, dt);
     cameraUserPitch += (0 - cameraUserPitch) * (1 - Math.exp(-CAM_AUTO_RETURN_SPEED * dt));
   }
-
   const fy = cameraBaseYaw + cameraUserYaw;
   const p = cameraUserPitch;
   const bX = -Math.sin(fy), bZ = -Math.cos(fy);
   const pC = Math.cos(p), pS = Math.sin(p);
-
   _camDesired.set(
     tp.x + bX * currentCamParams.distance * pC,
     tp.y + currentCamParams.height + pS * currentCamParams.distance,
     tp.z + bZ * currentCamParams.distance * pC
   );
   if(_camDesired.y < 0.6) _camDesired.y = 0.6;
-
   const pl = (mode === "flying") ? 6 : ((mode === "driving") ? 10 : 8);
   camera.position.lerp(_camDesired, 1 - Math.exp(-pl * dt));
-
   _lookTarget.set(tp.x, tp.y + currentCamParams.lookHeight, tp.z);
   cameraState.smoothTarget.lerp(_lookTarget, 1 - Math.exp(-14 * dt));
   camera.lookAt(cameraState.smoothTarget);
@@ -1726,7 +1824,6 @@ function doAutoSave(dt){
       SaveSystem.data.carPos = { x: carState.position.x, y: carState.position.y, z: carState.position.z };
       SaveSystem.data.carRotation = carState.rotation;
     }
-    // ⭐ ذخیره هلیکوپتر هم توی auto-save
     if(heliModel){
       SaveSystem.data.heliPos = { x: heliState.position.x, y: heliState.position.y, z: heliState.position.z };
       SaveSystem.data.heliRotation = heliState.yaw;
@@ -1743,10 +1840,8 @@ const clock = new THREE.Clock();
 function animate(){
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
-  
   if(mixer) mixer.update(dt);
   if(heliMixer) heliMixer.update(dt);
-  
   if(mode === "walking"){
     updateCharacterWalk(dt);
     checkEnterProximity();
@@ -1755,11 +1850,9 @@ function animate(){
   } else if(mode === "flying"){
     updateHelicopter(dt);
   }
-  
   if(mode !== "flying" && heliModel){
     updateHelicopter(dt);
   }
-  
   updateCamera(dt);
   doAutoSave(dt);
   composer.render();
