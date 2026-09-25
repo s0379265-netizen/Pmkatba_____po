@@ -11,10 +11,7 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#0a0a15;touch-action:none;font-family:Arial,Tahoma,sans-serif}
 canvas{display:block;width:100%;height:100%;touch-action:none}
 
-/* ═══════════════════════════════════════════════════════════
-   CSS GUARD: Game canvas only visible in GAME state
-   Even if JS has a delay, user never sees gameplay flash
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ CSS GUARD: Game canvas only visible in GAME state ═══ */
 #gameCanvas{visibility:hidden}
 body.appBooting #gameCanvas{visibility:hidden}
 body.appMenu #gameCanvas{visibility:hidden}
@@ -26,30 +23,17 @@ body.appGame #gameCanvas{visibility:visible}
 #loadingBarWrapper{width:75%;max-width:500px;height:6px;background:rgba(0,0,0,0.6);border-radius:3px;overflow:hidden;box-shadow:0 0 20px rgba(0,0,0,0.7)}
 #loadingBar{height:100%;width:0%;background:linear-gradient(90deg,#ffcc00,#ffe066,#ffcc00);border-radius:3px;transition:width 0.3s ease-out;box-shadow:0 0 15px rgba(255,204,0,0.9)}
 
-/* ═══ MAIN MENU - LAYER 900 with isolation ═══ */
+/* ═══ MAIN MENU ═══ */
 .mainMenu{position:fixed;inset:0;z-index:900;overflow:hidden;transition:opacity 0.5s, visibility 0.5s;background:#0a0a15;isolation:isolate}
 .mainMenu.hidden{opacity:0;visibility:hidden;pointer-events:none}
-
-/* Layer 1: Background video */
 #bgVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.65;pointer-events:none}
-
-/* Layer 2: Cinematic dark overlay */
 .mainMenu::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,10,21,0.65) 0%, rgba(10,10,21,0.15) 45%, rgba(10,10,21,0.92) 100%);pointer-events:none;z-index:2}
-
-/* Layer 5: Preview wrap (safe area between header & bottom) */
 .previewWrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;pointer-events:none}
-
-/* Layer 6: Preview canvas - transparent so video shows through */
 #previewCanvas{width:100%;height:100%;background:transparent;position:relative;z-index:6;touch-action:none;cursor:grab;pointer-events:auto;display:block}
 #previewCanvas:active{cursor:grabbing}
-
-/* Layer 7: decorative glow */
 .previewGlow{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);width:65%;height:10px;background:radial-gradient(ellipse, rgba(120,180,255,0.6) 0%, transparent 70%);filter:blur(8px);z-index:7;pointer-events:none}
-
-/* Layer 8: labels */
 .previewLabel{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:#8ec5e8;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 10px rgba(120,180,255,0.8);z-index:8;pointer-events:none}
 
-/* Layer 20: Top bar */
 .menuTopBar{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;z-index:20;pointer-events:none}
 .menuTopBar > *{pointer-events:auto}
 .profileCard{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg, rgba(20,20,40,0.92), rgba(30,35,60,0.88));backdrop-filter:blur(12px);padding:10px 14px;border-radius:14px;border:1.5px solid rgba(255,204,0,0.35);box-shadow:0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);min-width:0;flex:1;max-width:320px}
@@ -69,7 +53,6 @@ body.appGame #gameCanvas{visibility:visible}
 .coinBox{display:flex;gap:6px;align-items:center;background:linear-gradient(135deg, rgba(20,20,40,0.92), rgba(30,35,60,0.88));backdrop-filter:blur(12px);padding:10px 16px;border-radius:14px;border:1.5px solid rgba(120,180,255,0.35);box-shadow:0 4px 20px rgba(0,0,0,0.5);color:#fff;font-weight:800;font-size:15px;flex-shrink:0}
 .coinIcon{font-size:18px;filter:drop-shadow(0 0 6px rgba(255,204,0,0.8))}
 
-/* Layer 25: Bottom bar */
 .menuBottomBar{position:absolute;bottom:24px;left:0;right:0;display:flex;justify-content:center;gap:14px;padding:0 20px;z-index:25;flex-wrap:wrap;pointer-events:none}
 .menuBottomBar > *{pointer-events:auto}
 .menuBtn{padding:14px 28px;border-radius:14px;font-size:15px;font-weight:800;letter-spacing:0.5px;cursor:pointer;border:none;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;gap:8px;min-width:150px;justify-content:center;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
@@ -78,7 +61,6 @@ body.appGame #gameCanvas{visibility:visible}
 .startBtn{background:linear-gradient(135deg, #ffcc00, #ff8800);color:#000;border:2px solid rgba(255,255,200,0.9);box-shadow:0 6px 25px rgba(255,204,0,0.6), 0 0 40px rgba(255,136,0,0.4);font-size:17px;padding:16px 36px;min-width:190px;animation:startPulse 2.2s ease-in-out infinite}
 @keyframes startPulse{0%,100%{box-shadow:0 6px 25px rgba(255,204,0,0.6), 0 0 40px rgba(255,136,0,0.4)}50%{box-shadow:0 6px 30px rgba(255,204,0,0.9), 0 0 60px rgba(255,136,0,0.7)}}
 
-/* Layer 50: Customize panel */
 .customizePanel{position:fixed;inset:0;z-index:50;background:linear-gradient(135deg, rgba(10,10,21,0.97), rgba(20,20,40,0.97));backdrop-filter:blur(20px);display:flex;flex-direction:column;transition:opacity 0.35s, visibility 0.35s;isolation:isolate}
 .customizePanel.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .customizeHeader{padding:16px 20px;display:flex;align-items:center;gap:16px;border-bottom:1.5px solid rgba(255,204,0,0.25);background:linear-gradient(180deg, rgba(30,30,50,0.8), transparent)}
@@ -94,7 +76,6 @@ body.appGame #gameCanvas{visibility:visible}
 .optionTile.active::after{content:"✓";position:absolute;top:4px;right:6px;color:#ffcc00;font-weight:900;font-size:14px;text-shadow:0 0 8px rgba(0,0,0,0.9)}
 .optionColor{width:100%;height:100%;border-radius:10px}
 
-/* ═══ GAME UI ═══ */
 #joyZoneLeft{position:fixed;bottom:0;left:0;width:55%;height:70%;z-index:15;touch-action:none}
 #joyZoneLeft.hidden{display:none}
 #joyBaseFloat{position:absolute;width:120px;height:120px;border-radius:50%;border:3px solid rgba(255,255,255,0.35);background:radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 70%);transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity 0.2s}
@@ -204,6 +185,7 @@ body.appGame #gameCanvas{visibility:visible}
     </div>
   </div>
 
+  <!-- ★ دکمه شروع سمت چپ، شخصی‌سازی سمت راست (RTL: اولی سمت راست) -->
   <div class="menuBottomBar">
     <button class="menuBtn customizeBtn" id="openCustomizeBtn">🎨 شخصی‌سازی</button>
     <button class="menuBtn startBtn" id="startGameBtn">▶ شروع بازی</button>
@@ -269,15 +251,10 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 
-// ═══════════════════════════════════════════════════════════
-// STATE MACHINE — the single source of truth
-//   BOOT : initial, nothing visible except loading
-//   MENU : main menu is shown, gameplay locked
-//   GAME : gameplay active, menu hidden
-// ═══════════════════════════════════════════════════════════
-let appState = "BOOT";           // "BOOT" | "MENU" | "GAME"
+// ═══ STATE MACHINE ═══
+let appState = "BOOT";
 let gameStarted = false;
-let gameStartLocked = false;     // prevents double-start
+let gameStartLocked = false;
 
 // ═══ URLS ═══
 const SOLDIER_URL  = "https://raw.githubusercontent.com/google/model-viewer/master/packages/shared-assets/models/soldier.glb";
@@ -305,28 +282,24 @@ function assetResolved(){
   if(resolvedAssets >= totalAssets){ targetProgress = 100; isReady = true; }
 }
 
-// ═══════════════════════════════════════════════════════════
-// finishInitialLoading — BOOT → MENU transition
-//   Order: init preview → show menu → wait 2 frames → hide loading
-// ═══════════════════════════════════════════════════════════
 function finishInitialLoading(){
   if (loadingFinished) return;
   if (appState !== "BOOT") return;
   loadingFinished = true;
 
-  // 1) Prepare preview (it's a separate renderer, not gameplay)
+  // 1) Init preview
   initPreview();
 
-  // 2) Switch state to MENU BEFORE hiding loading
+  // 2) Switch state to MENU
   appState = "MENU";
   gameStarted = false;
   document.body.classList.remove("appBooting");
   document.body.classList.add("appMenu");
 
-  // 3) Show menu (removes 'hidden' from mainMenu)
+  // 3) Show menu
   showMainMenu();
 
-  // 4) Give browser 2 animation frames to paint MENU before hiding loading
+  // 4) Wait 2 frames, then hide loading
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       loadingDiv.classList.add("hidden");
@@ -340,6 +313,7 @@ function updateBar(){
     if(currentProgress > targetProgress) currentProgress = targetProgress;
     loadingBar.style.width = currentProgress + "%";
   }
+  // ★ IMPORTANT: wait for BOTH assets AND media (video + music) to be ready
   const allAssetsDone = resolvedAssets >= totalAssets;
   const allMediaDone = mediaReady.video && mediaReady.music;
   if(!loadingFinished && isReady && currentProgress >= 99 && allAssetsDone && allMediaDone){
@@ -350,7 +324,7 @@ function updateBar(){
 
 // ═══ PROFILE ═══
 const Profile = {
-  KEY: "tps_profile_v8",
+  KEY: "tps_profile_v9",
   data: {
     username: "PLAYER", level: 1, xp: 0, xpToNext: 100, coins: 500,
     customization: { helmetColor: 0x3a4a2a, vestColor: 0x2a3a1a, uniformColor: 0x3a5a2a, hasHelmet: true, hasBackpack: false }
@@ -564,6 +538,7 @@ function initBgMedia(){
   bgMusicEl.addEventListener("error", () => { mediaReady.music = true; });
   if (bgVideoEl.readyState >= 2) mediaReady.video = true;
   if (bgMusicEl.readyState >= 2) mediaReady.music = true;
+  // Fallback — after 8s continue anyway
   setTimeout(() => { mediaReady.video = true; mediaReady.music = true; }, 8000);
   const tryPlay = () => {
     if (appState === "MENU") {
@@ -586,9 +561,7 @@ function pauseBgMedia(){
   try { bgMusicEl.pause(); } catch(e){}
 }
 
-// ═══════════════════════════════════════════════════════════
-// RIFLE (procedural) + attach to right hand
-// ═══════════════════════════════════════════════════════════
+// ═══ RIFLE ═══
 function createRifleModel(){
   const group = new THREE.Group();
   group.name = "Rifle";
@@ -598,43 +571,22 @@ function createRifleModel(){
 
   const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.09, 0.32), blackMat);
   group.add(receiver);
-
   const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.4, 8), darkMat);
-  barrel.rotation.x = Math.PI / 2;
-  barrel.position.set(0, 0.02, -0.36);
-  group.add(barrel);
-
+  barrel.rotation.x = Math.PI / 2; barrel.position.set(0, 0.02, -0.36); group.add(barrel);
   const handguard = new THREE.Mesh(new THREE.BoxGeometry(0.048, 0.055, 0.22), blackMat);
-  handguard.position.set(0, 0.02, -0.24);
-  group.add(handguard);
-
+  handguard.position.set(0, 0.02, -0.24); group.add(handguard);
   const mag = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.14, 0.05), accentMat);
-  mag.position.set(0, -0.10, 0.02);
-  mag.rotation.x = -0.15;
-  group.add(mag);
-
+  mag.position.set(0, -0.10, 0.02); mag.rotation.x = -0.15; group.add(mag);
   const stock = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.20), blackMat);
-  stock.position.set(0, -0.01, 0.26);
-  group.add(stock);
-
+  stock.position.set(0, -0.01, 0.26); group.add(stock);
   const grip = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.10, 0.035), blackMat);
-  grip.position.set(0, -0.09, 0.14);
-  grip.rotation.x = 0.25;
-  group.add(grip);
-
+  grip.position.set(0, -0.09, 0.14); grip.rotation.x = 0.25; group.add(grip);
   const scope = new THREE.Mesh(new THREE.BoxGeometry(0.022, 0.035, 0.10), darkMat);
-  scope.position.set(0, 0.075, -0.05);
-  group.add(scope);
-
+  scope.position.set(0, 0.075, -0.05); group.add(scope);
   const frontSight = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.03, 0.015), darkMat);
-  frontSight.position.set(0, 0.05, -0.32);
-  group.add(frontSight);
-
+  frontSight.position.set(0, 0.05, -0.32); group.add(frontSight);
   const muzzle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.05, 8), darkMat);
-  muzzle.rotation.x = Math.PI / 2;
-  muzzle.position.set(0, 0.02, -0.58);
-  group.add(muzzle);
-
+  muzzle.rotation.x = Math.PI / 2; muzzle.position.set(0, 0.02, -0.58); group.add(muzzle);
   return group;
 }
 
@@ -643,10 +595,7 @@ function attachWeaponToRightHand(character){
   const old = character.getObjectByName("Rifle");
   if(old && old.parent) old.parent.remove(old);
 
-  const candidateNames = [
-    "mixamorig:RightHand", "mixamorigRightHand", "RightHand",
-    "hand_r", "Right_Hand", "Hand_R", "Bone_Hand_R", "RightHandBone"
-  ];
+  const candidateNames = ["mixamorig:RightHand", "mixamorigRightHand", "RightHand", "hand_r", "Right_Hand", "Hand_R", "Bone_Hand_R", "RightHandBone"];
   let handBone = null;
   for (const n of candidateNames){ const b = character.getObjectByName(n); if(b){ handBone = b; break; } }
   if(!handBone) handBone = findBoneFlexible(character, ["righthand", "hand_r", "right_hand"]);
@@ -662,42 +611,33 @@ function attachWeaponToRightHand(character){
   rifle.traverse(o => {
     if (o.isMesh){ o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; }
   });
-
   rifle.position.set(0, 0.02, 0.02);
   rifle.rotation.set(Math.PI / 2, Math.PI / 2, 0);
   rifle.scale.setScalar(1.0);
-
   handBone.add(rifle);
   console.log("✅ Weapon attached to right hand");
   return rifle;
 }
 
-// ═══════════════════════════════════════════════════════════
-// AUTO-FIT
-// ═══════════════════════════════════════════════════════════
+// ═══ AUTO-FIT ═══
 function autoFitCharacter(model, targetHeight){
   targetHeight = targetHeight || 1.55;
   model.updateMatrixWorld(true);
   let box = new THREE.Box3().setFromObject(model);
   let size = box.getSize(new THREE.Vector3());
   if (size.y <= 0) return null;
-
   const scale = targetHeight / size.y;
   model.scale.multiplyScalar(scale);
   model.updateMatrixWorld(true);
-
   box = new THREE.Box3().setFromObject(model);
   const center = box.getCenter(new THREE.Vector3());
-
   model.position.x -= center.x;
   model.position.z -= center.z;
   model.position.y -= box.min.y;
-
   model.updateMatrixWorld(true);
   const finalBox = new THREE.Box3().setFromObject(model);
   const finalSize = finalBox.getSize(new THREE.Vector3());
   const finalCenter = finalBox.getCenter(new THREE.Vector3());
-
   console.log("✅ Character height:", finalSize.y.toFixed(3));
   return { height: finalSize.y, width: finalSize.x, depth: finalSize.z, center: finalCenter };
 }
@@ -705,36 +645,25 @@ function autoFitCharacter(model, targetHeight){
 function fitPreviewCameraToCharacter(model, safeMargin){
   if (!previewCamera || !model) return;
   safeMargin = safeMargin || 1.5;
-
   model.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(model);
   const size = box.getSize(new THREE.Vector3());
-  const height = size.y;
-  const width = size.x;
-  const depth = size.z;
-
+  const height = size.y, width = size.x, depth = size.z;
   const visualWidth = Math.max(width, depth * 0.7);
-
   const fovRad = previewCamera.fov * Math.PI / 180;
   const aspect = previewCamera.aspect;
-
   const distV = (height * safeMargin) / (2 * Math.tan(fovRad / 2));
   const hFov = 2 * Math.atan(Math.tan(fovRad / 2) * aspect);
   const distH = (visualWidth * safeMargin) / (2 * Math.tan(hFov / 2));
-
   const distance = Math.max(distV, distH, 2.5);
-
   const lookY = height * 0.55;
   previewCamera.position.set(0, lookY, distance);
   previewCamera.lookAt(0, lookY * 0.95, 0);
   previewCamera.updateProjectionMatrix();
-
   console.log("✅ Camera fit distance:", distance.toFixed(2));
 }
 
-// ═══════════════════════════════════════════════════════════
-// PREVIEW (separate renderer, only visible in MENU)
-// ═══════════════════════════════════════════════════════════
+// ═══ PREVIEW ═══
 let previewRenderer, previewScene, previewCamera, previewPivot = null;
 let previewCharacter = null, previewMixer = null, previewWrapper = null;
 let previewRunning = false;
@@ -745,27 +674,23 @@ let previewDragging = false, previewLastX = 0, previewVelY = 0;
 function computePreviewSize(){
   const menuEl = document.getElementById("mainMenu");
   if(!menuEl) return { w: 300, h: 400 };
-  const menuH = menuEl.clientHeight;
-  const menuW = menuEl.clientWidth;
-
+  const menuH = menuEl.clientHeight, menuW = menuEl.clientWidth;
   const topBar = document.querySelector(".menuTopBar");
   const bottomBar = document.querySelector(".menuBottomBar");
   const topH = topBar ? topBar.getBoundingClientRect().height : 80;
   const bottomH = bottomBar ? bottomBar.getBoundingClientRect().height : 70;
-
   const safeTop = topH + 20;
   const safeBottom = bottomH + 20;
   const availableH = Math.max(240, menuH - safeTop - safeBottom);
   const availableW = Math.min(menuW * 0.86, 420);
-
   let w = Math.min(availableW, availableH * 0.85);
   let h = Math.min(availableH, w / 0.85);
-
   return { w: Math.floor(w), h: Math.floor(h) };
 }
 
 function updatePreviewArea(){
   const wrap = document.getElementById("previewWrap");
+  if(!wrap) return { w: 300, h: 400 };
   const { w, h } = computePreviewSize();
   wrap.style.width = w + "px";
   wrap.style.height = h + "px";
@@ -779,20 +704,17 @@ function updatePreviewArea(){
   wrap.style.top = centerY + "px";
   wrap.style.left = "50%";
   wrap.style.transform = "translate(-50%, -50%)";
-
   if (previewRenderer && previewCamera) {
     previewRenderer.setSize(w, h, false);
     previewCamera.aspect = w / h;
     previewCamera.updateProjectionMatrix();
-    if (previewCharacter) {
-      fitPreviewCameraToCharacter(previewCharacter, 1.5);
-    }
+    if (previewCharacter) fitPreviewCameraToCharacter(previewCharacter, 1.5);
   }
   return { w, h };
 }
 
 function initPreview(){
-  if (previewRenderer) return; // don't init twice
+  if (previewRenderer) return; // ★ Prevent double init
   const canvas = document.getElementById("previewCanvas");
   const { w, h } = updatePreviewArea();
 
@@ -820,33 +742,27 @@ function initPreview(){
   key.shadow.camera.top = 3; key.shadow.camera.bottom = -1;
   key.shadow.bias = -0.0005;
   previewScene.add(key);
-
   const fill = new THREE.DirectionalLight(0x88aaff, 1.1);
-  fill.position.set(-4, 3, 2.5);
-  previewScene.add(fill);
-
+  fill.position.set(-4, 3, 2.5); previewScene.add(fill);
   const rim = new THREE.DirectionalLight(0xffb86b, 1.6);
-  rim.position.set(0, 3.5, -5);
-  previewScene.add(rim);
-
+  rim.position.set(0, 3.5, -5); previewScene.add(rim);
   previewScene.add(new THREE.HemisphereLight(0xbcd6ee, 0x2a2a1a, 0.85));
 
   const disc = new THREE.Mesh(
     new THREE.CylinderGeometry(0.85, 0.95, 0.08, 40),
     new THREE.MeshStandardMaterial({ color: 0x2a3a5a, roughness: 0.5, metalness: 0.6, transparent:true, opacity:0.85 })
   );
-  disc.position.y = -0.04; disc.receiveShadow = true;
-  previewScene.add(disc);
+  disc.position.y = -0.04; disc.receiveShadow = true; previewScene.add(disc);
   const ring = new THREE.Mesh(
     new THREE.TorusGeometry(0.9, 0.015, 8, 50),
     new THREE.MeshStandardMaterial({ color: 0xffcc00, emissive: 0xffcc00, emissiveIntensity: 2.0, roughness: 0.3 })
   );
-  ring.rotation.x = Math.PI/2; ring.position.y = 0.02;
-  previewScene.add(ring);
+  ring.rotation.x = Math.PI/2; ring.position.y = 0.02; previewScene.add(ring);
 
   previewPivot = new THREE.Group();
   previewScene.add(previewPivot);
 
+  // ★ Build character (real soldier if available, else fallback)
   if (soldierGLTF) { applySoldierToPreview(); }
   else { buildFallbackPreview(); }
 
@@ -871,6 +787,13 @@ function initPreview(){
 
   previewRunning = true;
   previewLoop();
+
+  // ★ Force re-apply soldier in case it loaded between init and now
+  setTimeout(() => {
+    if (soldierGLTF && previewPivot) {
+      applySoldierToPreview();
+    }
+  }, 100);
 }
 
 function buildFallbackPreview(){
@@ -949,7 +872,7 @@ function applySoldierToPreview(){
 function previewLoop(){
   if(!previewRunning) return;
   requestAnimationFrame(previewLoop);
-  if(appState !== "MENU") return;  // render preview only in MENU
+  if(appState !== "MENU") return;
   const now = performance.now();
   const dt = Math.min((now - (previewLoop._last || now)) / 1000, 0.05);
   previewLoop._last = now;
@@ -984,28 +907,20 @@ function applyCustomizationToGame(){
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// MENU SHOW / HIDE (strict state transitions)
-// ═══════════════════════════════════════════════════════════
+// ═══ MENU SHOW / HIDE ═══
 const mainMenuEl = document.getElementById("mainMenu");
 const customizePanelEl = document.getElementById("customizePanel");
 
 function showMainMenu(){
-  // Ensure menu is visible FIRST, before any state change
   mainMenuEl.classList.remove("hidden");
-
   appState = "MENU";
   gameStarted = false;
   gameStartLocked = false;
   mode = "walking";
-
   document.body.classList.remove("appBooting");
   document.body.classList.remove("appGame");
   document.body.classList.add("appMenu");
-
   updateMenuUI();
-
-  // Hide all game UI
   document.getElementById("carHUD").style.display = "none";
   document.getElementById("heliHUD").classList.remove("show");
   document.getElementById("carControls").classList.remove("show");
@@ -1019,69 +934,44 @@ function showMainMenu(){
   document.getElementById("hint").style.display = "none";
   document.getElementById("joyZoneLeft").classList.add("hidden");
   document.getElementById("camZoneRight").classList.add("hidden");
-  document.getElementById("heliHUD").classList.remove("show");
-  document.getElementById("heliControls").classList.remove("show");
-  document.getElementById("carControls").classList.remove("show");
-  document.getElementById("carHUD").style.display = "none";
-
-  // Character should NOT be visible in menu
   if (character) character.visible = false;
-
-  // Enable preview rendering
   previewRunning = true;
-
-  // Play background media
   playBgMedia();
-
-  // Re-fit preview
-  setTimeout(() => { updatePreviewArea(); }, 50);
+  // ★ Re-fit preview + re-apply soldier if it became available
+  setTimeout(() => {
+    updatePreviewArea();
+    if (soldierGLTF && previewPivot) {
+      applySoldierToPreview();
+    }
+  }, 100);
 }
 
 function hideMainMenu(){
-  // Only allowed from MENU state
   if (appState !== "MENU") return;
   if (gameStarted) return;
   if (gameStartLocked) return;
-
   gameStartLocked = true;
-
-  // Transition to GAME
   appState = "GAME";
   gameStarted = true;
-
   document.body.classList.remove("appMenu");
   document.body.classList.remove("appBooting");
   document.body.classList.add("appGame");
-
-  // Hide menu
   mainMenuEl.classList.add("hidden");
-
-  // Pause menu media
   pauseBgMedia();
-
-  // Stop preview rendering
   previewRunning = false;
-
-  // Show game UI
   document.getElementById("joyZoneLeft").classList.remove("hidden");
   document.getElementById("camZoneRight").classList.remove("hidden");
   document.getElementById("menuTopBtn").classList.add("show");
   document.getElementById("soundToggle").style.display = "flex";
   document.getElementById("hint").style.display = "block";
-
-  // Make character visible in gameplay
   if (character) character.visible = true;
-
   applyCustomizationToGame();
 }
 
 function backToMenu(){
   if (appState !== "GAME") return;
-
-  // Pause all game audio
   AudioEngine.stop();
   HeliAudio.stop();
-
   showMainMenu();
 }
 
@@ -1123,7 +1013,7 @@ setTimeout(() => {
   if(resolvedAssets < totalAssets){ targetProgress = 100; isReady = true; }
 }, 10000);
 
-// ═══ AUDIO (game) ═══
+// ═══ AUDIO ═══
 const AudioEngine = {
   ctx:null, source:null, gainNode:null, buffer:null, loaded:false, isMuted:false,
   baseRPM:800, maxRPM:7000, currentRPM:800, targetRPM:800, baseVolume:0.35, maxVolume:0.85, isStarting:false,
@@ -1145,7 +1035,7 @@ const HeliAudio = {
 
 // ═══ SAVE SYSTEM ═══
 const SaveSystem = {
-  KEY: "tpspro_save_v19",
+  KEY: "tpspro_save_v20",
   data: {
     charPos: { x: 0, y: 0, z: 20 }, charYaw: 0,
     carPos: { x: -15, y: 0, z: -15 }, carRotation: 0,
@@ -1388,7 +1278,7 @@ function prep(obj){
   });
 }
 
-// Buildings (full list preserved)
+// ═══ BUILDINGS (kept, compact) ═══
 const facadeCache = {};
 function getFacadeTex(style){
   if(facadeCache[style]) return facadeCache[style];
@@ -1731,7 +1621,7 @@ function spawnFallbackCharacter(){
   const sp = SaveSystem.data.charPos;
   character.position.set(sp.x, 0, sp.z);
   character.rotation.y = charYaw + MODEL_YAW_OFFSET;
-  character.visible = false;  // ★ hidden until GAME
+  character.visible = false;
   scene.add(character);
   useFallbackCharAnim = true;
 }
@@ -1746,7 +1636,7 @@ function replaceWithGLBCharacter(gltf){
   const box = new THREE.Box3().setFromObject(character);
   character.position.set(oldPos.x, -box.min.y, oldPos.z);
   character.rotation.y = oldRot;
-  character.visible = false;  // ★ hidden until GAME
+  character.visible = false;
   scene.add(character);
   useFallbackCharAnim = false;
 
@@ -1771,12 +1661,12 @@ function replaceWithGLBCharacter(gltf){
     actions.idle.play();
     currentAction = actions.idle;
 
-    console.log("✅ Idle animation:", idleClip.name || "(unnamed)");
-    console.log("✅ Walk animation:", walkClip.name || "(unnamed)");
-    console.log("✅ Run animation:", runClip.name || "(unnamed)");
-    console.log(aimClip ? "✅ Aim animation" : "⚠ Missing aim animation");
-    console.log(shootClip ? "✅ Shoot animation" : "⚠ Missing shoot animation");
-    console.log(reloadClip ? "✅ Reload animation" : "⚠ Missing reload animation");
+    console.log("✅ Idle:", idleClip.name || "(unnamed)");
+    console.log("✅ Walk:", walkClip.name || "(unnamed)");
+    console.log("✅ Run:", runClip.name || "(unnamed)");
+    console.log(aimClip ? "✅ Aim" : "⚠ Missing aim animation");
+    console.log(shootClip ? "✅ Shoot" : "⚠ Missing shoot animation");
+    console.log(reloadClip ? "✅ Reload" : "⚠ Missing reload animation");
     if (!shootClip) console.warn("WARNING: Real shooting animation not found");
   }
 
@@ -1786,6 +1676,7 @@ function replaceWithGLBCharacter(gltf){
 }
 spawnFallbackCharacter();
 
+// ★★★ LOAD SOLDIER — apply to preview if preview is ready ★★★
 (function loadSoldier(){
   let counted = false;
   const timeout = setTimeout(() => { if(!counted){ counted = true; assetResolved(); } }, 12000);
@@ -1797,7 +1688,14 @@ spawnFallbackCharacter();
         soldierGLTF = gltf.scene;
         soldierAnimations = gltf.animations;
         replaceWithGLBCharacter(gltf);
-        if (previewPivot) applySoldierToPreview();
+        console.log("✅ Soldier loaded for game");
+        // ★ If preview already initialized, apply soldier to preview immediately
+        if (previewPivot) {
+          console.log("✅ Preview ready — applying real soldier to preview");
+          applySoldierToPreview();
+        } else {
+          console.log("⏳ Preview not yet initialized — will apply on init");
+        }
       } catch(e){ console.warn("soldier load error", e); }
     },
     undefined,
@@ -1939,7 +1837,7 @@ function setAction(name){
   currentAction = nx;
 }
 
-// ═══ Controls (all guarded by appState) ═══
+// ═══ CONTROLS ═══
 const joyZoneLeft = document.getElementById("joyZoneLeft");
 const joyBaseFloat = document.getElementById("joyBaseFloat");
 const joyKnobFloat = document.getElementById("joyKnobFloat");
@@ -2515,7 +2413,6 @@ function animate(){
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
 
-  // ═══ GAMEPLAY UPDATES: ONLY in GAME state ═══
   if(appState === "GAME" && gameStarted){
     if(mixer) mixer.update(dt);
     if(heliMixer) heliMixer.update(dt);
@@ -2527,17 +2424,12 @@ function animate(){
     doAutoSave(dt);
   }
 
-  // Heli rotor animation for atmospheric feel (safe outside GAME, doesn't depend on state)
-  // Only run if game has started to avoid needless CPU
   if(appState === "GAME" && mode !== "flying" && heliModel) updateHelicopter(dt);
 
-  // ═══ ALWAYS: sky follows camera, sun follows camera ═══
   sun.target.position.set(camera.position.x, 0, camera.position.z);
   sun.target.updateMatrixWorld();
   skyDome.position.set(camera.position.x, 0, camera.position.z);
 
-  // ═══ ALWAYS render main scene to its canvas ═══
-  // Canvas is hidden by CSS in BOOT/MENU states, so nothing is seen
   renderer.render(scene, camera);
 }
 animate();
