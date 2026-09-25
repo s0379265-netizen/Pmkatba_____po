@@ -11,6 +11,15 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#0a0a15;touch-action:none;font-family:Arial,Tahoma,sans-serif}
 canvas{display:block;width:100%;height:100%;touch-action:none}
 
+/* ═══════════════════════════════════════════════════════════
+   CSS GUARD: Game canvas only visible in GAME state
+   Even if JS has a delay, user never sees gameplay flash
+   ═══════════════════════════════════════════════════════════ */
+#gameCanvas{visibility:hidden}
+body.appBooting #gameCanvas{visibility:hidden}
+body.appMenu #gameCanvas{visibility:hidden}
+body.appGame #gameCanvas{visibility:visible}
+
 /* ═══ LAYER 100: LOADING ═══ */
 #loading{position:fixed;inset:0;z-index:100;background:#0a0a15;background-image:url('https://uploadkon.ir/uploads/a6c023_26grok-1790086009059.jpg');background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:40px;transition:opacity 0.6s, visibility 0.6s}
 #loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
@@ -39,7 +48,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 
 /* Layer 8: labels */
 .previewLabel{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:#8ec5e8;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 10px rgba(120,180,255,0.8);z-index:8;pointer-events:none}
-.dragHint{position:absolute;top:10px;right:8px;color:#8ec5e8;font-size:10px;font-weight:600;background:rgba(0,0,0,0.55);padding:5px 10px;border-radius:20px;backdrop-filter:blur(6px);z-index:8;pointer-events:none;opacity:0.85}
 
 /* Layer 20: Top bar */
 .menuTopBar{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;z-index:20;pointer-events:none}
@@ -86,7 +94,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .optionTile.active::after{content:"✓";position:absolute;top:4px;right:6px;color:#ffcc00;font-weight:900;font-size:14px;text-shadow:0 0 8px rgba(0,0,0,0.9)}
 .optionColor{width:100%;height:100%;border-radius:10px}
 
-/* ═══ GAME UI (behind menu z-index-wise) ═══ */
+/* ═══ GAME UI ═══ */
 #joyZoneLeft{position:fixed;bottom:0;left:0;width:55%;height:70%;z-index:15;touch-action:none}
 #joyZoneLeft.hidden{display:none}
 #joyBaseFloat{position:absolute;width:120px;height:120px;border-radius:50%;border:3px solid rgba(255,255,255,0.35);background:radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 70%);transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity 0.2s}
@@ -161,18 +169,17 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
 </script>
 </head>
-<body>
+<body class="appBooting">
 <div id="loading"><div id="loadingBarWrapper"><div id="loadingBar"></div></div></div>
 
 <!-- ═══════ MAIN MENU ═══════ -->
-<div id="mainMenu" class="mainMenu hidden">
+<div id="mainMenu" class="mainMenu">
   <video id="bgVideo" autoplay muted loop playsinline preload="auto"></video>
   <audio id="bgMusic" loop preload="auto"></audio>
 
   <div class="previewWrap" id="previewWrap">
     <canvas id="previewCanvas"></canvas>
     <div class="previewGlow"></div>
-    <div class="dragHint">↔ بچرخون</div>
     <div class="previewLabel">PREVIEW</div>
   </div>
 
@@ -218,9 +225,9 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 </div>
 
 <!-- ═══════ GAME UI ═══════ -->
-<div id="joyZoneLeft"><div id="joyBaseFloat"></div><div id="joyKnobFloat"></div></div>
-<div id="camZoneRight"></div>
-<div id="hint">👈 چپ: حرکت | 👉 راست: دوربین</div>
+<div id="joyZoneLeft" class="hidden"><div id="joyBaseFloat"></div><div id="joyKnobFloat"></div></div>
+<div id="camZoneRight" class="hidden"></div>
+<div id="hint" style="display:none;">👈 چپ: حرکت | 👉 راست: دوربین</div>
 <button id="menuTopBtn">☰ منو</button>
 <div id="carControls">
   <svg class="steer-svg-btn" id="steer-left" viewBox="0 0 100 100"><defs><radialGradient id="sgl" cx="40%" cy="35%"><stop offset="0%" stop-color="#5aa2ff"/><stop offset="50%" stop-color="#2874d8"/><stop offset="100%" stop-color="#0f3a80"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#sgl)" stroke="#a8d4ff" stroke-width="3"/><path d="M 70 50 L 35 50 M 45 38 L 32 50 L 45 62" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/></svg>
@@ -262,6 +269,16 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 
+// ═══════════════════════════════════════════════════════════
+// STATE MACHINE — the single source of truth
+//   BOOT : initial, nothing visible except loading
+//   MENU : main menu is shown, gameplay locked
+//   GAME : gameplay active, menu hidden
+// ═══════════════════════════════════════════════════════════
+let appState = "BOOT";           // "BOOT" | "MENU" | "GAME"
+let gameStarted = false;
+let gameStartLocked = false;     // prevents double-start
+
 // ═══ URLS ═══
 const SOLDIER_URL  = "https://raw.githubusercontent.com/google/model-viewer/master/packages/shared-assets/models/soldier.glb";
 const FERRARI_URL  = "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/models/gltf/ferrari.glb";
@@ -271,12 +288,10 @@ const HELI_SOUND_URL = "https://cdn.jsdelivr.net/gh/s0379265-netizen/Fagah@main/
 const BG_VIDEO_URL = "https://github.com/s0379265-netizen/Cvodfha/raw/refs/heads/main/grok_video_2026-09-24-19-00-24.mp4";
 const BG_MUSIC_URL = "https://github.com/s0379265-netizen/Cvodfha/raw/refs/heads/main/2019-10-30_-_Action_Rhythms_-_David_Fesliyan.mp3";
 
-// ═══ GLOBAL STATE ═══
 let soldierGLTF = null;
 let soldierAnimations = null;
-let gameStarted = false;
 
-// ═══ LOADING STATE (declared FIRST) ═══
+// ═══ LOADING STATE ═══
 const loadingBar = document.getElementById("loadingBar");
 const loadingDiv = document.getElementById("loading");
 let currentProgress = 0, targetProgress = 10, isReady = false, loadingFinished = false;
@@ -290,6 +305,35 @@ function assetResolved(){
   if(resolvedAssets >= totalAssets){ targetProgress = 100; isReady = true; }
 }
 
+// ═══════════════════════════════════════════════════════════
+// finishInitialLoading — BOOT → MENU transition
+//   Order: init preview → show menu → wait 2 frames → hide loading
+// ═══════════════════════════════════════════════════════════
+function finishInitialLoading(){
+  if (loadingFinished) return;
+  if (appState !== "BOOT") return;
+  loadingFinished = true;
+
+  // 1) Prepare preview (it's a separate renderer, not gameplay)
+  initPreview();
+
+  // 2) Switch state to MENU BEFORE hiding loading
+  appState = "MENU";
+  gameStarted = false;
+  document.body.classList.remove("appBooting");
+  document.body.classList.add("appMenu");
+
+  // 3) Show menu (removes 'hidden' from mainMenu)
+  showMainMenu();
+
+  // 4) Give browser 2 animation frames to paint MENU before hiding loading
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      loadingDiv.classList.add("hidden");
+    });
+  });
+}
+
 function updateBar(){
   if(currentProgress < targetProgress){
     currentProgress += (targetProgress - currentProgress) * 0.15 + 0.3;
@@ -299,16 +343,14 @@ function updateBar(){
   const allAssetsDone = resolvedAssets >= totalAssets;
   const allMediaDone = mediaReady.video && mediaReady.music;
   if(!loadingFinished && isReady && currentProgress >= 99 && allAssetsDone && allMediaDone){
-    loadingFinished = true;
-    loadingDiv.classList.add("hidden");
-    setTimeout(() => { initPreview(); showMainMenu(); }, 300);
+    finishInitialLoading();
   }
   requestAnimationFrame(updateBar);
 }
 
 // ═══ PROFILE ═══
 const Profile = {
-  KEY: "tps_profile_v7",
+  KEY: "tps_profile_v8",
   data: {
     username: "PLAYER", level: 1, xp: 0, xpToNext: 100, coins: 500,
     customization: { helmetColor: 0x3a4a2a, vestColor: 0x2a3a1a, uniformColor: 0x3a5a2a, hasHelmet: true, hasBackpack: false }
@@ -316,6 +358,7 @@ const Profile = {
   load(){ try { const s = localStorage.getItem(this.KEY); if(s) Object.assign(this.data, JSON.parse(s)); } catch(e){} },
   save(){ try { localStorage.setItem(this.KEY, JSON.stringify(this.data)); } catch(e){} },
   addXp(amount){
+    if(appState !== "GAME") return;
     this.data.xp += amount; this.data.coins += Math.floor(amount * 0.5);
     while(this.data.xp >= this.data.xpToNext){
       this.data.xp -= this.data.xpToNext; this.data.level++;
@@ -406,7 +449,7 @@ function buildCustomizeOptions(){
   });
 }
 
-// ═══ CHARACTER CUSTOMIZATION (flexible bone search) ═══
+// ═══ CHARACTER CUSTOMIZATION ═══
 function findBone(obj, names){
   for(const n of names){ const b = obj.getObjectByName(n); if(b) return b; }
   return null;
@@ -522,7 +565,12 @@ function initBgMedia(){
   if (bgVideoEl.readyState >= 2) mediaReady.video = true;
   if (bgMusicEl.readyState >= 2) mediaReady.music = true;
   setTimeout(() => { mediaReady.video = true; mediaReady.music = true; }, 8000);
-  const tryPlay = () => { bgVideoEl.play().catch(()=>{}); bgMusicEl.play().catch(()=>{}); };
+  const tryPlay = () => {
+    if (appState === "MENU") {
+      bgVideoEl.play().catch(()=>{});
+      bgMusicEl.play().catch(()=>{});
+    }
+  };
   tryPlay();
   window.addEventListener("touchstart", tryPlay, {once:true, passive:true});
   window.addEventListener("click", tryPlay, {once:true});
@@ -539,7 +587,7 @@ function pauseBgMedia(){
 }
 
 // ═══════════════════════════════════════════════════════════
-// RIFLE (procedural M4-style) + attach to right hand
+// RIFLE (procedural) + attach to right hand
 // ═══════════════════════════════════════════════════════════
 function createRifleModel(){
   const group = new THREE.Group();
@@ -548,50 +596,40 @@ function createRifleModel(){
   const darkMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.4, metalness: 0.95 });
   const accentMat = new THREE.MeshStandardMaterial({ color: 0x333338, roughness: 0.55, metalness: 0.9 });
 
-  // Receiver body (main)
   const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.09, 0.32), blackMat);
-  receiver.position.set(0, 0, 0);
   group.add(receiver);
 
-  // Barrel
   const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.4, 8), darkMat);
   barrel.rotation.x = Math.PI / 2;
   barrel.position.set(0, 0.02, -0.36);
   group.add(barrel);
 
-  // Handguard
   const handguard = new THREE.Mesh(new THREE.BoxGeometry(0.048, 0.055, 0.22), blackMat);
   handguard.position.set(0, 0.02, -0.24);
   group.add(handguard);
 
-  // Magazine (angled)
   const mag = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.14, 0.05), accentMat);
   mag.position.set(0, -0.10, 0.02);
   mag.rotation.x = -0.15;
   group.add(mag);
 
-  // Stock
   const stock = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.20), blackMat);
   stock.position.set(0, -0.01, 0.26);
   group.add(stock);
 
-  // Grip
   const grip = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.10, 0.035), blackMat);
   grip.position.set(0, -0.09, 0.14);
   grip.rotation.x = 0.25;
   group.add(grip);
 
-  // Scope
   const scope = new THREE.Mesh(new THREE.BoxGeometry(0.022, 0.035, 0.10), darkMat);
   scope.position.set(0, 0.075, -0.05);
   group.add(scope);
 
-  // Front sight
   const frontSight = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.03, 0.015), darkMat);
   frontSight.position.set(0, 0.05, -0.32);
   group.add(frontSight);
 
-  // Muzzle
   const muzzle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.05, 8), darkMat);
   muzzle.rotation.x = Math.PI / 2;
   muzzle.position.set(0, 0.02, -0.58);
@@ -602,7 +640,6 @@ function createRifleModel(){
 
 function attachWeaponToRightHand(character){
   if(!character) return null;
-  // Remove existing weapon
   const old = character.getObjectByName("Rifle");
   if(old && old.parent) old.parent.remove(old);
 
@@ -626,7 +663,6 @@ function attachWeaponToRightHand(character){
     if (o.isMesh){ o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; }
   });
 
-  // ═══ Adjust these if rifle position looks wrong ═══
   rifle.position.set(0, 0.02, 0.02);
   rifle.rotation.set(Math.PI / 2, Math.PI / 2, 0);
   rifle.scale.setScalar(1.0);
@@ -637,7 +673,7 @@ function attachWeaponToRightHand(character){
 }
 
 // ═══════════════════════════════════════════════════════════
-// AUTO-FIT: scale + center + feet on ground
+// AUTO-FIT
 // ═══════════════════════════════════════════════════════════
 function autoFitCharacter(model, targetHeight){
   targetHeight = targetHeight || 1.55;
@@ -653,7 +689,6 @@ function autoFitCharacter(model, targetHeight){
   box = new THREE.Box3().setFromObject(model);
   const center = box.getCenter(new THREE.Vector3());
 
-  // Recenter at origin, feet on Y=0
   model.position.x -= center.x;
   model.position.z -= center.z;
   model.position.y -= box.min.y;
@@ -664,18 +699,12 @@ function autoFitCharacter(model, targetHeight){
   const finalCenter = finalBox.getCenter(new THREE.Vector3());
 
   console.log("✅ Character height:", finalSize.y.toFixed(3));
-  console.log("✅ Character width:", finalSize.x.toFixed(3));
-  console.log("✅ Character depth:", finalSize.z.toFixed(3));
-
   return { height: finalSize.y, width: finalSize.x, depth: finalSize.z, center: finalCenter };
 }
 
-// ═══════════════════════════════════════════════════════════
-// CAMERA AUTO-FIT based on Box3 + FOV + aspect
-// ═══════════════════════════════════════════════════════════
 function fitPreviewCameraToCharacter(model, safeMargin){
   if (!previewCamera || !model) return;
-  safeMargin = safeMargin || 1.5; // 50% extra padding around
+  safeMargin = safeMargin || 1.5;
 
   model.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(model);
@@ -684,7 +713,6 @@ function fitPreviewCameraToCharacter(model, safeMargin){
   const width = size.x;
   const depth = size.z;
 
-  // Visual width includes both horizontal extents + some depth
   const visualWidth = Math.max(width, depth * 0.7);
 
   const fovRad = previewCamera.fov * Math.PI / 180;
@@ -696,7 +724,6 @@ function fitPreviewCameraToCharacter(model, safeMargin){
 
   const distance = Math.max(distV, distH, 2.5);
 
-  // Look at upper chest (55% of height)
   const lookY = height * 0.55;
   previewCamera.position.set(0, lookY, distance);
   previewCamera.lookAt(0, lookY * 0.95, 0);
@@ -706,7 +733,7 @@ function fitPreviewCameraToCharacter(model, safeMargin){
 }
 
 // ═══════════════════════════════════════════════════════════
-// PREVIEW RENDERER
+// PREVIEW (separate renderer, only visible in MENU)
 // ═══════════════════════════════════════════════════════════
 let previewRenderer, previewScene, previewCamera, previewPivot = null;
 let previewCharacter = null, previewMixer = null, previewWrapper = null;
@@ -716,7 +743,6 @@ let previewRotationY = 0;
 let previewDragging = false, previewLastX = 0, previewVelY = 0;
 
 function computePreviewSize(){
-  // Compute safe area between header & bottom buttons
   const menuEl = document.getElementById("mainMenu");
   if(!menuEl) return { w: 300, h: 400 };
   const menuH = menuEl.clientHeight;
@@ -732,7 +758,6 @@ function computePreviewSize(){
   const availableH = Math.max(240, menuH - safeTop - safeBottom);
   const availableW = Math.min(menuW * 0.86, 420);
 
-  // Keep aspect ratio ~ 3:4
   let w = Math.min(availableW, availableH * 0.85);
   let h = Math.min(availableH, w / 0.85);
 
@@ -744,7 +769,6 @@ function updatePreviewArea(){
   const { w, h } = computePreviewSize();
   wrap.style.width = w + "px";
   wrap.style.height = h + "px";
-  // Position: center between safeTop and (menuH - safeBottom)
   const menuEl = document.getElementById("mainMenu");
   const menuH = menuEl.clientHeight;
   const topBar = document.querySelector(".menuTopBar");
@@ -756,12 +780,10 @@ function updatePreviewArea(){
   wrap.style.left = "50%";
   wrap.style.transform = "translate(-50%, -50%)";
 
-  // Update renderer size
   if (previewRenderer && previewCamera) {
     previewRenderer.setSize(w, h, false);
     previewCamera.aspect = w / h;
     previewCamera.updateProjectionMatrix();
-    // Re-fit camera to character with new aspect
     if (previewCharacter) {
       fitPreviewCameraToCharacter(previewCharacter, 1.5);
     }
@@ -770,6 +792,7 @@ function updatePreviewArea(){
 }
 
 function initPreview(){
+  if (previewRenderer) return; // don't init twice
   const canvas = document.getElementById("previewCanvas");
   const { w, h } = updatePreviewArea();
 
@@ -788,7 +811,6 @@ function initPreview(){
   previewCamera.position.set(0, 1.2, 3.2);
   previewCamera.lookAt(0, 0.9, 0);
 
-  // ═══ Lighting: Key + Fill + Rim + Hemisphere ═══
   const key = new THREE.DirectionalLight(0xfff2d6, 2.6);
   key.position.set(3.5, 5.5, 4);
   key.castShadow = true;
@@ -809,7 +831,6 @@ function initPreview(){
 
   previewScene.add(new THREE.HemisphereLight(0xbcd6ee, 0x2a2a1a, 0.85));
 
-  // Pedestal disc
   const disc = new THREE.Mesh(
     new THREE.CylinderGeometry(0.85, 0.95, 0.08, 40),
     new THREE.MeshStandardMaterial({ color: 0x2a3a5a, roughness: 0.5, metalness: 0.6, transparent:true, opacity:0.85 })
@@ -829,7 +850,6 @@ function initPreview(){
   if (soldierGLTF) { applySoldierToPreview(); }
   else { buildFallbackPreview(); }
 
-  // Touch drag rotation
   function onDown(x){ previewDragging = true; previewLastX = x; previewAutoRotate = false; previewVelY = 0; if(previewAutoRotTimer) clearTimeout(previewAutoRotTimer); }
   function onMove(x){
     if(!previewDragging) return;
@@ -874,7 +894,6 @@ function buildFallbackPreview(){
 function applySoldierToPreview(){
   if (!previewPivot || !soldierGLTF) return;
   try {
-    // Clear
     while (previewPivot.children.length) previewPivot.remove(previewPivot.children[0]);
     if (previewMixer) { previewMixer.stopAllAction(); previewMixer = null; }
 
@@ -892,7 +911,6 @@ function applySoldierToPreview(){
       }
     });
 
-    // Auto-fit (scale + center + feet on ground)
     autoFitCharacter(previewSoldier, 1.5);
 
     previewWrapper = new THREE.Group();
@@ -901,7 +919,6 @@ function applySoldierToPreview(){
     previewPivot.add(previewWrapper);
     previewCharacter = previewWrapper;
 
-    // Animation
     if (soldierAnimations && soldierAnimations.length > 0) {
       previewMixer = new THREE.AnimationMixer(previewSoldier);
       let idleClip = null;
@@ -914,31 +931,25 @@ function applySoldierToPreview(){
       console.log("✅ Preview idle animation:", idleClip.name || "(unnamed)");
     }
 
-    // Weapon
     attachWeaponToRightHand(previewSoldier);
 
-    // Customization
     applyCustomization(previewSoldier, {
       helmetColor: tempHelmetColor, vestColor: tempVestColor,
       uniformColor: tempUniformColor, hasHelmet: tempHasHelmet, hasBackpack: tempHasBackpack
     });
 
-    // Camera auto-fit
     fitPreviewCameraToCharacter(previewSoldier, 1.5);
 
-    // Log bone count
     let boneCount = 0;
     previewSoldier.traverse(o => { if(o.isBone) boneCount++; });
     console.log("✅ Character bones count:", boneCount);
-
-    console.log("✅ Character loaded");
   } catch(e){ console.warn("applySoldierToPreview error:", e); }
 }
 
 function previewLoop(){
   if(!previewRunning) return;
   requestAnimationFrame(previewLoop);
-  if(gameStarted) return;
+  if(appState !== "MENU") return;  // render preview only in MENU
   const now = performance.now();
   const dt = Math.min((now - (previewLoop._last || now)) / 1000, 0.05);
   previewLoop._last = now;
@@ -973,15 +984,28 @@ function applyCustomizationToGame(){
   }
 }
 
-// ═══ MENU OPEN/CLOSE ═══
+// ═══════════════════════════════════════════════════════════
+// MENU SHOW / HIDE (strict state transitions)
+// ═══════════════════════════════════════════════════════════
 const mainMenuEl = document.getElementById("mainMenu");
 const customizePanelEl = document.getElementById("customizePanel");
 
 function showMainMenu(){
+  // Ensure menu is visible FIRST, before any state change
   mainMenuEl.classList.remove("hidden");
+
+  appState = "MENU";
   gameStarted = false;
+  gameStartLocked = false;
+  mode = "walking";
+
+  document.body.classList.remove("appBooting");
+  document.body.classList.remove("appGame");
+  document.body.classList.add("appMenu");
+
   updateMenuUI();
-  playBgMedia();
+
+  // Hide all game UI
   document.getElementById("carHUD").style.display = "none";
   document.getElementById("heliHUD").classList.remove("show");
   document.getElementById("carControls").classList.remove("show");
@@ -995,32 +1019,92 @@ function showMainMenu(){
   document.getElementById("hint").style.display = "none";
   document.getElementById("joyZoneLeft").classList.add("hidden");
   document.getElementById("camZoneRight").classList.add("hidden");
-  // Re-fit preview to current viewport
+  document.getElementById("heliHUD").classList.remove("show");
+  document.getElementById("heliControls").classList.remove("show");
+  document.getElementById("carControls").classList.remove("show");
+  document.getElementById("carHUD").style.display = "none";
+
+  // Character should NOT be visible in menu
+  if (character) character.visible = false;
+
+  // Enable preview rendering
+  previewRunning = true;
+
+  // Play background media
+  playBgMedia();
+
+  // Re-fit preview
   setTimeout(() => { updatePreviewArea(); }, 50);
 }
+
 function hideMainMenu(){
-  mainMenuEl.classList.add("hidden");
+  // Only allowed from MENU state
+  if (appState !== "MENU") return;
+  if (gameStarted) return;
+  if (gameStartLocked) return;
+
+  gameStartLocked = true;
+
+  // Transition to GAME
+  appState = "GAME";
   gameStarted = true;
+
+  document.body.classList.remove("appMenu");
+  document.body.classList.remove("appBooting");
+  document.body.classList.add("appGame");
+
+  // Hide menu
+  mainMenuEl.classList.add("hidden");
+
+  // Pause menu media
   pauseBgMedia();
+
+  // Stop preview rendering
+  previewRunning = false;
+
+  // Show game UI
   document.getElementById("joyZoneLeft").classList.remove("hidden");
   document.getElementById("camZoneRight").classList.remove("hidden");
   document.getElementById("menuTopBtn").classList.add("show");
   document.getElementById("soundToggle").style.display = "flex";
   document.getElementById("hint").style.display = "block";
-}
-function backToMenu(){ showMainMenu(); }
 
-document.getElementById("startGameBtn").addEventListener("click", () => {
-  hideMainMenu();
+  // Make character visible in gameplay
+  if (character) character.visible = true;
+
   applyCustomizationToGame();
-});
+}
+
+function backToMenu(){
+  if (appState !== "GAME") return;
+
+  // Pause all game audio
+  AudioEngine.stop();
+  HeliAudio.stop();
+
+  showMainMenu();
+}
+
+// ═══ BUTTON EVENTS ═══
+document.getElementById("startGameBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (appState !== "MENU") return;
+  if (gameStarted) return;
+  if (gameStartLocked) return;
+  hideMainMenu();
+}, { passive: false });
+
 document.getElementById("menuTopBtn").addEventListener("click", backToMenu);
+
 document.getElementById("openCustomizeBtn").addEventListener("click", () => {
+  if (appState !== "MENU") return;
   buildCustomizeOptions();
   customizePanelEl.classList.remove("hidden");
   applyCustomizationToPreview();
 });
 document.getElementById("closeCustomizeBtn").addEventListener("click", () => {
+  if (appState !== "MENU") return;
   Profile.data.customization.helmetColor = tempHelmetColor;
   Profile.data.customization.vestColor = tempVestColor;
   Profile.data.customization.uniformColor = tempUniformColor;
@@ -1061,7 +1145,7 @@ const HeliAudio = {
 
 // ═══ SAVE SYSTEM ═══
 const SaveSystem = {
-  KEY: "tpspro_save_v18",
+  KEY: "tpspro_save_v19",
   data: {
     charPos: { x: 0, y: 0, z: 20 }, charYaw: 0,
     carPos: { x: -15, y: 0, z: -15 }, carRotation: 0,
@@ -1105,12 +1189,9 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.domElement.id = "gameCanvas";
 document.body.appendChild(renderer.domElement);
 renderer.domElement.style.touchAction = "none";
-// Ensure game canvas is BEHIND the menu
-renderer.domElement.style.position = "fixed";
-renderer.domElement.style.inset = "0";
-renderer.domElement.style.zIndex = "1";
 
 const pmrem = new THREE.PMREMGenerator(renderer);
 function buildEnvScene(){
@@ -1156,7 +1237,6 @@ const rimL = new THREE.DirectionalLight(0xffcc88, 0.4);
 rimL.position.set(0, 30, -120);
 scene.add(rimL);
 
-// Ground
 function makeGroundTex(){
   const c = document.createElement("canvas");
   c.width = c.height = 768;
@@ -1308,7 +1388,7 @@ function prep(obj){
   });
 }
 
-// Buildings
+// Buildings (full list preserved)
 const facadeCache = {};
 function getFacadeTex(style){
   if(facadeCache[style]) return facadeCache[style];
@@ -1412,7 +1492,6 @@ function placeBuildings(){
 }
 placeBuildings();
 
-// Trees
 function createTrunkGeometry(){ return new THREE.CylinderGeometry(0.22, 0.5, 4.6, 8, 4); }
 function createLeafGeometry(){
   const geo = new THREE.IcosahedronGeometry(1, 1);
@@ -1490,7 +1569,6 @@ function plantTrees(){
 }
 plantTrees();
 
-// Lamps
 function createLamp(){
   const g = new THREE.Group();
   const poleMat = new THREE.MeshStandardMaterial({color: 0x28282c, roughness: 0.55, metalness: 0.85, envMapIntensity: 1.0});
@@ -1518,7 +1596,6 @@ for (let i = -4; i <= 4; i++){
   }
 }
 
-// Fallbacks
 function createFallbackCharacter(){
   const g = new THREE.Group();
   const skinMat = new THREE.MeshStandardMaterial({color: 0xd9a679, roughness: 0.6, metalness: 0.05});
@@ -1654,6 +1731,7 @@ function spawnFallbackCharacter(){
   const sp = SaveSystem.data.charPos;
   character.position.set(sp.x, 0, sp.z);
   character.rotation.y = charYaw + MODEL_YAW_OFFSET;
+  character.visible = false;  // ★ hidden until GAME
   scene.add(character);
   useFallbackCharAnim = true;
 }
@@ -1668,10 +1746,10 @@ function replaceWithGLBCharacter(gltf){
   const box = new THREE.Box3().setFromObject(character);
   character.position.set(oldPos.x, -box.min.y, oldPos.z);
   character.rotation.y = oldRot;
+  character.visible = false;  // ★ hidden until GAME
   scene.add(character);
   useFallbackCharAnim = false;
 
-  // Animations
   mixer = new THREE.AnimationMixer(character);
   const clips = gltf.animations || [];
   console.log("✅ Animation count:", clips.length);
@@ -1702,15 +1780,12 @@ function replaceWithGLBCharacter(gltf){
     if (!shootClip) console.warn("WARNING: Real shooting animation not found");
   }
 
-  // Weapon attached to game character
   attachWeaponToRightHand(character);
-
   applyCustomization(character, Profile.data.customization);
   console.log("✅ Character loaded");
 }
 spawnFallbackCharacter();
 
-// Load soldier
 (function loadSoldier(){
   let counted = false;
   const timeout = setTimeout(() => { if(!counted){ counted = true; assetResolved(); } }, 12000);
@@ -1730,7 +1805,6 @@ spawnFallbackCharacter();
   );
 })();
 
-// Ferrari
 function spawnFallbackCar(){
   carModel = createFallbackCar();
   const box = new THREE.Box3().setFromObject(carModel);
@@ -1865,13 +1939,13 @@ function setAction(name){
   currentAction = nx;
 }
 
-// ═══ Controls ═══
+// ═══ Controls (all guarded by appState) ═══
 const joyZoneLeft = document.getElementById("joyZoneLeft");
 const joyBaseFloat = document.getElementById("joyBaseFloat");
 const joyKnobFloat = document.getElementById("joyKnobFloat");
 const joy = { active: false, pointerId: null, originX: 0, originY: 0, maxRadius: 55, moveX: 0, moveY: 0 };
 joyZoneLeft.addEventListener("pointerdown", (e) => {
-  if(mode !== "walking" || joy.active || !gameStarted) return;
+  if(appState !== "GAME" || mode !== "walking" || joy.active) return;
   e.preventDefault();
   joyZoneLeft.setPointerCapture(e.pointerId);
   joy.active = true; joy.pointerId = e.pointerId;
@@ -1908,7 +1982,7 @@ const camZoneRight = document.getElementById("camZoneRight");
 const camAutoReturn = { active: true, timer: null };
 const camTouch = { active: false, pointerId: null, startX: 0, startY: 0, startUserYaw: 0, startUserPitch: 0 };
 camZoneRight.addEventListener("pointerdown", (e) => {
-  if(camTouch.active || !gameStarted) return;
+  if(appState !== "GAME" || camTouch.active) return;
   e.preventDefault();
   camZoneRight.setPointerCapture(e.pointerId);
   camTouch.active = true; camTouch.pointerId = e.pointerId;
@@ -1937,7 +2011,7 @@ camZoneRight.addEventListener("lostpointercapture", releaseCam);
 function bindSvgBtn(id, key){
   const el = document.getElementById(id);
   if(!el) return;
-  el.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); carKeys[key] = true; el.classList.add("active"); try { el.setPointerCapture(e.pointerId); } catch(err){} });
+  el.addEventListener("pointerdown", (e) => { if(appState !== "GAME") return; e.preventDefault(); e.stopPropagation(); carKeys[key] = true; el.classList.add("active"); try { el.setPointerCapture(e.pointerId); } catch(err){} });
   el.addEventListener("pointerup", (e) => { e.preventDefault(); e.stopPropagation(); carKeys[key] = false; el.classList.remove("active"); });
   el.addEventListener("pointercancel", () => { carKeys[key] = false; el.classList.remove("active"); });
   el.addEventListener("lostpointercapture", () => { carKeys[key] = false; el.classList.remove("active"); });
@@ -1947,7 +2021,7 @@ bindSvgBtn("gasBtn", "forward"); bindSvgBtn("brakeSvgBtn", "brake"); bindSvgBtn(
 function bindHeliBtn(id, key){
   const el = document.getElementById(id);
   if(!el) return;
-  el.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); heliKeys[key] = true; el.classList.add("active"); try { el.setPointerCapture(e.pointerId); } catch(err){} });
+  el.addEventListener("pointerdown", (e) => { if(appState !== "GAME") return; e.preventDefault(); e.stopPropagation(); heliKeys[key] = true; el.classList.add("active"); try { el.setPointerCapture(e.pointerId); } catch(err){} });
   el.addEventListener("pointerup", (e) => { e.preventDefault(); e.stopPropagation(); heliKeys[key] = false; el.classList.remove("active"); });
   el.addEventListener("pointercancel", () => { heliKeys[key] = false; el.classList.remove("active"); });
   el.addEventListener("lostpointercapture", () => { heliKeys[key] = false; el.classList.remove("active"); });
@@ -1956,10 +2030,10 @@ bindHeliBtn("heli-fwd", "forward"); bindHeliBtn("heli-back", "back");
 bindHeliBtn("heli-left", "left"); bindHeliBtn("heli-right", "right");
 bindHeliBtn("heli-up", "up"); bindHeliBtn("heli-down", "down");
 const heliEngineBtn = document.getElementById("heli-engine");
-heliEngineBtn.addEventListener("pointerdown", (e) => { e.preventDefault(); e.stopPropagation(); toggleHeliEngine(); });
+heliEngineBtn.addEventListener("pointerdown", (e) => { if(appState !== "GAME") return; e.preventDefault(); e.stopPropagation(); toggleHeliEngine(); });
 
 window.addEventListener("keydown", (e) => {
-  if(!gameStarted) return;
+  if(appState !== "GAME") return;
   if(mode === "walking"){
     if(e.key === "w" || e.key === "ArrowUp") keys.forward = true;
     if(e.key === "s" || e.key === "ArrowDown") keys.back = true;
@@ -1995,7 +2069,7 @@ soundToggle.style.display = "none";
 soundToggle.addEventListener("click", async () => {
   const m = !AudioEngine.isMuted;
   AudioEngine.setMuted(m); HeliAudio.setMuted(m);
-  if(m){ bgMusicEl.pause(); } else { if(!gameStarted) bgMusicEl.play().catch(()=>{}); }
+  if(m){ bgMusicEl.pause(); } else { if(appState === "MENU") bgMusicEl.play().catch(()=>{}); }
   soundToggle.textContent = m ? "🔇" : "🔊";
   soundToggle.classList.toggle("muted", m);
 });
@@ -2020,7 +2094,7 @@ const heliEngineStateEl = document.getElementById("heliEngineState");
 
 async function enterCar(e){
   if(e){ e.preventDefault(); e.stopPropagation(); }
-  if(mode !== "walking" || !carModel || !character) return;
+  if(appState !== "GAME" || mode !== "walking" || !carModel || !character) return;
   mode = "driving";
   character.visible = false;
   carHUD.style.display = "flex";
@@ -2043,7 +2117,7 @@ async function enterCar(e){
 }
 function exitCar(e){
   if(e){ e.preventDefault(); e.stopPropagation(); }
-  if(mode !== "driving" || !carModel || !character) return;
+  if(appState !== "GAME" || mode !== "driving" || !carModel || !character) return;
   mode = "walking";
   AudioEngine.stop();
   const rx = Math.cos(carState.rotation), rz = -Math.sin(carState.rotation);
@@ -2068,7 +2142,7 @@ enterCarBtn.addEventListener("pointerdown", enterCar, {passive: false});
 exitCarBtn.addEventListener("pointerdown", exitCar, {passive: false});
 
 function toggleHeliEngine(){
-  if(mode !== "flying") return;
+  if(appState !== "GAME" || mode !== "flying") return;
   if(heliState.engineState === "OFF" || heliState.engineState === "STOPPING"){
     heliState.engineState = "STARTING";
     heliState.targetRPM = 1.0; heliState.targetRotorSpeed = 1.0;
@@ -2082,7 +2156,7 @@ function toggleHeliEngine(){
 }
 async function enterHeli(e){
   if(e){ e.preventDefault(); e.stopPropagation(); }
-  if(mode !== "walking" || !heliModel || !character) return;
+  if(appState !== "GAME" || mode !== "walking" || !heliModel || !character) return;
   mode = "flying";
   character.visible = false;
   heliHUD.classList.add("show"); heliControls.classList.add("show");
@@ -2102,7 +2176,7 @@ async function enterHeli(e){
 }
 function exitHeli(e){
   if(e){ e.preventDefault(); e.stopPropagation(); }
-  if(mode !== "flying" || !heliModel || !character) return;
+  if(appState !== "GAME" || mode !== "flying" || !heliModel || !character) return;
   if(heliState.engineState !== "OFF"){
     heliState.engineState = "STOPPING";
     heliState.targetRPM = 0; heliState.targetRotorSpeed = 0;
@@ -2145,7 +2219,7 @@ document.addEventListener("visibilitychange", () => { if(document.hidden){ relea
 
 let xpAccumulator = 0;
 function gainPlaytimeXp(dt){
-  if(!gameStarted) return;
+  if(appState !== "GAME") return;
   xpAccumulator += dt;
   if(xpAccumulator >= 5){ xpAccumulator -= 5; Profile.addXp(1); }
 }
@@ -2348,7 +2422,7 @@ function updateHelicopter(dt){
 }
 
 function checkEnterProximity(){
-  if(mode !== "walking" || !character || !gameStarted){ enterCarBtn.classList.remove("show"); enterHeliBtn.classList.remove("show"); return; }
+  if(appState !== "GAME" || mode !== "walking" || !character){ enterCarBtn.classList.remove("show"); enterHeliBtn.classList.remove("show"); return; }
   if(carModel){
     const dx = character.position.x - carState.position.x;
     const dz = character.position.z - carState.position.z;
@@ -2423,6 +2497,7 @@ function updateCamera(dt){
 
 let saveTimer = 0;
 function doAutoSave(dt){
+  if(appState !== "GAME") return;
   saveTimer += dt;
   if(saveTimer > 2){
     saveTimer = 0;
@@ -2439,20 +2514,30 @@ const clock = new THREE.Clock();
 function animate(){
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
-  if(mixer) mixer.update(dt);
-  if(heliMixer) heliMixer.update(dt);
-  if(gameStarted){
+
+  // ═══ GAMEPLAY UPDATES: ONLY in GAME state ═══
+  if(appState === "GAME" && gameStarted){
+    if(mixer) mixer.update(dt);
+    if(heliMixer) heliMixer.update(dt);
     if(mode === "walking"){ updateCharacterWalk(dt); checkEnterProximity(); }
     else if(mode === "driving"){ updateCarDrive(dt); }
     else if(mode === "flying"){ updateHelicopter(dt); }
     gainPlaytimeXp(dt);
+    updateCamera(dt);
+    doAutoSave(dt);
   }
-  if(mode !== "flying" && heliModel) updateHelicopter(dt);
+
+  // Heli rotor animation for atmospheric feel (safe outside GAME, doesn't depend on state)
+  // Only run if game has started to avoid needless CPU
+  if(appState === "GAME" && mode !== "flying" && heliModel) updateHelicopter(dt);
+
+  // ═══ ALWAYS: sky follows camera, sun follows camera ═══
   sun.target.position.set(camera.position.x, 0, camera.position.z);
   sun.target.updateMatrixWorld();
   skyDome.position.set(camera.position.x, 0, camera.position.z);
-  updateCamera(dt);
-  doAutoSave(dt);
+
+  // ═══ ALWAYS render main scene to its canvas ═══
+  // Canvas is hidden by CSS in BOOT/MENU states, so nothing is seen
   renderer.render(scene, camera);
 }
 animate();
@@ -2461,7 +2546,7 @@ addEventListener("resize", () => {
   camera.aspect = innerWidth/innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
-  if(!gameStarted) updatePreviewArea();
+  if(appState === "MENU") updatePreviewArea();
 });
 
 window.addEventListener("beforeunload", () => {
