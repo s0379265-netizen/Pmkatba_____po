@@ -10,16 +10,41 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:#0a0a15;touch-action:none;font-family:Arial,Tahoma,sans-serif}
 canvas{display:block;width:100%;height:100%;touch-action:none}
-#loading{position:fixed;inset:0;z-index:1000;background:#0a0a15;background-image:url('https://uploadkon.ir/uploads/a6c023_26grok-1790086009059.jpg');background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:40px;transition:opacity 0.6s, visibility 0.6s}
+
+/* ═══ LAYER 100: LOADING ═══ */
+#loading{position:fixed;inset:0;z-index:100;background:#0a0a15;background-image:url('https://uploadkon.ir/uploads/a6c023_26grok-1790086009059.jpg');background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding-bottom:40px;transition:opacity 0.6s, visibility 0.6s}
 #loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
 #loadingBarWrapper{width:75%;max-width:500px;height:6px;background:rgba(0,0,0,0.6);border-radius:3px;overflow:hidden;box-shadow:0 0 20px rgba(0,0,0,0.7)}
 #loadingBar{height:100%;width:0%;background:linear-gradient(90deg,#ffcc00,#ffe066,#ffcc00);border-radius:3px;transition:width 0.3s ease-out;box-shadow:0 0 15px rgba(255,204,0,0.9)}
-.mainMenu{position:fixed;inset:0;z-index:900;overflow:hidden;transition:opacity 0.5s, visibility 0.5s;background:#0a0a15}
+
+/* ═══ MAIN MENU - LAYER 900 with isolation ═══ */
+.mainMenu{position:fixed;inset:0;z-index:900;overflow:hidden;transition:opacity 0.5s, visibility 0.5s;background:#0a0a15;isolation:isolate}
 .mainMenu.hidden{opacity:0;visibility:hidden;pointer-events:none}
-#bgVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.6;pointer-events:none}
-.mainMenu::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,10,21,0.55) 0%, rgba(10,10,21,0.2) 45%, rgba(10,10,21,0.9) 100%),radial-gradient(circle at 50% 55%, transparent 0%, rgba(10,10,21,0.7) 100%);pointer-events:none;z-index:2}
-.menuTopBar{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;z-index:10}
-.profileCard{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg, rgba(20,20,40,0.9), rgba(30,35,60,0.85));backdrop-filter:blur(12px);padding:10px 14px;border-radius:14px;border:1.5px solid rgba(255,204,0,0.35);box-shadow:0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);min-width:0;flex:1;max-width:320px}
+
+/* Layer 1: Background video */
+#bgVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.65;pointer-events:none}
+
+/* Layer 2: Cinematic dark overlay */
+.mainMenu::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,10,21,0.65) 0%, rgba(10,10,21,0.15) 45%, rgba(10,10,21,0.92) 100%);pointer-events:none;z-index:2}
+
+/* Layer 5: Preview wrap (safe area between header & bottom) */
+.previewWrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;pointer-events:none}
+
+/* Layer 6: Preview canvas - transparent so video shows through */
+#previewCanvas{width:100%;height:100%;background:transparent;position:relative;z-index:6;touch-action:none;cursor:grab;pointer-events:auto;display:block}
+#previewCanvas:active{cursor:grabbing}
+
+/* Layer 7: decorative glow */
+.previewGlow{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);width:65%;height:10px;background:radial-gradient(ellipse, rgba(120,180,255,0.6) 0%, transparent 70%);filter:blur(8px);z-index:7;pointer-events:none}
+
+/* Layer 8: labels */
+.previewLabel{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);color:#8ec5e8;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 10px rgba(120,180,255,0.8);z-index:8;pointer-events:none}
+.dragHint{position:absolute;top:10px;right:8px;color:#8ec5e8;font-size:10px;font-weight:600;background:rgba(0,0,0,0.55);padding:5px 10px;border-radius:20px;backdrop-filter:blur(6px);z-index:8;pointer-events:none;opacity:0.85}
+
+/* Layer 20: Top bar */
+.menuTopBar{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;z-index:20;pointer-events:none}
+.menuTopBar > *{pointer-events:auto}
+.profileCard{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg, rgba(20,20,40,0.92), rgba(30,35,60,0.88));backdrop-filter:blur(12px);padding:10px 14px;border-radius:14px;border:1.5px solid rgba(255,204,0,0.35);box-shadow:0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);min-width:0;flex:1;max-width:320px}
 .avatarRing{width:52px;height:52px;border-radius:50%;padding:3px;background:conic-gradient(from 180deg, #ffcc00, #ff8800, #ffcc00, #ffee88, #ffcc00);box-shadow:0 0 14px rgba(255,204,0,0.6);flex-shrink:0}
 .avatar{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#2a3a5a,#1a2538);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;color:#ffcc00;text-shadow:0 0 10px rgba(255,204,0,0.8);border:2px solid #0a0a15}
 .profileMeta{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
@@ -33,21 +58,20 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .xpBarMini{flex:1;height:5px;background:rgba(0,0,0,0.5);border-radius:3px;overflow:hidden;min-width:50px}
 .xpFillMini{height:100%;width:0%;background:linear-gradient(90deg,#4ade80,#22c55e,#16a34a);transition:width 0.5s;box-shadow:0 0 8px rgba(74,222,128,0.8)}
 .xpText{color:#8ec5e8;font-size:9px;font-weight:600;white-space:nowrap}
-.coinBox{display:flex;gap:6px;align-items:center;background:linear-gradient(135deg, rgba(20,20,40,0.9), rgba(30,35,60,0.85));backdrop-filter:blur(12px);padding:10px 16px;border-radius:14px;border:1.5px solid rgba(120,180,255,0.35);box-shadow:0 4px 20px rgba(0,0,0,0.5);color:#fff;font-weight:800;font-size:15px;flex-shrink:0}
+.coinBox{display:flex;gap:6px;align-items:center;background:linear-gradient(135deg, rgba(20,20,40,0.92), rgba(30,35,60,0.88));backdrop-filter:blur(12px);padding:10px 16px;border-radius:14px;border:1.5px solid rgba(120,180,255,0.35);box-shadow:0 4px 20px rgba(0,0,0,0.5);color:#fff;font-weight:800;font-size:15px;flex-shrink:0}
 .coinIcon{font-size:18px;filter:drop-shadow(0 0 6px rgba(255,204,0,0.8))}
-.previewWrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(90vw, 420px);height:min(60vh, 520px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;pointer-events:none}
-#previewCanvas{width:100%;height:100%;background:transparent;border-radius:20px;position:relative;z-index:1;touch-action:none;cursor:grab;pointer-events:auto}
-#previewCanvas:active{cursor:grabbing}
-.previewWrap::before{content:"";position:absolute;bottom:8%;left:50%;transform:translateX(-50%);width:60%;height:8px;background:radial-gradient(ellipse, rgba(120,180,255,0.5) 0%, transparent 70%);filter:blur(6px);z-index:0}
-.previewLabel{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);color:#8ec5e8;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-shadow:0 0 10px rgba(120,180,255,0.8);z-index:6;pointer-events:none}
-.dragHint{position:absolute;top:12px;right:14px;color:#8ec5e8;font-size:10px;font-weight:600;background:rgba(0,0,0,0.5);padding:5px 10px;border-radius:20px;backdrop-filter:blur(6px);z-index:6;pointer-events:none;opacity:0.85}
-.menuBottomBar{position:absolute;bottom:24px;left:0;right:0;display:flex;justify-content:center;gap:14px;padding:0 20px;z-index:10;flex-wrap:wrap}
+
+/* Layer 25: Bottom bar */
+.menuBottomBar{position:absolute;bottom:24px;left:0;right:0;display:flex;justify-content:center;gap:14px;padding:0 20px;z-index:25;flex-wrap:wrap;pointer-events:none}
+.menuBottomBar > *{pointer-events:auto}
 .menuBtn{padding:14px 28px;border-radius:14px;font-size:15px;font-weight:800;letter-spacing:0.5px;cursor:pointer;border:none;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;gap:8px;min-width:150px;justify-content:center;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
 .menuBtn:active{transform:scale(0.95)}
 .customizeBtn{background:linear-gradient(135deg, rgba(60,120,220,0.95), rgba(30,80,180,0.95));color:#fff;border:2px solid rgba(140,190,255,0.6);box-shadow:0 6px 20px rgba(60,120,220,0.5)}
 .startBtn{background:linear-gradient(135deg, #ffcc00, #ff8800);color:#000;border:2px solid rgba(255,255,200,0.9);box-shadow:0 6px 25px rgba(255,204,0,0.6), 0 0 40px rgba(255,136,0,0.4);font-size:17px;padding:16px 36px;min-width:190px;animation:startPulse 2.2s ease-in-out infinite}
 @keyframes startPulse{0%,100%{box-shadow:0 6px 25px rgba(255,204,0,0.6), 0 0 40px rgba(255,136,0,0.4)}50%{box-shadow:0 6px 30px rgba(255,204,0,0.9), 0 0 60px rgba(255,136,0,0.7)}}
-.customizePanel{position:fixed;inset:0;z-index:950;background:linear-gradient(135deg, rgba(10,10,21,0.97), rgba(20,20,40,0.97));backdrop-filter:blur(20px);display:flex;flex-direction:column;transition:opacity 0.35s, visibility 0.35s}
+
+/* Layer 50: Customize panel */
+.customizePanel{position:fixed;inset:0;z-index:50;background:linear-gradient(135deg, rgba(10,10,21,0.97), rgba(20,20,40,0.97));backdrop-filter:blur(20px);display:flex;flex-direction:column;transition:opacity 0.35s, visibility 0.35s;isolation:isolate}
 .customizePanel.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .customizeHeader{padding:16px 20px;display:flex;align-items:center;gap:16px;border-bottom:1.5px solid rgba(255,204,0,0.25);background:linear-gradient(180deg, rgba(30,30,50,0.8), transparent)}
 .backBtn{background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.25);color:#fff;padding:8px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
@@ -61,6 +85,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 .optionTile.active{border-color:#ffcc00;box-shadow:0 0 18px rgba(255,204,0,0.7), inset 0 0 12px rgba(255,204,0,0.25)}
 .optionTile.active::after{content:"✓";position:absolute;top:4px;right:6px;color:#ffcc00;font-weight:900;font-size:14px;text-shadow:0 0 8px rgba(0,0,0,0.9)}
 .optionColor{width:100%;height:100%;border-radius:10px}
+
+/* ═══ GAME UI (behind menu z-index-wise) ═══ */
 #joyZoneLeft{position:fixed;bottom:0;left:0;width:55%;height:70%;z-index:15;touch-action:none}
 #joyZoneLeft.hidden{display:none}
 #joyBaseFloat{position:absolute;width:120px;height:120px;border-radius:50%;border:3px solid rgba(255,255,255,0.35);background:radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 70%);transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity 0.2s}
@@ -122,7 +148,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #exitCarBtn.show{display:block}
 #menuTopBtn{position:absolute;top:12px;left:12px;padding:8px 14px;background:linear-gradient(135deg, rgba(50,60,90,0.9), rgba(30,40,70,0.9));border:2px solid rgba(120,180,255,0.5);border-radius:10px;color:#fff;font-size:12px;font-weight:700;display:none;pointer-events:auto;z-index:20;backdrop-filter:blur(6px)}
 #menuTopBtn.show{display:block}
-#hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:6px 14px;border-radius:18px;font-size:10px;z-index:14;pointer-events:none;opacity:0.9;transition:opacity 0.5s}
+#hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:#fff;padding:6px 14px;border-radius:18px;font-size:10px;z-index:14;pointer-events:none;opacity:0.9}
 #hint.hidden{opacity:0}
 #soundToggle{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,0.7);border:2px solid rgba(255,255,255,0.4);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;pointer-events:auto;z-index:20}
 #soundToggle.muted{background:linear-gradient(135deg, rgba(200,35,35,0.9), rgba(150,20,20,0.9))}
@@ -138,9 +164,18 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <body>
 <div id="loading"><div id="loadingBarWrapper"><div id="loadingBar"></div></div></div>
 
+<!-- ═══════ MAIN MENU ═══════ -->
 <div id="mainMenu" class="mainMenu hidden">
   <video id="bgVideo" autoplay muted loop playsinline preload="auto"></video>
   <audio id="bgMusic" loop preload="auto"></audio>
+
+  <div class="previewWrap" id="previewWrap">
+    <canvas id="previewCanvas"></canvas>
+    <div class="previewGlow"></div>
+    <div class="dragHint">↔ بچرخون</div>
+    <div class="previewLabel">PREVIEW</div>
+  </div>
+
   <div class="menuTopBar">
     <div class="profileCard">
       <div class="avatarRing"><div class="avatar" id="menuAvatar">P</div></div>
@@ -161,42 +196,28 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       <span id="menuCoins">500</span>
     </div>
   </div>
-  <div class="previewWrap">
-    <canvas id="previewCanvas"></canvas>
-    <div class="dragHint">↔ بچرخون با انگشت</div>
-    <div class="previewLabel">PREVIEW</div>
-  </div>
+
   <div class="menuBottomBar">
     <button class="menuBtn customizeBtn" id="openCustomizeBtn">🎨 شخصی‌سازی</button>
     <button class="menuBtn startBtn" id="startGameBtn">▶ شروع بازی</button>
   </div>
 </div>
 
+<!-- ═══════ CUSTOMIZE PANEL ═══════ -->
 <div id="customizePanel" class="customizePanel hidden">
   <div class="customizeHeader">
     <button class="backBtn" id="closeCustomizeBtn">← بازگشت</button>
     <div class="customizeTitle">شخصی‌سازی کاراکتر</div>
   </div>
   <div class="customizeBody">
-    <div class="customSection">
-      <div class="sectionTitle">🎩 کلاه</div>
-      <div class="optionsRow" id="helmetOptions"></div>
-    </div>
-    <div class="customSection">
-      <div class="sectionTitle">🦺 جلیقه</div>
-      <div class="optionsRow" id="vestOptions"></div>
-    </div>
-    <div class="customSection">
-      <div class="sectionTitle">👕 یونیفرم</div>
-      <div class="optionsRow" id="uniformOptions"></div>
-    </div>
-    <div class="customSection">
-      <div class="sectionTitle">🎒 کوله‌پشتی</div>
-      <div class="optionsRow" id="backpackOptions"></div>
-    </div>
+    <div class="customSection"><div class="sectionTitle">🎩 کلاه</div><div class="optionsRow" id="helmetOptions"></div></div>
+    <div class="customSection"><div class="sectionTitle">🦺 جلیقه</div><div class="optionsRow" id="vestOptions"></div></div>
+    <div class="customSection"><div class="sectionTitle">👕 یونیفرم</div><div class="optionsRow" id="uniformOptions"></div></div>
+    <div class="customSection"><div class="sectionTitle">🎒 کوله‌پشتی</div><div class="optionsRow" id="backpackOptions"></div></div>
   </div>
 </div>
 
+<!-- ═══════ GAME UI ═══════ -->
 <div id="joyZoneLeft"><div id="joyBaseFloat"></div><div id="joyKnobFloat"></div></div>
 <div id="camZoneRight"></div>
 <div id="hint">👈 چپ: حرکت | 👉 راست: دوربین</div>
@@ -217,11 +238,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div class="heli-btn" id="heli-down">⬇</div>
   <div class="heli-btn" id="heli-engine">استارت</div>
 </div>
-<div id="carHUD" style="display:none;">
-  <div id="gearIndicator" class="neutral">N</div>
-  <div><span id="carSpeed">0</span> <span id="carSpeedLabel">km/h</span></div>
-  <div id="speedBar"><div id="speedBarFill"></div></div>
-</div>
+<div id="carHUD" style="display:none;"><div id="gearIndicator" class="neutral">N</div><div><span id="carSpeed">0</span> <span id="carSpeedLabel">km/h</span></div><div id="speedBar"><div id="speedBarFill"></div></div></div>
 <div id="heliHUD">
   <div class="heli-hud-item"><div class="heli-hud-value" id="heliSpeed">0</div><div class="heli-hud-label">km/h</div></div>
   <div class="heli-hud-divider"></div>
@@ -245,6 +262,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 
+// ═══ URLS ═══
 const SOLDIER_URL  = "https://raw.githubusercontent.com/google/model-viewer/master/packages/shared-assets/models/soldier.glb";
 const FERRARI_URL  = "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/models/gltf/ferrari.glb";
 const HELI_URL     = "https://raw.githubusercontent.com/s0379265-netizen/Pmkatba_____po/main/bell_huey_helicopter.glb";
@@ -253,12 +271,12 @@ const HELI_SOUND_URL = "https://cdn.jsdelivr.net/gh/s0379265-netizen/Fagah@main/
 const BG_VIDEO_URL = "https://github.com/s0379265-netizen/Cvodfha/raw/refs/heads/main/grok_video_2026-09-24-19-00-24.mp4";
 const BG_MUSIC_URL = "https://github.com/s0379265-netizen/Cvodfha/raw/refs/heads/main/2019-10-30_-_Action_Rhythms_-_David_Fesliyan.mp3";
 
+// ═══ GLOBAL STATE ═══
 let soldierGLTF = null;
 let soldierAnimations = null;
+let gameStarted = false;
 
-// ═══════════════════════════════════════════════════════════
-// ✅ FIX: همه متغیرهای لودینگ قبل از هر تابعی تعریف می‌شن
-// ═══════════════════════════════════════════════════════════
+// ═══ LOADING STATE (declared FIRST) ═══
 const loadingBar = document.getElementById("loadingBar");
 const loadingDiv = document.getElementById("loading");
 let currentProgress = 0, targetProgress = 10, isReady = false, loadingFinished = false;
@@ -280,21 +298,17 @@ function updateBar(){
   }
   const allAssetsDone = resolvedAssets >= totalAssets;
   const allMediaDone = mediaReady.video && mediaReady.music;
-  
   if(!loadingFinished && isReady && currentProgress >= 99 && allAssetsDone && allMediaDone){
     loadingFinished = true;
     loadingDiv.classList.add("hidden");
-    setTimeout(() => { 
-      initPreview(); 
-      showMainMenu(); 
-    }, 300);
+    setTimeout(() => { initPreview(); showMainMenu(); }, 300);
   }
   requestAnimationFrame(updateBar);
 }
 
 // ═══ PROFILE ═══
 const Profile = {
-  KEY: "tps_profile_v6",
+  KEY: "tps_profile_v7",
   data: {
     username: "PLAYER", level: 1, xp: 0, xpToNext: 100, coins: 500,
     customization: { helmetColor: 0x3a4a2a, vestColor: 0x2a3a1a, uniformColor: 0x3a5a2a, hasHelmet: true, hasBackpack: false }
@@ -324,6 +338,7 @@ function showXpPopup(amount){
   setTimeout(() => p.classList.remove("show"), 800);
 }
 
+// ═══ CUSTOMIZATION DATA ═══
 const HELMET_COLORS = [
   { name:"جنگلی", color: 0x3a4a2a },{ name:"شنی", color: 0xc2a878 },{ name:"مشکی", color: 0x1a1a1a },
   { name:"زیتونی", color: 0x4a5a3a },{ name:"خاکی", color: 0x6b5a3a },{ name:"آبی", color: 0x2a4a7a }
@@ -336,9 +351,7 @@ const UNIFORM_COLORS = [
   { name:"جنگلی", color: 0x3a5a2a },{ name:"صحرایی", color: 0x9a8a5a },{ name:"شهری", color: 0x4a4a4a },
   { name:"قطبی", color: 0xdadada },{ name:"زیتونی", color: 0x4a5a2a },{ name:"آبی‌نفتی", color: 0x2a3a5a }
 ];
-const BACKPACK_OPTIONS = [
-  { name:"بدون", value: false },{ name:"کوچک", value: true }
-];
+const BACKPACK_OPTIONS = [{ name:"بدون", value: false },{ name:"کوچک", value: true }];
 
 let tempHelmetColor = Profile.data.customization.helmetColor;
 let tempVestColor = Profile.data.customization.vestColor;
@@ -393,10 +406,22 @@ function buildCustomizeOptions(){
   });
 }
 
-// ═══ CHARACTER CUSTOMIZATION ═══
+// ═══ CHARACTER CUSTOMIZATION (flexible bone search) ═══
 function findBone(obj, names){
   for(const n of names){ const b = obj.getObjectByName(n); if(b) return b; }
   return null;
+}
+function findBoneFlexible(obj, keywords){
+  let found = null;
+  obj.traverse(o => {
+    if(found) return;
+    if(!o.isBone && !o.name) return;
+    const n = o.name.toLowerCase();
+    for(const kw of keywords){
+      if(n.includes(kw.toLowerCase())){ found = o; return; }
+    }
+  });
+  return found;
 }
 function removeCustomAttachments(char){
   if(!char) return;
@@ -411,9 +436,10 @@ function applyCustomization(char, opts){
     uniformColor: tempUniformColor, hasHelmet: tempHasHelmet, hasBackpack: tempHasBackpack
   };
   removeCustomAttachments(char);
-  const headBone = findBone(char, ["mixamorig:Head", "mixamorigHead", "Head"]);
-  const spineBone = findBone(char, ["mixamorig:Spine2", "mixamorigSpine2", "Spine2", "mixamorig:Spine1", "mixamorigSpine1", "Spine"]);
+  const headBone = findBone(char, ["mixamorig:Head", "mixamorigHead", "Head"]) || findBoneFlexible(char, ["head"]);
+  const spineBone = findBone(char, ["mixamorig:Spine2", "mixamorigSpine2", "Spine2", "mixamorig:Spine1", "mixamorigSpine1", "Spine"]) || findBoneFlexible(char, ["spine2", "spine1", "spine"]);
   const isRealSoldier = !!headBone;
+
   if(headBone && opts.hasHelmet){
     const g = new THREE.Group(); g.userData.isCustomAttach = true;
     const R = isRealSoldier ? 0.14 : 0.11;
@@ -423,9 +449,6 @@ function applyCustomization(char, opts){
     const brim = new THREE.Mesh(new THREE.TorusGeometry(R * 0.98, R * 0.12, 6, 20),
       new THREE.MeshStandardMaterial({color: 0x1a1a1a, roughness: 0.5, metalness: 0.75}));
     brim.rotation.x = Math.PI/2; brim.position.y = 0.005; g.add(brim);
-    const pouch = new THREE.Mesh(new THREE.BoxGeometry(R * 0.5, R * 0.35, R * 0.25),
-      new THREE.MeshStandardMaterial({color: opts.vestColor, roughness: 0.85}));
-    pouch.position.set(R * 0.85, 0.02, 0); g.add(pouch);
     g.position.set(0, R * 0.35, 0);
     headBone.add(g);
   }
@@ -438,12 +461,7 @@ function applyCustomization(char, opts){
     const pouchMat = new THREE.MeshStandardMaterial({color: 0x1a1a1a, roughness: 0.9});
     for (const dx of [-0.08, 0, 0.08]){
       const p = new THREE.Mesh(new THREE.BoxGeometry(0.08 * s, 0.09 * s, 0.04 * s), pouchMat);
-      p.position.set(dx * s, -0.03 * s, 0.09 * s); p.castShadow = true; g.add(p);
-    }
-    for (const dx of [-0.11, 0.11]){
-      const st = new THREE.Mesh(new THREE.BoxGeometry(0.04 * s, 0.26 * s, 0.02 * s),
-        new THREE.MeshStandardMaterial({color: opts.vestColor, roughness: 0.9}));
-      st.position.set(dx * s, 0.10 * s, 0.09 * s); g.add(st);
+      p.position.set(dx * s, -0.03 * s, 0.09 * s); g.add(p);
     }
     g.position.set(0, 0.02 * s, 0);
     spineBone.add(g);
@@ -454,17 +472,12 @@ function applyCustomization(char, opts){
     const bag = new THREE.Mesh(new THREE.BoxGeometry(0.24 * s, 0.28 * s, 0.14 * s),
       new THREE.MeshStandardMaterial({color: opts.vestColor, roughness: 0.92}));
     bag.castShadow = true; g.add(bag);
-    const pocket = new THREE.Mesh(new THREE.BoxGeometry(0.18 * s, 0.10 * s, 0.04 * s),
-      new THREE.MeshStandardMaterial({color: 0x1a1a1a, roughness: 0.9}));
-    pocket.position.set(0, -0.06 * s, -0.08 * s); g.add(pocket);
-    const roll = new THREE.Mesh(new THREE.CylinderGeometry(0.05 * s, 0.05 * s, 0.22 * s, 12),
-      new THREE.MeshStandardMaterial({color: opts.vestColor, roughness: 0.9}));
-    roll.rotation.z = Math.PI/2; roll.position.set(0, 0.17 * s, 0); g.add(roll);
     g.position.set(0, 0.02 * s, -0.16 * s);
     spineBone.add(g);
   }
 }
 
+// ═══ MENU UI ═══
 function updateMenuUI(){
   document.getElementById("menuLevel").textContent = Profile.data.level;
   document.getElementById("menuCoins").textContent = Profile.data.coins;
@@ -509,16 +522,11 @@ function initBgMedia(){
   if (bgVideoEl.readyState >= 2) mediaReady.video = true;
   if (bgMusicEl.readyState >= 2) mediaReady.music = true;
   setTimeout(() => { mediaReady.video = true; mediaReady.music = true; }, 8000);
-  const tryPlay = () => {
-    bgVideoEl.play().catch(()=>{});
-    bgMusicEl.play().catch(()=>{});
-  };
+  const tryPlay = () => { bgVideoEl.play().catch(()=>{}); bgMusicEl.play().catch(()=>{}); };
   tryPlay();
-  const retry = () => { tryPlay(); };
-  window.addEventListener("touchstart", retry, {once:true, passive:true});
-  window.addEventListener("click", retry, {once:true});
+  window.addEventListener("touchstart", tryPlay, {once:true, passive:true});
+  window.addEventListener("click", tryPlay, {once:true});
 }
-
 function playBgMedia(){
   try { bgVideoEl.currentTime = 0; } catch(e){}
   try { bgMusicEl.currentTime = 0; } catch(e){}
@@ -530,19 +538,242 @@ function pauseBgMedia(){
   try { bgMusicEl.pause(); } catch(e){}
 }
 
-// ═══ PREVIEW ═══
+// ═══════════════════════════════════════════════════════════
+// RIFLE (procedural M4-style) + attach to right hand
+// ═══════════════════════════════════════════════════════════
+function createRifleModel(){
+  const group = new THREE.Group();
+  group.name = "Rifle";
+  const blackMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.65, metalness: 0.85 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.4, metalness: 0.95 });
+  const accentMat = new THREE.MeshStandardMaterial({ color: 0x333338, roughness: 0.55, metalness: 0.9 });
+
+  // Receiver body (main)
+  const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.09, 0.32), blackMat);
+  receiver.position.set(0, 0, 0);
+  group.add(receiver);
+
+  // Barrel
+  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.4, 8), darkMat);
+  barrel.rotation.x = Math.PI / 2;
+  barrel.position.set(0, 0.02, -0.36);
+  group.add(barrel);
+
+  // Handguard
+  const handguard = new THREE.Mesh(new THREE.BoxGeometry(0.048, 0.055, 0.22), blackMat);
+  handguard.position.set(0, 0.02, -0.24);
+  group.add(handguard);
+
+  // Magazine (angled)
+  const mag = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.14, 0.05), accentMat);
+  mag.position.set(0, -0.10, 0.02);
+  mag.rotation.x = -0.15;
+  group.add(mag);
+
+  // Stock
+  const stock = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.20), blackMat);
+  stock.position.set(0, -0.01, 0.26);
+  group.add(stock);
+
+  // Grip
+  const grip = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.10, 0.035), blackMat);
+  grip.position.set(0, -0.09, 0.14);
+  grip.rotation.x = 0.25;
+  group.add(grip);
+
+  // Scope
+  const scope = new THREE.Mesh(new THREE.BoxGeometry(0.022, 0.035, 0.10), darkMat);
+  scope.position.set(0, 0.075, -0.05);
+  group.add(scope);
+
+  // Front sight
+  const frontSight = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.03, 0.015), darkMat);
+  frontSight.position.set(0, 0.05, -0.32);
+  group.add(frontSight);
+
+  // Muzzle
+  const muzzle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.05, 8), darkMat);
+  muzzle.rotation.x = Math.PI / 2;
+  muzzle.position.set(0, 0.02, -0.58);
+  group.add(muzzle);
+
+  return group;
+}
+
+function attachWeaponToRightHand(character){
+  if(!character) return null;
+  // Remove existing weapon
+  const old = character.getObjectByName("Rifle");
+  if(old && old.parent) old.parent.remove(old);
+
+  const candidateNames = [
+    "mixamorig:RightHand", "mixamorigRightHand", "RightHand",
+    "hand_r", "Right_Hand", "Hand_R", "Bone_Hand_R", "RightHandBone"
+  ];
+  let handBone = null;
+  for (const n of candidateNames){ const b = character.getObjectByName(n); if(b){ handBone = b; break; } }
+  if(!handBone) handBone = findBoneFlexible(character, ["righthand", "hand_r", "right_hand"]);
+
+  if(!handBone){
+    console.warn("⚠ Missing right hand bone — weapon not attached");
+    return null;
+  }
+  console.log("✅ Right hand bone:", handBone.name);
+
+  const rifle = createRifleModel();
+  rifle.userData.isWeapon = true;
+  rifle.traverse(o => {
+    if (o.isMesh){ o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; }
+  });
+
+  // ═══ Adjust these if rifle position looks wrong ═══
+  rifle.position.set(0, 0.02, 0.02);
+  rifle.rotation.set(Math.PI / 2, Math.PI / 2, 0);
+  rifle.scale.setScalar(1.0);
+
+  handBone.add(rifle);
+  console.log("✅ Weapon attached to right hand");
+  return rifle;
+}
+
+// ═══════════════════════════════════════════════════════════
+// AUTO-FIT: scale + center + feet on ground
+// ═══════════════════════════════════════════════════════════
+function autoFitCharacter(model, targetHeight){
+  targetHeight = targetHeight || 1.55;
+  model.updateMatrixWorld(true);
+  let box = new THREE.Box3().setFromObject(model);
+  let size = box.getSize(new THREE.Vector3());
+  if (size.y <= 0) return null;
+
+  const scale = targetHeight / size.y;
+  model.scale.multiplyScalar(scale);
+  model.updateMatrixWorld(true);
+
+  box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+
+  // Recenter at origin, feet on Y=0
+  model.position.x -= center.x;
+  model.position.z -= center.z;
+  model.position.y -= box.min.y;
+
+  model.updateMatrixWorld(true);
+  const finalBox = new THREE.Box3().setFromObject(model);
+  const finalSize = finalBox.getSize(new THREE.Vector3());
+  const finalCenter = finalBox.getCenter(new THREE.Vector3());
+
+  console.log("✅ Character height:", finalSize.y.toFixed(3));
+  console.log("✅ Character width:", finalSize.x.toFixed(3));
+  console.log("✅ Character depth:", finalSize.z.toFixed(3));
+
+  return { height: finalSize.y, width: finalSize.x, depth: finalSize.z, center: finalCenter };
+}
+
+// ═══════════════════════════════════════════════════════════
+// CAMERA AUTO-FIT based on Box3 + FOV + aspect
+// ═══════════════════════════════════════════════════════════
+function fitPreviewCameraToCharacter(model, safeMargin){
+  if (!previewCamera || !model) return;
+  safeMargin = safeMargin || 1.5; // 50% extra padding around
+
+  model.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(model);
+  const size = box.getSize(new THREE.Vector3());
+  const height = size.y;
+  const width = size.x;
+  const depth = size.z;
+
+  // Visual width includes both horizontal extents + some depth
+  const visualWidth = Math.max(width, depth * 0.7);
+
+  const fovRad = previewCamera.fov * Math.PI / 180;
+  const aspect = previewCamera.aspect;
+
+  const distV = (height * safeMargin) / (2 * Math.tan(fovRad / 2));
+  const hFov = 2 * Math.atan(Math.tan(fovRad / 2) * aspect);
+  const distH = (visualWidth * safeMargin) / (2 * Math.tan(hFov / 2));
+
+  const distance = Math.max(distV, distH, 2.5);
+
+  // Look at upper chest (55% of height)
+  const lookY = height * 0.55;
+  previewCamera.position.set(0, lookY, distance);
+  previewCamera.lookAt(0, lookY * 0.95, 0);
+  previewCamera.updateProjectionMatrix();
+
+  console.log("✅ Camera fit distance:", distance.toFixed(2));
+}
+
+// ═══════════════════════════════════════════════════════════
+// PREVIEW RENDERER
+// ═══════════════════════════════════════════════════════════
 let previewRenderer, previewScene, previewCamera, previewPivot = null;
-let previewCharacter = null, previewMixer = null;
+let previewCharacter = null, previewMixer = null, previewWrapper = null;
 let previewRunning = false;
 let previewAutoRotate = true, previewAutoRotTimer = null;
 let previewRotationY = 0;
 let previewDragging = false, previewLastX = 0, previewVelY = 0;
 
+function computePreviewSize(){
+  // Compute safe area between header & bottom buttons
+  const menuEl = document.getElementById("mainMenu");
+  if(!menuEl) return { w: 300, h: 400 };
+  const menuH = menuEl.clientHeight;
+  const menuW = menuEl.clientWidth;
+
+  const topBar = document.querySelector(".menuTopBar");
+  const bottomBar = document.querySelector(".menuBottomBar");
+  const topH = topBar ? topBar.getBoundingClientRect().height : 80;
+  const bottomH = bottomBar ? bottomBar.getBoundingClientRect().height : 70;
+
+  const safeTop = topH + 20;
+  const safeBottom = bottomH + 20;
+  const availableH = Math.max(240, menuH - safeTop - safeBottom);
+  const availableW = Math.min(menuW * 0.86, 420);
+
+  // Keep aspect ratio ~ 3:4
+  let w = Math.min(availableW, availableH * 0.85);
+  let h = Math.min(availableH, w / 0.85);
+
+  return { w: Math.floor(w), h: Math.floor(h) };
+}
+
+function updatePreviewArea(){
+  const wrap = document.getElementById("previewWrap");
+  const { w, h } = computePreviewSize();
+  wrap.style.width = w + "px";
+  wrap.style.height = h + "px";
+  // Position: center between safeTop and (menuH - safeBottom)
+  const menuEl = document.getElementById("mainMenu");
+  const menuH = menuEl.clientHeight;
+  const topBar = document.querySelector(".menuTopBar");
+  const bottomBar = document.querySelector(".menuBottomBar");
+  const topH = topBar ? topBar.getBoundingClientRect().height : 80;
+  const bottomH = bottomBar ? bottomBar.getBoundingClientRect().height : 70;
+  const centerY = topH + 20 + (menuH - topH - 20 - bottomH - 20) / 2;
+  wrap.style.top = centerY + "px";
+  wrap.style.left = "50%";
+  wrap.style.transform = "translate(-50%, -50%)";
+
+  // Update renderer size
+  if (previewRenderer && previewCamera) {
+    previewRenderer.setSize(w, h, false);
+    previewCamera.aspect = w / h;
+    previewCamera.updateProjectionMatrix();
+    // Re-fit camera to character with new aspect
+    if (previewCharacter) {
+      fitPreviewCameraToCharacter(previewCharacter, 1.5);
+    }
+  }
+  return { w, h };
+}
+
 function initPreview(){
   const canvas = document.getElementById("previewCanvas");
-  const w = canvas.clientWidth || 400;
-  const h = canvas.clientHeight || 500;
-  previewRenderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  const { w, h } = updatePreviewArea();
+
+  previewRenderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, powerPreference:"high-performance" });
   previewRenderer.setSize(w, h, false);
   previewRenderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   previewRenderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -551,90 +782,126 @@ function initPreview(){
   previewRenderer.shadowMap.enabled = true;
   previewRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
   previewRenderer.setClearColor(0x000000, 0);
+
   previewScene = new THREE.Scene();
-  previewCamera = new THREE.PerspectiveCamera(30, w/h, 0.05, 20);
-  previewCamera.position.set(0, 1.15, 2.5);
-  previewCamera.lookAt(0, 0.95, 0);
-  const key = new THREE.DirectionalLight(0xfff2d6, 3.0);
-  key.position.set(3, 5, 4); key.castShadow = true;
+  previewCamera = new THREE.PerspectiveCamera(38, w / h, 0.05, 30);
+  previewCamera.position.set(0, 1.2, 3.2);
+  previewCamera.lookAt(0, 0.9, 0);
+
+  // ═══ Lighting: Key + Fill + Rim + Hemisphere ═══
+  const key = new THREE.DirectionalLight(0xfff2d6, 2.6);
+  key.position.set(3.5, 5.5, 4);
+  key.castShadow = true;
   key.shadow.mapSize.set(512, 512);
   key.shadow.camera.near = 0.5; key.shadow.camera.far = 15;
   key.shadow.camera.left = -2; key.shadow.camera.right = 2;
-  key.shadow.camera.top = 2; key.shadow.camera.bottom = -2;
+  key.shadow.camera.top = 3; key.shadow.camera.bottom = -1;
+  key.shadow.bias = -0.0005;
   previewScene.add(key);
-  const fill = new THREE.DirectionalLight(0x88aaff, 1.4);
-  fill.position.set(-4, 3, 2); previewScene.add(fill);
-  const rim = new THREE.DirectionalLight(0xffcc88, 1.8);
-  rim.position.set(0, 3, -5); previewScene.add(rim);
-  previewScene.add(new THREE.HemisphereLight(0xbcd6ee, 0x2a2a1a, 1.0));
+
+  const fill = new THREE.DirectionalLight(0x88aaff, 1.1);
+  fill.position.set(-4, 3, 2.5);
+  previewScene.add(fill);
+
+  const rim = new THREE.DirectionalLight(0xffb86b, 1.6);
+  rim.position.set(0, 3.5, -5);
+  previewScene.add(rim);
+
+  previewScene.add(new THREE.HemisphereLight(0xbcd6ee, 0x2a2a1a, 0.85));
+
+  // Pedestal disc
   const disc = new THREE.Mesh(
     new THREE.CylinderGeometry(0.85, 0.95, 0.08, 40),
-    new THREE.MeshStandardMaterial({color: 0x2a3a5a, roughness: 0.5, metalness: 0.6, transparent:true, opacity:0.9})
+    new THREE.MeshStandardMaterial({ color: 0x2a3a5a, roughness: 0.5, metalness: 0.6, transparent:true, opacity:0.85 })
   );
-  disc.position.y = -0.04; disc.receiveShadow = true; previewScene.add(disc);
+  disc.position.y = -0.04; disc.receiveShadow = true;
+  previewScene.add(disc);
   const ring = new THREE.Mesh(
     new THREE.TorusGeometry(0.9, 0.015, 8, 50),
-    new THREE.MeshStandardMaterial({color: 0xffcc00, emissive: 0xffcc00, emissiveIntensity: 2.2, roughness: 0.3})
+    new THREE.MeshStandardMaterial({ color: 0xffcc00, emissive: 0xffcc00, emissiveIntensity: 2.0, roughness: 0.3 })
   );
-  ring.rotation.x = Math.PI/2; ring.position.y = 0.02; previewScene.add(ring);
-  const ring2 = new THREE.Mesh(
-    new THREE.TorusGeometry(0.75, 0.008, 6, 40),
-    new THREE.MeshStandardMaterial({color: 0x8ec5e8, emissive: 0x8ec5e8, emissiveIntensity: 1.5, roughness: 0.4})
-  );
-  ring2.rotation.x = Math.PI/2; ring2.position.y = 0.03; previewScene.add(ring2);
-  previewPivot = new THREE.Group(); previewScene.add(previewPivot);
+  ring.rotation.x = Math.PI/2; ring.position.y = 0.02;
+  previewScene.add(ring);
+
+  previewPivot = new THREE.Group();
+  previewScene.add(previewPivot);
+
   if (soldierGLTF) { applySoldierToPreview(); }
   else { buildFallbackPreview(); }
+
+  // Touch drag rotation
   function onDown(x){ previewDragging = true; previewLastX = x; previewAutoRotate = false; previewVelY = 0; if(previewAutoRotTimer) clearTimeout(previewAutoRotTimer); }
-  function onMove(x){ if(!previewDragging) return; const dx = x - previewLastX; previewLastX = x; previewRotationY -= dx * 0.012; previewVelY = -dx * 0.012; }
-  function onUp(){ if(!previewDragging) return; previewDragging = false; previewAutoRotTimer = setTimeout(() => { previewAutoRotate = true; }, 2200); }
+  function onMove(x){
+    if(!previewDragging) return;
+    const dx = x - previewLastX;
+    previewLastX = x;
+    previewRotationY -= dx * 0.012;
+    previewVelY = -dx * 0.012;
+  }
+  function onUp(){
+    if(!previewDragging) return;
+    previewDragging = false;
+    previewAutoRotTimer = setTimeout(() => { previewAutoRotate = true; }, 2200);
+  }
   canvas.addEventListener("pointerdown", (e) => { e.preventDefault(); onDown(e.clientX); try { canvas.setPointerCapture(e.pointerId); } catch(err){} }, {passive:false});
   canvas.addEventListener("pointermove", (e) => { if(previewDragging){ e.preventDefault(); onMove(e.clientX); } }, {passive:false});
   canvas.addEventListener("pointerup", () => onUp());
   canvas.addEventListener("pointercancel", () => onUp());
   canvas.addEventListener("pointerleave", () => { if(previewDragging) onUp(); });
+
   previewRunning = true;
   previewLoop();
 }
 
 function buildFallbackPreview(){
   const fb = createFallbackCharacter();
-  const wrapper = new THREE.Group(); wrapper.userData.isPreviewWrapper = true;
+  previewWrapper = new THREE.Group();
+  previewWrapper.userData.isPreviewWrapper = true;
   fb.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(fb);
   const size = box.getSize(new THREE.Vector3());
-  const s = 1.85 / (size.y || 1);
-  fb.scale.setScalar(s); fb.updateMatrixWorld(true);
+  const s = 1.5 / (size.y || 1);
+  fb.scale.setScalar(s);
+  fb.updateMatrixWorld(true);
   const box2 = new THREE.Box3().setFromObject(fb);
   const c2 = box2.getCenter(new THREE.Vector3());
   fb.position.x = -c2.x; fb.position.z = -c2.z; fb.position.y = -box2.min.y;
-  wrapper.add(fb); previewCharacter = wrapper; previewPivot.add(wrapper);
+  previewWrapper.add(fb);
+  previewPivot.add(previewWrapper);
+  previewCharacter = previewWrapper;
 }
 
 function applySoldierToPreview(){
   if (!previewPivot || !soldierGLTF) return;
   try {
-    if (previewCharacter) previewPivot.remove(previewCharacter);
+    // Clear
+    while (previewPivot.children.length) previewPivot.remove(previewPivot.children[0]);
     if (previewMixer) { previewMixer.stopAllAction(); previewMixer = null; }
+
     const previewSoldier = SkeletonUtils.clone(soldierGLTF);
     previewSoldier.traverse(o => {
       if(o.isMesh){
-        o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false;
-        if(o.material){ o.material = o.material.clone(); o.material.needsUpdate = true; }
+        o.castShadow = true;
+        o.receiveShadow = true;
+        o.frustumCulled = false;
+        if(o.material){
+          o.material = o.material.clone();
+          o.material.needsUpdate = true;
+          if ("envMapIntensity" in o.material) o.material.envMapIntensity = 1.0;
+        }
       }
     });
-    const wrapper = new THREE.Group(); wrapper.userData.isPreviewWrapper = true;
-    previewSoldier.position.set(0, 0, 0); previewSoldier.rotation.set(0, 0, 0); previewSoldier.scale.set(1, 1, 1);
-    previewSoldier.updateMatrixWorld(true);
-    const box = new THREE.Box3().setFromObject(previewSoldier);
-    const size = box.getSize(new THREE.Vector3());
-    const height = size.y || 1;
-    const s = 1.85 / height;
-    previewSoldier.scale.setScalar(s); previewSoldier.updateMatrixWorld(true);
-    const box2 = new THREE.Box3().setFromObject(previewSoldier);
-    const center2 = box2.getCenter(new THREE.Vector3());
-    previewSoldier.position.x = -center2.x; previewSoldier.position.z = -center2.z; previewSoldier.position.y = -box2.min.y;
-    wrapper.add(previewSoldier); previewCharacter = wrapper; previewPivot.add(wrapper);
+
+    // Auto-fit (scale + center + feet on ground)
+    autoFitCharacter(previewSoldier, 1.5);
+
+    previewWrapper = new THREE.Group();
+    previewWrapper.userData.isPreviewWrapper = true;
+    previewWrapper.add(previewSoldier);
+    previewPivot.add(previewWrapper);
+    previewCharacter = previewWrapper;
+
+    // Animation
     if (soldierAnimations && soldierAnimations.length > 0) {
       previewMixer = new THREE.AnimationMixer(previewSoldier);
       let idleClip = null;
@@ -642,12 +909,29 @@ function applySoldierToPreview(){
       if(!idleClip) for(const c of soldierAnimations){ if((c.name||"").toLowerCase().includes("idle")){ idleClip = c; break; } }
       if(!idleClip) idleClip = soldierAnimations[0];
       const act = previewMixer.clipAction(idleClip);
-      act.setLoop(THREE.LoopRepeat, Infinity); act.play();
+      act.setLoop(THREE.LoopRepeat, Infinity);
+      act.play();
+      console.log("✅ Preview idle animation:", idleClip.name || "(unnamed)");
     }
+
+    // Weapon
+    attachWeaponToRightHand(previewSoldier);
+
+    // Customization
     applyCustomization(previewSoldier, {
       helmetColor: tempHelmetColor, vestColor: tempVestColor,
       uniformColor: tempUniformColor, hasHelmet: tempHasHelmet, hasBackpack: tempHasBackpack
     });
+
+    // Camera auto-fit
+    fitPreviewCameraToCharacter(previewSoldier, 1.5);
+
+    // Log bone count
+    let boneCount = 0;
+    previewSoldier.traverse(o => { if(o.isBone) boneCount++; });
+    console.log("✅ Character bones count:", boneCount);
+
+    console.log("✅ Character loaded");
   } catch(e){ console.warn("applySoldierToPreview error:", e); }
 }
 
@@ -664,7 +948,9 @@ function previewLoop(){
     previewRotationY += previewVelY * dt * 30; previewVelY *= 0.94;
   }
   if(previewPivot){ previewPivot.rotation.y = previewRotationY; }
-  if(previewRenderer && previewScene && previewCamera){ previewRenderer.render(previewScene, previewCamera); }
+  if(previewRenderer && previewScene && previewCamera){
+    previewRenderer.render(previewScene, previewCamera);
+  }
 }
 
 function applyCustomizationToPreview(){
@@ -688,7 +974,6 @@ function applyCustomizationToGame(){
 }
 
 // ═══ MENU OPEN/CLOSE ═══
-let gameStarted = false;
 const mainMenuEl = document.getElementById("mainMenu");
 const customizePanelEl = document.getElementById("customizePanel");
 
@@ -710,6 +995,8 @@ function showMainMenu(){
   document.getElementById("hint").style.display = "none";
   document.getElementById("joyZoneLeft").classList.add("hidden");
   document.getElementById("camZoneRight").classList.add("hidden");
+  // Re-fit preview to current viewport
+  setTimeout(() => { updatePreviewArea(); }, 50);
 }
 function hideMainMenu(){
   mainMenuEl.classList.add("hidden");
@@ -745,19 +1032,14 @@ document.getElementById("closeCustomizeBtn").addEventListener("click", () => {
   applyCustomizationToPreview();
 });
 
-// ═══════════════════════════════════════════════════════════
-// ✅ FIX: initBgMedia + updateBar بعد از تعریف همه متغیرها
-// ═══════════════════════════════════════════════════════════
+// ═══ START LOADING ═══
 initBgMedia();
 updateBar();
-
 setTimeout(() => {
-  if(resolvedAssets < totalAssets){
-    targetProgress = 100; isReady = true;
-  }
+  if(resolvedAssets < totalAssets){ targetProgress = 100; isReady = true; }
 }, 10000);
 
-// ═══ AUDIO ═══
+// ═══ AUDIO (game) ═══
 const AudioEngine = {
   ctx:null, source:null, gainNode:null, buffer:null, loaded:false, isMuted:false,
   baseRPM:800, maxRPM:7000, currentRPM:800, targetRPM:800, baseVolume:0.35, maxVolume:0.85, isStarting:false,
@@ -779,7 +1061,7 @@ const HeliAudio = {
 
 // ═══ SAVE SYSTEM ═══
 const SaveSystem = {
-  KEY: "tpspro_save_v17",
+  KEY: "tpspro_save_v18",
   data: {
     charPos: { x: 0, y: 0, z: 20 }, charYaw: 0,
     carPos: { x: -15, y: 0, z: -15 }, carRotation: 0,
@@ -793,7 +1075,7 @@ const SaveSystem = {
 };
 SaveSystem.init();
 
-// ═══ SCENE SETUP ═══
+// ═══ GAME SCENE ═══
 const CAR_MODEL_YAW_OFFSET = Math.PI;
 const WORLD_LIMIT = 380;
 const CAM_DRIVE = { distance: 7.5, height: 2.4, lookHeight: 1.0 };
@@ -825,6 +1107,10 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 renderer.domElement.style.touchAction = "none";
+// Ensure game canvas is BEHIND the menu
+renderer.domElement.style.position = "fixed";
+renderer.domElement.style.inset = "0";
+renderer.domElement.style.zIndex = "1";
 
 const pmrem = new THREE.PMREMGenerator(renderer);
 function buildEnvScene(){
@@ -870,6 +1156,7 @@ const rimL = new THREE.DirectionalLight(0xffcc88, 0.4);
 rimL.position.set(0, 30, -120);
 scene.add(rimL);
 
+// Ground
 function makeGroundTex(){
   const c = document.createElement("canvas");
   c.width = c.height = 768;
@@ -1021,6 +1308,7 @@ function prep(obj){
   });
 }
 
+// Buildings
 const facadeCache = {};
 function getFacadeTex(style){
   if(facadeCache[style]) return facadeCache[style];
@@ -1089,20 +1377,6 @@ function createRealisticBuilding(w, d, h, style, roofDetail){
   const roofMat = new THREE.MeshStandardMaterial({color: 0x3a3a40, roughness: 0.85, metalness: 0.15});
   const cap = new THREE.Mesh(new THREE.BoxGeometry(w + 0.4, 0.5, d + 0.4), roofMat);
   cap.position.y = h + 0.25; cap.castShadow = true; g.add(cap);
-  if(roofDetail){
-    const acMat = new THREE.MeshStandardMaterial({color: 0x909098, roughness: 0.7, metalness: 0.4});
-    const acCount = 2 + Math.floor(Math.random() * 3);
-    for (let i = 0; i < acCount; i++){
-      const ac = new THREE.Mesh(new THREE.BoxGeometry(1.2 + Math.random() * 0.8, 0.9, 1 + Math.random() * 0.6), acMat);
-      ac.position.set((Math.random() - 0.5) * (w * 0.7), h + 0.9, (Math.random() - 0.5) * (d * 0.7));
-      ac.castShadow = true; g.add(ac);
-    }
-  }
-  if (h > 15 && Math.random() > 0.4){
-    const awnMat = new THREE.MeshStandardMaterial({color: 0x3a3a3a, roughness: 0.8, metalness: 0.2});
-    const awning = new THREE.Mesh(new THREE.BoxGeometry(w + 1.5, 0.15, d + 1.5), awnMat);
-    awning.position.y = 4.5; awning.castShadow = true; g.add(awning);
-  }
   return g;
 }
 function placeBuildings(){
@@ -1138,15 +1412,14 @@ function placeBuildings(){
 }
 placeBuildings();
 
+// Trees
 function createTrunkGeometry(){ return new THREE.CylinderGeometry(0.22, 0.5, 4.6, 8, 4); }
 function createLeafGeometry(){
   const geo = new THREE.IcosahedronGeometry(1, 1);
   const pos = geo.attributes.position;
   for(let i = 0; i < pos.count; i++){
     const noise = 0.65 + Math.random() * 0.4;
-    pos.setX(i, pos.getX(i) * noise);
-    pos.setY(i, pos.getY(i) * noise);
-    pos.setZ(i, pos.getZ(i) * noise);
+    pos.setX(i, pos.getX(i) * noise); pos.setY(i, pos.getY(i) * noise); pos.setZ(i, pos.getZ(i) * noise);
   }
   geo.computeVertexNormals();
   return geo;
@@ -1217,6 +1490,7 @@ function plantTrees(){
 }
 plantTrees();
 
+// Lamps
 function createLamp(){
   const g = new THREE.Group();
   const poleMat = new THREE.MeshStandardMaterial({color: 0x28282c, roughness: 0.55, metalness: 0.85, envMapIntensity: 1.0});
@@ -1244,6 +1518,7 @@ for (let i = -4; i <= 4; i++){
   }
 }
 
+// Fallbacks
 function createFallbackCharacter(){
   const g = new THREE.Group();
   const skinMat = new THREE.MeshStandardMaterial({color: 0xd9a679, roughness: 0.6, metalness: 0.05});
@@ -1293,8 +1568,6 @@ function createFallbackHeli(){
   cockpit.position.set(0, 1.8, 1.7); g.add(cockpit);
   const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.4, 5.0, 12), bodyMat);
   tail.rotation.z = Math.PI/2; tail.position.set(0, 1.8, -4.5); tail.castShadow = true; g.add(tail);
-  const tailFin = new THREE.Mesh(new THREE.BoxGeometry(0.15, 1.4, 0.9), bodyMat);
-  tailFin.position.set(0, 2.2, -7.0); g.add(tailFin);
   const skidMat = new THREE.MeshStandardMaterial({color: 0x2a2a2a, roughness: 0.6, metalness: 0.5});
   const skidL = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 4.5, 8), skidMat);
   skidL.rotation.z = Math.PI/2; skidL.position.set(-0.9, 0.6, 0); g.add(skidL);
@@ -1318,7 +1591,7 @@ function createFallbackHeli(){
 }
 
 let character = null, mixer = null, currentAction = null;
-const actions = { idle:null, walk:null, run:null };
+const actions = { idle:null, walk:null, run:null, aim:null, shoot:null, reload:null };
 let carModel = null, carHalfWidth = 1.0, carHalfLength = 2.2;
 let useFallbackCharAnim = false;
 const carWheels = {
@@ -1384,6 +1657,7 @@ function spawnFallbackCharacter(){
   scene.add(character);
   useFallbackCharAnim = true;
 }
+
 function replaceWithGLBCharacter(gltf){
   const oldPos = character ? character.position.clone() : new THREE.Vector3(0, 0, 20);
   const oldRot = character ? character.rotation.y : (charYaw + MODEL_YAW_OFFSET);
@@ -1396,27 +1670,50 @@ function replaceWithGLBCharacter(gltf){
   character.rotation.y = oldRot;
   scene.add(character);
   useFallbackCharAnim = false;
+
+  // Animations
   mixer = new THREE.AnimationMixer(character);
   const clips = gltf.animations || [];
+  console.log("✅ Animation count:", clips.length);
   if(clips.length > 0){
-    const idleClip = pickClip(clips, ["idle"]) || clips[0];
-    const walkClip = pickClip(clips, ["walk"]) || idleClip;
-    const runClip  = pickClip(clips, ["run", "sprint"]) || walkClip;
+    const idleClip = pickClip(clips, ["idle", "standing"]) || clips[0];
+    const walkClip = pickClip(clips, ["walk", "walking"]) || idleClip;
+    const runClip  = pickClip(clips, ["run", "running", "sprint"]) || walkClip;
+    const aimClip  = pickClip(clips, ["aim", "aiming"]);
+    const shootClip = pickClip(clips, ["fire", "firing", "shoot", "shooting"]);
+    const reloadClip = pickClip(clips, ["reload", "reloading"]);
+
     actions.idle = mixer.clipAction(idleClip);
     actions.walk = mixer.clipAction(walkClip);
     actions.run  = mixer.clipAction(runClip);
+    if (aimClip) actions.aim = mixer.clipAction(aimClip);
+    if (shootClip) actions.shoot = mixer.clipAction(shootClip);
+    if (reloadClip) actions.reload = mixer.clipAction(reloadClip);
+
     actions.idle.play();
     currentAction = actions.idle;
+
+    console.log("✅ Idle animation:", idleClip.name || "(unnamed)");
+    console.log("✅ Walk animation:", walkClip.name || "(unnamed)");
+    console.log("✅ Run animation:", runClip.name || "(unnamed)");
+    console.log(aimClip ? "✅ Aim animation" : "⚠ Missing aim animation");
+    console.log(shootClip ? "✅ Shoot animation" : "⚠ Missing shoot animation");
+    console.log(reloadClip ? "✅ Reload animation" : "⚠ Missing reload animation");
+    if (!shootClip) console.warn("WARNING: Real shooting animation not found");
   }
+
+  // Weapon attached to game character
+  attachWeaponToRightHand(character);
+
   applyCustomization(character, Profile.data.customization);
+  console.log("✅ Character loaded");
 }
 spawnFallbackCharacter();
 
+// Load soldier
 (function loadSoldier(){
   let counted = false;
-  const timeout = setTimeout(() => {
-    if(!counted){ counted = true; assetResolved(); }
-  }, 12000);
+  const timeout = setTimeout(() => { if(!counted){ counted = true; assetResolved(); } }, 12000);
   loader.load(SOLDIER_URL,
     (gltf) => {
       clearTimeout(timeout);
@@ -1425,19 +1722,15 @@ spawnFallbackCharacter();
         soldierGLTF = gltf.scene;
         soldierAnimations = gltf.animations;
         replaceWithGLBCharacter(gltf);
-        console.log("✅ Soldier GLB loaded");
         if (previewPivot) applySoldierToPreview();
       } catch(e){ console.warn("soldier load error", e); }
     },
     undefined,
-    (e) => {
-      clearTimeout(timeout);
-      if(!counted){ counted = true; assetResolved(); }
-      console.warn("soldier load failed", e);
-    }
+    (e) => { clearTimeout(timeout); if(!counted){ counted = true; assetResolved(); } console.warn("soldier load failed", e); }
   );
 })();
 
+// Ferrari
 function spawnFallbackCar(){
   carModel = createFallbackCar();
   const box = new THREE.Box3().setFromObject(carModel);
@@ -1497,21 +1790,12 @@ function replaceWithGLBCar(gltf){
   scene.add(carModel);
 }
 spawnFallbackCar();
-
 (function loadFerrari(){
   let counted = false;
   const timeout = setTimeout(() => { if(!counted){ counted = true; assetResolved(); } }, 12000);
   loader.load(FERRARI_URL,
-    (gltf) => {
-      clearTimeout(timeout);
-      if(!counted){ counted = true; assetResolved(); }
-      try { replaceWithGLBCar(gltf); console.log("✅ Ferrari loaded"); } catch(e){ console.warn(e); }
-    },
-    undefined,
-    (e) => {
-      clearTimeout(timeout);
-      if(!counted){ counted = true; assetResolved(); }
-    }
+    (gltf) => { clearTimeout(timeout); if(!counted){ counted = true; assetResolved(); } try { replaceWithGLBCar(gltf); console.log("✅ Ferrari loaded"); } catch(e){} },
+    undefined, (e) => { clearTimeout(timeout); if(!counted){ counted = true; assetResolved(); } }
   );
 })();
 
@@ -1564,21 +1848,12 @@ function replaceWithGLBHeli(gltf){
   scene.add(heliModel);
 }
 spawnFallbackHeli();
-
 (function loadHeli(){
   let counted = false;
   const timeout = setTimeout(() => { if(!counted){ counted = true; assetResolved(); } }, 12000);
   loader.load(HELI_URL,
-    (gltf) => {
-      clearTimeout(timeout);
-      if(!counted){ counted = true; assetResolved(); }
-      try { replaceWithGLBHeli(gltf); console.log("✅ Heli loaded"); } catch(e){ console.warn(e); }
-    },
-    undefined,
-    (e) => {
-      clearTimeout(timeout);
-      if(!counted){ counted = true; assetResolved(); }
-    }
+    (gltf) => { clearTimeout(timeout); if(!counted){ counted = true; assetResolved(); } try { replaceWithGLBHeli(gltf); console.log("✅ Heli loaded"); } catch(e){} },
+    undefined, (e) => { clearTimeout(timeout); if(!counted){ counted = true; assetResolved(); } }
   );
 })();
 
@@ -1590,6 +1865,7 @@ function setAction(name){
   currentAction = nx;
 }
 
+// ═══ Controls ═══
 const joyZoneLeft = document.getElementById("joyZoneLeft");
 const joyBaseFloat = document.getElementById("joyBaseFloat");
 const joyKnobFloat = document.getElementById("joyKnobFloat");
@@ -1605,8 +1881,7 @@ joyZoneLeft.addEventListener("pointerdown", (e) => {
   const lx = e.clientX - r.left, ly = e.clientY - r.top;
   joyBaseFloat.style.left = lx + "px"; joyBaseFloat.style.top = ly + "px";
   joyKnobFloat.style.left = lx + "px"; joyKnobFloat.style.top = ly + "px";
-  joyBaseFloat.classList.add("active");
-  joyKnobFloat.classList.add("active");
+  joyBaseFloat.classList.add("active"); joyKnobFloat.classList.add("active");
 }, { passive: false });
 joyZoneLeft.addEventListener("pointermove", (e) => {
   if(!joy.active || e.pointerId !== joy.pointerId) return;
@@ -2186,14 +2461,7 @@ addEventListener("resize", () => {
   camera.aspect = innerWidth/innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
-  if(previewRenderer && previewCamera){
-    const canvas = document.getElementById("previewCanvas");
-    const w = canvas.clientWidth || 400;
-    const h = canvas.clientHeight || 500;
-    previewRenderer.setSize(w, h, false);
-    previewCamera.aspect = w / h;
-    previewCamera.updateProjectionMatrix();
-  }
+  if(!gameStarted) updatePreviewArea();
 });
 
 window.addEventListener("beforeunload", () => {
