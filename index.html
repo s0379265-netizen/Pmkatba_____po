@@ -1,640 +1,183 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>نمایش ساده</title>
-
-    <!-- فونت حرفه‌ای Vazirmatn -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #0d1117;
-            font-family: "Vazirmatn", system-ui, sans-serif;
-            overscroll-behavior: none;
-            -webkit-text-size-adjust: 100%;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        #splash {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            background-image: url('https://cdn.imgurl.ir/uploads/q712771_IMG_20260910_213129_944.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            transition: opacity 0.45s ease;
-        }
-
-        #splash.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            position: fixed;
-            left: 20px;
-            bottom: 20px;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.25);
-            border-top-color: #ffffff;
-            border-right-color: #58a6ff;
-            animation: spin 0.9s linear infinite;
-            z-index: 20;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(2px);
-        }
-
-        .spinner::after {
-            content: "";
-            position: absolute;
-            inset: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .spinner.hidden {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        /* ========== دیالوگ شیشه‌ای کوچک و حرفه‌ای ========== */
-        #blocked-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 50;
-            background: rgba(0, 10, 25, 0.42);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            align-items: center;
-            justify-content: center;
-            padding: 1.2rem;
-            animation: overlayIn 0.3s ease;
-        }
-
-        @keyframes overlayIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .glass-dialog {
-            width: 100%;
-            max-width: 295px;          /* کوچکتر */
-            background: linear-gradient(145deg, rgba(18, 55, 115, 0.62), rgba(12, 35, 85, 0.72));
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
-            border: 1px solid rgba(100, 180, 255, 0.3);
-            border-radius: 18px;
-            padding: 1.55rem 1.3rem 1.35rem;
-            text-align: center;
-            box-shadow: 
-                0 16px 40px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-                0 0 30px rgba(50, 130, 255, 0.15);
-            animation: dialogIn 0.38s cubic-bezier(0.16, 1, 0.3, 1);
-            font-family: "Vazirmatn", system-ui, sans-serif;
-        }
-
-        @keyframes dialogIn {
-            from { 
-                opacity: 0; 
-                transform: scale(0.9) translateY(10px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: scale(1) translateY(0); 
-            }
-        }
-
-        .glass-icon {
-            width: 58px;
-            height: 58px;
-            margin: 0 auto 1.1rem;
-            border-radius: 50%;
-            background: rgba(30, 90, 180, 0.38);
-            border: 1px solid rgba(100, 180, 255, 0.32);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 18px rgba(0, 40, 120, 0.3);
-        }
-
-        .glass-icon svg {
-            width: 26px;
-            height: 26px;
-            stroke: #7dd3fc;
-            stroke-width: 1.8;
-            fill: none;
-        }
-
-        .glass-dialog h2 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #e0f2fe;
-            margin-bottom: 0.55rem;
-            letter-spacing: -0.2px;
-        }
-
-        .glass-dialog .desc {
-            font-size: 0.84rem;
-            color: #bae6fd;
-            line-height: 1.65;
-            margin-bottom: 1.4rem;
-            opacity: 0.95;
-            font-weight: 500;
-        }
-
-        .glass-dialog .desc span {
-            display: block;
-            margin-top: 0.25rem;
-            font-size: 0.78rem;
-            color: #7dd3fc;
-            opacity: 0.85;
-            font-weight: 400;
-        }
-
-        /* دکمه زرد سه‌بعدی */
-        #retryBtn {
-            background: linear-gradient(180deg, #facc15 0%, #eab308 48%, #ca8a04 100%);
-            color: #422006;
-            border: none;
-            padding: 0.78rem 2.1rem;
-            font-size: 0.95rem;
-            font-weight: 700;
-            border-radius: 11px;
-            cursor: pointer;
-            font-family: "Vazirmatn", system-ui, sans-serif;
-            position: relative;
-            box-shadow: 
-                0 5px 0 #a16207,
-                0 7px 16px rgba(0, 0, 0, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.35);
-            transition: all 0.12s ease;
-            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
-        }
-
-        #retryBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 
-                0 7px 0 #a16207,
-                0 10px 20px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.35);
-        }
-
-        #retryBtn:active {
-            transform: translateY(3px);
-            box-shadow: 
-                0 2px 0 #a16207,
-                0 3px 10px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .glass-footer {
-            margin-top: 1.2rem;
-            font-size: 0.68rem;
-            color: rgba(147, 197, 253, 0.55);
-            font-weight: 400;
-        }
-
-        #error {
-            display: none;
-            position: fixed;
-            inset: 0;
-            padding: 2rem;
-            text-align: center;
-            color: #f85149;
-            line-height: 1.8;
-            background: #0d1117;
-            z-index: 30;
-            align-items: center;
-            justify-content: center;
-            font-family: "Vazirmatn", system-ui, sans-serif;
-        }
-
-        #frame {
-            display: none;
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            border: 0;
-            background: #0d1117;
-            z-index: 1;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تست Speechactors TTS فارسی</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Tahoma, 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 560px;
+    }
+    h1 { font-size: 1.25rem; color: #ff9500; margin-bottom: 6px; }
+    .sub { font-size: 0.85rem; color: #888; margin-bottom: 18px; }
+    label { display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 6px; }
+    input, textarea, select {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 10px;
+      color: #fff;
+      padding: 12px;
+      font-size: 0.95rem;
+      outline: none;
+      margin-bottom: 14px;
+    }
+    input:focus, textarea:focus, select:focus { border-color: #ff9500; }
+    textarea { height: 110px; resize: vertical; line-height: 1.7; }
+    .row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    button {
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+      min-width: 120px;
+    }
+    .btn-orange { background: #ff9500; color: #000; }
+    .btn-orange:disabled { background: #555; color: #999; cursor: not-allowed; }
+    .btn-gray { background: #333; color: #fff; }
+    .status {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      color: #aaa;
+      min-height: 48px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .status.ok { border-color: #2ecc71; color: #2ecc71; }
+    .status.err { border-color: #e74c3c; color: #e74c3c; }
+    .status.info { border-color: #3498db; color: #3498db; }
+    audio { width: 100%; margin-top: 12px; border-radius: 8px; }
+  </style>
 </head>
 <body>
+  <div class="card">
+    <h1>تست Speechactors TTS</h1>
+    <div class="sub">فارسی · Dilara / Farid · API</div>
 
-    <div id="splash"></div>
-    <div class="spinner" id="spinner"></div>
-    <div id="error"></div>
+    <label>API Key</label>
+    <input type="text" id="apiKey" value="tNpyttarhKat2Duve4rz7uXVMXeXRhz9ahiJU8eg" placeholder="Bearer Token">
 
-    <!-- دیالوگ شیشه‌ای کوچک -->
-    <div id="blocked-overlay">
-        <div class="glass-dialog">
-            <div class="glass-icon">
-                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-            </div>
-            <h2>دسترسی غیرمجاز</h2>
-            <div class="desc">
-                سیستم امنیتی تشخیص داد که اتصال فعلی شما مجاز نیست.
-                <span>لطفاً فیلترشکن را خاموش کنید و دوباره تلاش کنید</span>
-            </div>
-            <button id="retryBtn">تلاش مجدد</button>
-            <div class="glass-footer">در صورت ادامه مشکل، چند دقیقه بعد دوباره امتحان کنید</div>
-        </div>
+    <label>متن فارسی</label>
+    <textarea id="text">سلام! این یک تست تبدیل متن فارسی به گفتار با سرویس Speechactors است. امیدوارم کیفیت صدا خوب باشه.</textarea>
+
+    <label>صدا</label>
+    <select id="voice">
+      <option value="fa-IR-DilaraNeural|fa-IR">Dilara (زن - فارسی)</option>
+      <option value="fa-IR-FaridNeural|fa-IR">Farid (مرد - فارسی)</option>
+    </select>
+
+    <div class="row">
+      <button class="btn-gray" onclick="checkBalance()">بررسی موجودی</button>
+      <button class="btn-orange" id="playBtn" onclick="generate()">پخش صدا</button>
     </div>
 
-    <iframe id="frame"
-        allow="clipboard-read; clipboard-write; microphone; camera; autoplay"
-        referrerpolicy="no-referrer">
-    </iframe>
+    <div class="status" id="status">آماده تست...</div>
+    <audio id="player" controls style="display:none;"></audio>
+  </div>
 
-    <script>
-        // ============================================================
-        // سیاست دسترسی
-        // ============================================================
-        const ACCESS_POLICY = {
-            ALLOW_IRAN: true,
-            ALLOW_FOREIGN: false,
-            ALLOW_UNKNOWN: true,
-            BLOCK_VPN: true,
-            BLOCK_PROXY: true,
-            BLOCK_TOR: true,
-            BLOCK_HOSTING: true,
-            CACHE_TTL_MS: 2 * 60 * 1000,
-            FORCE_REFRESH: false
-        };
+  <script>
+    const BASE = 'https://api.speechactors.com/v1';
 
-        const MIN_LOADING_TIME = 1350;
+    function setStatus(msg, type = '') {
+      const el = document.getElementById('status');
+      el.textContent = msg;
+      el.className = 'status ' + type;
+    }
 
-        const URL_SRC = 'https://raw.githubusercontent.com/TIGER-IR/virax/refs/heads/main/index.html';
-        const BASE    = 'https://raw.githubusercontent.com/TIGER-IR/virax/refs/heads/main/';
+    function getHeaders() {
+      const key = document.getElementById('apiKey').value.trim();
+      return {
+        'Authorization': 'Bearer ' + key,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      };
+    }
 
-        const frame   = document.getElementById('frame');
-        const splash  = document.getElementById('splash');
-        const spinner = document.getElementById('spinner');
-        const errBox  = document.getElementById('error');
-        const blockedOverlay = document.getElementById('blocked-overlay');
-        const retryBtn = document.getElementById('retryBtn');
-
-        let finished = false;
-        const startTime = Date.now();
-
-        function hideLoading() {
-            if (finished) return;
-            finished = true;
-            splash.classList.add('hidden');
-            spinner.classList.add('hidden');
-            setTimeout(() => {
-                splash.style.display = 'none';
-                spinner.style.display = 'none';
-            }, 450);
+    async function checkBalance() {
+      setStatus('در حال بررسی موجودی...', 'info');
+      try {
+        const res = await fetch(BASE + '/balance', { headers: getHeaders() });
+        const data = await res.json();
+        if (res.ok) {
+          setStatus('موجودی: ' + JSON.stringify(data, null, 2), 'ok');
+        } else {
+          setStatus('خطا: ' + (data.message || res.status), 'err');
         }
+      } catch (e) {
+        setStatus('خطای شبکه: ' + e.message, 'err');
+      }
+    }
 
-        function showError(msg) {
-            if (finished) return;
-            splash.style.display = 'none';
-            spinner.style.display = 'none';
-            errBox.style.display = 'flex';
-            errBox.textContent = 'خطا در بارگذاری: ' + msg;
-        }
+    async function generate() {
+      const text = document.getElementById('text').value.trim();
+      if (!text) {
+        setStatus('متن وارد کن', 'err');
+        return;
+      }
 
-        function showBlocked() {
-            if (finished) return;
-            finished = true;
-            spinner.classList.add('hidden');
-            blockedOverlay.style.display = 'flex';
-        }
+      const [vid, locale] = document.getElementById('voice').value.split('|');
+      const btn = document.getElementById('playBtn');
+      btn.disabled = true;
+      setStatus('در حال ساخت صدا...', 'info');
 
-        async function waitForMinLoading() {
-            const elapsed = Date.now() - startTime;
-            if (elapsed < MIN_LOADING_TIME) {
-                await new Promise(r => setTimeout(r, MIN_LOADING_TIME - elapsed));
-            }
-        }
-
-        // ============================================================
-        // سیستم تشخیص IP
-        // ============================================================
-        const IP_CACHE_KEY = 'virax_ip_v6';
-
-        function getCachedResult() {
-            if (ACCESS_POLICY.FORCE_REFRESH) return null;
-            try {
-                const raw = sessionStorage.getItem(IP_CACHE_KEY);
-                if (!raw) return null;
-                const data = JSON.parse(raw);
-                if (Date.now() - data.ts > ACCESS_POLICY.CACHE_TTL_MS) {
-                    sessionStorage.removeItem(IP_CACHE_KEY);
-                    return null;
-                }
-                return data.result;
-            } catch (e) {
-                return null;
-            }
-        }
-
-        function setCachedResult(result) {
-            try {
-                sessionStorage.setItem(IP_CACHE_KEY, JSON.stringify({
-                    ts: Date.now(),
-                    result
-                }));
-            } catch (e) {}
-        }
-
-        function clearIPCache() {
-            try { sessionStorage.removeItem(IP_CACHE_KEY); } catch (e) {}
-        }
-
-        function fetchWithTimeout(url, timeout = 4800) {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), timeout);
-            return fetch(url, {
-                method: 'GET',
-                cache: 'no-store',
-                signal: controller.signal,
-                headers: { 'Accept': 'application/json' }
-            }).finally(() => clearTimeout(timer));
-        }
-
-        async function providerIpWhoIs() {
-            const res = await fetchWithTimeout('https://ipwho.is/');
-            if (!res.ok) throw new Error('ipwho.is HTTP ' + res.status);
-            const data = await res.json();
-            if (!data.success) throw new Error('ipwho.is failed');
-
-            return {
-                ip: data.ip,
-                country: data.country,
-                countryCode: data.country_code,
-                region: data.region,
-                city: data.city,
-                isp: data.connection?.isp || null,
-                org: data.connection?.org || null,
-                asn: data.connection?.asn || null,
-                isVpn: !!(data.security?.is_vpn),
-                isProxy: !!(data.security?.is_proxy),
-                isTor: !!(data.security?.is_tor),
-                isHosting: !!(data.security?.is_datacenter),
-                source: 'ipwho.is'
-            };
-        }
-
-        async function providerGeoJS() {
-            const res = await fetchWithTimeout('https://get.geojs.io/v1/ip/geo.json');
-            if (!res.ok) throw new Error('geojs HTTP ' + res.status);
-            const data = await res.json();
-
-            return {
-                ip: data.ip,
-                country: data.country,
-                countryCode: data.country_code,
-                region: data.region,
-                city: data.city,
-                isp: data.organization_name || null,
-                org: data.organization_name || null,
-                asn: data.asn || null,
-                isVpn: false,
-                isProxy: false,
-                isTor: false,
-                isHosting: false,
-                source: 'geojs.io'
-            };
-        }
-
-        async function providerIpSb() {
-            const res = await fetchWithTimeout('https://api.ip.sb/geoip');
-            if (!res.ok) throw new Error('ip.sb HTTP ' + res.status);
-            const data = await res.json();
-
-            return {
-                ip: data.ip,
-                country: data.country,
-                countryCode: data.country_code,
-                region: data.region,
-                city: data.city,
-                isp: data.isp || data.organization || null,
-                org: data.organization || null,
-                asn: data.asn || null,
-                isVpn: false,
-                isProxy: false,
-                isTor: false,
-                isHosting: false,
-                source: 'ip.sb'
-            };
-        }
-
-        async function getIPInfo() {
-            const providers = [providerIpWhoIs, providerGeoJS, providerIpSb];
-            let lastError = null;
-
-            for (const fn of providers) {
-                try {
-                    const result = await fn();
-                    console.log('IP Provider OK:', result.source, result.countryCode);
-                    return result;
-                } catch (err) {
-                    lastError = err;
-                    console.warn('Provider failed:', err.message);
-                }
-            }
-            throw lastError || new Error('All providers failed');
-        }
-
-        function classifyConnection(info) {
-            if (!info || !info.countryCode) return 'UNKNOWN';
-
-            if (info.isVpn) return 'VPN_DETECTED';
-            if (info.isProxy) return 'PROXY_DETECTED';
-            if (info.isTor) return 'TOR_DETECTED';
-            if (info.isHosting) return 'HOSTING_DETECTED';
-
-            const text = ((info.org || '') + ' ' + (info.isp || '')).toLowerCase();
-            const badKeywords = [
-                'vpn', 'proxy', 'tor', 'hosting', 'datacenter', 'digitalocean',
-                'linode', 'vultr', 'hetzner', 'ovh', 'm247', 'cloudflare',
-                'amazon', 'aws', 'google cloud', 'microsoft', 'azure',
-                'contabo', 'nord', 'express', 'surfshark', 'mullvad', 'proton'
-            ];
-            if (badKeywords.some(k => text.includes(k))) {
-                return 'HOSTING_DETECTED';
-            }
-
-            const code = (info.countryCode || '').toUpperCase();
-            if (code === 'IR') return 'NORMAL_IRAN';
-            return 'FOREIGN_IP';
-        }
-
-        function checkAccessPolicy(status) {
-            switch (status) {
-                case 'NORMAL_IRAN':      return ACCESS_POLICY.ALLOW_IRAN;
-                case 'FOREIGN_IP':       return ACCESS_POLICY.ALLOW_FOREIGN;
-                case 'VPN_DETECTED':     return !ACCESS_POLICY.BLOCK_VPN;
-                case 'PROXY_DETECTED':   return !ACCESS_POLICY.BLOCK_PROXY;
-                case 'TOR_DETECTED':     return !ACCESS_POLICY.BLOCK_TOR;
-                case 'HOSTING_DETECTED': return !ACCESS_POLICY.BLOCK_HOSTING;
-                case 'UNKNOWN':          return ACCESS_POLICY.ALLOW_UNKNOWN;
-                default:                 return false;
-            }
-        }
-
-        // ============================================================
-        // لود برنامه اصلی + فناوری پیش‌بارگذاری تصاویر
-        // ============================================================
-        function loadMainApp() {
-            finished = false;
-
-            fetch(URL_SRC, {
-                cache: 'no-store',
-                credentials: 'omit',
-                redirect: 'follow'
-            })
-            .then(res => {
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                return res.text();
-            })
-            .then(html => {
-                // تزریق base
-                if (!/<base\s/i.test(html)) {
-                    html = html.replace(
-                        /<head([^>]*)>/i,
-                        '<head$1><base href="' + BASE + '">'
-                    );
-                }
-
-                // تزریق viewport
-                if (!/name=["']viewport["']/i.test(html)) {
-                    html = html.replace(
-                        /<head([^>]*)>/i,
-                        '<head$1><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">'
-                    );
-                }
-
-                // ========== فناوری ضد لودینگ تصاویر ==========
-                // ۱. همه تصاویر را eager + sync کن
-                html = html.replace(
-                    /<img([^>]*?)>/gi,
-                    (match, attrs) => {
-                        let newAttrs = attrs
-                            .replace(/\s*loading\s*=\s*["'][^"']*["']/gi, '')
-                            .replace(/\s*decoding\s*=\s*["'][^"']*["']/gi, '');
-                        return `<img${newAttrs} loading="eager" decoding="sync" fetchpriority="high">`;
-                    }
-                );
-
-                // ۲. اضافه کردن preconnect و preload قوی‌تر
-                html = html.replace(
-                    /<head([^>]*)>/i,
-                    `<head$1>
-                    <link rel="preconnect" href="https://cdn.imgurl.ir" crossorigin>
-                    <link rel="dns-prefetch" href="https://cdn.imgurl.ir">
-                    <link rel="preconnect" href="${BASE}">`
-                );
-
-                // ۳. پیدا کردن تمام URL تصاویر و preload کردن آن‌ها
-                const imgUrls = [];
-                const imgRegex = /(?:src|href)=["'](https:\/\/cdn\.imgurl\.ir\/[^"']+\.(?:png|jpg|jpeg|webp|gif))["']/gi;
-                let m;
-                while ((m = imgRegex.exec(html)) !== null) {
-                    if (!imgUrls.includes(m[1])) imgUrls.push(m[1]);
-                }
-
-                // حداکثر ۱۲ تصویر مهم را preload کن
-                let preloadTags = '';
-                imgUrls.slice(0, 12).forEach(url => {
-                    preloadTags += `<link rel="preload" as="image" href="${url}" fetchpriority="high">\n`;
-                });
-
-                html = html.replace(
-                    /<head([^>]*)>/i,
-                    `<head$1>${preloadTags}`
-                );
-
-                frame.srcdoc = html;
-
-                frame.addEventListener('load', () => {
-                    frame.style.display = 'block';
-                    setTimeout(hideLoading, 260);
-                }, { once: true });
-
-                setTimeout(() => {
-                    if (frame.style.display !== 'block') {
-                        frame.style.display = 'block';
-                        hideLoading();
-                    }
-                }, 10000);
-            })
-            .catch(err => showError(err.message));
-        }
-
-        // ============================================================
-        // شروع
-        // ============================================================
-        async function start() {
-            let info = getCachedResult();
-
-            if (!info) {
-                try {
-                    info = await getIPInfo();
-                    setCachedResult(info);
-                } catch (err) {
-                    console.warn('IP detection failed:', err);
-                    info = null;
-                }
-            }
-
-            const status = classifyConnection(info);
-            const allowed = checkAccessPolicy(status);
-
-            console.log('وضعیت:', status, '| مجاز:', allowed, info);
-
-            await waitForMinLoading();
-
-            if (allowed) {
-                loadMainApp();
-            } else {
-                showBlocked();
-            }
-        }
-
-        retryBtn.addEventListener('click', () => {
-            clearIPCache();
-            blockedOverlay.style.display = 'none';
-            splash.style.display = 'flex';
-            spinner.style.display = 'block';
-            splash.classList.remove('hidden');
-            spinner.classList.remove('hidden');
-            finished = false;
-            start();
+      try {
+        const res = await fetch(BASE + '/generate', {
+          method: 'POST',
+          headers: getHeaders(),
+          body: JSON.stringify({
+            locale: locale,
+            vid: vid,
+            text: text,
+            style: 'default'
+          })
         });
 
-        start();
-    </script>
+        // اگر JSON برگشت یعنی خطا
+        const contentType = res.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const data = await res.json();
+          setStatus('خطا: ' + (data.message || JSON.stringify(data)), 'err');
+          btn.disabled = false;
+          return;
+        }
+
+        // موفقیت → فایل صوتی (mp3)
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const player = document.getElementById('player');
+        player.src = url;
+        player.style.display = 'block';
+        player.play();
+        setStatus('صدا آماده شد و در حال پخش است.', 'ok');
+      } catch (e) {
+        setStatus('خطا: ' + e.message, 'err');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  </script>
 </body>
 </html>
